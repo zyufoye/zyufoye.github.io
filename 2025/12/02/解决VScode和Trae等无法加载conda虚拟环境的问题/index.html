@@ -20,16 +20,17 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="一、问题描述使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题： 1CondaError: Run &#x27;conda init&#x27; before &#x27;conda activate&#x27;  但是，运行 conda init 后还是不起作用： 123456789101112131415161718192021222324λ conda">
+    <meta name="description" content="一、问题描述使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题： 1CondaError: Run &#x27;conda init&#x27; before &#x27;conda activate&#x27;  但是，运行 conda init 后还是不起作用： 123456λ conda initno change     C:\Users\Userna">
 <meta property="og:type" content="article">
 <meta property="og:title" content="解决VScode和Trae等无法加载conda虚拟环境的问题">
 <meta property="og:url" content="https://zyufoye.github.io/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
-<meta property="og:site_name" content="网络安全随笔">
-<meta property="og:description" content="一、问题描述使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题： 1CondaError: Run &#x27;conda init&#x27; before &#x27;conda activate&#x27;  但是，运行 conda init 后还是不起作用： 123456789101112131415161718192021222324λ conda">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="一、问题描述使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题： 1CondaError: Run &#x27;conda init&#x27; before &#x27;conda activate&#x27;  但是，运行 conda init 后还是不起作用： 123456λ conda initno change     C:\Users\Userna">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-02T12:11:22.000Z">
-<meta property="article:modified_time" content="2025-12-02T12:48:32.848Z">
+<meta property="article:modified_time" content="2025-12-03T14:40:57.216Z">
 <meta property="article:author" content="Aono">
+<meta property="article:tag" content="Trouble shooting">
 <meta name="twitter:card" content="summary">
 
 
@@ -39,7 +40,7 @@
 <script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/","path":"2025/12/02/解决VScode和Trae等无法加载conda虚拟环境的问题/","title":"解决VScode和Trae等无法加载conda虚拟环境的问题"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>解决VScode和Trae等无法加载conda虚拟环境的问题 | 网络安全随笔</title>
+<title>解决VScode和Trae等无法加载conda虚拟环境的问题 | Aono Note</title>
   
 
 
@@ -79,6 +80,9 @@
       <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
@@ -86,9 +90,10 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">网络安全随笔</p>
+      <p class="site-title">Aono Note</p>
       <i class="logo-line"></i>
     </a>
+      <p class="site-subtitle" itemprop="description">记录学习，分享生活</p>
   </div>
 
   <div class="site-nav-right">
@@ -99,6 +104,10 @@
 
 
 
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
 
 
 
@@ -127,8 +136,10 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
   <p class="site-author-name" itemprop="name">Aono</p>
-  <div class="site-description" itemprop="description"></div>
+  <div class="site-description" itemprop="description">一个专注网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。</div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
@@ -138,8 +149,26 @@
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
   </nav>
 </div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yourname@gmail.com" title="E-Mail → mailto:yourname@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
 
         </div>
       </div>
@@ -165,17 +194,17 @@
     <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
       <meta itemprop="name" content="Aono">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="网络安全随笔">
-      <meta itemprop="description" content="">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="一个专注网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="解决VScode和Trae等无法加载conda虚拟环境的问题 | 网络安全随笔">
+      <meta itemprop="name" content="解决VScode和Trae等无法加载conda虚拟环境的问题 | Aono Note">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
@@ -190,9 +219,24 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-12-02 20:11:22 / 修改时间：20:48:32" itemprop="dateCreated datePublished" datetime="2025-12-02T20:11:22+08:00">2025-12-02</time>
+      <time title="创建时间：2025-12-02 20:11:22" itemprop="dateCreated datePublished" datetime="2025-12-02T20:11:22+08:00">2025-12-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-03 22:40:57" itemprop="dateModified" datetime="2025-12-03T22:40:57+08:00">2025-12-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Trouble-shooting/" itemprop="url" rel="index"><span itemprop="name">Trouble shooting</span></a>
+        </span>
     </span>
 
   
@@ -208,7 +252,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <p>但是，运行 <code>conda init</code> 后还是不起作用：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">λ conda init</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda.exe</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda-env.exe</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda-script.py</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda-env-script.py</span><br><span class="line">no change     C:\Users\Username\miniconda3\condabin\conda.bat</span><br><span class="line">no change     C:\Users\Username\miniconda3\Library\bin\conda.bat</span><br><span class="line">no change     C:\Users\Username\miniconda3\condabin\_conda_activate.bat</span><br><span class="line">no change     C:\Users\Username\miniconda3\condabin\rename_tmp.bat</span><br><span class="line">no change     C:\Users\Username\miniconda3\condabin\conda_auto_activate.bat</span><br><span class="line">no change     C:\Users\Username\miniconda3\condabin\conda_hook.bat</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\activate.bat</span><br><span class="line">no change     C:\Users\Username\miniconda3\condabin\activate.bat</span><br><span class="line">no change     C:\Users\Username\miniconda3\condabin\deactivate.bat</span><br><span class="line">modified      C:\Users\Username\miniconda3\Scripts\activate</span><br><span class="line">modified      C:\Users\Username\miniconda3\Scripts\deactivate</span><br><span class="line">modified      C:\Users\Username\miniconda3\etc\profile.d\conda.sh</span><br><span class="line">modified      C:\Users\Username\miniconda3\etc\fish\conf.d\conda.fish</span><br><span class="line">no change     C:\Users\Username\miniconda3\shell\condabin\Conda.psm1</span><br><span class="line">modified      C:\Users\Username\miniconda3\shell\condabin\conda-hook.ps1</span><br><span class="line">no change     C:\Users\Username\miniconda3\Lib\site-packages\xontrib\conda.xsh</span><br><span class="line">modified      C:\Users\Username\miniconda3\etc\profile.d\conda.csh</span><br><span class="line">no change     C:\Users\Username\Documents\WindowsPowerShell\profile.ps1</span><br><span class="line">modified      HKEY_CURRENT_USER\Software\Microsoft\Command Processor\AutoRun</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">λ conda init</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda.exe</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda-env.exe</span><br><span class="line">......</span><br><span class="line">no change     C:\Users\Username\Documents\WindowsPowerShell\profile.ps1</span><br><span class="line">modified      HKEY_CURRENT_USER\Software\Microsoft\Command Processor\AutoRun</span><br></pre></td></tr></table></figure>
 
 <h1 id="二、解决方案"><a href="#二、解决方案" class="headerlink" title="二、解决方案"></a>二、解决方案</h1><p>我是 win11 操作系统，需要以 <strong>管理员身份</strong> 打开powershell窗口，输入以下命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
@@ -221,7 +265,7 @@
 <p>所以当你看到：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
 
-<p>其实意思是：<strong>当前这个 PowerShell 会话里没有被注入 Conda 的 Hook 脚本</strong>，所以它“感觉”自己还没 init。</p>
+<p>其实意思是：<strong>当前这个 PowerShell 会话里没有被注入 Conda 的 Hook 脚本</strong>，所以它感觉自己还没 init。</p>
 <h2 id="2-PowerShell-执行策略的限制"><a href="#2-PowerShell-执行策略的限制" class="headerlink" title="2. PowerShell 执行策略的限制"></a>2. PowerShell 执行策略的限制</h2><p>PowerShell 为了安全，有一个 <strong>执行策略（Execution Policy）</strong>，决定哪些脚本可以被执行：</p>
 <p>常见几种：</p>
 <ul>
@@ -237,15 +281,15 @@
 <ul>
 <li>打开 PowerShell 时，<code>profile.ps1</code> &#x2F; <code>conda-hook.ps1</code> 没有被执行；</li>
 <li>于是 <code>conda</code> 函数、自动激活逻辑统统都没加载进当前会话；</li>
-<li>终端自然就会提示你“先 <code>conda init</code>”。</li>
+<li>终端自然就会提示你先 <code>conda init</code>。</li>
 </ul>
 </li>
 </ul>
-<p>也就是说：**<code>conda init</code> 写入的配置已经在那儿了，但每次启动 PowerShell 时都被策略挡在门外。** 当以管理员身份执行：</p>
+<p>也就是说：<code>conda init</code> 写入的配置已经在那儿了，但每次启动 PowerShell 时都被策略挡在门外。 当以管理员身份执行：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
 
-<p>等于允许系统执行本地脚本，只对来源不明的远程脚本做限制。”</p>
-<p>这样一来，再次打开 PowerShell &#x2F; VSCode 内置终端时，<code>profile.ps1</code> 会被正常加载，里面调用的 <code>conda-hook.ps1</code> 等本地脚本可以顺利执行， VSCode &#x2F; Trae 里就可以正常加载和激活 Conda 虚拟环境，不再报 “Run ‘conda init’ before ‘conda activate’”。</p>
+<p>等于允许系统执行本地脚本，只对来源不明的远程脚本做限制。</p>
+<p>这样一来，再次打开 PowerShell &#x2F; VSCode 内置终端时，<code>profile.ps1</code> 会被正常加载，里面调用的 <code>conda-hook.ps1</code> 等本地脚本可以顺利执行， VSCode &#x2F; Trae 里就可以正常加载和激活 Conda 虚拟环境，不再报 Run ‘conda init’ before ‘conda activate’错误。</p>
 
     </div>
 
@@ -254,6 +298,9 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Trouble-shooting/" rel="tag"># Trouble shooting</a>
+          </div>
 
         
 
