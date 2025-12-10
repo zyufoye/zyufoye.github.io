@@ -172,18 +172,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -208,6 +208,109 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/10/SARIF%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="一个专注网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/10/SARIF%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/" class="post-title-link" itemprop="url">SARIF文件架构解读</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-10 23:23:33 / 修改时间：23:25:22" itemprop="dateCreated datePublished" datetime="2025-12-10T23:23:33+08:00">2025-12-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CodeQL/" itemprop="url" rel="index"><span itemprop="name">CodeQL</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="SARIF-文件架构架构解读"><a href="#SARIF-文件架构架构解读" class="headerlink" title="SARIF 文件架构架构解读"></a>SARIF 文件架构架构解读</h2><p>SARIF（Static Analysis Results Interchange Format）本质是一个 JSON 日志规范，用于统一表达静态分析（SAST、Lint、CodeQL、依赖扫描等）的扫描结果，方便不同工具之间共享、聚合、展示与追踪。</p>
+<p>SARIF 简单文件结构如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;$schema&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;https://json.schemastore.org/sarif-2.1.0.json&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;2.1.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;runs&quot;</span> <span class="punctuation">:</span> <span class="punctuation">[</span>&#x27;tool&#x27;<span class="punctuation">,</span> &#x27;invocations&#x27;<span class="punctuation">,</span> &#x27;artifacts&#x27;<span class="punctuation">,</span> &#x27;results&#x27;<span class="punctuation">,</span> &#x27;columnKind&#x27;<span class="punctuation">,</span>&#x27;properties&#x27;<span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>SARIF &#x3D; 多次运行 runs 的集合，每次运行包含：工具信息 + 运行元数据 + 被分析对象（artifacts）+ 分析结果（results）</p>
+</blockquote>
+<p>对各部分内容介绍如下：</p>
+<ol>
+<li>tool 工具信息：检查员身份信息和检查手册，记录了用哪个工具进行了扫描，版本号是多少，包含了 driver 驱动程序信息 和 rules 检查规则清单；</li>
+<li>invocations 调用信息：检查员的工作日志，记录了这次检查是在什么环境下进行的，以及是否顺利完成，executionSuccessful: true&#x2F;false；</li>
+<li>artifacts 被扫描的文件：检查了哪些地点，列出了所有被 CodeQL 扫描过的源文件（Source Code），包含文件的路径（location），有时也包含文件的具体内容或哈希值，方便后续定位；</li>
+<li><strong>results 结果</strong> ：这是问题清单，这是整份报告里最重要的部分，列出了扫描出来的所有 Bug和漏洞信息，关键单：ruleId 记录违反了哪条规则（对应 tool 里的规则），message 记录问题的具体描述，locations 记录了问题在哪个文件的第几行、第几列；</li>
+<li>columnKind 列的计算方式：用于告诉 IDE（如 VS Code）如何正确高亮代码；</li>
+<li>properties 附加属性：记录了杂项信息，存放标准字段里放不下的、或者工具特有的自定义数据，可能会包含构建时的标签（Build Tags）、项目的元数据（Project Metadata）和一些给特定显示面板用的统计数据；</li>
+</ol>
+<p>小结</p>
+<p>这一次扫描 (run)，是由名为 CodeQL 的 (tool) 进行的。它在一个特定的时间以特定的参数运行 (invocations)，按照特定的刻度标准 (columnKind)，扫描了这一堆文件 (artifacts)，最后发现了这些漏洞 (results)，并在最后贴了一些标签 (properties)。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/12/10/SARIF%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -247,7 +350,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-12-10 15:50:32 / 修改时间：15:55:38" itemprop="dateCreated datePublished" datetime="2025-12-10T15:50:32+08:00">2025-12-10</time>
+      <time title="创建时间：2025-12-10 15:50:32 / 修改时间：15:56:49" itemprop="dateCreated datePublished" datetime="2025-12-10T15:50:32+08:00">2025-12-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
