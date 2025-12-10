@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="uv是一个用 Rust 编写的极快的 Python 包和项目管理工具。 官方文档参考：https:&#x2F;&#x2F;docs.astral.sh&#x2F;uv&#x2F; uv安装Linux &amp; MacOS 安装 1curl -LsSf https:&#x2F;&#x2F;astral.sh&#x2F;uv&#x2F;install.sh | sh  Windows powershell 安装 1powershell -ExecutionPolicy ByPa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="uv使用">
+<meta property="og:url" content="https://zyufoye.github.io/2025/12/10/uv%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="uv是一个用 Rust 编写的极快的 Python 包和项目管理工具。 官方文档参考：https:&#x2F;&#x2F;docs.astral.sh&#x2F;uv&#x2F; uv安装Linux &amp; MacOS 安装 1curl -LsSf https:&#x2F;&#x2F;astral.sh&#x2F;uv&#x2F;install.sh | sh  Windows powershell 安装 1powershell -ExecutionPolicy ByPa">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/uv.png">
+<meta property="article:published_time" content="2025-12-10T07:50:32.000Z">
+<meta property="article:modified_time" content="2025-12-10T07:55:38.567Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="Config">
+<meta property="article:tag" content="uv">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zyufoye.github.io/uploads/uv.png">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2025/12/10/uv%E4%BD%BF%E7%94%A8/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2025/12/10/uv%E4%BD%BF%E7%94%A8/","path":"2025/12/10/uv使用/","title":"uv使用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>uv使用 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，分享生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#uv%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">uv安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#uv%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">uv使用</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">一个专注网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/10/uv%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="一个专注网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="uv使用 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          uv使用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-10 15:50:32 / 修改时间：15:55:38" itemprop="dateCreated datePublished" datetime="2025-12-10T15:50:32+08:00">2025-12-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>uv是一个用 Rust 编写的极快的 Python 包和项目管理工具。</p>
+<p>官方文档参考：<a target="_blank" rel="noopener" href="https://docs.astral.sh/uv/">https://docs.astral.sh/uv/</a></p>
+<h2 id="uv安装"><a href="#uv安装" class="headerlink" title="uv安装"></a>uv安装</h2><p>Linux &amp; MacOS 安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -LsSf https://astral.sh/uv/install.sh | sh</span><br></pre></td></tr></table></figure>
+
+<p>Windows powershell 安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell -ExecutionPolicy ByPass -c <span class="string">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>以Windows为例，下载uv并配置环境变量，在powershell中。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(base) <span class="built_in">PS</span> C:\Users\<span class="number">77319</span>&gt; powershell <span class="literal">-ExecutionPolicy</span> ByPass <span class="literal">-c</span> <span class="string">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></span><br><span class="line">Downloading uv <span class="number">0.9</span>.<span class="number">17</span> (x86_64<span class="literal">-pc-windows-msvc</span>)</span><br><span class="line">Installing to C:\Users\<span class="number">77319</span>\.local\bin</span><br><span class="line">  uv.exe</span><br><span class="line">  uvx.exe</span><br><span class="line">  uvw.exe</span><br><span class="line">everything<span class="string">&#x27;s installed!</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">To add C:\Users\77319\.local\bin to your PATH, either restart your shell or run:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    set Path=C:\Users\77319\.local\bin;%Path%   (cmd)</span></span><br><span class="line"><span class="string">    $env:Path = &quot;C:\Users\77319\.local\bin;$env:Path&quot;   (powershell)</span></span><br><span class="line"><span class="string">(base) PS C:\Users\77319&gt; $env:Path = &quot;C:\Users\77319\.local\bin;$env:Path&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>输入uv -h</p>
+<p><img src="/../uploads/uv.png"></p>
+<p>即表示安全成功。</p>
+<h2 id="uv使用"><a href="#uv使用" class="headerlink" title="uv使用"></a>uv使用</h2><p>以官方实践为例，展示uv如何初始化一个 Python 项目、添加依赖、运行工具、生成锁文件并同步环境。  </p>
+<p><code>uv init example</code> — 创建一个新的 Python 项目模板  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~$ uv init myproject_test</span><br><span class="line">Initialized project `myproject-test` at `/home/zyu/myproject_test`</span><br><span class="line">(base) zyu@zyu-virtual-machine:~$ <span class="built_in">cd</span> myproject_test/</span><br><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ tree .</span><br><span class="line">.</span><br><span class="line">├── main.py</span><br><span class="line">├── pyproject.toml</span><br><span class="line">└── README.md</span><br><span class="line"></span><br><span class="line">0 directories, 3 files</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>uv add ruff</code> — 安装依赖并更新 pyproject  </p>
+<p>自动创建项目虚拟环境，安装依赖包ruff，把依赖写入pyproject.toml：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv add ruff</span><br><span class="line">Using CPython 3.13.9 interpreter at: /home/zyu/miniconda3/bin/python3</span><br><span class="line">Creating virtual environment at: .venv</span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 864ms</span><br><span class="line">Prepared 1 package <span class="keyword">in</span> 1.30s</span><br><span class="line">Installed 1 package <span class="keyword">in</span> 1ms</span><br><span class="line"> + ruff==0.14.8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>uv run ruff check</code> — 运行 ruff 检查代码  </p>
+<p> 使用项目虚拟环境里的 ruff 执行代码风格检查 :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv run ruff check</span><br><span class="line">All checks passed!</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>uv lock</code> — 生成锁文件 : 解析所有依赖版本  , 生成 <code>uv.lock</code>（类似 Pipfile.lock &#x2F; poetry.lock），保证这个项目未来依赖安装一致、可复现。  </p>
+<p><code>uv sync</code> — 按锁文件同步虚拟环境 ： 根据 <code>uv.lock</code> 安装或更新依赖  ， 确保 <code>.venv/</code> 完全匹配锁文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv lock</span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 0.84ms</span><br><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv <span class="built_in">sync</span></span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 0.70ms</span><br><span class="line">Audited 1 package <span class="keyword">in</span> 0.09ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>uvx pycowsay &#39;hello world!&#39; </code> uvx 等价于 <code>uv tool run</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uvx pycowsay <span class="string">&#x27;hello world!&#x27;</span></span><br><span class="line">Installed 1 package <span class="keyword">in</span> 5ms</span><br><span class="line">/home/zyu/.cache/uv/archive-v0/nYZiOnUm3DMddg7I9DLwr/lib/python3.13/site-packages/pycowsay/main.py:27: SyntaxWarning: invalid escape sequence <span class="string">&#x27;\ &#x27;</span></span><br><span class="line">  \   ^__^</span><br><span class="line"></span><br><span class="line">  ------------</span><br><span class="line">&lt; hello world! &gt;</span><br><span class="line">  ------------</span><br><span class="line">   \   ^__^</span><br><span class="line">    \  (oo)\_______</span><br><span class="line">       (__)\       )\/\</span><br><span class="line">           ||----w |</span><br><span class="line">           ||     ||</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>以上就是官方提供的示例Demo。</p>
+<p>在实际项目中使用（以<a target="_blank" rel="noopener" href="https://github.com/JordyZomer/codeql-mcp#">https://github.com/JordyZomer/codeql-mcp#</a>为例）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install -r .\requirements.txt</span><br><span class="line">error: No virtual environment found; run `uv venv` to create an environment, or pass `--system` to install into a non-virtual environment</span><br></pre></td></tr></table></figure>
+
+<p> 使用 <code>uv pip</code> 安装依赖，但当前目录没有虚拟环境，所以 uv 不知道该把包装到哪里。  uv 的原则是如果不指定装到哪里，它默认要找一个虚拟环境（.venv），如果找不到就报错。所以需要先创建虚拟环境：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv venv</span><br><span class="line">Using CPython 3.11.7 interpreter at: C:\Users\77319\anaconda3\python.exe</span><br><span class="line">Creating virtual environment at: .venv</span><br><span class="line">Activate with: .venv\Scripts\activate</span><br><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install -r .\requirements.txt</span><br><span class="line">Resolved 60 packages <span class="keyword">in</span> 1.61s</span><br><span class="line">Prepared 60 packages <span class="keyword">in</span> 3.56s</span><br><span class="line">░░░░░░░░░░░░░░░░░░░░ [0/60] Installing wheels...                                                warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.                                                                                            </span><br><span class="line">         If the cache and target directories are on different filesystems, hardlinking may not be supported.                                                                                    </span><br><span class="line">         If this is intentional, <span class="built_in">set</span> `<span class="built_in">export</span> UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.                                                                             </span><br><span class="line">Installed 60 packages <span class="keyword">in</span> 4.17s</span><br><span class="line"> + annotated-types==0.7.0                                                                       </span><br><span class="line"> + anyio==4.12.0                                                                                </span><br><span class="line"> + attrs==25.4.0                                                                                </span><br><span class="line"> + authlib==1.6.5                                                                               </span><br><span class="line"> + beartype==0.22.8                                                                             </span><br><span class="line"> + cachetools==6.2.2</span><br><span class="line"> + certifi==2025.11.12</span><br><span class="line"> + cffi==2.0.0</span><br><span class="line"> + charset-normalizer==3.4.4</span><br><span class="line"> + click==8.3.1</span><br><span class="line"> + colorama==0.4.6</span><br><span class="line"> + cryptography==46.0.3</span><br><span class="line"> + cyclopts==4.3.0</span><br><span class="line"> + diskcache==5.6.3</span><br><span class="line"> + dnspython==2.8.0</span><br><span class="line"> + docstring-parser==0.17.0</span><br><span class="line"> + docutils==0.22.3</span><br><span class="line"> + email-validator==2.3.0</span><br><span class="line"> + exceptiongroup==1.3.1</span><br><span class="line"> + fastmcp==2.13.3</span><br><span class="line"> + h11==0.16.0</span><br><span class="line"> + httpcore==1.0.9</span><br><span class="line"> + httpx==0.28.1</span><br><span class="line"> + httpx-sse==0.4.3</span><br><span class="line"> + idna==3.11</span><br><span class="line"> + jsonschema==4.25.1</span><br><span class="line"> + jsonschema-path==0.3.4</span><br><span class="line"> + jsonschema-specifications==2025.9.1</span><br><span class="line"> + markdown-it-py==4.0.0</span><br><span class="line"> + mcp==1.22.0</span><br><span class="line"> + mdurl==0.1.2</span><br><span class="line"> + openapi-pydantic==0.5.1</span><br><span class="line"> + pathable==0.4.4</span><br><span class="line"> + pathvalidate==3.3.1</span><br><span class="line"> + platformdirs==4.5.1</span><br><span class="line"> + py-key-value-aio==0.3.0</span><br><span class="line"> + py-key-value-shared==0.3.0</span><br><span class="line"> + pycparser==2.23</span><br><span class="line"> + pydantic==2.12.5</span><br><span class="line"> + pydantic-core==2.41.5</span><br><span class="line"> + pydantic-settings==2.12.0</span><br><span class="line"> + pygments==2.19.2</span><br><span class="line"> + pyjwt==2.10.1</span><br><span class="line"> + pyperclip==1.11.0</span><br><span class="line"> + python-dotenv==1.2.1</span><br><span class="line"> + python-multipart==0.0.20</span><br><span class="line"> + pywin32==311</span><br><span class="line"> + pyyaml==6.0.3</span><br><span class="line"> + referencing==0.36.2</span><br><span class="line"> + requests==2.32.5</span><br><span class="line"> + rich==14.2.0</span><br><span class="line"> + rich-rst==1.3.2</span><br><span class="line"> + rpds-py==0.30.0</span><br><span class="line"> + sse-starlette==3.0.3</span><br><span class="line"> + starlette==0.50.0</span><br><span class="line"> + typing-extensions==4.15.0</span><br><span class="line"> + typing-inspection==0.4.2</span><br><span class="line"> + urllib3==2.6.1</span><br><span class="line"> + uvicorn==0.38.0</span><br><span class="line"> + websockets==15.0.1</span><br></pre></td></tr></table></figure>
+
+<p>关于报错信息可以忽略，大致意思是： uv 想用硬链接（hardlink）加速依赖安装，但我们的缓存目录和安装目录不在同一个文件系统上 → 无法硬链接 → 只能退回到“完整复制”文件，性能稍慢一点。  应该缓存目录在C盘，但是安装目录在D盘。</p>
+<p>运行mcp服务器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv run mcp run server.py -t sse</span><br><span class="line">Error: typer is required. Install with <span class="string">&#x27;pip install mcp[cli]&#x27;</span></span><br><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install mcp[cli]</span><br><span class="line">Resolved 37 packages <span class="keyword">in</span> 710ms</span><br><span class="line">Prepared 2 packages <span class="keyword">in</span> 138ms</span><br><span class="line">░░░░░░░░░░░░░░░░░░░░ [0/2] Installing wheels...                                                 warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.</span><br><span class="line">         If the cache and target directories are on different filesystems, hardlinking may not be supported.</span><br><span class="line">         If this is intentional, <span class="built_in">set</span> `<span class="built_in">export</span> UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.</span><br><span class="line">Installed 2 packages <span class="keyword">in</span> 56ms</span><br><span class="line"> + shellingham==1.5.4</span><br><span class="line"> + typer==0.20.0</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Config/" rel="tag"># Config</a>
+              <a href="/tags/uv/" rel="tag"># uv</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/10/kali%E5%AE%89%E8%A3%85ssh/" rel="prev" title="kali安装ssh">
+                  <i class="fa fa-angle-left"></i> kali安装ssh
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
