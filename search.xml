@@ -1,55 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>CodeQL入门</title>
-    <url>/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/</url>
-    <content><![CDATA[<h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
-<p>传统的扫描工具往往像是一个黑盒，你输入代码，它吐出报告。但 CodeQL 不同，它的核心理念非常有意思： <code>Code as Data</code> 代码即数据，CodeQL 把源代码转化成一个关系型数据库，而漏洞挖掘的过程，就变成了一次次编写 SQL（其实是 QL）查询语句的过程。</p>
-<p>CodeQL 工具包含两大部分组成：</p>
-<ul>
-<li>核心引擎(闭源)：用于解析源代码并存储于数据库，以及执行 QL 语句从数据库中进行查询；</li>
-<li>SDK代码库(开源)：包含各编程语言对应的 QL 代码库(属性&#x2F;谓词&#x2F;等)，以便快速编写查询语句。</li>
-</ul>
-<p>这给了安全研究员和开发者极大的自由度——不再受限于工具内置的规则，可以自己定义“什么样的代码长相存在漏洞”。这篇 Blog 记录了我第一次使用 CodeQL 进行静态代码分析的过程。</p>
-<span id="more"></span>
-
-<h2 id="一、CodeQL-核心工作流"><a href="#一、CodeQL-核心工作流" class="headerlink" title="一、CodeQL 核心工作流"></a>一、CodeQL 核心工作流</h2><p>使用 CodeQL 主要分为三个步骤：</p>
-<ol>
-<li><p><strong>创建数据库（Create Database）</strong>： 在编译&#x2F;构建代码的过程中，CodeQL 会“旁路监听”，捕捉所有的编译命令、文件结构、函数调用关系，生成一个快照数据库；</p>
-</li>
-<li><p><strong>编写&#x2F;运行查询（Analyze）</strong>： 使用一种类似 SQL 的面向对象查询语言（QL），在数据库中查找符合特征的代码片段；</p>
-</li>
-<li><p><strong>生成结果（Results）</strong>： 输出分析报告（通常是 SARIF 格式），定位到具体的代码行号。</p>
-</li>
-</ol>
-<h2 id="二、CodeQL-安装"><a href="#二、CodeQL-安装" class="headerlink" title="二、CodeQL 安装"></a>二、CodeQL 安装</h2><p>运行 CodeQL 需要安装 CodeQL CLI 工具，分开下载的话需要分别下载 CodeQL binary 和 SDK，需要放在相同目录下且版本保持一致，也可以直接下载捆绑包，以 Ubuntu 环境为例，安装命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.16.1/codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvzf codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/home/aono/codeqlsrc/codeql</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
-
-<p>检测是否安装成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">codeql --version</span><br></pre></td></tr></table></figure>
-
-<p>可以使用  <code>codeQL resolve languages</code> 可以查看支持的编程语言。</p>
-<h2 id="三、CodeQL-简单使用"><a href="#三、CodeQL-简单使用" class="headerlink" title="三、CodeQL 简单使用"></a>三、CodeQL 简单使用</h2><p>指定项目创建数据库，以 Java 目标（<a href="https://github.com/l4yn3/micro_service_seclab%EF%BC%89%E4%B8%BA%E4%BE%8B%EF%BC%8C%E9%A1%B9%E7%9B%AE%E9%80%9A%E8%BF%87">https://github.com/l4yn3/micro_service_seclab）为例，项目通过</a> mvn 构建，首先安装 mvn：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt install maven -y</span><br></pre></td></tr></table></figure>
-
-<p>创建数据库：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database create java_db --language=java --source-root=./test/micro_service_seclab/</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../uploads/codeql_1.png"></p>
-<p>使用默认规则进行查询，生成 SARIF 文件：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database analyze java_db/ --format=sarif-latest --output=java_result.sarif</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../uploads/codeql_2.png"></p>
-]]></content>
-      <categories>
-        <category>SAST</category>
-      </categories>
-      <tags>
-        <tag>SAST</tag>
-        <tag>CodeQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Function Call和MCP的区别</title>
     <url>/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<h2 id="Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）"><a href="#Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）" class="headerlink" title="Function Call和MCP的核心区别梳理（由GPT 5.1 生成）"></a>Function Call和MCP的核心区别梳理（由GPT 5.1 生成）</h2><h2 id="🧩核心区别总结"><a href="#🧩核心区别总结" class="headerlink" title="🧩核心区别总结"></a>🧩核心区别总结</h2><table>
@@ -168,23 +119,6 @@
       </tags>
   </entry>
   <entry>
-    <title>HEXO链接站内文章方法</title>
-    <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>Hexo链接站内文章方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 部分是现实的内容，如果不写的话就默认是文章名称。</p>
-<p>参考链接：<a href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HEXO使用记录</title>
     <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
@@ -232,6 +166,72 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
 
 <p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CodeQL入门</title>
+    <url>/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
+<p>传统的扫描工具往往像是一个黑盒，你输入代码，它吐出报告。但 CodeQL 不同，它的核心理念非常有意思： <code>Code as Data</code> 代码即数据，CodeQL 把源代码转化成一个关系型数据库，而漏洞挖掘的过程，就变成了一次次编写 SQL（其实是 QL）查询语句的过程。</p>
+<p>CodeQL 工具包含两大部分组成：</p>
+<ul>
+<li>核心引擎(闭源)：用于解析源代码并存储于数据库，以及执行 QL 语句从数据库中进行查询；</li>
+<li>SDK代码库(开源)：包含各编程语言对应的 QL 代码库(属性&#x2F;谓词&#x2F;等)，以便快速编写查询语句。</li>
+</ul>
+<p>这给了安全研究员和开发者极大的自由度——不再受限于工具内置的规则，可以自己定义“什么样的代码长相存在漏洞”。这篇 Blog 记录了我第一次使用 CodeQL 进行静态代码分析的过程。</p>
+<span id="more"></span>
+
+<h2 id="一、CodeQL-核心工作流"><a href="#一、CodeQL-核心工作流" class="headerlink" title="一、CodeQL 核心工作流"></a>一、CodeQL 核心工作流</h2><p>使用 CodeQL 主要分为三个步骤：</p>
+<ol>
+<li><p><strong>创建数据库（Create Database）</strong>： 在编译&#x2F;构建代码的过程中，CodeQL 会“旁路监听”，捕捉所有的编译命令、文件结构、函数调用关系，生成一个快照数据库；</p>
+</li>
+<li><p><strong>编写&#x2F;运行查询（Analyze）</strong>： 使用一种类似 SQL 的面向对象查询语言（QL），在数据库中查找符合特征的代码片段；</p>
+</li>
+<li><p><strong>生成结果（Results）</strong>： 输出分析报告（通常是 SARIF 格式），定位到具体的代码行号。</p>
+</li>
+</ol>
+<h2 id="二、CodeQL-安装"><a href="#二、CodeQL-安装" class="headerlink" title="二、CodeQL 安装"></a>二、CodeQL 安装</h2><p>运行 CodeQL 需要安装 CodeQL CLI 工具，分开下载的话需要分别下载 CodeQL binary 和 SDK，需要放在相同目录下且版本保持一致，也可以直接下载捆绑包，以 Ubuntu 环境为例，安装命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.16.1/codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvzf codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/home/aono/codeqlsrc/codeql</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>检测是否安装成功：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">codeql --version</span><br></pre></td></tr></table></figure>
+
+<p>可以使用  <code>codeQL resolve languages</code> 可以查看支持的编程语言。</p>
+<h2 id="三、CodeQL-简单使用"><a href="#三、CodeQL-简单使用" class="headerlink" title="三、CodeQL 简单使用"></a>三、CodeQL 简单使用</h2><p>指定项目创建数据库，以 Java 目标（<a href="https://github.com/l4yn3/micro_service_seclab%EF%BC%89%E4%B8%BA%E4%BE%8B%EF%BC%8C%E9%A1%B9%E7%9B%AE%E9%80%9A%E8%BF%87">https://github.com/l4yn3/micro_service_seclab）为例，项目通过</a> mvn 构建，首先安装 mvn：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt install maven -y</span><br></pre></td></tr></table></figure>
+
+<p>创建数据库：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database create java_db --language=java --source-root=./test/micro_service_seclab/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../uploads/codeql_1.png"></p>
+<p>使用默认规则进行查询，生成 SARIF 文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database analyze java_db/ --format=sarif-latest --output=java_result.sarif</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../uploads/codeql_2.png"></p>
+]]></content>
+      <categories>
+        <category>SAST</category>
+      </categories>
+      <tags>
+        <tag>SAST</tag>
+        <tag>CodeQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HEXO链接站内文章方法</title>
+    <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>Hexo链接站内文章方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 部分是现实的内容，如果不写的话就默认是文章名称。</p>
+<p>参考链接：<a href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
 ]]></content>
       <categories>
         <category>Config</category>
@@ -454,6 +454,27 @@
       </tags>
   </entry>
   <entry>
+    <title>Win11 Java环境变量配置</title>
+    <url>/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<p>找到JDK的路径，在系统环境变量中新建变量名和变量值：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">JAVA_HOME</span><br><span class="line">C:\Program Files\Java\jdk1.8.0_202</span><br></pre></td></tr></table></figure>
+
+<p>然后在系统变量path中，新建两条：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">%JAVA_HOME%\bin</span><br><span class="line">%JAVA_HOME%\jre\bin</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>验证配置是否成功：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;java -version</span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;javac -version</span><br><span class="line">javac 1.8.0_202</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SARIF文件架构解读</title>
     <url>/2025/12/10/SARIF%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/</url>
     <content><![CDATA[<h2 id="SARIF-文件架构架构解读"><a href="#SARIF-文件架构架构解读" class="headerlink" title="SARIF 文件架构架构解读"></a>SARIF 文件架构架构解读</h2><p>SARIF（Static Analysis Results Interchange Format）本质是一个 JSON 日志规范，用于统一表达静态分析（SAST、Lint、CodeQL、依赖扫描等）的扫描结果，方便不同工具之间共享、聚合、展示与追踪。</p>
@@ -601,39 +622,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Win11 Java环境变量配置</title>
-    <url>/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<p>找到JDK的路径，在系统环境变量中新建变量名和变量值：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">JAVA_HOME</span><br><span class="line">C:\Program Files\Java\jdk1.8.0_202</span><br></pre></td></tr></table></figure>
-
-<p>然后在系统变量path中，新建两条：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">%JAVA_HOME%\bin</span><br><span class="line">%JAVA_HOME%\jre\bin</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<p>验证配置是否成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;java -version</span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;javac -version</span><br><span class="line">javac 1.8.0_202</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>kali安装ssh</title>
-    <url>/2025/12/10/kali%E5%AE%89%E8%A3%85ssh/</url>
-    <content><![CDATA[<h1 id="kali-linux-安装ssh服务"><a href="#kali-linux-安装ssh服务" class="headerlink" title="kali linux 安装ssh服务"></a>kali linux 安装ssh服务</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get install ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl start ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> ssh <span class="comment">#设置开机自启</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl status ssh <span class="comment">#查看运行状态</span></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Kali Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Windows结束进程</title>
     <url>/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/</url>
     <content><![CDATA[<p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
@@ -654,6 +642,18 @@
       </categories>
       <tags>
         <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>kali安装ssh</title>
+    <url>/2025/12/10/kali%E5%AE%89%E8%A3%85ssh/</url>
+    <content><![CDATA[<h1 id="kali-linux-安装ssh服务"><a href="#kali-linux-安装ssh服务" class="headerlink" title="kali linux 安装ssh服务"></a>kali linux 安装ssh服务</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get install ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl start ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> ssh <span class="comment">#设置开机自启</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl status ssh <span class="comment">#查看运行状态</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Kali Linux</tag>
       </tags>
   </entry>
   <entry>
