@@ -50,238 +50,6 @@
       </tags>
   </entry>
   <entry>
-    <title>HEXO使用记录</title>
-    <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
-<p>官方文档：<a href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
-<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
-<span id="more"></span>
-
-<h2 id="一、Hexo-安装"><a href="#一、Hexo-安装" class="headerlink" title="一、Hexo 安装"></a>一、Hexo 安装</h2><p>Hexo 是一个快速、简单且功能强大的博客框架，可以使用 Markdown （或其他标记语言）编写文章，Hexo 会在几秒钟内生成带有对应主题的静态文件。</p>
-<p>安装 Hexo 需要 Node.js 以及 Git 环境。</p>
-<p>Node.js 下载地址 <a href="https://nodejs.org/en/download">Node.js Download</a></p>
-<p>Git 下载地址 <a href="https://git-scm.com/install/windows">Git Download</a></p>
-<p>所有必需组件安装完毕后，即可使用 npm 安装 Hexo：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-
-<p>初始化 Hexo 站点：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br></pre></td></tr></table></figure>
-<p>hexo-site 也可以替换为其他路径名，以 hexo-site 为例，网站根目录被称为 <code>hexo-site</code>。 </p>
-<p>初始化完成后，可以到网站根目录下，下载对应主题并进行升级：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next@latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>注意事项：</p>
-<p>运行 npm install 时，对 node_modules 目录下主题所做的任何本地更改都将丢失。如果对主题进行了更改，则应在运行 npm install 之前备份这些更改，然后在安装完成后恢复这些更改。</p>
-<p>安装完 Hexo 和 NexT 主题后，可以通过修改配置文件来自定义博客。安装 Hexo 时，配套的配置文件位于网站根目录。博客配置文件名为 _config.yml ；我们称之为 Hexo 配置文件 NexT 主题的配置文件需要您自行创建；请在目录下创建一个 _config.next.yml 文件。 网站根目录我们将其称为 Next 配置文件在以下文本中。</p>
-<p>创建空的 _config.next.yml 文件后，可以将主题文件夹中的默认配置选项复制到该文件中，以便进行修改和自定义。根据安装方式，NexT 主题的默认配置文件可能位于 themes&#x2F;next&#x2F;_config.yml 或 node_modules&#x2F;hexo-theme-next&#x2F;_config.yml 中。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure>
-
-<h2 id="二、Hexo-个性化设置"><a href="#二、Hexo-个性化设置" class="headerlink" title="二、Hexo 个性化设置"></a>二、Hexo 个性化设置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Allow to cache content generation.</span></span><br><span class="line">cache:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove unnecessary files after hexo generate.</span></span><br><span class="line">minify: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Schemes</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="comment">#scheme: Pisces</span></span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line">darkmode: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:zyufoye/zyufoye.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="三、Hexo-新建发布文章"><a href="#三、Hexo-新建发布文章" class="headerlink" title="三、Hexo 新建发布文章"></a>三、Hexo 新建发布文章</h2><p>新建发布文章：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post <span class="string">&quot;文章名称&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>生成并部署：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp;  hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
-
-<p>同步更新部署到github：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-
-<p>博客侧边栏添加 menu 菜单，以 tags 和 categories 为例：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
-
-<p>同时在index.md 中设置类别，不然点击跳转后不显示任何内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: categories</span><br></pre></td></tr></table></figure>
-
-<p>设置文章想要显示的内容时，可以用 more 进行切分， more以上的作为显示内容。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
-
-<p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Miniconda安装</title>
-    <url>/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p>Miniconda 是 Conda 的精简发行版，只包含最核心的包管理系统与 Python，可以快速搭建独立的 Python 环境。在进行数据分析、机器学习或科研开发时，相比于 Anaconda 更轻量、更灵活。</p>
-<h2 id="一、Miniconda-安装"><a href="#一、Miniconda-安装" class="headerlink" title="一、Miniconda 安装"></a>一、Miniconda 安装</h2><p>Windows 命令行安装方式，可以快速且安静地下载最新的 64 位 Windows 安装程序，将其重命名为较短的文件名，执行静默安装，然后删除安装程序：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe</span><br><span class="line">start /wait &quot;&quot; .\miniconda.exe /S</span><br><span class="line">del .\miniconda.exe</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<p>Windows Powershell：</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Invoke-WebRequest</span> <span class="literal">-Uri</span> <span class="string">&quot;https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe&quot;</span> <span class="literal">-outfile</span> <span class="string">&quot;.\miniconda.exe&quot;</span></span><br><span class="line"><span class="built_in">Start-Process</span> <span class="literal">-FilePath</span> <span class="string">&quot;.\miniconda.exe&quot;</span> <span class="literal">-ArgumentList</span> <span class="string">&quot;/S&quot;</span> <span class="literal">-Wait</span></span><br><span class="line"><span class="built_in">del</span> .\miniconda.exe</span><br></pre></td></tr></table></figure>
-
-<p>Linux 64位：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/miniconda3</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line"><span class="built_in">rm</span> ~/miniconda3/miniconda.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/miniconda3/bin/activate</span><br><span class="line"></span><br><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
-
-<h2 id="二、快速使用"><a href="#二、快速使用" class="headerlink" title="二、快速使用"></a>二、快速使用</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda create -n environment python=3.12</span><br><span class="line"></span><br><span class="line">conda activate environment</span><br><span class="line"></span><br><span class="line">conda deactivate environment</span><br></pre></td></tr></table></figure>
-
-<p>参考文献：<a href="https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt">https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt</a></p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Miniconda</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SARIF文件架构解读</title>
-    <url>/2025/12/10/SARIF%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/</url>
-    <content><![CDATA[<h2 id="SARIF-文件架构架构解读"><a href="#SARIF-文件架构架构解读" class="headerlink" title="SARIF 文件架构架构解读"></a>SARIF 文件架构架构解读</h2><p>SARIF（Static Analysis Results Interchange Format）本质是一个 JSON 日志规范，用于统一表达静态分析（SAST、Lint、CodeQL、依赖扫描等）的扫描结果，方便不同工具之间共享、聚合、展示与追踪。</p>
-<p>SARIF 简单文件结构如下：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;$schema&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;https://json.schemastore.org/sarif-2.1.0.json&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;2.1.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;runs&quot;</span> <span class="punctuation">:</span> <span class="punctuation">[</span>&#x27;tool&#x27;<span class="punctuation">,</span> &#x27;invocations&#x27;<span class="punctuation">,</span> &#x27;artifacts&#x27;<span class="punctuation">,</span> &#x27;results&#x27;<span class="punctuation">,</span> &#x27;columnKind&#x27;<span class="punctuation">,</span>&#x27;properties&#x27;<span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>SARIF &#x3D; 多次运行 runs 的集合，每次运行包含：工具信息 + 运行元数据 + 被分析对象（artifacts）+ 分析结果（results）</p>
-</blockquote>
-<p>对各部分内容介绍如下：</p>
-<ol>
-<li>tool 工具信息：检查员身份信息和检查手册，记录了用哪个工具进行了扫描，版本号是多少，包含了 driver 驱动程序信息 和 rules 检查规则清单；</li>
-<li>invocations 调用信息：检查员的工作日志，记录了这次检查是在什么环境下进行的，以及是否顺利完成，executionSuccessful: true&#x2F;false；</li>
-<li>artifacts 被扫描的文件：检查了哪些地点，列出了所有被 CodeQL 扫描过的源文件（Source Code），包含文件的路径（location），有时也包含文件的具体内容或哈希值，方便后续定位；</li>
-<li><strong>results 结果</strong> ：这是问题清单，这是整份报告里最重要的部分，列出了扫描出来的所有 Bug和漏洞信息，关键单：ruleId 记录违反了哪条规则（对应 tool 里的规则），message 记录问题的具体描述，locations 记录了问题在哪个文件的第几行、第几列；</li>
-<li>columnKind 列的计算方式：用于告诉 IDE（如 VS Code）如何正确高亮代码；</li>
-<li>properties 附加属性：记录了杂项信息，存放标准字段里放不下的、或者工具特有的自定义数据，可能会包含构建时的标签（Build Tags）、项目的元数据（Project Metadata）和一些给特定显示面板用的统计数据；</li>
-</ol>
-<p>小结</p>
-<p>这一次扫描 (run)，是由名为 CodeQL 的 (tool) 进行的。它在一个特定的时间以特定的参数运行 (invocations)，按照特定的刻度标准 (columnKind)，扫描了这一堆文件 (artifacts)，最后发现了这些漏洞 (results)，并在最后贴了一些标签 (properties)。</p>
-<span id="more"></span>
-
-<h2 id="关键信息提取"><a href="#关键信息提取" class="headerlink" title="关键信息提取"></a>关键信息提取</h2><p>要在 CodeQL 生成的 SARIF 报告中提取<strong>漏洞点（Sink）</strong>、<strong>漏洞位置</strong>、<strong>数据流（Source 到 Sink）以及控制流</strong>信息，你需要深入解析 <code>runs</code> -&gt; <code>results</code> 数组中的对象。</p>
-<p>SARIF 将这些复杂的逻辑封装在了一个层级分明的结构中。以下是提取这些关键信息所对应的具体字段和解析逻辑：</p>
-<hr>
-<h3 id="提取核心模块：results-数组"><a href="#提取核心模块：results-数组" class="headerlink" title="提取核心模块：results 数组"></a>提取核心模块：<code>results</code> 数组</h3><p>所有的漏洞信息都在 <code>runs[0].results</code> 列表里，需要遍历这个列表，列表中的每一个对象代表一个具体的漏洞实例。</p>
-<h3 id="详细提取指南"><a href="#详细提取指南" class="headerlink" title="详细提取指南"></a>详细提取指南</h3><p>请关注 <code>results</code> 对象下的以下字段：</p>
-<h4 id="A-漏洞的基本信息（是什么？）"><a href="#A-漏洞的基本信息（是什么？）" class="headerlink" title="A. 漏洞的基本信息（是什么？）"></a>A. 漏洞的基本信息（是什么？）</h4><ul>
-<li><strong>漏洞名称&#x2F;类型</strong>：<code>ruleId</code><ul>
-<li>例如：<code>java/sql-injection</code></li>
-</ul>
-</li>
-<li><strong>漏洞简要描述</strong>：<code>message.text</code><ul>
-<li>例如：”This query depends on a user-provided value.”</li>
-</ul>
-</li>
-</ul>
-<h4 id="B-漏洞位置-爆发点-Sink（在哪里爆发？）"><a href="#B-漏洞位置-爆发点-Sink（在哪里爆发？）" class="headerlink" title="B. 漏洞位置 &#x2F; 爆发点 &#x2F; Sink（在哪里爆发？）"></a>B. 漏洞位置 &#x2F; 爆发点 &#x2F; Sink（在哪里爆发？）</h4><p>这是 CodeQL 认为漏洞最终发生的地方（例如执行 SQL 查询的那一行）。</p>
-<ul>
-<li><strong>提取字段</strong>：<code>locations</code> 数组</li>
-<li><strong>关键逻辑</strong>：通常取 <code>locations[0]</code>（数组的第一个元素）作为主要位置。</li>
-<li><strong>具体内容</strong>：<ul>
-<li><strong>文件路径</strong>：<code>locations[0].physicalLocation.artifactLocation.uri</code></li>
-<li><strong>起始行号</strong>：<code>locations[0].physicalLocation.region.startLine</code></li>
-<li><strong>代码片段</strong>（如果有）：<code>locations[0].physicalLocation.region.snippet.text</code></li>
-</ul>
-</li>
-</ul>
-<h4 id="C-数据流与控制流（怎么来的？）"><a href="#C-数据流与控制流（怎么来的？）" class="headerlink" title="C. 数据流与控制流（怎么来的？）"></a>C. 数据流与控制流（怎么来的？）</h4><p>这是最复杂也是最有价值的部分，描述了污点数据（Taint Data）是如何从<strong>输入源（Source）</strong>一步步流向<strong>爆发点（Sink）</strong>的。</p>
-<p>CodeQL 将数据流和控制流统一放在 <code>codeFlows</code> 字段中。</p>
-<ul>
-<li><strong>提取字段</strong>：<code>codeFlows</code> 数组</li>
-<li><strong>结构逻辑</strong>：<ol>
-<li><code>codeFlows</code> 下通常包含一个或多个 <code>threadFlows</code>（CodeQL 通常只给出一个最具代表性的路径）。</li>
-<li><code>threadFlows</code> 下是一个 <code>locations</code> 列表，这是一个<strong>有序数组</strong>，代表了代码执行的步骤。</li>
-</ol>
-</li>
-</ul>
-<p><strong>如何解析这个路径链条：</strong></p>
-<ul>
-<li><strong>Source（污点源头&#x2F;用户输入）</strong>：<ul>
-<li>通常是 <code>threadFlows[0].locations</code> 数组的<strong>第一个元素</strong>。</li>
-<li>提取：<code>...locations[0].location.physicalLocation</code> (文件和行号)</li>
-<li>含义：例如 <code>request.getParameter(&quot;id&quot;)</code>，这是数据进入系统的位置。</li>
-</ul>
-</li>
-<li><strong>Flow Path（传播路径&#x2F;控制流）</strong>：<ul>
-<li>是 <code>threadFlows[0].locations</code> 数组的<strong>中间元素</strong>。</li>
-<li>这些步骤展示了数据经过了哪些函数调用、赋值操作或判断逻辑。</li>
-<li><strong>关键提取</strong>：<code>location.message.text</code> —— 这里通常会说明“数据被传递给参数 x”或“数据通过函数返回值传播”。</li>
-</ul>
-</li>
-<li><strong>Sink（爆发点&#x2F;最终位置）</strong>：<ul>
-<li>通常是 <code>threadFlows[0].locations</code> 数组的<strong>最后一个元素</strong>。</li>
-<li>这应该与上面提到的 <strong>B. 漏洞位置</strong> 重合。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="总结：需要提取的-JSON-路径映射表"><a href="#总结：需要提取的-JSON-路径映射表" class="headerlink" title="总结：需要提取的 JSON 路径映射表"></a>总结：需要提取的 JSON 路径映射表</h3><p>为了方便编写脚本（如 Python）提取，这是一个速查表：</p>
-<table>
-<thead>
-<tr>
-<th align="left">你想要的信息</th>
-<th align="left">SARIF JSON 路径 (假设当前在 results[i] 对象下)</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><strong>漏洞类型</strong></td>
-<td align="left"><code>ruleId</code></td>
-<td align="left">漏洞的 ID，如 SQL 注入</td>
-</tr>
-<tr>
-<td align="left"><strong>漏洞描述</strong></td>
-<td align="left"><code>message.text</code></td>
-<td align="left">人类可读的解释</td>
-</tr>
-<tr>
-<td align="left"><strong>漏洞文件</strong></td>
-<td align="left"><code>locations[0].physicalLocation.artifactLocation.uri</code></td>
-<td align="left">发生漏洞的文件名</td>
-</tr>
-<tr>
-<td align="left"><strong>漏洞行号</strong></td>
-<td align="left"><code>locations[0].physicalLocation.region.startLine</code></td>
-<td align="left">发生漏洞的行号</td>
-</tr>
-<tr>
-<td align="left"><strong>数据流路径</strong></td>
-<td align="left"><code>codeFlows[0].threadFlows[0].locations</code></td>
-<td align="left">这是一个列表，包含完整路径</td>
-</tr>
-<tr>
-<td align="left"><strong>数据源 (Source)</strong></td>
-<td align="left"><code>codeFlows[0].threadFlows[0].locations[0]</code></td>
-<td align="left">路径的第一步</td>
-</tr>
-<tr>
-<td align="left"><strong>传播过程</strong></td>
-<td align="left"><code>codeFlows[0].threadFlows[0].locations[1:-1]</code></td>
-<td align="left">路径的中间步骤</td>
-</tr>
-<tr>
-<td align="left"><strong>爆发点 (Sink)</strong></td>
-<td align="left"><code>codeFlows[0].threadFlows[0].locations[-1]</code></td>
-<td align="left">路径的最后一步</td>
-</tr>
-</tbody></table>
-<h3 id="4-举例说明（可视化）"><a href="#4-举例说明（可视化）" class="headerlink" title="4. 举例说明（可视化）"></a>4. 举例说明（可视化）</h3><p>假设这是一个 SQL 注入的 <code>result</code> 片段：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;ruleId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java/sql-injection&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Query depends on user input.&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;locations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>  <span class="comment">// ---&gt; 这里是 B: 漏洞最终爆发的位置 (Sink)</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;physicalLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;artifactLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/DB.java&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;startLine&quot;</span><span class="punctuation">:</span> <span class="number">42</span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;codeFlows&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="comment">// ---&gt; 这里是 C: 完整的数据流/控制流路径</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;threadFlows&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;locations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="comment">// 步骤 1: Source (数据源)</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;location&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;physicalLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/Controller.java&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;startLine&quot;</span><span class="punctuation">:</span> <span class="number">15</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;User input source...&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">              <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="comment">// 步骤 2: 中间传播</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;location&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;physicalLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/Service.java&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;startLine&quot;</span><span class="punctuation">:</span> <span class="number">20</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Data passed to function...&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">              <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="comment">// 步骤 3: Sink (通常与 locations[0] 一致)</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;location&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;physicalLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/DB.java&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;startLine&quot;</span><span class="punctuation">:</span> <span class="number">42</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Data used in SQL query...&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">              <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="开发者提示"><a href="#开发者提示" class="headerlink" title="开发者提示"></a>开发者提示</h3><ol>
-<li><strong>判空处理</strong>：不是所有的 <code>results</code> 都有 <code>codeFlows</code>。简单的代码质量检查（比如“变量未使用”）通常只有 <code>locations</code>，没有数据流路径。只有安全类漏洞（如注入、XSS）通常会有 <code>codeFlows</code>。</li>
-<li><strong>路径简繁</strong>：CodeQL 生成的 <code>codeFlows</code> 有时非常详细，如果你只想看关键跳板，关注 <code>location.message</code> 也是很有帮助的。</li>
-<li><strong>关联位置</strong>：有时你还会看到 <code>relatedLocations</code> 字段，这通常用于辅助说明（例如：指出变量定义的位置），如果不需要极高精度，可以暂时忽略。</li>
-</ol>
-]]></content>
-      <categories>
-        <category>CodeQL</category>
-      </categories>
-      <tags>
-        <tag>SAST</tag>
-        <tag>CodeQL</tag>
-        <tag>SARIF</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java漏洞靶场搭建学习(一)：环境搭建与Springboot架构</title>
     <url>/2025/12/09/Java%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8ESpringboot%E6%9E%B6%E6%9E%84/</url>
     <content><![CDATA[<h1 id="Java漏洞靶场搭建学习"><a href="#Java漏洞靶场搭建学习" class="headerlink" title="Java漏洞靶场搭建学习"></a>Java漏洞靶场搭建学习</h1><p>在学习 Java Web 安全的过程中，目前状态是只能理解相关的漏洞原理，根据 PoC 做题或者复现漏洞，但是这些对于 <strong>代码审计、漏洞挖掘、SDL</strong> 等都没有实质性帮助，想要在学习或工作过程中提升相关能力，计划实现以下目标：</p>
@@ -403,6 +171,153 @@
       </tags>
   </entry>
   <entry>
+    <title>SARIF文件架构解读</title>
+    <url>/2025/12/10/SARIF%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/</url>
+    <content><![CDATA[<h2 id="SARIF-文件架构架构解读"><a href="#SARIF-文件架构架构解读" class="headerlink" title="SARIF 文件架构架构解读"></a>SARIF 文件架构架构解读</h2><p>SARIF（Static Analysis Results Interchange Format）本质是一个 JSON 日志规范，用于统一表达静态分析（SAST、Lint、CodeQL、依赖扫描等）的扫描结果，方便不同工具之间共享、聚合、展示与追踪。</p>
+<p>SARIF 简单文件结构如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;$schema&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;https://json.schemastore.org/sarif-2.1.0.json&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;2.1.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;runs&quot;</span> <span class="punctuation">:</span> <span class="punctuation">[</span>&#x27;tool&#x27;<span class="punctuation">,</span> &#x27;invocations&#x27;<span class="punctuation">,</span> &#x27;artifacts&#x27;<span class="punctuation">,</span> &#x27;results&#x27;<span class="punctuation">,</span> &#x27;columnKind&#x27;<span class="punctuation">,</span>&#x27;properties&#x27;<span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>SARIF &#x3D; 多次运行 runs 的集合，每次运行包含：工具信息 + 运行元数据 + 被分析对象（artifacts）+ 分析结果（results）</p>
+</blockquote>
+<p>对各部分内容介绍如下：</p>
+<ol>
+<li>tool 工具信息：检查员身份信息和检查手册，记录了用哪个工具进行了扫描，版本号是多少，包含了 driver 驱动程序信息 和 rules 检查规则清单；</li>
+<li>invocations 调用信息：检查员的工作日志，记录了这次检查是在什么环境下进行的，以及是否顺利完成，executionSuccessful: true&#x2F;false；</li>
+<li>artifacts 被扫描的文件：检查了哪些地点，列出了所有被 CodeQL 扫描过的源文件（Source Code），包含文件的路径（location），有时也包含文件的具体内容或哈希值，方便后续定位；</li>
+<li><strong>results 结果</strong> ：这是问题清单，这是整份报告里最重要的部分，列出了扫描出来的所有 Bug和漏洞信息，关键单：ruleId 记录违反了哪条规则（对应 tool 里的规则），message 记录问题的具体描述，locations 记录了问题在哪个文件的第几行、第几列；</li>
+<li>columnKind 列的计算方式：用于告诉 IDE（如 VS Code）如何正确高亮代码；</li>
+<li>properties 附加属性：记录了杂项信息，存放标准字段里放不下的、或者工具特有的自定义数据，可能会包含构建时的标签（Build Tags）、项目的元数据（Project Metadata）和一些给特定显示面板用的统计数据；</li>
+</ol>
+<p>通俗的讲，就是这一次扫描 (run)，是由名为 CodeQL 的 (tool) 进行的。它在一个特定的时间以特定的参数运行 (invocations)，按照特定的刻度标准 (columnKind)，扫描了这一堆文件 (artifacts)，最后发现了这些漏洞 (results)，并在最后贴了一些标签 (properties)。</p>
+<span id="more"></span>
+
+<h2 id="关键信息提取"><a href="#关键信息提取" class="headerlink" title="关键信息提取"></a>关键信息提取</h2><p>要在 CodeQL 生成的 SARIF 报告中提取<strong>漏洞点（Sink）</strong>、<strong>漏洞位置</strong>、<strong>数据流（Source 到 Sink）以及控制流</strong>信息，需要研究 <code>runs</code> -&gt; <code>results</code> 数组中的对象。</p>
+<p>SARIF 将这些复杂的逻辑封装在了一个层级分明的结构中。以下是提取这些关键信息所对应的具体字段和解析逻辑：</p>
+<hr>
+<h3 id="提取核心模块：results-数组"><a href="#提取核心模块：results-数组" class="headerlink" title="提取核心模块：results 数组"></a>提取核心模块：<code>results</code> 数组</h3><p>所有的漏洞信息都在 <code>runs[0].results</code> 列表里，需要遍历这个列表，列表中的每一个对象代表一个具体的漏洞实例。</p>
+<h3 id="详细提取指南"><a href="#详细提取指南" class="headerlink" title="详细提取指南"></a>详细提取指南</h3><p>需要关注 <code>results</code> 对象下的以下字段：</p>
+<h4 id="A-漏洞的基本信息"><a href="#A-漏洞的基本信息" class="headerlink" title="A. 漏洞的基本信息"></a>A. 漏洞的基本信息</h4><ul>
+<li><strong>漏洞名称&#x2F;类型</strong>：<code>ruleId</code><ul>
+<li>例如：<code>java/sql-injection</code></li>
+</ul>
+</li>
+<li><strong>漏洞简要描述</strong>：<code>message.text</code><ul>
+<li>例如：”This query depends on a user-provided value.”</li>
+</ul>
+</li>
+</ul>
+<h4 id="B-漏洞位置-爆发点-Sink"><a href="#B-漏洞位置-爆发点-Sink" class="headerlink" title="B. 漏洞位置 &#x2F; 爆发点 &#x2F; Sink"></a>B. 漏洞位置 &#x2F; 爆发点 &#x2F; Sink</h4><p>这是 CodeQL 认为漏洞最终发生的地方（例如执行 SQL 查询的那一行）。</p>
+<ul>
+<li><strong>提取字段</strong>：<code>locations</code> 数组</li>
+<li><strong>关键逻辑</strong>：通常取 <code>locations[0]</code>（数组的第一个元素）作为主要位置。</li>
+<li><strong>具体内容</strong>：<ul>
+<li><strong>文件路径</strong>：<code>locations[0].physicalLocation.artifactLocation.uri</code></li>
+<li><strong>起始行号</strong>：<code>locations[0].physicalLocation.region.startLine</code></li>
+<li><strong>代码片段</strong>（如果有）：<code>locations[0].physicalLocation.region.snippet.text</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="C-数据流与控制流"><a href="#C-数据流与控制流" class="headerlink" title="C. 数据流与控制流"></a>C. 数据流与控制流</h4><p>这是最复杂也是最有价值的部分，描述了污点数据（Taint Data）是如何从<strong>输入源（Source）</strong>一步步流向<strong>爆发点（Sink）</strong>的。</p>
+<p>CodeQL 将数据流和控制流统一放在 <code>codeFlows</code> 字段中。</p>
+<ul>
+<li><strong>提取字段</strong>：<code>codeFlows</code> 数组</li>
+<li><strong>结构逻辑</strong>：<ol>
+<li><code>codeFlows</code> 下通常包含一个或多个 <code>threadFlows</code>（CodeQL 通常只给出一个最具代表性的路径）。</li>
+<li><code>threadFlows</code> 下是一个 <code>locations</code> 列表，这是一个<strong>有序数组</strong>，代表了代码执行的步骤。</li>
+</ol>
+</li>
+</ul>
+<p><strong>如何解析这个路径链条：</strong></p>
+<ul>
+<li><strong>Source（污点源头&#x2F;用户输入）</strong>：<ul>
+<li>通常是 <code>threadFlows[0].locations</code> 数组的<strong>第一个元素</strong>。</li>
+<li>提取：<code>...locations[0].location.physicalLocation</code> (文件和行号)</li>
+<li>含义：例如 <code>request.getParameter(&quot;id&quot;)</code>，这是数据进入系统的位置。</li>
+</ul>
+</li>
+<li><strong>Flow Path（传播路径&#x2F;控制流）</strong>：<ul>
+<li>是 <code>threadFlows[0].locations</code> 数组的<strong>中间元素</strong>。</li>
+<li>这些步骤展示了数据经过了哪些函数调用、赋值操作或判断逻辑。</li>
+<li><strong>关键提取</strong>：<code>location.message.text</code> —— 这里通常会说明“数据被传递给参数 x”或“数据通过函数返回值传播”。</li>
+</ul>
+</li>
+<li><strong>Sink（爆发点&#x2F;最终位置）</strong>：<ul>
+<li>通常是 <code>threadFlows[0].locations</code> 数组的<strong>最后一个元素</strong>。</li>
+<li>这应该与上面提到的 <strong>B. 漏洞位置</strong> 重合。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="总结：需要提取的-JSON-路径映射表"><a href="#总结：需要提取的-JSON-路径映射表" class="headerlink" title="总结：需要提取的 JSON 路径映射表"></a>总结：需要提取的 JSON 路径映射表</h3><p>为了方便编写脚本（如 Python）提取，这是一个速查表：</p>
+<table>
+<thead>
+<tr>
+<th align="left">信息类型</th>
+<th align="left">SARIF JSON 路径 (假设当前在 results[i] 对象下)</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>漏洞类型</strong></td>
+<td align="left"><code>ruleId</code></td>
+<td align="left">漏洞的 ID，如 SQL 注入</td>
+</tr>
+<tr>
+<td align="left"><strong>漏洞描述</strong></td>
+<td align="left"><code>message.text</code></td>
+<td align="left">人类可读的解释</td>
+</tr>
+<tr>
+<td align="left"><strong>漏洞文件</strong></td>
+<td align="left"><code>locations[0].physicalLocation.artifactLocation.uri</code></td>
+<td align="left">发生漏洞的文件名</td>
+</tr>
+<tr>
+<td align="left"><strong>漏洞行号</strong></td>
+<td align="left"><code>locations[0].physicalLocation.region.startLine</code></td>
+<td align="left">发生漏洞的行号</td>
+</tr>
+<tr>
+<td align="left"><strong>数据流路径</strong></td>
+<td align="left"><code>codeFlows[0].threadFlows[0].locations</code></td>
+<td align="left">这是一个列表，包含完整路径</td>
+</tr>
+<tr>
+<td align="left"><strong>数据源 (Source)</strong></td>
+<td align="left"><code>codeFlows[0].threadFlows[0].locations[0]</code></td>
+<td align="left">路径的第一步</td>
+</tr>
+<tr>
+<td align="left"><strong>传播过程</strong></td>
+<td align="left"><code>codeFlows[0].threadFlows[0].locations[1:-1]</code></td>
+<td align="left">路径的中间步骤</td>
+</tr>
+<tr>
+<td align="left"><strong>爆发点 (Sink)</strong></td>
+<td align="left"><code>codeFlows[0].threadFlows[0].locations[-1]</code></td>
+<td align="left">路径的最后一步</td>
+</tr>
+</tbody></table>
+<h3 id="4-举例说明"><a href="#4-举例说明" class="headerlink" title="4. 举例说明"></a>4. 举例说明</h3><p>假设这是一个 SQL 注入的 <code>result</code> 片段：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;ruleId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java/sql-injection&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Query depends on user input.&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;locations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>  <span class="comment">// ---&gt; 这里是 B: 漏洞最终爆发的位置 (Sink)</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;physicalLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;artifactLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/DB.java&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;startLine&quot;</span><span class="punctuation">:</span> <span class="number">42</span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;codeFlows&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="comment">// ---&gt; 这里是 C: 完整的数据流/控制流路径</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;threadFlows&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;locations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="comment">// 步骤 1: Source (数据源)</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;location&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;physicalLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/Controller.java&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;startLine&quot;</span><span class="punctuation">:</span> <span class="number">15</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;User input source...&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">              <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="comment">// 步骤 2: 中间传播</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;location&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;physicalLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/Service.java&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;startLine&quot;</span><span class="punctuation">:</span> <span class="number">20</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Data passed to function...&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">              <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="comment">// 步骤 3: Sink (通常与 locations[0] 一致)</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;location&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;physicalLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/DB.java&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;startLine&quot;</span><span class="punctuation">:</span> <span class="number">42</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Data used in SQL query...&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">              <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><ol>
+<li><strong>判空处理</strong>：不是所有的 <code>results</code> 都有 <code>codeFlows</code>。简单的代码质量检查（比如“变量未使用”）通常只有 <code>locations</code>，没有数据流路径。只有安全类漏洞（如注入、XSS）通常会有 <code>codeFlows</code>。</li>
+<li><strong>路径简繁</strong>：CodeQL 生成的 <code>codeFlows</code> 有时非常详细，如果只关注关键跳板，关注 <code>location.message</code> 比较有帮助。</li>
+<li><strong>关联位置</strong>：有时还会看到 <code>relatedLocations</code> 字段，这通常用于辅助说明（例如：指出变量定义的位置），如果不需要极高精度，可以暂时忽略。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>CodeQL</category>
+      </categories>
+      <tags>
+        <tag>SAST</tag>
+        <tag>CodeQL</tag>
+        <tag>SARIF</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Windows结束进程</title>
     <url>/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/</url>
     <content><![CDATA[<p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
@@ -447,15 +362,60 @@
       </tags>
   </entry>
   <entry>
-    <title>kali安装ssh</title>
-    <url>/2025/12/10/kali%E5%AE%89%E8%A3%85ssh/</url>
-    <content><![CDATA[<h1 id="kali-linux-安装ssh服务"><a href="#kali-linux-安装ssh服务" class="headerlink" title="kali linux 安装ssh服务"></a>kali linux 安装ssh服务</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get install ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl start ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> ssh <span class="comment">#设置开机自启</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl status ssh <span class="comment">#查看运行状态</span></span><br></pre></td></tr></table></figure>]]></content>
+    <title>HEXO使用记录</title>
+    <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
+<p>官方文档：<a href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
+<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
+<span id="more"></span>
+
+<h2 id="一、Hexo-安装"><a href="#一、Hexo-安装" class="headerlink" title="一、Hexo 安装"></a>一、Hexo 安装</h2><p>Hexo 是一个快速、简单且功能强大的博客框架，可以使用 Markdown （或其他标记语言）编写文章，Hexo 会在几秒钟内生成带有对应主题的静态文件。</p>
+<p>安装 Hexo 需要 Node.js 以及 Git 环境。</p>
+<p>Node.js 下载地址 <a href="https://nodejs.org/en/download">Node.js Download</a></p>
+<p>Git 下载地址 <a href="https://git-scm.com/install/windows">Git Download</a></p>
+<p>所有必需组件安装完毕后，即可使用 npm 安装 Hexo：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<p>初始化 Hexo 站点：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br></pre></td></tr></table></figure>
+<p>hexo-site 也可以替换为其他路径名，以 hexo-site 为例，网站根目录被称为 <code>hexo-site</code>。 </p>
+<p>初始化完成后，可以到网站根目录下，下载对应主题并进行升级：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next@latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>注意事项：</p>
+<p>运行 npm install 时，对 node_modules 目录下主题所做的任何本地更改都将丢失。如果对主题进行了更改，则应在运行 npm install 之前备份这些更改，然后在安装完成后恢复这些更改。</p>
+<p>安装完 Hexo 和 NexT 主题后，可以通过修改配置文件来自定义博客。安装 Hexo 时，配套的配置文件位于网站根目录。博客配置文件名为 _config.yml ；我们称之为 Hexo 配置文件 NexT 主题的配置文件需要您自行创建；请在目录下创建一个 _config.next.yml 文件。 网站根目录我们将其称为 Next 配置文件在以下文本中。</p>
+<p>创建空的 _config.next.yml 文件后，可以将主题文件夹中的默认配置选项复制到该文件中，以便进行修改和自定义。根据安装方式，NexT 主题的默认配置文件可能位于 themes&#x2F;next&#x2F;_config.yml 或 node_modules&#x2F;hexo-theme-next&#x2F;_config.yml 中。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、Hexo-个性化设置"><a href="#二、Hexo-个性化设置" class="headerlink" title="二、Hexo 个性化设置"></a>二、Hexo 个性化设置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Allow to cache content generation.</span></span><br><span class="line">cache:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove unnecessary files after hexo generate.</span></span><br><span class="line">minify: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Schemes</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="comment">#scheme: Pisces</span></span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line">darkmode: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:zyufoye/zyufoye.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="三、Hexo-新建发布文章"><a href="#三、Hexo-新建发布文章" class="headerlink" title="三、Hexo 新建发布文章"></a>三、Hexo 新建发布文章</h2><p>新建发布文章：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post <span class="string">&quot;文章名称&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>生成并部署：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp;  hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
+
+<p>同步更新部署到github：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p>博客侧边栏添加 menu 菜单，以 tags 和 categories 为例：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
+
+<p>同时在index.md 中设置类别，不然点击跳转后不显示任何内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: categories</span><br></pre></td></tr></table></figure>
+
+<p>设置文章想要显示的内容时，可以用 more 进行切分， more以上的作为显示内容。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
+
+<p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
+]]></content>
       <categories>
         <category>Config</category>
       </categories>
       <tags>
         <tag>Config</tag>
-        <tag>Kali Linux</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -570,6 +530,45 @@
       <tags>
         <tag>Config</tag>
         <tag>Trouble shooting</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Miniconda安装</title>
+    <url>/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Miniconda 是 Conda 的精简发行版，只包含最核心的包管理系统与 Python，可以快速搭建独立的 Python 环境。在进行数据分析、机器学习或科研开发时，相比于 Anaconda 更轻量、更灵活。</p>
+<h2 id="一、Miniconda-安装"><a href="#一、Miniconda-安装" class="headerlink" title="一、Miniconda 安装"></a>一、Miniconda 安装</h2><p>Windows 命令行安装方式，可以快速且安静地下载最新的 64 位 Windows 安装程序，将其重命名为较短的文件名，执行静默安装，然后删除安装程序：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe</span><br><span class="line">start /wait &quot;&quot; .\miniconda.exe /S</span><br><span class="line">del .\miniconda.exe</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>Windows Powershell：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Invoke-WebRequest</span> <span class="literal">-Uri</span> <span class="string">&quot;https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe&quot;</span> <span class="literal">-outfile</span> <span class="string">&quot;.\miniconda.exe&quot;</span></span><br><span class="line"><span class="built_in">Start-Process</span> <span class="literal">-FilePath</span> <span class="string">&quot;.\miniconda.exe&quot;</span> <span class="literal">-ArgumentList</span> <span class="string">&quot;/S&quot;</span> <span class="literal">-Wait</span></span><br><span class="line"><span class="built_in">del</span> .\miniconda.exe</span><br></pre></td></tr></table></figure>
+
+<p>Linux 64位：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/miniconda3</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line"><span class="built_in">rm</span> ~/miniconda3/miniconda.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/miniconda3/bin/activate</span><br><span class="line"></span><br><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、快速使用"><a href="#二、快速使用" class="headerlink" title="二、快速使用"></a>二、快速使用</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda create -n environment python=3.12</span><br><span class="line"></span><br><span class="line">conda activate environment</span><br><span class="line"></span><br><span class="line">conda deactivate environment</span><br></pre></td></tr></table></figure>
+
+<p>参考文献：<a href="https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt">https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt</a></p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Miniconda</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>kali安装ssh</title>
+    <url>/2025/12/10/kali%E5%AE%89%E8%A3%85ssh/</url>
+    <content><![CDATA[<h1 id="kali-linux-安装ssh服务"><a href="#kali-linux-安装ssh服务" class="headerlink" title="kali linux 安装ssh服务"></a>kali linux 安装ssh服务</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get install ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl start ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> ssh <span class="comment">#设置开机自启</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl status ssh <span class="comment">#查看运行状态</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Kali Linux</tag>
       </tags>
   </entry>
 </search>
