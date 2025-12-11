@@ -168,6 +168,236 @@
       </tags>
   </entry>
   <entry>
+    <title>HEXO使用记录</title>
+    <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
+<p>官方文档：<a href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
+<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
+<span id="more"></span>
+
+<h2 id="一、Hexo-安装"><a href="#一、Hexo-安装" class="headerlink" title="一、Hexo 安装"></a>一、Hexo 安装</h2><p>Hexo 是一个快速、简单且功能强大的博客框架，可以使用 Markdown （或其他标记语言）编写文章，Hexo 会在几秒钟内生成带有对应主题的静态文件。</p>
+<p>安装 Hexo 需要 Node.js 以及 Git 环境。</p>
+<p>Node.js 下载地址 <a href="https://nodejs.org/en/download">Node.js Download</a></p>
+<p>Git 下载地址 <a href="https://git-scm.com/install/windows">Git Download</a></p>
+<p>所有必需组件安装完毕后，即可使用 npm 安装 Hexo：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<p>初始化 Hexo 站点：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br></pre></td></tr></table></figure>
+<p>hexo-site 也可以替换为其他路径名，以 hexo-site 为例，网站根目录被称为 <code>hexo-site</code>。 </p>
+<p>初始化完成后，可以到网站根目录下，下载对应主题并进行升级：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next@latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>注意事项：</p>
+<p>运行 npm install 时，对 node_modules 目录下主题所做的任何本地更改都将丢失。如果对主题进行了更改，则应在运行 npm install 之前备份这些更改，然后在安装完成后恢复这些更改。</p>
+<p>安装完 Hexo 和 NexT 主题后，可以通过修改配置文件来自定义博客。安装 Hexo 时，配套的配置文件位于网站根目录。博客配置文件名为 _config.yml ；我们称之为 Hexo 配置文件 NexT 主题的配置文件需要您自行创建；请在目录下创建一个 _config.next.yml 文件。 网站根目录我们将其称为 Next 配置文件在以下文本中。</p>
+<p>创建空的 _config.next.yml 文件后，可以将主题文件夹中的默认配置选项复制到该文件中，以便进行修改和自定义。根据安装方式，NexT 主题的默认配置文件可能位于 themes&#x2F;next&#x2F;_config.yml 或 node_modules&#x2F;hexo-theme-next&#x2F;_config.yml 中。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、Hexo-个性化设置"><a href="#二、Hexo-个性化设置" class="headerlink" title="二、Hexo 个性化设置"></a>二、Hexo 个性化设置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Allow to cache content generation.</span></span><br><span class="line">cache:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove unnecessary files after hexo generate.</span></span><br><span class="line">minify: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Schemes</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="comment">#scheme: Pisces</span></span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line">darkmode: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:zyufoye/zyufoye.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="三、Hexo-新建发布文章"><a href="#三、Hexo-新建发布文章" class="headerlink" title="三、Hexo 新建发布文章"></a>三、Hexo 新建发布文章</h2><p>新建发布文章：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post <span class="string">&quot;文章名称&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>生成并部署：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp;  hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
+
+<p>同步更新部署到github：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p>博客侧边栏添加 menu 菜单，以 tags 和 categories 为例：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
+
+<p>同时在index.md 中设置类别，不然点击跳转后不显示任何内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: categories</span><br></pre></td></tr></table></figure>
+
+<p>设置文章想要显示的内容时，可以用 more 进行切分， more以上的作为显示内容。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
+
+<p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HEXO链接站内文章方法</title>
+    <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>Hexo链接站内文章方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 部分是现实的内容，如果不写的话就默认是文章名称。</p>
+<p>参考链接：<a href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MCP编程快速入门（二）</title>
+    <url>/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="模型如何确定工具选用？"><a href="#模型如何确定工具选用？" class="headerlink" title="模型如何确定工具选用？"></a>模型如何确定工具选用？</h2><p>Anthropic 详细解释了这个问题：模型在什么时候确定使用哪些工具。</p>
+<p>当用户提出一个问题时：</p>
+<ol>
+<li>客户端（Claude Desktop &#x2F; Cursor）将问题发送给 Claude；</li>
+<li>Claude 分析可用的工具，并决定使用哪一个（或多个）；</li>
+<li>客户端通过 MCP Server 执行所选的工具；</li>
+<li>工具的执行结果被送回给 Claude；</li>
+<li>Claude 结合执行结果构造最终的 prompt 并生成自然语言的回应；</li>
+<li>回应最终展示给用户！</li>
+</ol>
+<p>MCP Server 是由 Claude 主动选择并调用的，这个主动选择的过程可以分为两步：</p>
+<ol>
+<li>由 LLM（Claude）确定使用哪些 MCP Server；</li>
+<li>执行对应的 MCP Server 并对执行结果进行重新处理；</li>
+</ol>
+<p>MCP 流程图如下：</p>
+<p><img src="/../uploads/MCP_11.jpg"></p>
+<p>流程图展示了 LLM 在接收到用户输入后，根据系统提示中提供的指令与工具描述，决定是否需要调用外部工具（包括 MCP Server 提供的工具）。<br>首先，用户输入与系统 prompt（包含工具的结构化描述）一同交给模型生成 Message1。如果模型判断某个任务需要借助工具完成（Case 1），它会生成一段结构化的 Tool call JSON，并由外部执行环境或 MCP Server 负责实际执行工具逻辑。执行结果再返回给模型，模型基于这份结果生成最终回答；<br>如果模型判断不需要工具（Case 2），则直接生成最终输出。<br>整个流程体现了：LLM 负责“决定用什么工具及如何调用”，而 MCP Servers 等外部系统负责“实际执行任务并返回数据”，从而实现模型与外部能力的协作。</p>
+<span id="more"></span>
+
+<h2 id="模型如何智能选择工具？"><a href="#模型如何智能选择工具？" class="headerlink" title="模型如何智能选择工具？"></a>模型如何智能选择工具？</h2><p>模型如何确定该使用哪些工具，MCP 官方提供的 client example 示例如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">start</span>(<span class="params">self</span>):</span><br><span class="line">     <span class="comment"># 初始化所有的 mcp server</span></span><br><span class="line">     <span class="keyword">for</span> server <span class="keyword">in</span> <span class="variable language_">self</span>.servers:</span><br><span class="line">         <span class="keyword">await</span> server.initialize()</span><br><span class="line"> ​</span><br><span class="line">     <span class="comment"># 获取所有的 tools 命名为 all_tools</span></span><br><span class="line">     all_tools = []</span><br><span class="line">     <span class="keyword">for</span> server <span class="keyword">in</span> <span class="variable language_">self</span>.servers:</span><br><span class="line">         tools = <span class="keyword">await</span> server.list_tools()</span><br><span class="line">         all_tools.extend(tools)</span><br><span class="line"> ​</span><br><span class="line">     <span class="comment"># 将所有的 tools 的功能描述格式化成字符串供 LLM 使用</span></span><br><span class="line">     <span class="comment"># tool.format_for_llm() 我放到了这段代码最后，方便阅读。</span></span><br><span class="line">     <span class="comment"># 为 LLM 生成工具说明文档，告诉模型：有哪些工具、各自干啥、要什么参数。</span></span><br><span class="line">     tools_description = <span class="string">&quot;\n&quot;</span>.join(</span><br><span class="line">         [tool.format_for_llm() <span class="keyword">for</span> tool <span class="keyword">in</span> all_tools]</span><br><span class="line">     )</span><br><span class="line"> ​</span><br><span class="line">     <span class="comment"># 这里就不简化了，以供参考，实际上就是基于 prompt 和当前所有工具的信息</span></span><br><span class="line">     <span class="comment"># 询问 LLM（Claude） 应该使用哪些工具。</span></span><br><span class="line">     system_message = (</span><br><span class="line">         <span class="string">&quot;You are a helpful assistant with access to these tools:\n\n&quot;</span></span><br><span class="line">         <span class="string">f&quot;<span class="subst">&#123;tools_description&#125;</span>\n&quot;</span></span><br><span class="line">         <span class="string">&quot;Choose the appropriate tool based on the user&#x27;s question. &quot;</span></span><br><span class="line">         <span class="string">&quot;If no tool is needed, reply directly.\n\n&quot;</span></span><br><span class="line">         <span class="string">&quot;IMPORTANT: When you need to use a tool, you must ONLY respond with &quot;</span></span><br><span class="line">         <span class="string">&quot;the exact JSON object format below, nothing else:\n&quot;</span></span><br><span class="line">         <span class="string">&quot;&#123;\n&quot;</span></span><br><span class="line">         <span class="string">&#x27;    &quot;tool&quot;: &quot;tool-name&quot;,\n&#x27;</span></span><br><span class="line">         <span class="string">&#x27;    &quot;arguments&quot;: &#123;\n&#x27;</span></span><br><span class="line">         <span class="string">&#x27;        &quot;argument-name&quot;: &quot;value&quot;\n&#x27;</span></span><br><span class="line">         <span class="string">&quot;    &#125;\n&quot;</span></span><br><span class="line">         <span class="string">&quot;&#125;\n\n&quot;</span></span><br><span class="line">         <span class="string">&quot;After receiving a tool&#x27;s response:\n&quot;</span></span><br><span class="line">         <span class="string">&quot;1. Transform the raw data into a natural, conversational response\n&quot;</span></span><br><span class="line">         <span class="string">&quot;2. Keep responses concise but informative\n&quot;</span></span><br><span class="line">         <span class="string">&quot;3. Focus on the most relevant information\n&quot;</span></span><br><span class="line">         <span class="string">&quot;4. Use appropriate context from the user&#x27;s question\n&quot;</span></span><br><span class="line">         <span class="string">&quot;5. Avoid simply repeating the raw data\n\n&quot;</span></span><br><span class="line">         <span class="string">&quot;Please use only the tools that are explicitly defined above.&quot;</span></span><br><span class="line">     )</span><br><span class="line">     messages = [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: system_message&#125;]</span><br><span class="line"> ​</span><br><span class="line">     <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">         <span class="comment"># Final... 假设这里已经处理了用户消息输入.</span></span><br><span class="line">         messages.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: user_input&#125;)</span><br><span class="line"> ​</span><br><span class="line">         <span class="comment"># 将 system_message 和用户消息输入一起发送给 LLM</span></span><br><span class="line">         llm_response = <span class="variable language_">self</span>.llm_client.get_response(messages)</span><br><span class="line"> ​</span><br><span class="line">     ... <span class="comment"># 后面和确定使用哪些工具无关</span></span><br><span class="line">     </span><br><span class="line"> ​</span><br><span class="line"> <span class="keyword">class</span> <span class="title class_">Tool</span>:</span><br><span class="line">     <span class="string">&quot;&quot;&quot;Represents a tool with its properties and formatting.&quot;&quot;&quot;</span></span><br><span class="line"> ​</span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params"></span></span><br><span class="line"><span class="params">         self, name: <span class="built_in">str</span>, description: <span class="built_in">str</span>, input_schema: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]</span></span><br><span class="line"><span class="params">     </span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">         <span class="variable language_">self</span>.name: <span class="built_in">str</span> = name</span><br><span class="line">         <span class="variable language_">self</span>.description: <span class="built_in">str</span> = description</span><br><span class="line">         <span class="variable language_">self</span>.input_schema: <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>] = input_schema</span><br><span class="line"> ​</span><br><span class="line">     <span class="comment"># 把工具的名字 / 工具的用途（description）和工具所需要的参数（args_desc）转化为文本</span></span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">format_for_llm</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">         <span class="string">&quot;&quot;&quot;Format tool information for LLM.</span></span><br><span class="line"><span class="string"> ​</span></span><br><span class="line"><span class="string">         Returns:</span></span><br><span class="line"><span class="string">             A formatted string describing the tool.</span></span><br><span class="line"><span class="string">         &quot;&quot;&quot;</span></span><br><span class="line">         args_desc = []</span><br><span class="line">         <span class="keyword">if</span> <span class="string">&quot;properties&quot;</span> <span class="keyword">in</span> <span class="variable language_">self</span>.input_schema:</span><br><span class="line">             <span class="keyword">for</span> param_name, param_info <span class="keyword">in</span> <span class="variable language_">self</span>.input_schema[<span class="string">&quot;properties&quot;</span>].items():</span><br><span class="line">                 arg_desc = (</span><br><span class="line">                     <span class="string">f&quot;- <span class="subst">&#123;param_name&#125;</span>: <span class="subst">&#123;param_info.get(<span class="string">&#x27;description&#x27;</span>, <span class="string">&#x27;No description&#x27;</span>)&#125;</span>&quot;</span></span><br><span class="line">                 )</span><br><span class="line">                 <span class="keyword">if</span> param_name <span class="keyword">in</span> <span class="variable language_">self</span>.input_schema.get(<span class="string">&quot;required&quot;</span>, []):</span><br><span class="line">                     arg_desc += <span class="string">&quot; (required)&quot;</span></span><br><span class="line">                 args_desc.append(arg_desc)</span><br><span class="line"> ​</span><br><span class="line">         <span class="keyword">return</span> <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string"> Tool: <span class="subst">&#123;self.name&#125;</span></span></span><br><span class="line"><span class="string"> Description: <span class="subst">&#123;self.description&#125;</span></span></span><br><span class="line"><span class="string"> Arguments:</span></span><br><span class="line"><span class="string"> <span class="subst">&#123;<span class="built_in">chr</span>(<span class="number">10</span>).join(args_desc)&#125;</span></span></span><br><span class="line"><span class="string"> &quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>模型会通过 Prompt 来确定当前有哪些工具，通过将工具的具体使用描述以文本的形式传递给模型，供模型了解有哪些工具以及结合实时情况进行选择。</p>
+<blockquote>
+<p><strong>从所有 MCP Server 中“收集工具 → 转成给 LLM 看得懂的文字说明 → 拼到 system prompt 里 → 让 LLM 根据这些工具描述来决定要不要调用工具、调用哪个工具。</strong></p>
+</blockquote>
+<p>在整个 MCP 的大图景里，这段代码扮演的是<strong>中间协调者 &#x2F; 适配层</strong>：</p>
+<ol>
+<li>对下游（MCP Servers）</li>
+</ol>
+<ul>
+<li><p>负责初始化所有 MCP Server</p>
+</li>
+<li><p>通过 list_tools() 探测每个 server 暴露的工具</p>
+</li>
+<li><p>把工具的 JSON Schema 等结构化信息，抽象成 Tool 对象</p>
+</li>
+</ul>
+<ol start="2">
+<li>对上游（LLM）</li>
+</ol>
+<ul>
+<li><p>把所有工具信息整合并转成人类语言说明（format_for_llm）</p>
+</li>
+<li><p>把说明塞进 system prompt，告诉 LLM 它有哪些能力可以用</p>
+</li>
+<li><p>通过严格的 JSON 格式约束，让 LLM 以稳定可解析的方式返回“我要用哪个工具+参数”</p>
+</li>
+</ul>
+<ol start="3">
+<li>对中间逻辑（Router &#x2F; Orchestrator）</li>
+</ol>
+<ul>
+<li><p>后续根据 LLM 的工具选择 JSON 再去调用相应 MCP server 的 tool</p>
+</li>
+<li><p>把结果反馈给 LLM，让它生成自然语言答复</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>它让“多 MCP Server 的工具”对 LLM 看起来像一组统一、清晰、可选择的工具菜单。</strong></p>
+</blockquote>
+<h2 id="工具执行和结果反馈机制"><a href="#工具执行和结果反馈机制" class="headerlink" title="工具执行和结果反馈机制"></a>工具执行和结果反馈机制</h2><p>工具的执行就是把 system prompt 指令和工具调用描述，还有用户消息一起发送给模型，然后接收模型的回复。当模型分析用户请求后，它会决定是否需要调用工具。如果回复中包含结构化 json 格式的工具调用请求，则客户端会根据这个 json 代码执行对应的工具。</p>
+<p>如果模型执行了 tool call，则工具执行的结果 result 会和 system prompt 和用户消息一起重新发送给模型，请求模型生成最终回复。同时，如果 tool call 的 json 代码存在问题或者模型产生了幻觉，那么系统会 skip 掉无效的调用请求。</p>
+<p>工具执行的相关代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">start</span>(<span class="params">self</span>):</span><br><span class="line">     ... <span class="comment"># 上面已经介绍过了，模型如何选择工具</span></span><br><span class="line"> ​</span><br><span class="line">     <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">         <span class="comment"># 假设这里已经处理了用户消息输入.</span></span><br><span class="line">         messages.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: user_input&#125;)</span><br><span class="line"> ​</span><br><span class="line">         <span class="comment"># 获取 LLM 的输出</span></span><br><span class="line">         llm_response = <span class="variable language_">self</span>.llm_client.get_response(messages)</span><br><span class="line"> ​</span><br><span class="line">         <span class="comment"># 处理 LLM 的输出（如果有 tool call 则执行对应的工具）</span></span><br><span class="line">         result = <span class="keyword">await</span> <span class="variable language_">self</span>.process_llm_response(llm_response)</span><br><span class="line"> ​</span><br><span class="line">         <span class="comment"># 如果 result 与 llm_response 不同，说明执行了 tool call （有额外信息了）</span></span><br><span class="line">         <span class="comment"># 则将 tool call 的结果重新发送给 LLM 进行处理。</span></span><br><span class="line">         <span class="keyword">if</span> result != llm_response:</span><br><span class="line">             messages.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;content&quot;</span>: llm_response&#125;)</span><br><span class="line">             messages.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: result&#125;)</span><br><span class="line"> ​</span><br><span class="line">             final_response = <span class="variable language_">self</span>.llm_client.get_response(messages)</span><br><span class="line">             logging.info(<span class="string">&quot;\nFinal response: %s&quot;</span>, final_response)</span><br><span class="line">             messages.append(</span><br><span class="line">                 &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;content&quot;</span>: final_response&#125;</span><br><span class="line">             )</span><br><span class="line">         <span class="comment"># 否则代表没有执行 tool call，则直接将 LLM 的输出返回给用户。</span></span><br><span class="line">         <span class="keyword">else</span>:</span><br><span class="line">             messages.append(&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;content&quot;</span>: llm_response&#125;) </span><br></pre></td></tr></table></figure>
+
+<p>两个要点：</p>
+<ol>
+<li>工具对应的文档很重要： 模型通过工具描述文本来理解和选择工具，因此精心编写工具的名称、docstring 和参数说明至关重要；</li>
+<li>由于 MCP 的选择是基于 prompt 的，所以任何模型其实都适配 MCP，只要能提供对应的工具描述。但是当你使用非 Claude 模型时，MCP 使用的效果和体验难以保证（没有做专门的训练，这个不太确定，后续需要测试一下）。</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li><strong>MCP 的本质</strong>：它是一个统一的协议标准，使 AI 模型能够以一致的方式连接各种数据源和工具，类似于 AI 世界的”USB-C”接口。</li>
+<li><strong>MCP 的价值</strong>：它解决了传统 function call 的平台依赖问题，提供了更统一、开放、安全、灵活的工具调用机制，让用户和开发者都能从中受益。</li>
+<li>使用与开发：对于普通用户，MCP 提供了丰富的现成工具，用户可以在不了解任何技术细节的情况下使用；对于开发者，MCP 提供了清晰的架构和 SDK，使工具开发变得相对简单。</li>
+</ol>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li>MCP(Model Context Protocol)一篇就够了：<a href="https://zhuanlan.zhihu.com/p/29001189476">https://zhuanlan.zhihu.com/p/29001189476</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>MCP</category>
+      </categories>
+      <tags>
+        <tag>MCP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MCP编程快速入门（一）</title>
+    <url>/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%80%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="MCP-概念"><a href="#MCP-概念" class="headerlink" title="MCP 概念"></a>MCP 概念</h2><p>MCP 编程快速入门，MCP 全称 Model Context Protocol 模型上下文协议，其定义了 LLMs 与外部世界的互动方式，MCP 提供了一种标准化方法，使任意 LLMs 能够轻松连接各种数据源和工具，实现信息的高效交互和处理。</p>
+<p>目前的 AI 朝着两个方向发展：<strong>掌握更多信息</strong> 或 <strong>控制更多工具</strong>，在没有联网搜索之前，LLM 的数据来源只有训练时和推理时我们提供的数据。</p>
+<p>在MCP出现之前，如果LLM要访问外部数据，通常使用<code>Function Call</code>的方式，<code>Function Call</code>通过给模型预设函数描述（包括函数名、参数说明、返回值格式等），让模型在合适的时候返回一个符合结构的 JSON 格式，外部系统再解析这个 JSON，调用实际的后端函数。关于 <code>Function Call</code> 和<code>MCP</code> 的具体区别在 <a href="/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/" title="Function Call和MCP的区别">Function Call和MCP的区别</a></p>
+<p>但 <code>Function Call</code> 的方式没有一个统一的开发规范，你开发的函数我不能用，我开发的函数你不能用，而且开发起来很麻烦，为了解决这个问题，MCP 出现了。MCP作为LLMs的标准化工具箱，可以通过MCP调用外界的AI工具，而AI工具在开发的时候也需要遵循MCP协议。MCP 允许应用以标准化的方式向 LLM 提供上下文，并将<strong>提供上下文的逻辑</strong>与<strong>实际的LLM交互逻辑”</strong>解耦。</p>
+<p>在没有 MCP 之前，如果我们希望让模型使用本地数据，通常需要把这些数据直接复制到对话框中，让模型从文本中获取信息。而有了 MCP 之后，我们可以为特定能力编写一个 MCP Server，例如数据库读取、GitHub 操作、文件系统访问或获取当前时间等。模型通过 MCP 与这些 Server 通信，就能在无需手动粘贴数据的情况下，实时访问这些外部资源。</p>
+<p><img src="/../uploads/MCP_1.png"></p>
+<p>MCP 服务器可以提供三种主要类型的功能:</p>
+<ol>
+<li>资源访问：客户端读取文件等数据；</li>
+<li>工具调用：由LLM调用的函数；</li>
+<li>Prompt模板：预先编写的帮助客户完成特定任务的Prompt；</li>
+</ol>
+<span id="more"></span>
+
+<h2 id="MCP-Deno-开发"><a href="#MCP-Deno-开发" class="headerlink" title="MCP Deno 开发"></a>MCP Deno 开发</h2><p>使用python的SDK，简单实现下面功能，用来加深理解：</p>
+<ol>
+<li>构建可连接到任何 MCP Server 的 MCP Client</li>
+<li>创建公开资源、提示和工具的 MCP Server</li>
+<li>使用 stdio 和 SSE 等标准传输</li>
+<li>处理所有 MCP 协议消息和生命周期事件</li>
+</ol>
+<p>一般关于MCP的项目，开发者们都喜欢用uv来管理，不晓得为什么，但是跟着用一下，相关安装使用方法参照 <a href="/2025/12/10/uv%E4%BD%BF%E7%94%A8/" title="uv使用">uv使用</a> 。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建新的项目</span></span><br><span class="line">uv init mcp-demo</span><br><span class="line"><span class="built_in">cd</span> mcp-demo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并激活虚拟环境</span></span><br><span class="line">uv venv</span><br><span class="line"><span class="built_in">source</span> .venv/bin/activate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">uv add <span class="string">&quot;mcp[cli]&quot;</span> </span><br></pre></td></tr></table></figure>
+
+<p>这样一个uv管理的python MCP 项目就初始化完成了。</p>
+<p>接下来编写第一个简单Demo：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 FastMCP 实例</span></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;Demo&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例工具</span></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">echo</span>(<span class="params">text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">a: <span class="built_in">int</span>, b: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例资源</span></span><br><span class="line"><span class="meta">@mcp.resource(<span class="params"><span class="string">&quot;greeting://&#123;name&#125;&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">greet</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Hello, <span class="subst">&#123;name&#125;</span>!&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;FastMCP Demo Server is running ......&quot;</span>)</span><br><span class="line">    mcp.run()</span><br></pre></td></tr></table></figure>
+
+<p>示例代码中，使用了FastMCP来初始化一个MCP Server实例，分别创建了三个函数：</p>
+<ul>
+<li>echo：字符串输出；</li>
+<li>add：两个数字相加；</li>
+<li>greet：输入字符串，拼接后返回字符串；</li>
+</ul>
+<p>通过两个注解，赋予了函数不同的能力：</p>
+<ul>
+<li>@tool()：函数可以直接被AI调用；</li>
+<li>@resource()：像API接口一样被调用，其中的参数 greeting:&#x2F;&#x2F;{name} 是一个自定义的 URI， 可以拆解为两个部分。greeting 是随便起的前缀，name是动态参数的名称，在访问的时候需要传入。</li>
+</ul>
+<p>测试命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mcp dev server.py</span><br></pre></td></tr></table></figure>
+
+<p><code>mcp dev</code>是开发调试模式，输入这条命令后，会打开一个 MCP Inspector ，可以直观地检查和测试 MCP Server（server.py）是否正常工作。</p>
+<p><img src="/../uploads/MCP_2.png"></p>
+<p>点击 Connect ，选择 Tools，List Tools，即可列出 MCP 中定义的工具，可以输入测试内容进行 run tools测试:</p>
+<p><img src="/../uploads/MCP_3.png"></p>
+<p>在 Resources 标签页下，可以看到定义的资源函数 greet:</p>
+<p><img src="/../uploads/MCP_4.png"></p>
+<p>传入动态参数，mcp server 就会返回 json 格式的响应，并将我们输入的 api 拼接后返回。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>博客记录了对于 MCP 的理解，以及一个简单的Demo，后续在这个基础上继续完善。</p>
+<p>对 MCP Server 的开发是 MCP应用的重点，作者提到 MCP Server 其实就是定义一些函数，让智能体调用。在函数中可以实现简单逻辑、接口调用和各种操作，并通过注解赋予函数不同的能力。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li>什么是MCP？本地如何开发MCP Server：<a href="https://cloud.tencent.com/developer/article/2511642">https://cloud.tencent.com/developer/article/2511642</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>MCP</category>
+      </categories>
+      <tags>
+        <tag>MCP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java漏洞靶场搭建学习(一)：环境搭建与Springboot架构</title>
     <url>/2025/12/09/Java%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8ESpringboot%E6%9E%B6%E6%9E%84/</url>
     <content><![CDATA[<h1 id="Java漏洞靶场搭建学习"><a href="#Java漏洞靶场搭建学习" class="headerlink" title="Java漏洞靶场搭建学习"></a>Java漏洞靶场搭建学习</h1><p>在学习 Java Web 安全的过程中，目前状态是只能理解相关的漏洞原理，根据 PoC 做题或者复现漏洞，但是这些对于 <strong>代码审计、漏洞挖掘、SDL</strong> 等都没有实质性帮助，想要在学习或工作过程中提升相关能力，计划实现以下目标：</p>
@@ -289,141 +519,51 @@
       </tags>
   </entry>
   <entry>
-    <title>HEXO使用记录</title>
-    <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
-<p>官方文档：<a href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
-<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
+    <title>Miniconda安装</title>
+    <url>/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Miniconda 是 Conda 的精简发行版，只包含最核心的包管理系统与 Python，可以快速搭建独立的 Python 环境。在进行数据分析、机器学习或科研开发时，相比于 Anaconda 更轻量、更灵活。</p>
+<h2 id="一、Miniconda-安装"><a href="#一、Miniconda-安装" class="headerlink" title="一、Miniconda 安装"></a>一、Miniconda 安装</h2><p>Windows 命令行安装方式，可以快速且安静地下载最新的 64 位 Windows 安装程序，将其重命名为较短的文件名，执行静默安装，然后删除安装程序：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe</span><br><span class="line">start /wait &quot;&quot; .\miniconda.exe /S</span><br><span class="line">del .\miniconda.exe</span><br></pre></td></tr></table></figure>
+
 <span id="more"></span>
 
-<h2 id="一、Hexo-安装"><a href="#一、Hexo-安装" class="headerlink" title="一、Hexo 安装"></a>一、Hexo 安装</h2><p>Hexo 是一个快速、简单且功能强大的博客框架，可以使用 Markdown （或其他标记语言）编写文章，Hexo 会在几秒钟内生成带有对应主题的静态文件。</p>
-<p>安装 Hexo 需要 Node.js 以及 Git 环境。</p>
-<p>Node.js 下载地址 <a href="https://nodejs.org/en/download">Node.js Download</a></p>
-<p>Git 下载地址 <a href="https://git-scm.com/install/windows">Git Download</a></p>
-<p>所有必需组件安装完毕后，即可使用 npm 安装 Hexo：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<p>Windows Powershell：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Invoke-WebRequest</span> <span class="literal">-Uri</span> <span class="string">&quot;https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe&quot;</span> <span class="literal">-outfile</span> <span class="string">&quot;.\miniconda.exe&quot;</span></span><br><span class="line"><span class="built_in">Start-Process</span> <span class="literal">-FilePath</span> <span class="string">&quot;.\miniconda.exe&quot;</span> <span class="literal">-ArgumentList</span> <span class="string">&quot;/S&quot;</span> <span class="literal">-Wait</span></span><br><span class="line"><span class="built_in">del</span> .\miniconda.exe</span><br></pre></td></tr></table></figure>
 
-<p>初始化 Hexo 站点：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br></pre></td></tr></table></figure>
-<p>hexo-site 也可以替换为其他路径名，以 hexo-site 为例，网站根目录被称为 <code>hexo-site</code>。 </p>
-<p>初始化完成后，可以到网站根目录下，下载对应主题并进行升级：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next@latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Linux 64位：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/miniconda3</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line"><span class="built_in">rm</span> ~/miniconda3/miniconda.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/miniconda3/bin/activate</span><br><span class="line"></span><br><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
 
-<p>注意事项：</p>
-<p>运行 npm install 时，对 node_modules 目录下主题所做的任何本地更改都将丢失。如果对主题进行了更改，则应在运行 npm install 之前备份这些更改，然后在安装完成后恢复这些更改。</p>
-<p>安装完 Hexo 和 NexT 主题后，可以通过修改配置文件来自定义博客。安装 Hexo 时，配套的配置文件位于网站根目录。博客配置文件名为 _config.yml ；我们称之为 Hexo 配置文件 NexT 主题的配置文件需要您自行创建；请在目录下创建一个 _config.next.yml 文件。 网站根目录我们将其称为 Next 配置文件在以下文本中。</p>
-<p>创建空的 _config.next.yml 文件后，可以将主题文件夹中的默认配置选项复制到该文件中，以便进行修改和自定义。根据安装方式，NexT 主题的默认配置文件可能位于 themes&#x2F;next&#x2F;_config.yml 或 node_modules&#x2F;hexo-theme-next&#x2F;_config.yml 中。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure>
+<h2 id="二、快速使用"><a href="#二、快速使用" class="headerlink" title="二、快速使用"></a>二、快速使用</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda create -n environment python=3.12</span><br><span class="line"></span><br><span class="line">conda activate environment</span><br><span class="line"></span><br><span class="line">conda deactivate environment</span><br></pre></td></tr></table></figure>
 
-<h2 id="二、Hexo-个性化设置"><a href="#二、Hexo-个性化设置" class="headerlink" title="二、Hexo 个性化设置"></a>二、Hexo 个性化设置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Allow to cache content generation.</span></span><br><span class="line">cache:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove unnecessary files after hexo generate.</span></span><br><span class="line">minify: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Schemes</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="comment">#scheme: Pisces</span></span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line">darkmode: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:zyufoye/zyufoye.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="三、Hexo-新建发布文章"><a href="#三、Hexo-新建发布文章" class="headerlink" title="三、Hexo 新建发布文章"></a>三、Hexo 新建发布文章</h2><p>新建发布文章：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post <span class="string">&quot;文章名称&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>生成并部署：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp;  hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
-
-<p>同步更新部署到github：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-
-<p>博客侧边栏添加 menu 菜单，以 tags 和 categories 为例：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
-
-<p>同时在index.md 中设置类别，不然点击跳转后不显示任何内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: categories</span><br></pre></td></tr></table></figure>
-
-<p>设置文章想要显示的内容时，可以用 more 进行切分， more以上的作为显示内容。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
-
-<p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
+<p>参考文献：<a href="https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt">https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt</a></p>
 ]]></content>
       <categories>
         <category>Config</category>
       </categories>
       <tags>
         <tag>Config</tag>
-        <tag>Hexo</tag>
+        <tag>Miniconda</tag>
       </tags>
   </entry>
   <entry>
-    <title>HEXO链接站内文章方法</title>
-    <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>Hexo链接站内文章方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
+    <title>Win11 Java环境变量配置</title>
+    <url>/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<p>找到JDK的路径，在系统环境变量中新建变量名和变量值：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">JAVA_HOME</span><br><span class="line">C:\Program Files\Java\jdk1.8.0_202</span><br></pre></td></tr></table></figure>
 
-<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 部分是现实的内容，如果不写的话就默认是文章名称。</p>
-<p>参考链接：<a href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
-]]></content>
+<p>然后在系统变量path中，新建两条：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">%JAVA_HOME%\bin</span><br><span class="line">%JAVA_HOME%\jre\bin</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>验证配置是否成功：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;java -version</span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;javac -version</span><br><span class="line">javac 1.8.0_202</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>Config</category>
       </categories>
       <tags>
         <tag>Config</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MCP编程快速入门（一）</title>
-    <url>/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%80%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="MCP-概念"><a href="#MCP-概念" class="headerlink" title="MCP 概念"></a>MCP 概念</h2><p>MCP 编程快速入门，MCP 全称 Model Context Protocol 模型上下文协议，其定义了 LLMs 与外部世界的互动方式，MCP 提供了一种标准化方法，使任意 LLMs 能够轻松连接各种数据源和工具，实现信息的高效交互和处理。</p>
-<p>目前的 AI 朝着两个方向发展：<strong>掌握更多信息</strong> 或 <strong>控制更多工具</strong>，在没有联网搜索之前，LLM 的数据来源只有训练时和推理时我们提供的数据。</p>
-<p>在MCP出现之前，如果LLM要访问外部数据，通常使用<code>Function Call</code>的方式，<code>Function Call</code>通过给模型预设函数描述（包括函数名、参数说明、返回值格式等），让模型在合适的时候返回一个符合结构的 JSON 格式，外部系统再解析这个 JSON，调用实际的后端函数。关于 <code>Function Call</code> 和<code>MCP</code> 的具体区别在 <a href="/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/" title="Function Call和MCP的区别">Function Call和MCP的区别</a></p>
-<p>但 <code>Function Call</code> 的方式没有一个统一的开发规范，你开发的函数我不能用，我开发的函数你不能用，而且开发起来很麻烦，为了解决这个问题，MCP 出现了。MCP作为LLMs的标准化工具箱，可以通过MCP调用外界的AI工具，而AI工具在开发的时候也需要遵循MCP协议。MCP 允许应用以标准化的方式向 LLM 提供上下文，并将<strong>提供上下文的逻辑</strong>与<strong>实际的LLM交互逻辑”</strong>解耦。</p>
-<p>在没有 MCP 之前，如果我们希望让模型使用本地数据，通常需要把这些数据直接复制到对话框中，让模型从文本中获取信息。而有了 MCP 之后，我们可以为特定能力编写一个 MCP Server，例如数据库读取、GitHub 操作、文件系统访问或获取当前时间等。模型通过 MCP 与这些 Server 通信，就能在无需手动粘贴数据的情况下，实时访问这些外部资源。</p>
-<p><img src="/../uploads/MCP_1.png"></p>
-<p>MCP 服务器可以提供三种主要类型的功能:</p>
-<ol>
-<li>资源访问：客户端读取文件等数据；</li>
-<li>工具调用：由LLM调用的函数；</li>
-<li>Prompt模板：预先编写的帮助客户完成特定任务的Prompt；</li>
-</ol>
-<span id="more"></span>
-
-<h2 id="MCP-Deno-开发"><a href="#MCP-Deno-开发" class="headerlink" title="MCP Deno 开发"></a>MCP Deno 开发</h2><p>使用python的SDK，简单实现下面功能，用来加深理解：</p>
-<ol>
-<li>构建可连接到任何 MCP Server 的 MCP Client</li>
-<li>创建公开资源、提示和工具的 MCP Server</li>
-<li>使用 stdio 和 SSE 等标准传输</li>
-<li>处理所有 MCP 协议消息和生命周期事件</li>
-</ol>
-<p>一般关于MCP的项目，开发者们都喜欢用uv来管理，不晓得为什么，但是跟着用一下，相关安装使用方法参照 <a href="/2025/12/10/uv%E4%BD%BF%E7%94%A8/" title="uv使用">uv使用</a> 。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建新的项目</span></span><br><span class="line">uv init mcp-demo</span><br><span class="line"><span class="built_in">cd</span> mcp-demo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并激活虚拟环境</span></span><br><span class="line">uv venv</span><br><span class="line"><span class="built_in">source</span> .venv/bin/activate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">uv add <span class="string">&quot;mcp[cli]&quot;</span> </span><br></pre></td></tr></table></figure>
-
-<p>这样一个uv管理的python MCP 项目就初始化完成了。</p>
-<p>接下来编写第一个简单Demo：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 FastMCP 实例</span></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;Demo&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例工具</span></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">echo</span>(<span class="params">text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">a: <span class="built_in">int</span>, b: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例资源</span></span><br><span class="line"><span class="meta">@mcp.resource(<span class="params"><span class="string">&quot;greeting://&#123;name&#125;&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">greet</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Hello, <span class="subst">&#123;name&#125;</span>!&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;FastMCP Demo Server is running ......&quot;</span>)</span><br><span class="line">    mcp.run()</span><br></pre></td></tr></table></figure>
-
-<p>示例代码中，使用了FastMCP来初始化一个MCP Server实例，分别创建了三个函数：</p>
-<ul>
-<li>echo：字符串输出；</li>
-<li>add：两个数字相加；</li>
-<li>greet：输入字符串，拼接后返回字符串；</li>
-</ul>
-<p>通过两个注解，赋予了函数不同的能力：</p>
-<ul>
-<li>@tool()：函数可以直接被AI调用；</li>
-<li>@resource()：像API接口一样被调用，其中的参数 greeting:&#x2F;&#x2F;{name} 是一个自定义的 URI， 可以拆解为两个部分。greeting 是随便起的前缀，name是动态参数的名称，在访问的时候需要传入。</li>
-</ul>
-<p>测试命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mcp dev server.py</span><br></pre></td></tr></table></figure>
-
-<p><code>mcp dev</code>是开发调试模式，输入这条命令后，会打开一个 MCP Inspector ，可以直观地检查和测试 MCP Server（server.py）是否正常工作。</p>
-<p><img src="/../uploads/MCP_2.png"></p>
-<p>点击 Connect ，选择 Tools，List Tools，即可列出 MCP 中定义的工具，可以输入测试内容进行 run tools测试:</p>
-<p><img src="/../uploads/MCP_3.png"></p>
-<p>在 Resources 标签页下，可以看到定义的资源函数 greet:</p>
-<p><img src="/../uploads/MCP_4.png"></p>
-<p>传入动态参数，mcp server 就会返回 json 格式的响应，并将我们输入的 api 拼接后返回。</p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>博客记录了对于 MCP 的理解，以及一个简单的Demo，后续在这个基础上继续完善。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
-<li>什么是MCP？本地如何开发MCP Server：<a href="https://cloud.tencent.com/developer/article/2511642">https://cloud.tencent.com/developer/article/2511642</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>MCP</category>
-      </categories>
-      <tags>
-        <tag>MCP</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -574,66 +714,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Miniconda安装</title>
-    <url>/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p>Miniconda 是 Conda 的精简发行版，只包含最核心的包管理系统与 Python，可以快速搭建独立的 Python 环境。在进行数据分析、机器学习或科研开发时，相比于 Anaconda 更轻量、更灵活。</p>
-<h2 id="一、Miniconda-安装"><a href="#一、Miniconda-安装" class="headerlink" title="一、Miniconda 安装"></a>一、Miniconda 安装</h2><p>Windows 命令行安装方式，可以快速且安静地下载最新的 64 位 Windows 安装程序，将其重命名为较短的文件名，执行静默安装，然后删除安装程序：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe</span><br><span class="line">start /wait &quot;&quot; .\miniconda.exe /S</span><br><span class="line">del .\miniconda.exe</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<p>Windows Powershell：</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Invoke-WebRequest</span> <span class="literal">-Uri</span> <span class="string">&quot;https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe&quot;</span> <span class="literal">-outfile</span> <span class="string">&quot;.\miniconda.exe&quot;</span></span><br><span class="line"><span class="built_in">Start-Process</span> <span class="literal">-FilePath</span> <span class="string">&quot;.\miniconda.exe&quot;</span> <span class="literal">-ArgumentList</span> <span class="string">&quot;/S&quot;</span> <span class="literal">-Wait</span></span><br><span class="line"><span class="built_in">del</span> .\miniconda.exe</span><br></pre></td></tr></table></figure>
-
-<p>Linux 64位：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/miniconda3</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line"><span class="built_in">rm</span> ~/miniconda3/miniconda.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/miniconda3/bin/activate</span><br><span class="line"></span><br><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
-
-<h2 id="二、快速使用"><a href="#二、快速使用" class="headerlink" title="二、快速使用"></a>二、快速使用</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda create -n environment python=3.12</span><br><span class="line"></span><br><span class="line">conda activate environment</span><br><span class="line"></span><br><span class="line">conda deactivate environment</span><br></pre></td></tr></table></figure>
-
-<p>参考文献：<a href="https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt">https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt</a></p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Miniconda</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Win11 Java环境变量配置</title>
-    <url>/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<p>找到JDK的路径，在系统环境变量中新建变量名和变量值：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">JAVA_HOME</span><br><span class="line">C:\Program Files\Java\jdk1.8.0_202</span><br></pre></td></tr></table></figure>
-
-<p>然后在系统变量path中，新建两条：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">%JAVA_HOME%\bin</span><br><span class="line">%JAVA_HOME%\jre\bin</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<p>验证配置是否成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;java -version</span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;javac -version</span><br><span class="line">javac 1.8.0_202</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>kali安装ssh</title>
-    <url>/2025/12/10/kali%E5%AE%89%E8%A3%85ssh/</url>
-    <content><![CDATA[<h1 id="kali-linux-安装ssh服务"><a href="#kali-linux-安装ssh服务" class="headerlink" title="kali linux 安装ssh服务"></a>kali linux 安装ssh服务</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get install ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl start ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> ssh <span class="comment">#设置开机自启</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl status ssh <span class="comment">#查看运行状态</span></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Kali Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Windows结束进程</title>
     <url>/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/</url>
     <content><![CDATA[<p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
@@ -768,6 +848,18 @@
       <tags>
         <tag>Config</tag>
         <tag>Trouble shooting</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>kali安装ssh</title>
+    <url>/2025/12/10/kali%E5%AE%89%E8%A3%85ssh/</url>
+    <content><![CDATA[<h1 id="kali-linux-安装ssh服务"><a href="#kali-linux-安装ssh服务" class="headerlink" title="kali linux 安装ssh服务"></a>kali linux 安装ssh服务</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get install ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl start ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> ssh <span class="comment">#设置开机自启</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl status ssh <span class="comment">#查看运行状态</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Kali Linux</tag>
       </tags>
   </entry>
 </search>
