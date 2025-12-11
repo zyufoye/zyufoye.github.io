@@ -20,28 +20,25 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="一、问题描述使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题： 1CondaError: Run &#x27;conda init&#x27; before &#x27;conda activate&#x27;  但是，运行 conda init 后还是不起作用： 123456λ conda initno change     C:\Users\Userna">
-<meta property="og:type" content="article">
-<meta property="og:title" content="解决VScode和Trae等无法加载conda虚拟环境的问题">
-<meta property="og:url" content="https://zyufoye.github.io/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
+    <meta name="description" content="一个专注网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Aono Note">
+<meta property="og:url" content="https://zyufoye.github.io/page/2/index.html">
 <meta property="og:site_name" content="Aono Note">
-<meta property="og:description" content="一、问题描述使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题： 1CondaError: Run &#x27;conda init&#x27; before &#x27;conda activate&#x27;  但是，运行 conda init 后还是不起作用： 123456λ conda initno change     C:\Users\Userna">
+<meta property="og:description" content="一个专注网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-02T12:11:22.000Z">
-<meta property="article:modified_time" content="2025-12-04T02:19:41.716Z">
 <meta property="article:author" content="Aono">
-<meta property="article:tag" content="Config">
-<meta property="article:tag" content="Trouble shooting">
+<meta property="article:tag" content="网络安全">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://zyufoye.github.io/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/">
+<link rel="canonical" href="https://zyufoye.github.io/page/2/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/","path":"2025/12/02/解决VScode和Trae等无法加载conda虚拟环境的问题/","title":"解决VScode和Trae等无法加载conda虚拟环境的问题"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"page/2/index.html","title":""}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>解决VScode和Trae等无法加载conda虚拟环境的问题 | Aono Note</title>
+<title>Aono Note</title>
   
 
 
@@ -94,7 +91,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">Aono Note</p>
+      <h1 class="site-title">Aono Note</h1>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">记录学习，分享生活</p>
@@ -148,7 +145,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -161,7 +158,6 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">一、问题描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text">二、解决方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%8E%9F%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">三、原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-conda-init-%E5%AE%9E%E9%99%85%E5%9C%A8%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">1. conda init 实际在做什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-PowerShell-%E6%89%A7%E8%A1%8C%E7%AD%96%E7%95%A5%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">3.2.</span> <span class="nav-text">2. PowerShell 执行策略的限制</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -211,17 +207,194 @@
 
     </div>
 
-    <div class="main-inner post posts-expand">
+    <div class="main-inner index posts-expand">
 
-
-  
+    
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="一个专注网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">Win11 Java环境变量配置</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-04 10:57:42 / 修改时间：10:59:19" itemprop="dateCreated datePublished" datetime="2025-12-04T10:57:42+08:00">2025-12-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>找到JDK的路径，在系统环境变量中新建变量名和变量值：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">JAVA_HOME</span><br><span class="line">C:\Program Files\Java\jdk1.8.0_202</span><br></pre></td></tr></table></figure>
+
+<p>然后在系统变量path中，新建两条：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">%JAVA_HOME%\bin</span><br><span class="line">%JAVA_HOME%\jre\bin</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="一个专注网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">HEXO使用记录</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-04 10:22:24 / 修改时间：10:59:27" itemprop="dateCreated datePublished" datetime="2025-12-04T10:22:24+08:00">2025-12-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a target="_blank" rel="noopener" href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
+<p>官方文档：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
+<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -235,13 +408,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="解决VScode和Trae等无法加载conda虚拟环境的问题 | Aono Note">
+      <meta itemprop="name" content=" | Aono Note">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          解决VScode和Trae等无法加载conda虚拟环境的问题
-        </h1>
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">解决VScode和Trae等无法加载conda虚拟环境的问题</a>
+        </h2>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -271,13 +444,6 @@
     </span>
 
   
-    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span id="busuanzi_value_page_pv"></span>
-    </span>
 </div>
 
         </div>
@@ -286,7 +452,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="一、问题描述"><a href="#一、问题描述" class="headerlink" title="一、问题描述"></a>一、问题描述</h1><p>使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题：</p>
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="一、问题描述"><a href="#一、问题描述" class="headerlink" title="一、问题描述"></a>一、问题描述</h1><p>使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <p>但是，运行 <code>conda init</code> 后还是不起作用：</p>
@@ -296,41 +463,15 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
 
 <p>重新加载即可生效。</p>
-<span id="more"></span>
-
-<h1 id="三、原理"><a href="#三、原理" class="headerlink" title="三、原理"></a>三、原理</h1><p>简单说，这个问题本质上是：<strong>Conda 的初始化脚本被 PowerShell 的安全策略拦住了，所以每次新开终端时，Conda 都没真正“接管”当前 Shell。</strong></p>
-<h2 id="1-conda-init-实际在做什么？"><a href="#1-conda-init-实际在做什么？" class="headerlink" title="1. conda init 实际在做什么？"></a>1. <code>conda init</code> 实际在做什么？</h2><p>在 Windows + PowerShell 下，Conda 并不是简单地靠 <code>conda.exe</code> 来完成环境激活的，而是通过一套 <strong>Shell Hook 脚本</strong> 来接管当前会话：</p>
-<p><code>conda init</code> 会在 <code>C:\Users\Username\Documents\WindowsPowerShell\profile.ps1</code> 里写入一段初始化代码，这些脚本会去调用 <code>miniconda3\shell\condabin\conda-hook.ps1</code> 等文件，往当前 PowerShell 里注入 <code>conda</code> &#x2F; <code>conda activate</code> 等函数，并设置好 PATH、环境变量等。</p>
-<p><strong>只有这些 Hook 每次打开 PowerShell 时能顺利执行，当前终端才真正“支持” <code>conda activate</code>。</strong></p>
-<p>所以当你看到：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>其实意思是：<strong>当前这个 PowerShell 会话里没有被注入 Conda 的 Hook 脚本</strong>，所以它感觉自己还没 init。</p>
-<h2 id="2-PowerShell-执行策略的限制"><a href="#2-PowerShell-执行策略的限制" class="headerlink" title="2. PowerShell 执行策略的限制"></a>2. PowerShell 执行策略的限制</h2><p>PowerShell 为了安全，有一个 <strong>执行策略（Execution Policy）</strong>，决定哪些脚本可以被执行：</p>
-<p>常见几种：</p>
-<ul>
-<li><code>Restricted</code>：完全禁止执行脚本；</li>
-<li><code>AllSigned</code>：所有脚本都必须是签名的；</li>
-<li><code>RemoteSigned</code>：本地脚本可以执行，从互联网下载的脚本必须签名。</li>
-</ul>
-<p>在我机器上的情况是：</p>
-<ul>
-<li><p>Conda 的这些 hook &#x2F; profile 脚本属于 <strong>本地脚本</strong>；</p>
-</li>
-<li><p>但默认配置策略过于严格，导致：</p>
-<ul>
-<li>打开 PowerShell 时，<code>profile.ps1</code> &#x2F; <code>conda-hook.ps1</code> 没有被执行；</li>
-<li>于是 <code>conda</code> 函数、自动激活逻辑统统都没加载进当前会话；</li>
-<li>终端自然就会提示你先 <code>conda init</code>。</li>
-</ul>
-</li>
-</ul>
-<p>也就是说：<code>conda init</code> 写入的配置已经在那儿了，但每次启动 PowerShell 时都被策略挡在门外。 当以管理员身份执行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
-
-<p>等于允许系统执行本地脚本，只对来源不明的远程脚本做限制。</p>
-<p>这样一来，再次打开 PowerShell &#x2F; VSCode 内置终端时，<code>profile.ps1</code> 会被正常加载，里面调用的 <code>conda-hook.ps1</code> 等本地脚本可以顺利执行， VSCode &#x2F; Trae 里就可以正常加载和激活 Conda 虚拟环境，不再报 Run ‘conda init’ before ‘conda activate’错误。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
     </div>
 
     
@@ -338,22 +479,8 @@
     
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/Config/" rel="tag"># Config</a>
-              <a href="/tags/Trouble-shooting/" rel="tag"># Trouble shooting</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-            </div>
-            <div class="post-nav-item">
-                <a href="/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" rel="next" title="HEXO使用记录">
-                  HEXO使用记录 <i class="fa fa-angle-right"></i>
-                </a>
-            </div>
-          </div>
+        <div class="post-eof"></div>
+      
     </footer>
   </article>
 </div>
@@ -361,7 +488,9 @@
 
 
 
-
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
 
 </div>
   </main>

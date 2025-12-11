@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Function Call和MCP的核心区别梳理（由GPT 5.1 生成）🧩核心区别总结   特性 Function Call MCP（Model Context Protocol）    定位 让模型按照开发者定义的结构化方式返回“调用某函数所需的参数”。 让模型与外部工具、服务、数据源通过统一协议进行双向通信。   角色 模型只“产生命令”（函数+参数），不执行。执行由外部应用完成。 除生成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Function Call和MCP的区别">
+<meta property="og:url" content="https://zyufoye.github.io/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="Function Call和MCP的核心区别梳理（由GPT 5.1 生成）🧩核心区别总结   特性 Function Call MCP（Model Context Protocol）    定位 让模型按照开发者定义的结构化方式返回“调用某函数所需的参数”。 让模型与外部工具、服务、数据源通过统一协议进行双向通信。   角色 模型只“产生命令”（函数+参数），不执行。执行由外部应用完成。 除生成">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-11T02:52:18.000Z">
+<meta property="article:modified_time" content="2025-12-11T03:19:49.437Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="MCP">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/","path":"2025/12/11/Function-Call和MCP的区别/","title":"Function Call和MCP的区别"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Function Call和MCP的区别 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，分享生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Function-Call%E5%92%8CMCP%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB%E6%A2%B3%E7%90%86%EF%BC%88%E7%94%B1GPT-5-1-%E7%94%9F%E6%88%90%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">Function Call和MCP的核心区别梳理（由GPT 5.1 生成）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A7%A9%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB%E6%80%BB%E7%BB%93"><span class="nav-number">2.</span> <span class="nav-text">🧩核心区别总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A7%A0Function-Call-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">🧠Function Call 是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%94-Function-Call-%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.1.</span> <span class="nav-text">✔ Function Call 示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A7%A0MCP%EF%BC%88Model-Context-Protocol%EF%BC%89%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">🧠MCP（Model Context Protocol）是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%94-MCP-%E7%A4%BA%E4%BE%8B"><span class="nav-number">4.1.</span> <span class="nav-text">✔ MCP 示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%AD%90%E5%B0%8F%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">⭐小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">一个专注网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="一个专注网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Function Call和MCP的区别 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Function Call和MCP的区别
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-11 10:52:18 / 修改时间：11:19:49" itemprop="dateCreated datePublished" datetime="2025-12-11T10:52:18+08:00">2025-12-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）"><a href="#Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）" class="headerlink" title="Function Call和MCP的核心区别梳理（由GPT 5.1 生成）"></a>Function Call和MCP的核心区别梳理（由GPT 5.1 生成）</h2><h2 id="🧩核心区别总结"><a href="#🧩核心区别总结" class="headerlink" title="🧩核心区别总结"></a>🧩核心区别总结</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Function Call</th>
+<th>MCP（Model Context Protocol）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>定位</strong></td>
+<td>让模型按照开发者定义的结构化方式返回“调用某函数所需的参数”。</td>
+<td>让模型与外部工具、服务、数据源通过统一协议进行双向通信。</td>
+</tr>
+<tr>
+<td><strong>角色</strong></td>
+<td>模型只“产生命令”（函数+参数），不执行。执行由外部应用完成。</td>
+<td>除生成调用外，还可以<strong>发现、注册、调度、执行</strong>外部资源。</td>
+</tr>
+<tr>
+<td><strong>复杂度</strong></td>
+<td>简单、轻量级、多数场景够用。</td>
+<td>更底层、更通用，可连接复杂系统。</td>
+</tr>
+<tr>
+<td><strong>使用场景</strong></td>
+<td>调用某个特定函数、处理结构化任务。</td>
+<td>接入多个工具、多数据源、插件系统、企业级工作流。</td>
+</tr>
+</tbody></table>
+<hr>
+<span id="more"></span>
+
+<h2 id="🧠Function-Call-是什么？"><a href="#🧠Function-Call-是什么？" class="headerlink" title="🧠Function Call 是什么？"></a>🧠Function Call 是什么？</h2><p><strong>Function Call</strong> 是模型输出的一种结构化格式，模型输出它想调用什么函数并且要传什么参数。模型只负责<strong>输出结构化 JSON</strong>，实际执行由相关程序完成。</p>
+<p><strong>Function Call</strong>提供的是 API 层的能力，由开发者定义可调用函数列表，模型产出：函数名 + 参数，适用于简单逻辑。</p>
+<h3 id="✔-Function-Call-示例"><a href="#✔-Function-Call-示例" class="headerlink" title="✔ Function Call 示例"></a>✔ Function Call 示例</h3><p>假设开发者定义了一个函数：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;get_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;获取城市天气&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;parameters&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;required&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;city&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>用户问：</p>
+<blockquote>
+<p>“明天北京天气如何？”</p>
+</blockquote>
+<p>模型可能返回：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;get_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="string">&quot;北京&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后 <strong>相关程序</strong> 执行 get_weather(“北京”) 并把结果再返回给模型或用户。</p>
+<p>📌 <strong>关键点：模型不会执行，只会返回结构体。</strong></p>
+<h2 id="🧠MCP（Model-Context-Protocol）是什么？"><a href="#🧠MCP（Model-Context-Protocol）是什么？" class="headerlink" title="🧠MCP（Model Context Protocol）是什么？"></a>🧠MCP（Model Context Protocol）是什么？</h2><p>MCP 是一个<strong>通用协议</strong>，用于管理工具（tools），连接外部数据源（database、文件系统等），让模型能够发现并调用这些资源，同时统一不同工具的接口格式。</p>
+<p>可以把 MCP 理解为：</p>
+<blockquote>
+<p><strong>模型与外部世界的“操作系统抽象层”</strong><br>它让模型能直接访问文件、数据库、网络等工具。</p>
+</blockquote>
+<p>它的“能力”比 Function Call 强得多，因为：</p>
+<p>👉 <strong>Function Call 只能调用开发人员手工写死的函数</strong><br>👉 <strong>MCP 可以动态加载工具包、文件系统服务、环境服务，让模型像操作系统用户一样访问资源</strong></p>
+<hr>
+<h3 id="✔-MCP-示例"><a href="#✔-MCP-示例" class="headerlink" title="✔ MCP 示例"></a>✔ MCP 示例</h3><p>假设 MCP 提供一个工具 <code>fs.read_file</code>。</p>
+<p>用户问：</p>
+<blockquote>
+<p>“打开 &#x2F;docs&#x2F;intro.md 读给我听”</p>
+</blockquote>
+<p>模型实际会产生这样的消息（非 Function Call 风格，而是 MCP 消息协议）：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_tool&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fs.read_file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/docs/intro.md&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>服务端会执行 <strong>read_file</strong> 并返回文件内容。</p>
+<p>模型可以继续请求：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_tool&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fs.write_file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/docs/notes.txt&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里是我总结的内容...&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里体现 MCP 的本质：</p>
+<ul>
+<li>模型知道有哪些工具可用</li>
+<li>模型直接“操控”这些工具</li>
+<li>具有类似“文件读写”等复杂能力</li>
+<li>不需要开发者提前硬编码所有函数</li>
+</ul>
+<h2 id="⭐小结"><a href="#⭐小结" class="headerlink" title="⭐小结"></a>⭐小结</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Function Call</th>
+<th>MCP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>工具发现</td>
+<td>手工定义</td>
+<td>自动注册，模型可自动学习工具能力</td>
+</tr>
+<tr>
+<td>调用方式</td>
+<td>结构化 JSON</td>
+<td>双向协议、消息通信</td>
+</tr>
+<tr>
+<td>扩展性</td>
+<td>每加一个功能都要新增函数定义</td>
+<td>新增 MCP 服务即可扩展工具能力</td>
+</tr>
+<tr>
+<td>模型能力</td>
+<td>被动</td>
+<td>主动、可规划调用流程</td>
+</tr>
+<tr>
+<td>场景</td>
+<td>简单 API 调用、数据结构化</td>
+<td>IDE、数据库集成、文件系统、GitHub 操作、企业自动化</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MCP/" rel="tag"># MCP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" rel="prev" title="MCP编程快速入门">
+                  <i class="fa fa-angle-left"></i> MCP编程快速入门
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/" rel="next" title="HEXO链接站内文章方法">
+                  HEXO链接站内文章方法 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

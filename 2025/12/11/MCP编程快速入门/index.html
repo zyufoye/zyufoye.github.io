@@ -20,27 +20,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。 首先查找占用 8080 的 PID： 1netstat -ano | findstr :8080  然后根据 PID 强制结束进程： 1taskkill &#x2F;F &#x2F;PID 3836">
+    <meta name="description" content="MCP 概念MCP 编程快速入门，MCP 全称 Model Context Protocol 模型上下文协议，其定义了 LLMs 与外部世界的互动方式，MCP 提供了一种标准化方法，使任意 LLMs 能够轻松连接各种数据源和工具，实现信息的高效交互和处理。 目前的 AI 朝着两个方向发展：掌握更多信息 或 控制更多工具，在没有联网搜索之前，LLM 的数据来源只有训练时和推理时我们提供的数据。 在M">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Windows结束进程">
-<meta property="og:url" content="https://zyufoye.github.io/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/index.html">
+<meta property="og:title" content="MCP编程快速入门">
+<meta property="og:url" content="https://zyufoye.github.io/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/index.html">
 <meta property="og:site_name" content="Aono Note">
-<meta property="og:description" content="今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。 首先查找占用 8080 的 PID： 1netstat -ano | findstr :8080  然后根据 PID 强制结束进程： 1taskkill &#x2F;F &#x2F;PID 3836">
+<meta property="og:description" content="MCP 概念MCP 编程快速入门，MCP 全称 Model Context Protocol 模型上下文协议，其定义了 LLMs 与外部世界的互动方式，MCP 提供了一种标准化方法，使任意 LLMs 能够轻松连接各种数据源和工具，实现信息的高效交互和处理。 目前的 AI 朝着两个方向发展：掌握更多信息 或 控制更多工具，在没有联网搜索之前，LLM 的数据来源只有训练时和推理时我们提供的数据。 在M">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-09T10:05:39.000Z">
-<meta property="article:modified_time" content="2025-12-09T11:06:35.045Z">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/MCP_1.png">
+<meta property="article:published_time" content="2025-12-11T02:15:07.000Z">
+<meta property="article:modified_time" content="2025-12-11T03:44:45.779Z">
 <meta property="article:author" content="Aono">
-<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="MCP">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zyufoye.github.io/uploads/MCP_1.png">
 
 
-<link rel="canonical" href="https://zyufoye.github.io/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/">
+<link rel="canonical" href="https://zyufoye.github.io/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/","path":"2025/12/09/Windows结束进程/","title":"Windows结束进程"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/","path":"2025/12/11/MCP编程快速入门/","title":"MCP编程快速入门"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Windows结束进程 | Aono Note</title>
+<title>MCP编程快速入门 | Aono Note</title>
   
 
 
@@ -147,7 +149,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -160,6 +162,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MCP-%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">MCP 概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MCP-Deno-%E5%BC%80%E5%8F%91"><span class="nav-number">2.</span> <span class="nav-text">MCP Deno 开发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">3.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -220,7 +223,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/kehan.jpg">
@@ -233,12 +236,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Windows结束进程 | Aono Note">
+      <meta itemprop="name" content="MCP编程快速入门 | Aono Note">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Windows结束进程
+          MCP编程快速入门
         </h1>
 
         <div class="post-meta-container">
@@ -250,7 +253,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-12-09 18:05:39 / 修改时间：19:06:35" itemprop="dateCreated datePublished" datetime="2025-12-09T18:05:39+08:00">2025-12-09</time>
+      <time title="创建时间：2025-12-11 10:15:07 / 修改时间：11:44:45" itemprop="dateCreated datePublished" datetime="2025-12-11T10:15:07+08:00">2025-12-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -258,7 +261,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
+          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
         </span>
     </span>
 
@@ -278,19 +281,40 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
-<p>首先查找占用 8080 的 PID：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -ano | findstr :8080</span><br></pre></td></tr></table></figure>
-
-<p>然后根据 PID 强制结束进程：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">taskkill /F /PID 3836</span><br></pre></td></tr></table></figure>
-
+    <div class="post-body" itemprop="articleBody"><h2 id="MCP-概念"><a href="#MCP-概念" class="headerlink" title="MCP 概念"></a>MCP 概念</h2><p>MCP 编程快速入门，MCP 全称 Model Context Protocol 模型上下文协议，其定义了 LLMs 与外部世界的互动方式，MCP 提供了一种标准化方法，使任意 LLMs 能够轻松连接各种数据源和工具，实现信息的高效交互和处理。</p>
+<p>目前的 AI 朝着两个方向发展：<strong>掌握更多信息</strong> 或 <strong>控制更多工具</strong>，在没有联网搜索之前，LLM 的数据来源只有训练时和推理时我们提供的数据。</p>
+<p>在MCP出现之前，如果LLM要访问外部数据，通常使用<code>Function Call</code>的方式，<code>Function Call</code>通过给模型预设函数描述（包括函数名、参数说明、返回值格式等），让模型在合适的时候返回一个符合结构的 JSON 格式，外部系统再解析这个 JSON，调用实际的后端函数。关于 <code>Function Call</code> 和<code>MCP</code> 的具体区别在 <a href="/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/" title="Function Call和MCP的区别">Function Call和MCP的区别</a></p>
+<p>但 <code>Function Call</code> 的方式没有一个统一的开发规范，你开发的函数我不能用，我开发的函数你不能用，而且开发起来很麻烦，为了解决这个问题，MCP 出现了。MCP作为LLMs的标准化工具箱，可以通过MCP调用外界的AI工具，而AI工具在开发的时候也需要遵循MCP协议。MCP 允许应用以标准化的方式向 LLM 提供上下文，并将<strong>提供上下文的逻辑</strong>与<strong>实际的LLM交互逻辑”</strong>解耦。</p>
+<p>在没有 MCP 之前，如果我们希望让模型使用本地数据，通常需要把这些数据直接复制到对话框中，让模型从文本中获取信息。而有了 MCP 之后，我们可以为特定能力编写一个 MCP Server，例如数据库读取、GitHub 操作、文件系统访问或获取当前时间等。模型通过 MCP 与这些 Server 通信，就能在无需手动粘贴数据的情况下，实时访问这些外部资源。</p>
+<p><img src="/../uploads/MCP_1.png"></p>
+<p>MCP 服务器可以提供三种主要类型的功能:</p>
+<ol>
+<li>资源访问：客户端读取文件等数据；</li>
+<li>工具调用：由LLM调用的函数；</li>
+<li>Prompt模板：预先编写的帮助客户完成特定任务的Prompt；</li>
+</ol>
 <span id="more"></span>
 
-<ol start="3">
-<li>实验</li>
+<h2 id="MCP-Deno-开发"><a href="#MCP-Deno-开发" class="headerlink" title="MCP Deno 开发"></a>MCP Deno 开发</h2><p>使用python的SDK，简单实现下面功能，用来加深理解：</p>
+<ol>
+<li>构建可连接到任何 MCP Server 的 MCP Client</li>
+<li>创建公开资源、提示和工具的 MCP Server</li>
+<li>使用 stdio 和 SSE 等标准传输</li>
+<li>处理所有 MCP 协议消息和生命周期事件</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\77319&gt;netstat -ano | findstr :8080</span><br><span class="line">  TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       3836</span><br><span class="line">  TCP    [::]:8080              [::]:0                 LISTENING       3836</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;taskkill /F /PID 3836</span><br><span class="line">成功: 已终止 PID 为 3836 的进程。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>一般关于MCP的项目，开发者们都喜欢用uv来管理，不晓得为什么，但是跟着用一下，相关安装使用方法参照 <a href="/2025/12/10/uv%E4%BD%BF%E7%94%A8/" title="uv使用">uv使用</a> 。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建新的项目</span></span><br><span class="line">uv init mcp-demo</span><br><span class="line"><span class="built_in">cd</span> mcp-demo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并激活虚拟环境</span></span><br><span class="line">uv venv</span><br><span class="line"><span class="built_in">source</span> .venv/bin/activate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">uv add <span class="string">&quot;mcp[cli]&quot;</span> </span><br></pre></td></tr></table></figure>
+
+<p>这样一个uv管理的python MCP 项目就初始化完成了。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><p>Model Context Protocol(MCP) 编程极速入门 ：<a target="_blank" rel="noopener" href="https://github.com/liaokongVFX/MCP-Chinese-Getting-Started-Guide">https://github.com/liaokongVFX/MCP-Chinese-Getting-Started-Guide</a></p>
+</li>
+<li><p>MCP (Model Context Protocol)，一篇就够了：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/29001189476">https://zhuanlan.zhihu.com/p/29001189476</a></p>
+</li>
+<li><p>什么是MCP？本地如何开发MCP Server：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2511642">https://cloud.tencent.com/developer/article/2511642</a></p>
+</li>
+</ul>
+
     </div>
 
     
@@ -299,20 +323,20 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Windows/" rel="tag"># Windows</a>
+              <a href="/tags/MCP/" rel="tag"># MCP</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/12/09/Java%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8ESpringboot%E6%9E%B6%E6%9E%84/" rel="prev" title="Java漏洞靶场搭建学习(一)：环境搭建与Springboot架构">
-                  <i class="fa fa-angle-left"></i> Java漏洞靶场搭建学习(一)：环境搭建与Springboot架构
+                <a href="/2025/12/10/SARIF%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/" rel="prev" title="SARIF文件架构解读">
+                  <i class="fa fa-angle-left"></i> SARIF文件架构解读
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/12/10/kali%E5%AE%89%E8%A3%85ssh/" rel="next" title="kali安装ssh">
-                  kali安装ssh <i class="fa fa-angle-right"></i>
+                <a href="/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="next" title="Function Call和MCP的区别">
+                  Function Call和MCP的区别 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
