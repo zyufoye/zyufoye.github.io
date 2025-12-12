@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>HEXO链接站内文章方法</title>
-    <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>Hexo链接站内文章方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 部分是现实的内容，如果不写的话就默认是文章名称。</p>
-<p>参考链接：<a href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Function Call和MCP的区别</title>
     <url>/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<h2 id="Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）"><a href="#Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）" class="headerlink" title="Function Call和MCP的核心区别梳理（由GPT 5.1 生成）"></a>Function Call和MCP的核心区别梳理（由GPT 5.1 生成）</h2><h2 id="🧩核心区别总结"><a href="#🧩核心区别总结" class="headerlink" title="🧩核心区别总结"></a>🧩核心区别总结</h2><table>
@@ -133,6 +116,129 @@
       </categories>
       <tags>
         <tag>MCP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CodeQL入门</title>
+    <url>/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
+<p>传统的扫描工具往往像是一个黑盒，你输入代码，它吐出报告。但 CodeQL 不同，它的核心理念非常有意思： <code>Code as Data</code> 代码即数据，CodeQL 把源代码转化成一个关系型数据库，而漏洞挖掘的过程，就变成了一次次编写 SQL（其实是 QL）查询语句的过程。</p>
+<p>CodeQL 工具包含两大部分组成：</p>
+<ul>
+<li>核心引擎(闭源)：用于解析源代码并存储于数据库，以及执行 QL 语句从数据库中进行查询；</li>
+<li>SDK代码库(开源)：包含各编程语言对应的 QL 代码库(属性&#x2F;谓词&#x2F;等)，以便快速编写查询语句。</li>
+</ul>
+<p>这给了安全研究员和开发者极大的自由度——不再受限于工具内置的规则，可以自己定义“什么样的代码长相存在漏洞”。这篇 Blog 记录了我第一次使用 CodeQL 进行静态代码分析的过程。</p>
+<span id="more"></span>
+
+<h2 id="一、CodeQL-核心工作流"><a href="#一、CodeQL-核心工作流" class="headerlink" title="一、CodeQL 核心工作流"></a>一、CodeQL 核心工作流</h2><p>使用 CodeQL 主要分为三个步骤：</p>
+<ol>
+<li><p><strong>创建数据库（Create Database）</strong>： 在编译&#x2F;构建代码的过程中，CodeQL 会“旁路监听”，捕捉所有的编译命令、文件结构、函数调用关系，生成一个快照数据库；</p>
+</li>
+<li><p><strong>编写&#x2F;运行查询（Analyze）</strong>： 使用一种类似 SQL 的面向对象查询语言（QL），在数据库中查找符合特征的代码片段；</p>
+</li>
+<li><p><strong>生成结果（Results）</strong>： 输出分析报告（通常是 SARIF 格式），定位到具体的代码行号。</p>
+</li>
+</ol>
+<h2 id="二、CodeQL-安装"><a href="#二、CodeQL-安装" class="headerlink" title="二、CodeQL 安装"></a>二、CodeQL 安装</h2><p>运行 CodeQL 需要安装 CodeQL CLI 工具，分开下载的话需要分别下载 CodeQL binary 和 SDK，需要放在相同目录下且版本保持一致，也可以直接下载捆绑包，以 Ubuntu 环境为例，安装命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.16.1/codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvzf codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/home/aono/codeqlsrc/codeql</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>检测是否安装成功：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">codeql --version</span><br></pre></td></tr></table></figure>
+
+<p>可以使用  <code>codeQL resolve languages</code> 可以查看支持的编程语言。</p>
+<h2 id="三、CodeQL-简单使用"><a href="#三、CodeQL-简单使用" class="headerlink" title="三、CodeQL 简单使用"></a>三、CodeQL 简单使用</h2><p>指定项目创建数据库，以 Java 目标（<a href="https://github.com/l4yn3/micro_service_seclab%EF%BC%89%E4%B8%BA%E4%BE%8B%EF%BC%8C%E9%A1%B9%E7%9B%AE%E9%80%9A%E8%BF%87">https://github.com/l4yn3/micro_service_seclab）为例，项目通过</a> mvn 构建，首先安装 mvn：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt install maven -y</span><br></pre></td></tr></table></figure>
+
+<p>创建数据库：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database create java_db --language=java --source-root=./test/micro_service_seclab/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../uploads/codeql_1.png"></p>
+<p>使用默认规则进行查询，生成 SARIF 文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database analyze java_db/ --format=sarif-latest --output=java_result.sarif</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../uploads/codeql_2.png"></p>
+]]></content>
+      <categories>
+        <category>SAST</category>
+      </categories>
+      <tags>
+        <tag>SAST</tag>
+        <tag>CodeQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HEXO使用记录</title>
+    <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
+<p>官方文档：<a href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
+<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
+<span id="more"></span>
+
+<h2 id="一、Hexo-安装"><a href="#一、Hexo-安装" class="headerlink" title="一、Hexo 安装"></a>一、Hexo 安装</h2><p>Hexo 是一个快速、简单且功能强大的博客框架，可以使用 Markdown （或其他标记语言）编写文章，Hexo 会在几秒钟内生成带有对应主题的静态文件。</p>
+<p>安装 Hexo 需要 Node.js 以及 Git 环境。</p>
+<p>Node.js 下载地址 <a href="https://nodejs.org/en/download">Node.js Download</a></p>
+<p>Git 下载地址 <a href="https://git-scm.com/install/windows">Git Download</a></p>
+<p>所有必需组件安装完毕后，即可使用 npm 安装 Hexo：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<p>初始化 Hexo 站点：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br></pre></td></tr></table></figure>
+<p>hexo-site 也可以替换为其他路径名，以 hexo-site 为例，网站根目录被称为 <code>hexo-site</code>。 </p>
+<p>初始化完成后，可以到网站根目录下，下载对应主题并进行升级：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next@latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>注意事项：</p>
+<p>运行 npm install 时，对 node_modules 目录下主题所做的任何本地更改都将丢失。如果对主题进行了更改，则应在运行 npm install 之前备份这些更改，然后在安装完成后恢复这些更改。</p>
+<p>安装完 Hexo 和 NexT 主题后，可以通过修改配置文件来自定义博客。安装 Hexo 时，配套的配置文件位于网站根目录。博客配置文件名为 _config.yml ；我们称之为 Hexo 配置文件 NexT 主题的配置文件需要您自行创建；请在目录下创建一个 _config.next.yml 文件。 网站根目录我们将其称为 Next 配置文件在以下文本中。</p>
+<p>创建空的 _config.next.yml 文件后，可以将主题文件夹中的默认配置选项复制到该文件中，以便进行修改和自定义。根据安装方式，NexT 主题的默认配置文件可能位于 themes&#x2F;next&#x2F;_config.yml 或 node_modules&#x2F;hexo-theme-next&#x2F;_config.yml 中。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、Hexo-个性化设置"><a href="#二、Hexo-个性化设置" class="headerlink" title="二、Hexo 个性化设置"></a>二、Hexo 个性化设置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Allow to cache content generation.</span></span><br><span class="line">cache:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove unnecessary files after hexo generate.</span></span><br><span class="line">minify: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Schemes</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="comment">#scheme: Pisces</span></span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line">darkmode: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:zyufoye/zyufoye.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="三、Hexo-新建发布文章"><a href="#三、Hexo-新建发布文章" class="headerlink" title="三、Hexo 新建发布文章"></a>三、Hexo 新建发布文章</h2><p>新建发布文章：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post <span class="string">&quot;文章名称&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>生成并部署：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp;  hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
+
+<p>同步更新部署到github：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p>博客侧边栏添加 menu 菜单，以 tags 和 categories 为例：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
+
+<p>同时在index.md 中设置类别，不然点击跳转后不显示任何内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: categories</span><br></pre></td></tr></table></figure>
+
+<p>设置文章想要显示的内容时，可以用 more 进行切分， more以上的作为显示内容。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
+
+<p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HEXO链接站内文章方法</title>
+    <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>Hexo链接站内文章方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 部分是现实的内容，如果不写的话就默认是文章名称。</p>
+<p>参考链接：<a href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -257,6 +363,158 @@
       </tags>
   </entry>
   <entry>
+    <title>MCP编程快速入门（一）</title>
+    <url>/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%80%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="MCP-概念"><a href="#MCP-概念" class="headerlink" title="MCP 概念"></a>MCP 概念</h2><p>MCP 编程快速入门，MCP 全称 Model Context Protocol 模型上下文协议，其定义了 LLMs 与外部世界的互动方式，MCP 提供了一种标准化方法，使任意 LLMs 能够轻松连接各种数据源和工具，实现信息的高效交互和处理。</p>
+<p>目前的 AI 朝着两个方向发展：<strong>掌握更多信息</strong> 或 <strong>控制更多工具</strong>，在没有联网搜索之前，LLM 的数据来源只有训练时和推理时我们提供的数据。</p>
+<p>在MCP出现之前，如果LLM要访问外部数据，通常使用<code>Function Call</code>的方式，<code>Function Call</code>通过给模型预设函数描述（包括函数名、参数说明、返回值格式等），让模型在合适的时候返回一个符合结构的 JSON 格式，外部系统再解析这个 JSON，调用实际的后端函数。关于 <code>Function Call</code> 和<code>MCP</code> 的具体区别在 <a href="/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/" title="Function Call和MCP的区别">Function Call和MCP的区别</a></p>
+<p>但 <code>Function Call</code> 的方式没有一个统一的开发规范，你开发的函数我不能用，我开发的函数你不能用，而且开发起来很麻烦，为了解决这个问题，MCP 出现了。MCP作为LLMs的标准化工具箱，可以通过MCP调用外界的AI工具，而AI工具在开发的时候也需要遵循MCP协议。MCP 允许应用以标准化的方式向 LLM 提供上下文，并将<strong>提供上下文的逻辑</strong>与<strong>实际的LLM交互逻辑”</strong>解耦。</p>
+<p>在没有 MCP 之前，如果我们希望让模型使用本地数据，通常需要把这些数据直接复制到对话框中，让模型从文本中获取信息。而有了 MCP 之后，我们可以为特定能力编写一个 MCP Server，例如数据库读取、GitHub 操作、文件系统访问或获取当前时间等。模型通过 MCP 与这些 Server 通信，就能在无需手动粘贴数据的情况下，实时访问这些外部资源。</p>
+<p><img src="/../uploads/MCP_1.png"></p>
+<p>MCP 服务器可以提供三种主要类型的功能:</p>
+<ol>
+<li>资源访问：客户端读取文件等数据；</li>
+<li>工具调用：由LLM调用的函数；</li>
+<li>Prompt模板：预先编写的帮助客户完成特定任务的Prompt；</li>
+</ol>
+<span id="more"></span>
+
+<h2 id="MCP-Deno-开发"><a href="#MCP-Deno-开发" class="headerlink" title="MCP Deno 开发"></a>MCP Deno 开发</h2><p>使用python的SDK，简单实现下面功能，用来加深理解：</p>
+<ol>
+<li>构建可连接到任何 MCP Server 的 MCP Client</li>
+<li>创建公开资源、提示和工具的 MCP Server</li>
+<li>使用 stdio 和 SSE 等标准传输</li>
+<li>处理所有 MCP 协议消息和生命周期事件</li>
+</ol>
+<p>一般关于MCP的项目，开发者们都喜欢用uv来管理，不晓得为什么，但是跟着用一下，相关安装使用方法参照 <a href="/2025/12/10/uv%E4%BD%BF%E7%94%A8/" title="uv使用">uv使用</a> 。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建新的项目</span></span><br><span class="line">uv init mcp-demo</span><br><span class="line"><span class="built_in">cd</span> mcp-demo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并激活虚拟环境</span></span><br><span class="line">uv venv</span><br><span class="line"><span class="built_in">source</span> .venv/bin/activate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">uv add <span class="string">&quot;mcp[cli]&quot;</span> </span><br></pre></td></tr></table></figure>
+
+<p>这样一个uv管理的python MCP 项目就初始化完成了。</p>
+<p>接下来编写第一个简单Demo：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 FastMCP 实例</span></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;Demo&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例工具</span></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">echo</span>(<span class="params">text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">a: <span class="built_in">int</span>, b: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例资源</span></span><br><span class="line"><span class="meta">@mcp.resource(<span class="params"><span class="string">&quot;greeting://&#123;name&#125;&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">greet</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Hello, <span class="subst">&#123;name&#125;</span>!&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;FastMCP Demo Server is running ......&quot;</span>)</span><br><span class="line">    mcp.run()</span><br></pre></td></tr></table></figure>
+
+<p>示例代码中，使用了FastMCP来初始化一个MCP Server实例，分别创建了三个函数：</p>
+<ul>
+<li>echo：字符串输出；</li>
+<li>add：两个数字相加；</li>
+<li>greet：输入字符串，拼接后返回字符串；</li>
+</ul>
+<p>通过两个注解，赋予了函数不同的能力：</p>
+<ul>
+<li>@tool()：函数可以直接被AI调用；</li>
+<li>@resource()：像API接口一样被调用，其中的参数 greeting:&#x2F;&#x2F;{name} 是一个自定义的 URI， 可以拆解为两个部分。greeting 是随便起的前缀，name是动态参数的名称，在访问的时候需要传入。</li>
+</ul>
+<p>测试命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mcp dev server.py</span><br></pre></td></tr></table></figure>
+
+<p><code>mcp dev</code>是开发调试模式，输入这条命令后，会打开一个 MCP Inspector ，可以直观地检查和测试 MCP Server（server.py）是否正常工作。</p>
+<p><img src="/../uploads/MCP_2.png"></p>
+<p>点击 Connect ，选择 Tools，List Tools，即可列出 MCP 中定义的工具，可以输入测试内容进行 run tools测试:</p>
+<p><img src="/../uploads/MCP_3.png"></p>
+<p>在 Resources 标签页下，可以看到定义的资源函数 greet:</p>
+<p><img src="/../uploads/MCP_4.png"></p>
+<p>传入动态参数，mcp server 就会返回 json 格式的响应，并将我们输入的 api 拼接后返回。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>博客记录了对于 MCP 的理解，以及一个简单的Demo，后续在这个基础上继续完善。</p>
+<p>对 MCP Server 的开发是 MCP应用的重点，作者提到 MCP Server 其实就是定义一些函数，让智能体调用。在函数中可以实现简单逻辑、接口调用和各种操作，并通过注解赋予函数不同的能力。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li>什么是MCP？本地如何开发MCP Server：<a href="https://cloud.tencent.com/developer/article/2511642">https://cloud.tencent.com/developer/article/2511642</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>MCP</category>
+      </categories>
+      <tags>
+        <tag>MCP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MCP编程快速入门（三）</title>
+    <url>/2025/12/12/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%89%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="MCP-Server-开发实践"><a href="#MCP-Server-开发实践" class="headerlink" title="MCP Server 开发实践"></a>MCP Server 开发实践</h2><p>对于大部分 AI 开发者来说，MCP 只需要关心 Server 的实现，通过一个简单示例学习如何实现一个 MCP Server。</p>
+<p>MCP Server 可以提供三种主要类型的功能：</p>
+<ul>
+<li>Resources（资源）：类似文件的数据，可以被客户端读取；</li>
+<li>Tools（工具）：可以被LLM调用的函数；</li>
+<li>Prompt（提示）：预先编写的模版，帮助用户完成特定任务；</li>
+</ul>
+<p>任务：使用Python实现一个MCP Server，用来统计当前桌面上的 txt 文件数量和获取对应文件的名字。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 MCP Server</span></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;桌面 TXT 文件统计器&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">count_desktop_txt_files</span>() -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Count the number of .txt files on the desktop.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># Get the desktop path</span></span><br><span class="line">    username = os.getenv(<span class="string">&quot;USER&quot;</span>) <span class="keyword">or</span> os.getenv(<span class="string">&quot;USERNAME&quot;</span>)</span><br><span class="line">    desktop_path = Path(<span class="string">f&quot;C:\\Users\\<span class="subst">&#123;username&#125;</span>\\Desktop&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Count .txt files</span></span><br><span class="line">    txt_files = <span class="built_in">list</span>(desktop_path.glob(<span class="string">&quot;*.txt&quot;</span>))</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">len</span>(txt_files)</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">list_desktop_txt_files</span>() -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Get a list of all .txt filenames on the desktop.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># Get the desktop path</span></span><br><span class="line">    username = os.getenv(<span class="string">&quot;USER&quot;</span>) <span class="keyword">or</span> os.getenv(<span class="string">&quot;USERNAME&quot;</span>)</span><br><span class="line">    desktop_path = Path(<span class="string">f&quot;C:\\Users\\<span class="subst">&#123;username&#125;</span>\\Desktop&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Get all .txt files</span></span><br><span class="line">    txt_files = <span class="built_in">list</span>(desktop_path.glob(<span class="string">&quot;*.txt&quot;</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Return the filenames</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> txt_files:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;No .txt files found on desktop.&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Format the list of filenames</span></span><br><span class="line">    file_list = <span class="string">&quot;\n&quot;</span>.join([<span class="string">f&quot;- <span class="subst">&#123;file.name&#125;</span>&quot;</span> <span class="keyword">for</span> file <span class="keyword">in</span> txt_files])</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Found <span class="subst">&#123;<span class="built_in">len</span>(txt_files)&#125;</span> .txt files on desktop:\n<span class="subst">&#123;file_list&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># Initialize and run the server</span></span><br><span class="line">    mcp.run()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="MCP-Server-测试"><a href="#MCP-Server-测试" class="headerlink" title="MCP Server 测试"></a>MCP Server 测试</h3><p>测试 MCP Server， <code>mcp dev server.py</code> ，进行服务测试。</p>
+<p><img src="/../uploads/MCP_12.png"></p>
+<p>如图所示，成功生成了对应的 Tool Result ，即为测试成功。</p>
+<h3 id="接入-Claude-Desktop"><a href="#接入-Claude-Desktop" class="headerlink" title="接入 Claude Desktop"></a>接入 Claude Desktop</h3><p>这里 Claude Desktop 注册时需要手机号绑定，目前没有外国手机号，所以找了个平替的平台 Trae。</p>
+<p>配置文件如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;server_txt&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C:\\Users\\77319\\.local\\bin\\uv.exe&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;--directory&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;D:\\Code\\mcp-demo&quot;</span><span class="punctuation">,</span> <span class="comment">// 你的项目路径（这里是我的）</span></span><br><span class="line">        <span class="string">&quot;run&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;server_txt.py&quot;</span> <span class="comment">// 你的 MCP Server 文件名</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>手动添加 MCP 配置：</p>
+<p><img src="/../uploads/MCP_13.png"></p>
+<p>选择 MCP ：</p>
+<p><img src="/../uploads/MCP_14.png"></p>
+<p>提出问题：帮我分析桌面txt文件的含义</p>
+<p>思考过程：</p>
+<p>用户让我推测桌面txt文件名的含义，之前已经通过MCP工具获取到桌面上有3个txt文件：</p>
+<ul>
+<li>3.多模态信息融合.txt</li>
+<li>API Key.txt</li>
+<li>密码本.txt<br>我需要基于文件名来推测它们的含义，不需要查看文件内容。让我分析每个文件名：</li>
+</ul>
+<ol>
+<li><p>“3.多模态信息融合.txt”：</p>
+<ul>
+<li>“3.” 可能表示这是一系列文件中的第3个</li>
+<li>“多模态信息融合” 是一个专业术语，通常指将不同类型的数据（如文本、图像、音频等）结合起来进行分析和处理</li>
+<li>这个文件可能包含关于多模态信息融合技术的笔记、研究或资料</li>
+</ul>
+</li>
+<li><p>“API Key.txt”：</p>
+<ul>
+<li>“API Key” 是应用程序接口密钥的缩写，用于身份验证和授权</li>
+<li>这个文件可能包含各种服务或平台的API密钥</li>
+</ul>
+</li>
+<li><p>“密码本.txt”：</p>
+<ul>
+<li>“密码本” 通常指存储密码的文档</li>
+<li>这个文件可能包含各种账户的用户名和密码信息</li>
+</ul>
+</li>
+</ol>
+<p>我需要将这些分析整理成一个清晰的回应。</p>
+<p>回复内容：</p>
+<p>基于之前获取的桌面上的txt文件名，我可以推测它们的含义。让我分析每个文件名并提供合理的解释。基于桌面txt文件名，我可以做出以下推测：</p>
+<ol>
+<li><p><strong>3.多模态信息融合.txt</strong></p>
+<ul>
+<li>“3.” 可能表示这是一系列相关文件中的第3个</li>
+<li>“多模态信息融合” 是人工智能领域的专业术语，指将不同类型的数据（如文本、图像、音频、视频等）结合起来进行分析和处理的技术</li>
+<li>这个文件很可能包含关于多模态信息融合技术的研究资料、学习笔记或项目文档</li>
+</ul>
+</li>
+<li><p><strong>API Key.txt</strong></p>
+<ul>
+<li>“API Key”（应用程序接口密钥）是用于身份验证和授权的安全凭证</li>
+<li>这个文件可能存储了各种在线服务、开发平台或应用程序的API密钥，方便用户在开发或使用相关服务时快速获取</li>
+</ul>
+</li>
+<li><p><strong>密码本.txt</strong></p>
+<ul>
+<li>“密码本” 是一个常见的术语，指专门用于记录密码的文档</li>
+<li>这个文件很可能包含了用户在各种网站、应用程序或服务上的账户名称和对应的密码信息，用于集中管理和记忆</li>
+</ul>
+</li>
+</ol>
+<p>这些文件都与数字信息管理和技术相关，可能是用户在学习、工作或日常使用计算机时创建的重要参考文档。</p>
+<p>上述结果表明 MCP Server 已经可以正常工作。</p>
+]]></content>
+      <categories>
+        <category>MCP</category>
+      </categories>
+      <tags>
+        <tag>MCP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MCP编程快速入门（二）</title>
     <url>/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
     <content><![CDATA[<h2 id="模型如何确定工具选用？"><a href="#模型如何确定工具选用？" class="headerlink" title="模型如何确定工具选用？"></a>模型如何确定工具选用？</h2><p>Anthropic 详细解释了这个问题：模型在什么时候确定使用哪些工具。</p>
@@ -348,71 +606,6 @@
       </tags>
   </entry>
   <entry>
-    <title>MCP编程快速入门（一）</title>
-    <url>/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%80%EF%BC%89/</url>
-    <content><![CDATA[<h2 id="MCP-概念"><a href="#MCP-概念" class="headerlink" title="MCP 概念"></a>MCP 概念</h2><p>MCP 编程快速入门，MCP 全称 Model Context Protocol 模型上下文协议，其定义了 LLMs 与外部世界的互动方式，MCP 提供了一种标准化方法，使任意 LLMs 能够轻松连接各种数据源和工具，实现信息的高效交互和处理。</p>
-<p>目前的 AI 朝着两个方向发展：<strong>掌握更多信息</strong> 或 <strong>控制更多工具</strong>，在没有联网搜索之前，LLM 的数据来源只有训练时和推理时我们提供的数据。</p>
-<p>在MCP出现之前，如果LLM要访问外部数据，通常使用<code>Function Call</code>的方式，<code>Function Call</code>通过给模型预设函数描述（包括函数名、参数说明、返回值格式等），让模型在合适的时候返回一个符合结构的 JSON 格式，外部系统再解析这个 JSON，调用实际的后端函数。关于 <code>Function Call</code> 和<code>MCP</code> 的具体区别在 <a href="/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/" title="Function Call和MCP的区别">Function Call和MCP的区别</a></p>
-<p>但 <code>Function Call</code> 的方式没有一个统一的开发规范，你开发的函数我不能用，我开发的函数你不能用，而且开发起来很麻烦，为了解决这个问题，MCP 出现了。MCP作为LLMs的标准化工具箱，可以通过MCP调用外界的AI工具，而AI工具在开发的时候也需要遵循MCP协议。MCP 允许应用以标准化的方式向 LLM 提供上下文，并将<strong>提供上下文的逻辑</strong>与<strong>实际的LLM交互逻辑”</strong>解耦。</p>
-<p>在没有 MCP 之前，如果我们希望让模型使用本地数据，通常需要把这些数据直接复制到对话框中，让模型从文本中获取信息。而有了 MCP 之后，我们可以为特定能力编写一个 MCP Server，例如数据库读取、GitHub 操作、文件系统访问或获取当前时间等。模型通过 MCP 与这些 Server 通信，就能在无需手动粘贴数据的情况下，实时访问这些外部资源。</p>
-<p><img src="/../uploads/MCP_1.png"></p>
-<p>MCP 服务器可以提供三种主要类型的功能:</p>
-<ol>
-<li>资源访问：客户端读取文件等数据；</li>
-<li>工具调用：由LLM调用的函数；</li>
-<li>Prompt模板：预先编写的帮助客户完成特定任务的Prompt；</li>
-</ol>
-<span id="more"></span>
-
-<h2 id="MCP-Deno-开发"><a href="#MCP-Deno-开发" class="headerlink" title="MCP Deno 开发"></a>MCP Deno 开发</h2><p>使用python的SDK，简单实现下面功能，用来加深理解：</p>
-<ol>
-<li>构建可连接到任何 MCP Server 的 MCP Client</li>
-<li>创建公开资源、提示和工具的 MCP Server</li>
-<li>使用 stdio 和 SSE 等标准传输</li>
-<li>处理所有 MCP 协议消息和生命周期事件</li>
-</ol>
-<p>一般关于MCP的项目，开发者们都喜欢用uv来管理，不晓得为什么，但是跟着用一下，相关安装使用方法参照 <a href="/2025/12/10/uv%E4%BD%BF%E7%94%A8/" title="uv使用">uv使用</a> 。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建新的项目</span></span><br><span class="line">uv init mcp-demo</span><br><span class="line"><span class="built_in">cd</span> mcp-demo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并激活虚拟环境</span></span><br><span class="line">uv venv</span><br><span class="line"><span class="built_in">source</span> .venv/bin/activate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">uv add <span class="string">&quot;mcp[cli]&quot;</span> </span><br></pre></td></tr></table></figure>
-
-<p>这样一个uv管理的python MCP 项目就初始化完成了。</p>
-<p>接下来编写第一个简单Demo：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 FastMCP 实例</span></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;Demo&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例工具</span></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">echo</span>(<span class="params">text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">a: <span class="built_in">int</span>, b: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例资源</span></span><br><span class="line"><span class="meta">@mcp.resource(<span class="params"><span class="string">&quot;greeting://&#123;name&#125;&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">greet</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Hello, <span class="subst">&#123;name&#125;</span>!&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;FastMCP Demo Server is running ......&quot;</span>)</span><br><span class="line">    mcp.run()</span><br></pre></td></tr></table></figure>
-
-<p>示例代码中，使用了FastMCP来初始化一个MCP Server实例，分别创建了三个函数：</p>
-<ul>
-<li>echo：字符串输出；</li>
-<li>add：两个数字相加；</li>
-<li>greet：输入字符串，拼接后返回字符串；</li>
-</ul>
-<p>通过两个注解，赋予了函数不同的能力：</p>
-<ul>
-<li>@tool()：函数可以直接被AI调用；</li>
-<li>@resource()：像API接口一样被调用，其中的参数 greeting:&#x2F;&#x2F;{name} 是一个自定义的 URI， 可以拆解为两个部分。greeting 是随便起的前缀，name是动态参数的名称，在访问的时候需要传入。</li>
-</ul>
-<p>测试命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mcp dev server.py</span><br></pre></td></tr></table></figure>
-
-<p><code>mcp dev</code>是开发调试模式，输入这条命令后，会打开一个 MCP Inspector ，可以直观地检查和测试 MCP Server（server.py）是否正常工作。</p>
-<p><img src="/../uploads/MCP_2.png"></p>
-<p>点击 Connect ，选择 Tools，List Tools，即可列出 MCP 中定义的工具，可以输入测试内容进行 run tools测试:</p>
-<p><img src="/../uploads/MCP_3.png"></p>
-<p>在 Resources 标签页下，可以看到定义的资源函数 greet:</p>
-<p><img src="/../uploads/MCP_4.png"></p>
-<p>传入动态参数，mcp server 就会返回 json 格式的响应，并将我们输入的 api 拼接后返回。</p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>博客记录了对于 MCP 的理解，以及一个简单的Demo，后续在这个基础上继续完善。</p>
-<p>对 MCP Server 的开发是 MCP应用的重点，作者提到 MCP Server 其实就是定义一些函数，让智能体调用。在函数中可以实现简单逻辑、接口调用和各种操作，并通过注解赋予函数不同的能力。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
-<li>什么是MCP？本地如何开发MCP Server：<a href="https://cloud.tencent.com/developer/article/2511642">https://cloud.tencent.com/developer/article/2511642</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>MCP</category>
-      </categories>
-      <tags>
-        <tag>MCP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Miniconda安装</title>
     <url>/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<p>Miniconda 是 Conda 的精简发行版，只包含最核心的包管理系统与 Python，可以快速搭建独立的 Python 环境。在进行数据分析、机器学习或科研开发时，相比于 Anaconda 更轻量、更灵活。</p>
@@ -469,135 +662,6 @@
       <tags>
         <tag>OSCP</tag>
         <tag>Penetration Test</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>HEXO使用记录</title>
-    <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
-<p>官方文档：<a href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
-<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
-<span id="more"></span>
-
-<h2 id="一、Hexo-安装"><a href="#一、Hexo-安装" class="headerlink" title="一、Hexo 安装"></a>一、Hexo 安装</h2><p>Hexo 是一个快速、简单且功能强大的博客框架，可以使用 Markdown （或其他标记语言）编写文章，Hexo 会在几秒钟内生成带有对应主题的静态文件。</p>
-<p>安装 Hexo 需要 Node.js 以及 Git 环境。</p>
-<p>Node.js 下载地址 <a href="https://nodejs.org/en/download">Node.js Download</a></p>
-<p>Git 下载地址 <a href="https://git-scm.com/install/windows">Git Download</a></p>
-<p>所有必需组件安装完毕后，即可使用 npm 安装 Hexo：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-
-<p>初始化 Hexo 站点：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br></pre></td></tr></table></figure>
-<p>hexo-site 也可以替换为其他路径名，以 hexo-site 为例，网站根目录被称为 <code>hexo-site</code>。 </p>
-<p>初始化完成后，可以到网站根目录下，下载对应主题并进行升级：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next@latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>注意事项：</p>
-<p>运行 npm install 时，对 node_modules 目录下主题所做的任何本地更改都将丢失。如果对主题进行了更改，则应在运行 npm install 之前备份这些更改，然后在安装完成后恢复这些更改。</p>
-<p>安装完 Hexo 和 NexT 主题后，可以通过修改配置文件来自定义博客。安装 Hexo 时，配套的配置文件位于网站根目录。博客配置文件名为 _config.yml ；我们称之为 Hexo 配置文件 NexT 主题的配置文件需要您自行创建；请在目录下创建一个 _config.next.yml 文件。 网站根目录我们将其称为 Next 配置文件在以下文本中。</p>
-<p>创建空的 _config.next.yml 文件后，可以将主题文件夹中的默认配置选项复制到该文件中，以便进行修改和自定义。根据安装方式，NexT 主题的默认配置文件可能位于 themes&#x2F;next&#x2F;_config.yml 或 node_modules&#x2F;hexo-theme-next&#x2F;_config.yml 中。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure>
-
-<h2 id="二、Hexo-个性化设置"><a href="#二、Hexo-个性化设置" class="headerlink" title="二、Hexo 个性化设置"></a>二、Hexo 个性化设置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Allow to cache content generation.</span></span><br><span class="line">cache:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove unnecessary files after hexo generate.</span></span><br><span class="line">minify: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Schemes</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="comment">#scheme: Pisces</span></span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line">darkmode: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:zyufoye/zyufoye.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="三、Hexo-新建发布文章"><a href="#三、Hexo-新建发布文章" class="headerlink" title="三、Hexo 新建发布文章"></a>三、Hexo 新建发布文章</h2><p>新建发布文章：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post <span class="string">&quot;文章名称&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>生成并部署：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp;  hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
-
-<p>同步更新部署到github：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-
-<p>博客侧边栏添加 menu 菜单，以 tags 和 categories 为例：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
-
-<p>同时在index.md 中设置类别，不然点击跳转后不显示任何内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: categories</span><br></pre></td></tr></table></figure>
-
-<p>设置文章想要显示的内容时，可以用 more 进行切分， more以上的作为显示内容。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
-
-<p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CodeQL入门</title>
-    <url>/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/</url>
-    <content><![CDATA[<h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
-<p>传统的扫描工具往往像是一个黑盒，你输入代码，它吐出报告。但 CodeQL 不同，它的核心理念非常有意思： <code>Code as Data</code> 代码即数据，CodeQL 把源代码转化成一个关系型数据库，而漏洞挖掘的过程，就变成了一次次编写 SQL（其实是 QL）查询语句的过程。</p>
-<p>CodeQL 工具包含两大部分组成：</p>
-<ul>
-<li>核心引擎(闭源)：用于解析源代码并存储于数据库，以及执行 QL 语句从数据库中进行查询；</li>
-<li>SDK代码库(开源)：包含各编程语言对应的 QL 代码库(属性&#x2F;谓词&#x2F;等)，以便快速编写查询语句。</li>
-</ul>
-<p>这给了安全研究员和开发者极大的自由度——不再受限于工具内置的规则，可以自己定义“什么样的代码长相存在漏洞”。这篇 Blog 记录了我第一次使用 CodeQL 进行静态代码分析的过程。</p>
-<span id="more"></span>
-
-<h2 id="一、CodeQL-核心工作流"><a href="#一、CodeQL-核心工作流" class="headerlink" title="一、CodeQL 核心工作流"></a>一、CodeQL 核心工作流</h2><p>使用 CodeQL 主要分为三个步骤：</p>
-<ol>
-<li><p><strong>创建数据库（Create Database）</strong>： 在编译&#x2F;构建代码的过程中，CodeQL 会“旁路监听”，捕捉所有的编译命令、文件结构、函数调用关系，生成一个快照数据库；</p>
-</li>
-<li><p><strong>编写&#x2F;运行查询（Analyze）</strong>： 使用一种类似 SQL 的面向对象查询语言（QL），在数据库中查找符合特征的代码片段；</p>
-</li>
-<li><p><strong>生成结果（Results）</strong>： 输出分析报告（通常是 SARIF 格式），定位到具体的代码行号。</p>
-</li>
-</ol>
-<h2 id="二、CodeQL-安装"><a href="#二、CodeQL-安装" class="headerlink" title="二、CodeQL 安装"></a>二、CodeQL 安装</h2><p>运行 CodeQL 需要安装 CodeQL CLI 工具，分开下载的话需要分别下载 CodeQL binary 和 SDK，需要放在相同目录下且版本保持一致，也可以直接下载捆绑包，以 Ubuntu 环境为例，安装命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.16.1/codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvzf codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/home/aono/codeqlsrc/codeql</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
-
-<p>检测是否安装成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">codeql --version</span><br></pre></td></tr></table></figure>
-
-<p>可以使用  <code>codeQL resolve languages</code> 可以查看支持的编程语言。</p>
-<h2 id="三、CodeQL-简单使用"><a href="#三、CodeQL-简单使用" class="headerlink" title="三、CodeQL 简单使用"></a>三、CodeQL 简单使用</h2><p>指定项目创建数据库，以 Java 目标（<a href="https://github.com/l4yn3/micro_service_seclab%EF%BC%89%E4%B8%BA%E4%BE%8B%EF%BC%8C%E9%A1%B9%E7%9B%AE%E9%80%9A%E8%BF%87">https://github.com/l4yn3/micro_service_seclab）为例，项目通过</a> mvn 构建，首先安装 mvn：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt install maven -y</span><br></pre></td></tr></table></figure>
-
-<p>创建数据库：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database create java_db --language=java --source-root=./test/micro_service_seclab/</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../uploads/codeql_1.png"></p>
-<p>使用默认规则进行查询，生成 SARIF 文件：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database analyze java_db/ --format=sarif-latest --output=java_result.sarif</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../uploads/codeql_2.png"></p>
-]]></content>
-      <categories>
-        <category>SAST</category>
-      </categories>
-      <tags>
-        <tag>SAST</tag>
-        <tag>CodeQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows结束进程</title>
-    <url>/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/</url>
-    <content><![CDATA[<p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
-<p>首先查找占用 8080 的 PID：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -ano | findstr :8080</span><br></pre></td></tr></table></figure>
-
-<p>然后根据 PID 强制结束进程：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">taskkill /F /PID 3836</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<ol start="3">
-<li>实验</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;netstat -ano | findstr :8080</span><br><span class="line">  TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       3836</span><br><span class="line">  TCP    [::]:8080              [::]:0                 LISTENING       3836</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;taskkill /F /PID 3836</span><br><span class="line">成功: 已终止 PID 为 3836 的进程。</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Windows</category>
-      </categories>
-      <tags>
-        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -769,62 +833,6 @@
       </tags>
   </entry>
   <entry>
-    <title>解决VScode和Trae等无法加载conda虚拟环境的问题</title>
-    <url>/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="一、问题描述"><a href="#一、问题描述" class="headerlink" title="一、问题描述"></a>一、问题描述</h1><p>使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>但是，运行 <code>conda init</code> 后还是不起作用：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">λ conda init</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda.exe</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda-env.exe</span><br><span class="line">......</span><br><span class="line">no change     C:\Users\Username\Documents\WindowsPowerShell\profile.ps1</span><br><span class="line">modified      HKEY_CURRENT_USER\Software\Microsoft\Command Processor\AutoRun</span><br></pre></td></tr></table></figure>
-
-<h1 id="二、解决方案"><a href="#二、解决方案" class="headerlink" title="二、解决方案"></a>二、解决方案</h1><p>我是 win11 操作系统，需要以 <strong>管理员身份</strong> 打开powershell窗口，输入以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
-
-<p>重新加载即可生效。</p>
-<span id="more"></span>
-
-<h1 id="三、原理"><a href="#三、原理" class="headerlink" title="三、原理"></a>三、原理</h1><p>简单说，这个问题本质上是：<strong>Conda 的初始化脚本被 PowerShell 的安全策略拦住了，所以每次新开终端时，Conda 都没真正“接管”当前 Shell。</strong></p>
-<h2 id="1-conda-init-实际在做什么？"><a href="#1-conda-init-实际在做什么？" class="headerlink" title="1. conda init 实际在做什么？"></a>1. <code>conda init</code> 实际在做什么？</h2><p>在 Windows + PowerShell 下，Conda 并不是简单地靠 <code>conda.exe</code> 来完成环境激活的，而是通过一套 <strong>Shell Hook 脚本</strong> 来接管当前会话：</p>
-<p><code>conda init</code> 会在 <code>C:\Users\Username\Documents\WindowsPowerShell\profile.ps1</code> 里写入一段初始化代码，这些脚本会去调用 <code>miniconda3\shell\condabin\conda-hook.ps1</code> 等文件，往当前 PowerShell 里注入 <code>conda</code> &#x2F; <code>conda activate</code> 等函数，并设置好 PATH、环境变量等。</p>
-<p><strong>只有这些 Hook 每次打开 PowerShell 时能顺利执行，当前终端才真正“支持” <code>conda activate</code>。</strong></p>
-<p>所以当你看到：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>其实意思是：<strong>当前这个 PowerShell 会话里没有被注入 Conda 的 Hook 脚本</strong>，所以它感觉自己还没 init。</p>
-<h2 id="2-PowerShell-执行策略的限制"><a href="#2-PowerShell-执行策略的限制" class="headerlink" title="2. PowerShell 执行策略的限制"></a>2. PowerShell 执行策略的限制</h2><p>PowerShell 为了安全，有一个 <strong>执行策略（Execution Policy）</strong>，决定哪些脚本可以被执行：</p>
-<p>常见几种：</p>
-<ul>
-<li><code>Restricted</code>：完全禁止执行脚本；</li>
-<li><code>AllSigned</code>：所有脚本都必须是签名的；</li>
-<li><code>RemoteSigned</code>：本地脚本可以执行，从互联网下载的脚本必须签名。</li>
-</ul>
-<p>在我机器上的情况是：</p>
-<ul>
-<li><p>Conda 的这些 hook &#x2F; profile 脚本属于 <strong>本地脚本</strong>；</p>
-</li>
-<li><p>但默认配置策略过于严格，导致：</p>
-<ul>
-<li>打开 PowerShell 时，<code>profile.ps1</code> &#x2F; <code>conda-hook.ps1</code> 没有被执行；</li>
-<li>于是 <code>conda</code> 函数、自动激活逻辑统统都没加载进当前会话；</li>
-<li>终端自然就会提示你先 <code>conda init</code>。</li>
-</ul>
-</li>
-</ul>
-<p>也就是说：<code>conda init</code> 写入的配置已经在那儿了，但每次启动 PowerShell 时都被策略挡在门外。 当以管理员身份执行：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
-
-<p>等于允许系统执行本地脚本，只对来源不明的远程脚本做限制。</p>
-<p>这样一来，再次打开 PowerShell &#x2F; VSCode 内置终端时，<code>profile.ps1</code> 会被正常加载，里面调用的 <code>conda-hook.ps1</code> 等本地脚本可以顺利执行， VSCode &#x2F; Trae 里就可以正常加载和激活 Conda 虚拟环境，不再报 Run ‘conda init’ before ‘conda activate’错误。</p>
-]]></content>
-      <categories>
-        <category>Trouble shooting</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Trouble shooting</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>uv使用</title>
     <url>/2025/12/10/uv%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<p>uv是一个用 Rust 编写的极快的 Python 包和项目管理工具。</p>
@@ -880,6 +888,85 @@
       <tags>
         <tag>Config</tag>
         <tag>uv</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows结束进程</title>
+    <url>/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/</url>
+    <content><![CDATA[<p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
+<p>首先查找占用 8080 的 PID：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -ano | findstr :8080</span><br></pre></td></tr></table></figure>
+
+<p>然后根据 PID 强制结束进程：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">taskkill /F /PID 3836</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<ol start="3">
+<li>实验</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;netstat -ano | findstr :8080</span><br><span class="line">  TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       3836</span><br><span class="line">  TCP    [::]:8080              [::]:0                 LISTENING       3836</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;taskkill /F /PID 3836</span><br><span class="line">成功: 已终止 PID 为 3836 的进程。</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决VScode和Trae等无法加载conda虚拟环境的问题</title>
+    <url>/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="一、问题描述"><a href="#一、问题描述" class="headerlink" title="一、问题描述"></a>一、问题描述</h1><p>使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>但是，运行 <code>conda init</code> 后还是不起作用：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">λ conda init</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda.exe</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda-env.exe</span><br><span class="line">......</span><br><span class="line">no change     C:\Users\Username\Documents\WindowsPowerShell\profile.ps1</span><br><span class="line">modified      HKEY_CURRENT_USER\Software\Microsoft\Command Processor\AutoRun</span><br></pre></td></tr></table></figure>
+
+<h1 id="二、解决方案"><a href="#二、解决方案" class="headerlink" title="二、解决方案"></a>二、解决方案</h1><p>我是 win11 操作系统，需要以 <strong>管理员身份</strong> 打开powershell窗口，输入以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
+
+<p>重新加载即可生效。</p>
+<span id="more"></span>
+
+<h1 id="三、原理"><a href="#三、原理" class="headerlink" title="三、原理"></a>三、原理</h1><p>简单说，这个问题本质上是：<strong>Conda 的初始化脚本被 PowerShell 的安全策略拦住了，所以每次新开终端时，Conda 都没真正“接管”当前 Shell。</strong></p>
+<h2 id="1-conda-init-实际在做什么？"><a href="#1-conda-init-实际在做什么？" class="headerlink" title="1. conda init 实际在做什么？"></a>1. <code>conda init</code> 实际在做什么？</h2><p>在 Windows + PowerShell 下，Conda 并不是简单地靠 <code>conda.exe</code> 来完成环境激活的，而是通过一套 <strong>Shell Hook 脚本</strong> 来接管当前会话：</p>
+<p><code>conda init</code> 会在 <code>C:\Users\Username\Documents\WindowsPowerShell\profile.ps1</code> 里写入一段初始化代码，这些脚本会去调用 <code>miniconda3\shell\condabin\conda-hook.ps1</code> 等文件，往当前 PowerShell 里注入 <code>conda</code> &#x2F; <code>conda activate</code> 等函数，并设置好 PATH、环境变量等。</p>
+<p><strong>只有这些 Hook 每次打开 PowerShell 时能顺利执行，当前终端才真正“支持” <code>conda activate</code>。</strong></p>
+<p>所以当你看到：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>其实意思是：<strong>当前这个 PowerShell 会话里没有被注入 Conda 的 Hook 脚本</strong>，所以它感觉自己还没 init。</p>
+<h2 id="2-PowerShell-执行策略的限制"><a href="#2-PowerShell-执行策略的限制" class="headerlink" title="2. PowerShell 执行策略的限制"></a>2. PowerShell 执行策略的限制</h2><p>PowerShell 为了安全，有一个 <strong>执行策略（Execution Policy）</strong>，决定哪些脚本可以被执行：</p>
+<p>常见几种：</p>
+<ul>
+<li><code>Restricted</code>：完全禁止执行脚本；</li>
+<li><code>AllSigned</code>：所有脚本都必须是签名的；</li>
+<li><code>RemoteSigned</code>：本地脚本可以执行，从互联网下载的脚本必须签名。</li>
+</ul>
+<p>在我机器上的情况是：</p>
+<ul>
+<li><p>Conda 的这些 hook &#x2F; profile 脚本属于 <strong>本地脚本</strong>；</p>
+</li>
+<li><p>但默认配置策略过于严格，导致：</p>
+<ul>
+<li>打开 PowerShell 时，<code>profile.ps1</code> &#x2F; <code>conda-hook.ps1</code> 没有被执行；</li>
+<li>于是 <code>conda</code> 函数、自动激活逻辑统统都没加载进当前会话；</li>
+<li>终端自然就会提示你先 <code>conda init</code>。</li>
+</ul>
+</li>
+</ul>
+<p>也就是说：<code>conda init</code> 写入的配置已经在那儿了，但每次启动 PowerShell 时都被策略挡在门外。 当以管理员身份执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
+
+<p>等于允许系统执行本地脚本，只对来源不明的远程脚本做限制。</p>
+<p>这样一来，再次打开 PowerShell &#x2F; VSCode 内置终端时，<code>profile.ps1</code> 会被正常加载，里面调用的 <code>conda-hook.ps1</code> 等本地脚本可以顺利执行， VSCode &#x2F; Trae 里就可以正常加载和激活 Conda 虚拟环境，不再报 Run ‘conda init’ before ‘conda activate’错误。</p>
+]]></content>
+      <categories>
+        <category>Trouble shooting</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Trouble shooting</tag>
       </tags>
   </entry>
   <entry>

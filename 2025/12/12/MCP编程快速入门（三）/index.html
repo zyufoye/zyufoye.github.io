@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="MCP Server 开发实践对于大部分 AI 开发者来说，MCP 只需要关心 Server 的实现，通过一个简单示例学习如何实现一个 MCP Server。 MCP Server 可以提供三种主要类型的功能：  Resources（资源）：类似文件的数据，可以被客户端读取； Tools（工具）：可以被LLM调用的函数； Prompt（提示）：预先编写的模版，帮助用户完成特定任务；  任务：使用P">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP编程快速入门（三）">
+<meta property="og:url" content="https://zyufoye.github.io/2025/12/12/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%89%EF%BC%89/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="MCP Server 开发实践对于大部分 AI 开发者来说，MCP 只需要关心 Server 的实现，通过一个简单示例学习如何实现一个 MCP Server。 MCP Server 可以提供三种主要类型的功能：  Resources（资源）：类似文件的数据，可以被客户端读取； Tools（工具）：可以被LLM调用的函数； Prompt（提示）：预先编写的模版，帮助用户完成特定任务；  任务：使用P">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/MCP_12.png">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/MCP_13.png">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/MCP_14.png">
+<meta property="article:published_time" content="2025-12-12T06:08:48.000Z">
+<meta property="article:modified_time" content="2025-12-12T07:55:03.911Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="MCP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zyufoye.github.io/uploads/MCP_12.png">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2025/12/12/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%89%EF%BC%89/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2025/12/12/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%89%EF%BC%89/","path":"2025/12/12/MCP编程快速入门（三）/","title":"MCP编程快速入门（三）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MCP编程快速入门（三） | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，分享生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MCP-Server-%E5%BC%80%E5%8F%91%E5%AE%9E%E8%B7%B5"><span class="nav-number">1.</span> <span class="nav-text">MCP Server 开发实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MCP-Server-%E6%B5%8B%E8%AF%95"><span class="nav-number">1.1.</span> <span class="nav-text">MCP Server 测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%85%A5-Claude-Desktop"><span class="nav-number">1.2.</span> <span class="nav-text">接入 Claude Desktop</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/12/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%89%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MCP编程快速入门（三） | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MCP编程快速入门（三）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-12 14:08:48 / 修改时间：15:55:03" itemprop="dateCreated datePublished" datetime="2025-12-12T14:08:48+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="MCP-Server-开发实践"><a href="#MCP-Server-开发实践" class="headerlink" title="MCP Server 开发实践"></a>MCP Server 开发实践</h2><p>对于大部分 AI 开发者来说，MCP 只需要关心 Server 的实现，通过一个简单示例学习如何实现一个 MCP Server。</p>
+<p>MCP Server 可以提供三种主要类型的功能：</p>
+<ul>
+<li>Resources（资源）：类似文件的数据，可以被客户端读取；</li>
+<li>Tools（工具）：可以被LLM调用的函数；</li>
+<li>Prompt（提示）：预先编写的模版，帮助用户完成特定任务；</li>
+</ul>
+<p>任务：使用Python实现一个MCP Server，用来统计当前桌面上的 txt 文件数量和获取对应文件的名字。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 MCP Server</span></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;桌面 TXT 文件统计器&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">count_desktop_txt_files</span>() -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Count the number of .txt files on the desktop.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># Get the desktop path</span></span><br><span class="line">    username = os.getenv(<span class="string">&quot;USER&quot;</span>) <span class="keyword">or</span> os.getenv(<span class="string">&quot;USERNAME&quot;</span>)</span><br><span class="line">    desktop_path = Path(<span class="string">f&quot;C:\\Users\\<span class="subst">&#123;username&#125;</span>\\Desktop&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Count .txt files</span></span><br><span class="line">    txt_files = <span class="built_in">list</span>(desktop_path.glob(<span class="string">&quot;*.txt&quot;</span>))</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">len</span>(txt_files)</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">list_desktop_txt_files</span>() -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Get a list of all .txt filenames on the desktop.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># Get the desktop path</span></span><br><span class="line">    username = os.getenv(<span class="string">&quot;USER&quot;</span>) <span class="keyword">or</span> os.getenv(<span class="string">&quot;USERNAME&quot;</span>)</span><br><span class="line">    desktop_path = Path(<span class="string">f&quot;C:\\Users\\<span class="subst">&#123;username&#125;</span>\\Desktop&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Get all .txt files</span></span><br><span class="line">    txt_files = <span class="built_in">list</span>(desktop_path.glob(<span class="string">&quot;*.txt&quot;</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Return the filenames</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> txt_files:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;No .txt files found on desktop.&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Format the list of filenames</span></span><br><span class="line">    file_list = <span class="string">&quot;\n&quot;</span>.join([<span class="string">f&quot;- <span class="subst">&#123;file.name&#125;</span>&quot;</span> <span class="keyword">for</span> file <span class="keyword">in</span> txt_files])</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Found <span class="subst">&#123;<span class="built_in">len</span>(txt_files)&#125;</span> .txt files on desktop:\n<span class="subst">&#123;file_list&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># Initialize and run the server</span></span><br><span class="line">    mcp.run()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="MCP-Server-测试"><a href="#MCP-Server-测试" class="headerlink" title="MCP Server 测试"></a>MCP Server 测试</h3><p>测试 MCP Server， <code>mcp dev server.py</code> ，进行服务测试。</p>
+<p><img src="/../uploads/MCP_12.png"></p>
+<p>如图所示，成功生成了对应的 Tool Result ，即为测试成功。</p>
+<h3 id="接入-Claude-Desktop"><a href="#接入-Claude-Desktop" class="headerlink" title="接入 Claude Desktop"></a>接入 Claude Desktop</h3><p>这里 Claude Desktop 注册时需要手机号绑定，目前没有外国手机号，所以找了个平替的平台 Trae。</p>
+<p>配置文件如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;server_txt&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C:\\Users\\77319\\.local\\bin\\uv.exe&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;--directory&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;D:\\Code\\mcp-demo&quot;</span><span class="punctuation">,</span> <span class="comment">// 你的项目路径（这里是我的）</span></span><br><span class="line">        <span class="string">&quot;run&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;server_txt.py&quot;</span> <span class="comment">// 你的 MCP Server 文件名</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>手动添加 MCP 配置：</p>
+<p><img src="/../uploads/MCP_13.png"></p>
+<p>选择 MCP ：</p>
+<p><img src="/../uploads/MCP_14.png"></p>
+<p>提出问题：帮我分析桌面txt文件的含义</p>
+<p>思考过程：</p>
+<p>用户让我推测桌面txt文件名的含义，之前已经通过MCP工具获取到桌面上有3个txt文件：</p>
+<ul>
+<li>3.多模态信息融合.txt</li>
+<li>API Key.txt</li>
+<li>密码本.txt<br>我需要基于文件名来推测它们的含义，不需要查看文件内容。让我分析每个文件名：</li>
+</ul>
+<ol>
+<li><p>“3.多模态信息融合.txt”：</p>
+<ul>
+<li>“3.” 可能表示这是一系列文件中的第3个</li>
+<li>“多模态信息融合” 是一个专业术语，通常指将不同类型的数据（如文本、图像、音频等）结合起来进行分析和处理</li>
+<li>这个文件可能包含关于多模态信息融合技术的笔记、研究或资料</li>
+</ul>
+</li>
+<li><p>“API Key.txt”：</p>
+<ul>
+<li>“API Key” 是应用程序接口密钥的缩写，用于身份验证和授权</li>
+<li>这个文件可能包含各种服务或平台的API密钥</li>
+</ul>
+</li>
+<li><p>“密码本.txt”：</p>
+<ul>
+<li>“密码本” 通常指存储密码的文档</li>
+<li>这个文件可能包含各种账户的用户名和密码信息</li>
+</ul>
+</li>
+</ol>
+<p>我需要将这些分析整理成一个清晰的回应。</p>
+<p>回复内容：</p>
+<p>基于之前获取的桌面上的txt文件名，我可以推测它们的含义。让我分析每个文件名并提供合理的解释。基于桌面txt文件名，我可以做出以下推测：</p>
+<ol>
+<li><p><strong>3.多模态信息融合.txt</strong></p>
+<ul>
+<li>“3.” 可能表示这是一系列相关文件中的第3个</li>
+<li>“多模态信息融合” 是人工智能领域的专业术语，指将不同类型的数据（如文本、图像、音频、视频等）结合起来进行分析和处理的技术</li>
+<li>这个文件很可能包含关于多模态信息融合技术的研究资料、学习笔记或项目文档</li>
+</ul>
+</li>
+<li><p><strong>API Key.txt</strong></p>
+<ul>
+<li>“API Key”（应用程序接口密钥）是用于身份验证和授权的安全凭证</li>
+<li>这个文件可能存储了各种在线服务、开发平台或应用程序的API密钥，方便用户在开发或使用相关服务时快速获取</li>
+</ul>
+</li>
+<li><p><strong>密码本.txt</strong></p>
+<ul>
+<li>“密码本” 是一个常见的术语，指专门用于记录密码的文档</li>
+<li>这个文件很可能包含了用户在各种网站、应用程序或服务上的账户名称和对应的密码信息，用于集中管理和记忆</li>
+</ul>
+</li>
+</ol>
+<p>这些文件都与数字信息管理和技术相关，可能是用户在学习、工作或日常使用计算机时创建的重要参考文档。</p>
+<p>上述结果表明 MCP Server 已经可以正常工作。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MCP/" rel="tag"># MCP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/12/OSCP%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/" rel="prev" title="OSCP学习心得">
+                  <i class="fa fa-angle-left"></i> OSCP学习心得
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
