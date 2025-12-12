@@ -1,52 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>CodeQL入门</title>
-    <url>/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/</url>
-    <content><![CDATA[<h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
-<p>传统的扫描工具往往像是一个黑盒，你输入代码，它吐出报告。但 CodeQL 不同，它的核心理念非常有意思： <code>Code as Data</code> 代码即数据，CodeQL 把源代码转化成一个关系型数据库，而漏洞挖掘的过程，就变成了一次次编写 SQL（其实是 QL）查询语句的过程。</p>
-<p>CodeQL 工具包含两大部分组成：</p>
-<ul>
-<li>核心引擎(闭源)：用于解析源代码并存储于数据库，以及执行 QL 语句从数据库中进行查询；</li>
-<li>SDK代码库(开源)：包含各编程语言对应的 QL 代码库(属性&#x2F;谓词&#x2F;等)，以便快速编写查询语句。</li>
-</ul>
-<p>这给了安全研究员和开发者极大的自由度——不再受限于工具内置的规则，可以自己定义“什么样的代码长相存在漏洞”。这篇 Blog 记录了我第一次使用 CodeQL 进行静态代码分析的过程。</p>
-<span id="more"></span>
+    <title>HEXO链接站内文章方法</title>
+    <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>Hexo链接站内文章方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="一、CodeQL-核心工作流"><a href="#一、CodeQL-核心工作流" class="headerlink" title="一、CodeQL 核心工作流"></a>一、CodeQL 核心工作流</h2><p>使用 CodeQL 主要分为三个步骤：</p>
-<ol>
-<li><p><strong>创建数据库（Create Database）</strong>： 在编译&#x2F;构建代码的过程中，CodeQL 会“旁路监听”，捕捉所有的编译命令、文件结构、函数调用关系，生成一个快照数据库；</p>
-</li>
-<li><p><strong>编写&#x2F;运行查询（Analyze）</strong>： 使用一种类似 SQL 的面向对象查询语言（QL），在数据库中查找符合特征的代码片段；</p>
-</li>
-<li><p><strong>生成结果（Results）</strong>： 输出分析报告（通常是 SARIF 格式），定位到具体的代码行号。</p>
-</li>
-</ol>
-<h2 id="二、CodeQL-安装"><a href="#二、CodeQL-安装" class="headerlink" title="二、CodeQL 安装"></a>二、CodeQL 安装</h2><p>运行 CodeQL 需要安装 CodeQL CLI 工具，分开下载的话需要分别下载 CodeQL binary 和 SDK，需要放在相同目录下且版本保持一致，也可以直接下载捆绑包，以 Ubuntu 环境为例，安装命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.16.1/codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvzf codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/home/aono/codeqlsrc/codeql</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
-
-<p>检测是否安装成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">codeql --version</span><br></pre></td></tr></table></figure>
-
-<p>可以使用  <code>codeQL resolve languages</code> 可以查看支持的编程语言。</p>
-<h2 id="三、CodeQL-简单使用"><a href="#三、CodeQL-简单使用" class="headerlink" title="三、CodeQL 简单使用"></a>三、CodeQL 简单使用</h2><p>指定项目创建数据库，以 Java 目标（<a href="https://github.com/l4yn3/micro_service_seclab%EF%BC%89%E4%B8%BA%E4%BE%8B%EF%BC%8C%E9%A1%B9%E7%9B%AE%E9%80%9A%E8%BF%87">https://github.com/l4yn3/micro_service_seclab）为例，项目通过</a> mvn 构建，首先安装 mvn：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt install maven -y</span><br></pre></td></tr></table></figure>
-
-<p>创建数据库：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database create java_db --language=java --source-root=./test/micro_service_seclab/</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../uploads/codeql_1.png"></p>
-<p>使用默认规则进行查询，生成 SARIF 文件：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database analyze java_db/ --format=sarif-latest --output=java_result.sarif</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../uploads/codeql_2.png"></p>
+<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 部分是现实的内容，如果不写的话就默认是文章名称。</p>
+<p>参考链接：<a href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
 ]]></content>
       <categories>
-        <category>SAST</category>
+        <category>Config</category>
       </categories>
       <tags>
-        <tag>SAST</tag>
-        <tag>CodeQL</tag>
+        <tag>Config</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -168,77 +136,124 @@
       </tags>
   </entry>
   <entry>
-    <title>HEXO使用记录</title>
-    <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
-<p>官方文档：<a href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
-<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
+    <title>Java漏洞靶场搭建学习(一)：环境搭建与Springboot架构</title>
+    <url>/2025/12/09/Java%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8ESpringboot%E6%9E%B6%E6%9E%84/</url>
+    <content><![CDATA[<h1 id="Java漏洞靶场搭建学习"><a href="#Java漏洞靶场搭建学习" class="headerlink" title="Java漏洞靶场搭建学习"></a>Java漏洞靶场搭建学习</h1><p>在学习 Java Web 安全的过程中，目前状态是只能理解相关的漏洞原理，根据 PoC 做题或者复现漏洞，但是这些对于 <strong>代码审计、漏洞挖掘、SDL</strong> 等都没有实质性帮助，想要在学习或工作过程中提升相关能力，计划实现以下目标：</p>
+<ul>
+<li>理解漏洞产生的真实上下文；</li>
+<li>搭建一个可控、可扩展的实验环境；</li>
+<li>训练从代码层面定位与修复问题的能力；</li>
+</ul>
+<p>这篇博客记录了学习搭建 Java 漏洞靶场的过程，作为一个学习记录，为后续能够快速搭建测试环境，验证代码审计工具能力奠定基础。</p>
 <span id="more"></span>
 
-<h2 id="一、Hexo-安装"><a href="#一、Hexo-安装" class="headerlink" title="一、Hexo 安装"></a>一、Hexo 安装</h2><p>Hexo 是一个快速、简单且功能强大的博客框架，可以使用 Markdown （或其他标记语言）编写文章，Hexo 会在几秒钟内生成带有对应主题的静态文件。</p>
-<p>安装 Hexo 需要 Node.js 以及 Git 环境。</p>
-<p>Node.js 下载地址 <a href="https://nodejs.org/en/download">Node.js Download</a></p>
-<p>Git 下载地址 <a href="https://git-scm.com/install/windows">Git Download</a></p>
-<p>所有必需组件安装完毕后，即可使用 npm 安装 Hexo：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<h2 id="项目选用"><a href="#项目选用" class="headerlink" title="项目选用"></a>项目选用</h2><p>本文以 <a href="https://github.com/l4yn3/micro_service_seclab">micro_service_seclab</a> 为基础进行练习。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/l4yn3/micro_service_seclab.git</span><br></pre></td></tr></table></figure>
 
-<p>初始化 Hexo 站点：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br></pre></td></tr></table></figure>
-<p>hexo-site 也可以替换为其他路径名，以 hexo-site 为例，网站根目录被称为 <code>hexo-site</code>。 </p>
-<p>初始化完成后，可以到网站根目录下，下载对应主题并进行升级：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next@latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>拿到java项目，导入IDEA，对于有pom.xml的项目，可以直接使用mvn进行构建。</p>
+<p>创建数据库：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">--链接数据库</span></span><br><span class="line">mysql <span class="operator">-</span>u root <span class="operator">-</span>p</span><br><span class="line"></span><br><span class="line"><span class="comment">--创建数据库</span></span><br><span class="line"><span class="keyword">CREATE</span> DATABASE micro_service_seclab</span><br><span class="line">  <span class="keyword">CHARACTER SET</span> utf8mb4</span><br><span class="line">  <span class="keyword">COLLATE</span> utf8mb4_0900_ai_ci;</span><br><span class="line"></span><br><span class="line"><span class="comment">--使用数据库</span></span><br><span class="line">USE micro_service_seclab;</span><br></pre></td></tr></table></figure>
 
-<p>注意事项：</p>
-<p>运行 npm install 时，对 node_modules 目录下主题所做的任何本地更改都将丢失。如果对主题进行了更改，则应在运行 npm install 之前备份这些更改，然后在安装完成后恢复这些更改。</p>
-<p>安装完 Hexo 和 NexT 主题后，可以通过修改配置文件来自定义博客。安装 Hexo 时，配套的配置文件位于网站根目录。博客配置文件名为 _config.yml ；我们称之为 Hexo 配置文件 NexT 主题的配置文件需要您自行创建；请在目录下创建一个 _config.next.yml 文件。 网站根目录我们将其称为 Next 配置文件在以下文本中。</p>
-<p>创建空的 _config.next.yml 文件后，可以将主题文件夹中的默认配置选项复制到该文件中，以便进行修改和自定义。根据安装方式，NexT 主题的默认配置文件可能位于 themes&#x2F;next&#x2F;_config.yml 或 node_modules&#x2F;hexo-theme-next&#x2F;_config.yml 中。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure>
+<p>执行sql文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> \d D:\Code\micro_service_seclab</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入数据库</span></span><br><span class="line">mysql -u root -p micro_service_seclab &lt; micro_service_seclab.sql</span><br></pre></td></tr></table></figure>
 
-<h2 id="二、Hexo-个性化设置"><a href="#二、Hexo-个性化设置" class="headerlink" title="二、Hexo 个性化设置"></a>二、Hexo 个性化设置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Allow to cache content generation.</span></span><br><span class="line">cache:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove unnecessary files after hexo generate.</span></span><br><span class="line">minify: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Schemes</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="comment">#scheme: Pisces</span></span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line">darkmode: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:zyufoye/zyufoye.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>需要找到 application.properties  文件，修改对应的数据库用户名和密码。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">spring.datasource.url=jdbc:mysql://127.0.0.1:3306/micro_service_seclab</span></span><br><span class="line"><span class="string">spring.datasource.username=root</span></span><br><span class="line"><span class="string">spring.datasource.password=1234</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="三、Hexo-新建发布文章"><a href="#三、Hexo-新建发布文章" class="headerlink" title="三、Hexo 新建发布文章"></a>三、Hexo 新建发布文章</h2><p>新建发布文章：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post <span class="string">&quot;文章名称&quot;</span></span><br></pre></td></tr></table></figure>
+<p>在pom.xml的路径下，执行mvn命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mvn spring-boot:run</span><br></pre></td></tr></table></figure>
 
-<p>生成并部署：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp;  hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
+<p>启动后访问 <a href="http://127.0.0.1:8080/sqlinjection/one?username=yueshen">http://127.0.0.1:8080/sqlinjection/one?username=yueshen</a> 即可看到返回以下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[&#123;<span class="string">&quot;id&quot;</span>:1,<span class="string">&quot;username&quot;</span>:<span class="string">&quot;yueshen&quot;</span>,<span class="string">&quot;sex&quot;</span>:1,<span class="string">&quot;age&quot;</span>:33&#125;]</span><br></pre></td></tr></table></figure>
+<h2 id="项目解析"><a href="#项目解析" class="headerlink" title="项目解析"></a>项目解析</h2><h3 id="Spring-Boot-三层架构"><a href="#Spring-Boot-三层架构" class="headerlink" title="Spring-Boot 三层架构"></a>Spring-Boot 三层架构</h3><p>该项目核心是一个 Spring Boot Web 应用，通过不同的 Controller 暴露漏洞演示接口；底层再通过 Logic&#x2F;DAO&#x2F;DB&#x2F;MyBatis 访问数据库或触发危险点。</p>
+<p>调用链（一次请求的完整路径）：</p>
+<blockquote>
+<p>HTTP 请求 → controller（漏洞入口） → logic（业务&#x2F;场景封装） → dao&#x2F;mapper（数据访问&#x2F;危险实现） → db&#x2F;mysql</p>
+</blockquote>
+<p>用通俗的话来记录，就是：</p>
+<p>Controller 提供靶场入口，Logic 做业务组织，DAO&#x2F;Mapper 负责数据库或危险 API 调用，data 是实体&#x2F;数据模型，db 是数据库初始化&#x2F;连接辅助。</p>
+<ul>
+<li><code>Controller</code>：漏洞入口层，对外提供 HTTP API，用户通过 HTTP 打开，它负责把请求带入对应的漏洞场景；</li>
+<li><code>Logic</code>：业务场景封装层，存放 Service 的一些东西，把 Controller 参数变成底层可执行的动作；</li>
+<li><code>Dao</code>：数据访问层，做数据持久化，方法针对数据库操作；</li>
+<li><code>Mapper</code>：MyBatis Mapper 接口层，存放 MyBatis 的接口定义；</li>
+<li><code>data</code>：数据模型 实体层 对应数据库表或接口数据结构；</li>
+</ul>
+<h3 id="部署搭建记录"><a href="#部署搭建记录" class="headerlink" title="部署搭建记录"></a>部署搭建记录</h3><p>首先选择新建项目：</p>
+<p><img src="/../uploads/java_range1.png"></p>
+<p>通过Springboot Initializr初始化项目:</p>
+<p><img src="/../uploads/java_range2.png"></p>
+<p>选择相关依赖：</p>
+<p><img src="/../uploads/java_range3.png"></p>
+<p>初始化项目结构如下：</p>
+<p><img src="/../uploads/java_range4.png"></p>
+<p>依赖还是存在一些问题，因为靶场对应的是Java1.8版本，但是IDEA创建project时只有17、21和25可选项（这个应该有办法解决，后续再搞），不过目前已经清楚了Springboot的架构是什么样子。</p>
+<h2 id="代码审计"><a href="#代码审计" class="headerlink" title="代码审计"></a>代码审计</h2><h3 id="db-IndexDb-java"><a href="#db-IndexDb-java" class="headerlink" title="db&#x2F;IndexDb.java"></a>db&#x2F;IndexDb.java</h3><p><code>IndexDb.java</code> 是一个基于 <code>JdbcTemplate</code> 的数据库访问类，负责从 students 和 teachers 表中查询数据，同时为了漏洞靶场演示，刻意使用字符串拼接 SQL，存在明显的 SQL 注入风险。</p>
+<p>详细解读：</p>
+<ul>
+<li><p>被标记为 @Repository，供其他层（如 IndexLogic &#x2F; Controller）注入使用。</p>
+</li>
+<li><p>内部定义了两个 RowMapper，把查询结果映射成 Student 和 Teacher 对象。</p>
+</li>
+<li><p>提供多种查询方法：</p>
+<ol>
+<li><p>按用户名模糊查询学生：getStudent &#x2F; getStudentWithOptional</p>
+</li>
+<li><p>按 id 查询学生：getStudentById</p>
+</li>
+<li><p>按 id 查询教师：getTeacherById</p>
+</li>
+<li><p>使用 IN 条件批量用户名查询学生：getStudentWithIn &#x2F; getStudentWithInLong</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>所有 SQL 都是直接拼接字符串（包括 Optional、List 的拼接）作为靶场中演示 SQL 注入的重要部分。截取部分代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * IndexDb</span></span><br><span class="line"><span class="comment"> * 使用 Spring 的 JdbcTemplate 直接操作数据库的仓库类。</span></span><br><span class="line"><span class="comment"> * 主要提供针对 students / teachers 表的查询方法。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 注意：本类为了配合“Java 漏洞靶场”，大量使用字符串拼接构造 SQL，</span></span><br><span class="line"><span class="comment"> *       实际上存在典型的 SQL 注入风险，用于安全演示。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IndexDb</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Spring 注入 JdbcTemplate，用于执行 SQL 语句</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    JdbcTemplate jdbcTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将 ResultSet 映射为 Student 对象的 RowMapper</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> RowMapper&lt;Student&gt; ROW_MAPPER = (rs, i) -&gt; &#123;</span><br><span class="line">        <span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>();</span><br><span class="line">        student.setId(rs.getInt(<span class="string">&quot;id&quot;</span>));</span><br><span class="line">        student.setAge(rs.getInt(<span class="string">&quot;age&quot;</span>));</span><br><span class="line">        student.setSex(rs.getInt(<span class="string">&quot;sex&quot;</span>));</span><br><span class="line">        student.setUsername(rs.getString(<span class="string">&quot;username&quot;</span>));</span><br><span class="line">        <span class="keyword">return</span> student;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将 ResultSet 映射为 Teacher 对象的 RowMapper</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> RowMapper&lt;Teacher&gt; ROW_MAPPER_TEACHER = (rs, i) -&gt; &#123;</span><br><span class="line">        <span class="type">Teacher</span> <span class="variable">teacher</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Teacher</span>();</span><br><span class="line">        teacher.setId(rs.getInt(<span class="string">&quot;id&quot;</span>));</span><br><span class="line">        teacher.setSex(rs.getBoolean(<span class="string">&quot;sex&quot;</span>));</span><br><span class="line">        teacher.setName(rs.getString(<span class="string">&quot;username&quot;</span>));</span><br><span class="line">        <span class="keyword">return</span> teacher;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据用户名模糊查询学生信息。</span></span><br><span class="line"><span class="comment">     * 漏洞点：直接拼接 username 到 SQL 中，存在 SQL 注入风险。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudent</span><span class="params">(String username)</span> &#123;</span><br><span class="line">        <span class="comment">// 安全写法示例（被注释掉）：使用占位符并绑定参数</span></span><br><span class="line">        <span class="comment">// String sql = &quot;select * from students where username like ?&quot;;</span></span><br><span class="line">        <span class="comment">// return jdbcTemplate.query(sql, new Object[]&#123;&quot;%&quot; + username + &quot;%&quot;&#125;, ROW_MAPPER);</span></span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;select * from students where username like &#x27;%&quot;</span> + username + <span class="string">&quot;%&#x27;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> jdbcTemplate.query(sql, ROW_MAPPER);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用 Optional 包装的用户名进行模糊查询。</span></span><br><span class="line"><span class="comment">     * 实际上仍然是字符串拼接，同样存在 SQL 注入风险。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudentWithOptional</span><span class="params">(Optional&lt;String&gt; username)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">sqlWithOptional</span> <span class="operator">=</span></span><br><span class="line">                <span class="string">&quot;select * from students where username like &#x27;%&quot;</span> + username.get() + <span class="string">&quot;%&#x27;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> jdbcTemplate.query(sqlWithOptional, ROW_MAPPER);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 通过 id 精确查询学生。</span></span><br><span class="line"><span class="comment">     * 漏洞点：将 id 转成字符串再拼接到 SQL 中，存在注入风险。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudentById</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">sqlWithInt</span> <span class="operator">=</span></span><br><span class="line">                <span class="string">&quot;select * from students where id = &#x27;&quot;</span> + String.valueOf(id) + <span class="string">&quot;&#x27;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> jdbcTemplate.query(sqlWithInt, ROW_MAPPER);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>同步更新部署到github：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="logic-IndexLogic-java"><a href="#logic-IndexLogic-java" class="headerlink" title="logic&#x2F;IndexLogic.java"></a>logic&#x2F;IndexLogic.java</h3><p><code>IndexLogic.java</code> 本质上是<strong>Service 层的一个浅封装</strong>：</p>
+<ul>
+<li>用 <code>@Service</code> 标记，表示这是业务逻辑层的 Bean；</li>
+<li>通过 <code>@Autowired</code> 注入 <code>IndexDb</code>（4.1节对应的那个数据库访问类）；</li>
+<li>对外提供一组方法：<code>getStudent</code> &#x2F; <code>getStudentById</code> &#x2F; <code>getStudentWithOptional</code> &#x2F; <code>getStudentWithIn</code> &#x2F; <code>getStudentWithInLong</code> &#x2F; <code>getTeacherById</code>；</li>
+<li>每个方法都<strong>直接把参数原样转发给 <code>IndexDb</code>，不做额外处理</strong>，相当于“转发层”；</li>
+<li>因为 <code>IndexDb</code> 里面的 SQL 是拼接的，所以这些 Service 方法也就“顺带”暴露出 SQL 注入漏洞场景，方便 Controller 调用。</li>
+</ul>
+<p>可以理解为：<br><strong>Controller -&gt; IndexLogic -&gt; IndexDb -&gt; Databases</strong></p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Optional;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * IndexLogic</span></span><br><span class="line"><span class="comment"> * 业务逻辑层（Service），对外提供学生 / 老师相关的查询接口。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 当前实现非常薄，只是简单地把调用转发给 IndexDb，</span></span><br><span class="line"><span class="comment"> * 主要起到：Controller 与 DB 操作之间的“中间层”作用，</span></span><br><span class="line"><span class="comment"> * 方便保持三层架构的结构清晰。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 由于底层 IndexDb 使用字符串拼接 SQL，</span></span><br><span class="line"><span class="comment"> * 这些方法实际也用于配合漏洞靶场演示 SQL 注入场景。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IndexLogic</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注入数据库访问类 IndexDb</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    IndexDb indexDb;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据用户名模糊查询学生</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudent</span><span class="params">(String username)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexDb.getStudent(username);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 id 查询学生</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudentById</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexDb.getStudentById(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用 Optional 包装的用户名查询学生</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudentWithOptional</span><span class="params">(Optional&lt;String&gt; username)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexDb.getStudentWithOptional(username);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用 IN 条件（字符串列表）批量查询学生</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudentWithIn</span><span class="params">(List&lt;String&gt; user_list)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexDb.getStudentWithIn(user_list);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用 IN 条件（Long 列表）批量查询学生</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudentWithInLong</span><span class="params">(List&lt;Long&gt; user_list)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexDb.getStudentWithInLong(user_list);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据“id/userName”查询老师</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Teacher&gt; <span class="title function_">getTeacherById</span><span class="params">(String userName)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexDb.getTeacherById(userName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>IndexLogic 是 Controller 和 IndexDb 之间的桥梁，把各种查询操作组织成业务接口，方便暴露为 HTTP 靶场接口。</strong></p>
+<hr>
+<h3 id="mapper-IStudentMapper-java"><a href="#mapper-IStudentMapper-java" class="headerlink" title="mapper&#x2F;IStudentMapper.java"></a>mapper&#x2F;IStudentMapper.java</h3><p>IStudentMapper 是 students 表的 MyBatis 接口，其中 <code>queryAllByAnnotations</code> 用注解 + <code>$&#123;&#125;</code> 拼串，专门用来检测注解式 SQL 注入漏洞。</p>
+<p>Mapper <strong>≈</strong> 映射器，他的作用是把 “Java 方法调用” 映射成 “SQL 语句执行”，再把结果映射回 Java 对象。也可以称为“MyBatis 帮忙自动实现的 DAO 接口”。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * IStudentMapper</span></span><br><span class="line"><span class="comment"> * MyBatis 的 Mapper 接口，对 students 表提供查询方法。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 这个接口有两个目的：</span></span><br><span class="line"><span class="comment"> * 1）正常的查询方法（queryAll），SQL 通常写在 XML 中；</span></span><br><span class="line"><span class="comment"> * 2）使用注解 + $&#123;&#125; 拼接参数的方式，故意制造 SQL 注入漏洞，</span></span><br><span class="line"><span class="comment"> *    用于测试代码扫描工具是否能识别注解里的注入问题。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IStudentMapper</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 方式一：常规查询方法</span></span><br><span class="line"><span class="comment">     * SQL 写在 resources/mappers/IStudentMapper.xml 中，</span></span><br><span class="line"><span class="comment">     * 一般会使用 #&#123;name&#125; 这种占位符，属于参数绑定写法。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    List&lt;Student&gt; <span class="title function_">queryAll</span><span class="params">(<span class="meta">@Param(&quot;name&quot;)</span> String username)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 方式二：注解式 SQL，故意使用 $&#123;&#125; 直接拼接参数。</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 这里的 SQL：</span></span><br><span class="line"><span class="comment">     *   select * from students where username =&#x27;$&#123;name&#125;&#x27;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * $&#123;name&#125; 会被原样替换到 SQL 中，存在明显的 SQL 注入风险。</span></span><br><span class="line"><span class="comment">     * 这是靶场中专门用来测试“静态扫描工具能否发现注解里的 SQL 注入”的例子。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Select(&quot;select * from students where username =&#x27;$&#123;name&#125;&#x27;&quot;)</span></span><br><span class="line">    List&lt;Student&gt; <span class="title function_">queryAllByAnnotations</span><span class="params">(<span class="meta">@Param(&quot;name&quot;)</span> String username)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="data-Person-java"><a href="#data-Person-java" class="headerlink" title="data&#x2F;Person.java"></a>data&#x2F;Person.java</h3><p>data 文件夹下专门存放了“数据模型”，可以保存数据库和业务里的“实体对象”。同时作为各个层次之间传递数据的载体：</p>
+<ul>
+<li><p>db&#x2F;IndexDb 查出来的是 List<Student>、List<Teacher></p>
+</li>
+<li><p>logic&#x2F;IndexLogic 接收&#x2F;返回的也是这些对象</p>
+</li>
+<li><p>Controller 对外返回的 JSON，其实就是把这些 data 类序列化出去</p>
+</li>
+</ul>
+<p>👉 这样 Controller、Service、DAO 都围绕同一套“数据结构”在交流。</p>
+<p>Person 是用 JPA+Hibernate 映射出来的人员表实体，用 UUID 当主键，并强制 username 和 nickname 的唯一性与非空约束。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Person 实体类：</span></span><br><span class="line"><span class="comment"> * 映射数据库中的 person 表（默认表名），</span></span><br><span class="line"><span class="comment"> * 使用 UUID 作为主键，包含唯一且必填的 username / nickname 字段。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 主键 ID，使用自定义的 UUID 生成策略</span></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GenericGenerator(name = &quot;idGenerator&quot;, strategy = &quot;uuid&quot;)</span></span><br><span class="line">    <span class="meta">@GeneratedValue(generator = &quot;idGenerator&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用户名列：唯一、非空，最长 100 字符</span></span><br><span class="line">    <span class="meta">@Column(name = &quot;username&quot;, unique = true, nullable = false, length = 100)</span></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 昵称列：唯一、非空，最长 100 字符</span></span><br><span class="line">    <span class="meta">@Column(name = &quot;nickname&quot;, unique = true, nullable = false, length = 100)</span></span><br><span class="line">    <span class="keyword">private</span> String nickname;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>博客侧边栏添加 menu 菜单，以 tags 和 categories 为例：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="dao-PersonRepository-java"><a href="#dao-PersonRepository-java" class="headerlink" title="dao&#x2F;PersonRepository.java"></a>dao&#x2F;PersonRepository.java</h3><p><code>PersonRepository</code> 是一个基于 Spring Data JPA 的 DAO 接口，负责对 Person 实体做数据库查询：根据 username 和 nickname 查人，供 Controller 或 Service 调用。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * PersonRepository</span></span><br><span class="line"><span class="comment"> * 基于 Spring Data JPA 的 DAO 接口，</span></span><br><span class="line"><span class="comment"> * 用于对 Person 实体进行数据库访问操作。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 通过继承 JpaRepository，可以直接使用通用的增删改查方法，</span></span><br><span class="line"><span class="comment"> * 同时也可以定义派生查询方法或自定义 <span class="doctag">@Query</span> 查询。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">PersonRepository</span> <span class="keyword">extends</span> <span class="title class_">JpaRepository</span>&lt;Person, String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用 Spring Data JPA 的“方法名派生查询”功能，</span></span><br><span class="line"><span class="comment">     * 根据 username 字段查询 Person 列表。</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 等价于：SELECT p FROM Person p WHERE p.username = ?1</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    List&lt;Person&gt; <span class="title function_">findPersonByUsername</span><span class="params">(String username)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用 <span class="doctag">@Query</span> 手写 JPQL 查询，根据 nickname 查询。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Query(&quot;SELECT nickname FROM Person WHERE nickname = &#x27;?1&#x27;&quot;)</span></span><br><span class="line">    List&lt;Person&gt; <span class="title function_">findPersonByNickname</span><span class="params">(String nickname)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>同时在index.md 中设置类别，不然点击跳转后不显示任何内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: categories</span><br></pre></td></tr></table></figure>
-
-<p>设置文章想要显示的内容时，可以用 more 进行切分， more以上的作为显示内容。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
-
-<p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
+<h3 id="controller-VulnerabilitiesController-java"><a href="#controller-VulnerabilitiesController-java" class="headerlink" title="controller&#x2F;VulnerabilitiesController.java"></a>controller&#x2F;VulnerabilitiesController.java</h3><p><code>controller</code> 文件夹用来存放项目里的控制器类，也就是对外暴露 HTTP 接口的那一层。在 Spring Boot 里，Controller 负责接收浏览器或工具（如 Postman、burp）的请求，解析参数，把请求转交给逻辑层（logic&#x2F;service），再把返回结果封装成 JSON 或页面响应。</p>
 ]]></content>
       <categories>
-        <category>Config</category>
+        <category>Java Security</category>
       </categories>
       <tags>
-        <tag>Config</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>HEXO链接站内文章方法</title>
-    <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>Hexo链接站内文章方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 部分是现实的内容，如果不写的话就默认是文章名称。</p>
-<p>参考链接：<a href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Hexo</tag>
+        <tag>Java Security</tag>
+        <tag>Springboot</tag>
       </tags>
   </entry>
   <entry>
@@ -398,127 +413,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java漏洞靶场搭建学习(一)：环境搭建与Springboot架构</title>
-    <url>/2025/12/09/Java%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8ESpringboot%E6%9E%B6%E6%9E%84/</url>
-    <content><![CDATA[<h1 id="Java漏洞靶场搭建学习"><a href="#Java漏洞靶场搭建学习" class="headerlink" title="Java漏洞靶场搭建学习"></a>Java漏洞靶场搭建学习</h1><p>在学习 Java Web 安全的过程中，目前状态是只能理解相关的漏洞原理，根据 PoC 做题或者复现漏洞，但是这些对于 <strong>代码审计、漏洞挖掘、SDL</strong> 等都没有实质性帮助，想要在学习或工作过程中提升相关能力，计划实现以下目标：</p>
-<ul>
-<li>理解漏洞产生的真实上下文；</li>
-<li>搭建一个可控、可扩展的实验环境；</li>
-<li>训练从代码层面定位与修复问题的能力；</li>
-</ul>
-<p>这篇博客记录了学习搭建 Java 漏洞靶场的过程，作为一个学习记录，为后续能够快速搭建测试环境，验证代码审计工具能力奠定基础。</p>
-<span id="more"></span>
-
-<h2 id="项目选用"><a href="#项目选用" class="headerlink" title="项目选用"></a>项目选用</h2><p>本文以 <a href="https://github.com/l4yn3/micro_service_seclab">micro_service_seclab</a> 为基础进行练习。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/l4yn3/micro_service_seclab.git</span><br></pre></td></tr></table></figure>
-
-<p>拿到java项目，导入IDEA，对于有pom.xml的项目，可以直接使用mvn进行构建。</p>
-<p>创建数据库：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">--链接数据库</span></span><br><span class="line">mysql <span class="operator">-</span>u root <span class="operator">-</span>p</span><br><span class="line"></span><br><span class="line"><span class="comment">--创建数据库</span></span><br><span class="line"><span class="keyword">CREATE</span> DATABASE micro_service_seclab</span><br><span class="line">  <span class="keyword">CHARACTER SET</span> utf8mb4</span><br><span class="line">  <span class="keyword">COLLATE</span> utf8mb4_0900_ai_ci;</span><br><span class="line"></span><br><span class="line"><span class="comment">--使用数据库</span></span><br><span class="line">USE micro_service_seclab;</span><br></pre></td></tr></table></figure>
-
-<p>执行sql文件：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> \d D:\Code\micro_service_seclab</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入数据库</span></span><br><span class="line">mysql -u root -p micro_service_seclab &lt; micro_service_seclab.sql</span><br></pre></td></tr></table></figure>
-
-<p>需要找到 application.properties  文件，修改对应的数据库用户名和密码。</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">spring.datasource.url=jdbc:mysql://127.0.0.1:3306/micro_service_seclab</span></span><br><span class="line"><span class="string">spring.datasource.username=root</span></span><br><span class="line"><span class="string">spring.datasource.password=1234</span></span><br></pre></td></tr></table></figure>
-
-<p>在pom.xml的路径下，执行mvn命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mvn spring-boot:run</span><br></pre></td></tr></table></figure>
-
-<p>启动后访问 <a href="http://127.0.0.1:8080/sqlinjection/one?username=yueshen">http://127.0.0.1:8080/sqlinjection/one?username=yueshen</a> 即可看到返回以下内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[&#123;<span class="string">&quot;id&quot;</span>:1,<span class="string">&quot;username&quot;</span>:<span class="string">&quot;yueshen&quot;</span>,<span class="string">&quot;sex&quot;</span>:1,<span class="string">&quot;age&quot;</span>:33&#125;]</span><br></pre></td></tr></table></figure>
-<h2 id="项目解析"><a href="#项目解析" class="headerlink" title="项目解析"></a>项目解析</h2><h3 id="Spring-Boot-三层架构"><a href="#Spring-Boot-三层架构" class="headerlink" title="Spring-Boot 三层架构"></a>Spring-Boot 三层架构</h3><p>该项目核心是一个 Spring Boot Web 应用，通过不同的 Controller 暴露漏洞演示接口；底层再通过 Logic&#x2F;DAO&#x2F;DB&#x2F;MyBatis 访问数据库或触发危险点。</p>
-<p>调用链（一次请求的完整路径）：</p>
-<blockquote>
-<p>HTTP 请求 → controller（漏洞入口） → logic（业务&#x2F;场景封装） → dao&#x2F;mapper（数据访问&#x2F;危险实现） → db&#x2F;mysql</p>
-</blockquote>
-<p>用通俗的话来记录，就是：</p>
-<p>Controller 提供靶场入口，Logic 做业务组织，DAO&#x2F;Mapper 负责数据库或危险 API 调用，data 是实体&#x2F;数据模型，db 是数据库初始化&#x2F;连接辅助。</p>
-<ul>
-<li><code>Controller</code>：漏洞入口层，对外提供 HTTP API，用户通过 HTTP 打开，它负责把请求带入对应的漏洞场景；</li>
-<li><code>Logic</code>：业务场景封装层，存放 Service 的一些东西，把 Controller 参数变成底层可执行的动作；</li>
-<li><code>Dao</code>：数据访问层，做数据持久化，方法针对数据库操作；</li>
-<li><code>Mapper</code>：MyBatis Mapper 接口层，存放 MyBatis 的接口定义；</li>
-<li><code>data</code>：数据模型 实体层 对应数据库表或接口数据结构；</li>
-</ul>
-<h3 id="部署搭建记录"><a href="#部署搭建记录" class="headerlink" title="部署搭建记录"></a>部署搭建记录</h3><p>首先选择新建项目：</p>
-<p><img src="/../uploads/java_range1.png"></p>
-<p>通过Springboot Initializr初始化项目:</p>
-<p><img src="/../uploads/java_range2.png"></p>
-<p>选择相关依赖：</p>
-<p><img src="/../uploads/java_range3.png"></p>
-<p>初始化项目结构如下：</p>
-<p><img src="/../uploads/java_range4.png"></p>
-<p>依赖还是存在一些问题，因为靶场对应的是Java1.8版本，但是IDEA创建project时只有17、21和25可选项（这个应该有办法解决，后续再搞），不过目前已经清楚了Springboot的架构是什么样子。</p>
-<h2 id="代码审计"><a href="#代码审计" class="headerlink" title="代码审计"></a>代码审计</h2><h3 id="db-IndexDb-java"><a href="#db-IndexDb-java" class="headerlink" title="db&#x2F;IndexDb.java"></a>db&#x2F;IndexDb.java</h3><p><code>IndexDb.java</code> 是一个基于 <code>JdbcTemplate</code> 的数据库访问类，负责从 students 和 teachers 表中查询数据，同时为了漏洞靶场演示，刻意使用字符串拼接 SQL，存在明显的 SQL 注入风险。</p>
-<p>详细解读：</p>
-<ul>
-<li><p>被标记为 @Repository，供其他层（如 IndexLogic &#x2F; Controller）注入使用。</p>
-</li>
-<li><p>内部定义了两个 RowMapper，把查询结果映射成 Student 和 Teacher 对象。</p>
-</li>
-<li><p>提供多种查询方法：</p>
-<ol>
-<li><p>按用户名模糊查询学生：getStudent &#x2F; getStudentWithOptional</p>
-</li>
-<li><p>按 id 查询学生：getStudentById</p>
-</li>
-<li><p>按 id 查询教师：getTeacherById</p>
-</li>
-<li><p>使用 IN 条件批量用户名查询学生：getStudentWithIn &#x2F; getStudentWithInLong</p>
-</li>
-</ol>
-</li>
-</ul>
-<p>所有 SQL 都是直接拼接字符串（包括 Optional、List 的拼接）作为靶场中演示 SQL 注入的重要部分。截取部分代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * IndexDb</span></span><br><span class="line"><span class="comment"> * 使用 Spring 的 JdbcTemplate 直接操作数据库的仓库类。</span></span><br><span class="line"><span class="comment"> * 主要提供针对 students / teachers 表的查询方法。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 注意：本类为了配合“Java 漏洞靶场”，大量使用字符串拼接构造 SQL，</span></span><br><span class="line"><span class="comment"> *       实际上存在典型的 SQL 注入风险，用于安全演示。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IndexDb</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Spring 注入 JdbcTemplate，用于执行 SQL 语句</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    JdbcTemplate jdbcTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将 ResultSet 映射为 Student 对象的 RowMapper</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> RowMapper&lt;Student&gt; ROW_MAPPER = (rs, i) -&gt; &#123;</span><br><span class="line">        <span class="type">Student</span> <span class="variable">student</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>();</span><br><span class="line">        student.setId(rs.getInt(<span class="string">&quot;id&quot;</span>));</span><br><span class="line">        student.setAge(rs.getInt(<span class="string">&quot;age&quot;</span>));</span><br><span class="line">        student.setSex(rs.getInt(<span class="string">&quot;sex&quot;</span>));</span><br><span class="line">        student.setUsername(rs.getString(<span class="string">&quot;username&quot;</span>));</span><br><span class="line">        <span class="keyword">return</span> student;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将 ResultSet 映射为 Teacher 对象的 RowMapper</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> RowMapper&lt;Teacher&gt; ROW_MAPPER_TEACHER = (rs, i) -&gt; &#123;</span><br><span class="line">        <span class="type">Teacher</span> <span class="variable">teacher</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Teacher</span>();</span><br><span class="line">        teacher.setId(rs.getInt(<span class="string">&quot;id&quot;</span>));</span><br><span class="line">        teacher.setSex(rs.getBoolean(<span class="string">&quot;sex&quot;</span>));</span><br><span class="line">        teacher.setName(rs.getString(<span class="string">&quot;username&quot;</span>));</span><br><span class="line">        <span class="keyword">return</span> teacher;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据用户名模糊查询学生信息。</span></span><br><span class="line"><span class="comment">     * 漏洞点：直接拼接 username 到 SQL 中，存在 SQL 注入风险。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudent</span><span class="params">(String username)</span> &#123;</span><br><span class="line">        <span class="comment">// 安全写法示例（被注释掉）：使用占位符并绑定参数</span></span><br><span class="line">        <span class="comment">// String sql = &quot;select * from students where username like ?&quot;;</span></span><br><span class="line">        <span class="comment">// return jdbcTemplate.query(sql, new Object[]&#123;&quot;%&quot; + username + &quot;%&quot;&#125;, ROW_MAPPER);</span></span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;select * from students where username like &#x27;%&quot;</span> + username + <span class="string">&quot;%&#x27;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> jdbcTemplate.query(sql, ROW_MAPPER);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用 Optional 包装的用户名进行模糊查询。</span></span><br><span class="line"><span class="comment">     * 实际上仍然是字符串拼接，同样存在 SQL 注入风险。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudentWithOptional</span><span class="params">(Optional&lt;String&gt; username)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">sqlWithOptional</span> <span class="operator">=</span></span><br><span class="line">                <span class="string">&quot;select * from students where username like &#x27;%&quot;</span> + username.get() + <span class="string">&quot;%&#x27;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> jdbcTemplate.query(sqlWithOptional, ROW_MAPPER);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 通过 id 精确查询学生。</span></span><br><span class="line"><span class="comment">     * 漏洞点：将 id 转成字符串再拼接到 SQL 中，存在注入风险。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudentById</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">sqlWithInt</span> <span class="operator">=</span></span><br><span class="line">                <span class="string">&quot;select * from students where id = &#x27;&quot;</span> + String.valueOf(id) + <span class="string">&quot;&#x27;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> jdbcTemplate.query(sqlWithInt, ROW_MAPPER);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="logic-IndexLogic-java"><a href="#logic-IndexLogic-java" class="headerlink" title="logic&#x2F;IndexLogic.java"></a>logic&#x2F;IndexLogic.java</h3><p><code>IndexLogic.java</code> 本质上是<strong>Service 层的一个浅封装</strong>：</p>
-<ul>
-<li>用 <code>@Service</code> 标记，表示这是业务逻辑层的 Bean；</li>
-<li>通过 <code>@Autowired</code> 注入 <code>IndexDb</code>（4.1节对应的那个数据库访问类）；</li>
-<li>对外提供一组方法：<code>getStudent</code> &#x2F; <code>getStudentById</code> &#x2F; <code>getStudentWithOptional</code> &#x2F; <code>getStudentWithIn</code> &#x2F; <code>getStudentWithInLong</code> &#x2F; <code>getTeacherById</code>；</li>
-<li>每个方法都<strong>直接把参数原样转发给 <code>IndexDb</code>，不做额外处理</strong>，相当于“转发层”；</li>
-<li>因为 <code>IndexDb</code> 里面的 SQL 是拼接的，所以这些 Service 方法也就“顺带”暴露出 SQL 注入漏洞场景，方便 Controller 调用。</li>
-</ul>
-<p>可以理解为：<br><strong>Controller -&gt; IndexLogic -&gt; IndexDb -&gt; Databases</strong></p>
-<p>代码如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Optional;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * IndexLogic</span></span><br><span class="line"><span class="comment"> * 业务逻辑层（Service），对外提供学生 / 老师相关的查询接口。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 当前实现非常薄，只是简单地把调用转发给 IndexDb，</span></span><br><span class="line"><span class="comment"> * 主要起到：Controller 与 DB 操作之间的“中间层”作用，</span></span><br><span class="line"><span class="comment"> * 方便保持三层架构的结构清晰。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 由于底层 IndexDb 使用字符串拼接 SQL，</span></span><br><span class="line"><span class="comment"> * 这些方法实际也用于配合漏洞靶场演示 SQL 注入场景。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IndexLogic</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注入数据库访问类 IndexDb</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    IndexDb indexDb;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据用户名模糊查询学生</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudent</span><span class="params">(String username)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexDb.getStudent(username);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 id 查询学生</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudentById</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexDb.getStudentById(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用 Optional 包装的用户名查询学生</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudentWithOptional</span><span class="params">(Optional&lt;String&gt; username)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexDb.getStudentWithOptional(username);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用 IN 条件（字符串列表）批量查询学生</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudentWithIn</span><span class="params">(List&lt;String&gt; user_list)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexDb.getStudentWithIn(user_list);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用 IN 条件（Long 列表）批量查询学生</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Student&gt; <span class="title function_">getStudentWithInLong</span><span class="params">(List&lt;Long&gt; user_list)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexDb.getStudentWithInLong(user_list);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据“id/userName”查询老师</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Teacher&gt; <span class="title function_">getTeacherById</span><span class="params">(String userName)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexDb.getTeacherById(userName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>IndexLogic 是 Controller 和 IndexDb 之间的桥梁，把各种查询操作组织成业务接口，方便暴露为 HTTP 靶场接口。</strong></p>
-<hr>
-<h3 id="mapper-IStudentMapper-java"><a href="#mapper-IStudentMapper-java" class="headerlink" title="mapper&#x2F;IStudentMapper.java"></a>mapper&#x2F;IStudentMapper.java</h3><p>IStudentMapper 是 students 表的 MyBatis 接口，其中 <code>queryAllByAnnotations</code> 用注解 + <code>$&#123;&#125;</code> 拼串，专门用来检测注解式 SQL 注入漏洞。</p>
-<p>Mapper <strong>≈</strong> 映射器，他的作用是把 “Java 方法调用” 映射成 “SQL 语句执行”，再把结果映射回 Java 对象。也可以称为“MyBatis 帮忙自动实现的 DAO 接口”。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * IStudentMapper</span></span><br><span class="line"><span class="comment"> * MyBatis 的 Mapper 接口，对 students 表提供查询方法。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 这个接口有两个目的：</span></span><br><span class="line"><span class="comment"> * 1）正常的查询方法（queryAll），SQL 通常写在 XML 中；</span></span><br><span class="line"><span class="comment"> * 2）使用注解 + $&#123;&#125; 拼接参数的方式，故意制造 SQL 注入漏洞，</span></span><br><span class="line"><span class="comment"> *    用于测试代码扫描工具是否能识别注解里的注入问题。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IStudentMapper</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 方式一：常规查询方法</span></span><br><span class="line"><span class="comment">     * SQL 写在 resources/mappers/IStudentMapper.xml 中，</span></span><br><span class="line"><span class="comment">     * 一般会使用 #&#123;name&#125; 这种占位符，属于参数绑定写法。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    List&lt;Student&gt; <span class="title function_">queryAll</span><span class="params">(<span class="meta">@Param(&quot;name&quot;)</span> String username)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 方式二：注解式 SQL，故意使用 $&#123;&#125; 直接拼接参数。</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 这里的 SQL：</span></span><br><span class="line"><span class="comment">     *   select * from students where username =&#x27;$&#123;name&#125;&#x27;</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * $&#123;name&#125; 会被原样替换到 SQL 中，存在明显的 SQL 注入风险。</span></span><br><span class="line"><span class="comment">     * 这是靶场中专门用来测试“静态扫描工具能否发现注解里的 SQL 注入”的例子。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Select(&quot;select * from students where username =&#x27;$&#123;name&#125;&#x27;&quot;)</span></span><br><span class="line">    List&lt;Student&gt; <span class="title function_">queryAllByAnnotations</span><span class="params">(<span class="meta">@Param(&quot;name&quot;)</span> String username)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<hr>
-<h3 id="data-Person-java"><a href="#data-Person-java" class="headerlink" title="data&#x2F;Person.java"></a>data&#x2F;Person.java</h3><p>data 文件夹下专门存放了“数据模型”，可以保存数据库和业务里的“实体对象”。同时作为各个层次之间传递数据的载体：</p>
-<ul>
-<li><p>db&#x2F;IndexDb 查出来的是 List<Student>、List<Teacher></p>
-</li>
-<li><p>logic&#x2F;IndexLogic 接收&#x2F;返回的也是这些对象</p>
-</li>
-<li><p>Controller 对外返回的 JSON，其实就是把这些 data 类序列化出去</p>
-</li>
-</ul>
-<p>👉 这样 Controller、Service、DAO 都围绕同一套“数据结构”在交流。</p>
-<p>Person 是用 JPA+Hibernate 映射出来的人员表实体，用 UUID 当主键，并强制 username 和 nickname 的唯一性与非空约束。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Person 实体类：</span></span><br><span class="line"><span class="comment"> * 映射数据库中的 person 表（默认表名），</span></span><br><span class="line"><span class="comment"> * 使用 UUID 作为主键，包含唯一且必填的 username / nickname 字段。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 主键 ID，使用自定义的 UUID 生成策略</span></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GenericGenerator(name = &quot;idGenerator&quot;, strategy = &quot;uuid&quot;)</span></span><br><span class="line">    <span class="meta">@GeneratedValue(generator = &quot;idGenerator&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用户名列：唯一、非空，最长 100 字符</span></span><br><span class="line">    <span class="meta">@Column(name = &quot;username&quot;, unique = true, nullable = false, length = 100)</span></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 昵称列：唯一、非空，最长 100 字符</span></span><br><span class="line">    <span class="meta">@Column(name = &quot;nickname&quot;, unique = true, nullable = false, length = 100)</span></span><br><span class="line">    <span class="keyword">private</span> String nickname;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="dao-PersonRepository-java"><a href="#dao-PersonRepository-java" class="headerlink" title="dao&#x2F;PersonRepository.java"></a>dao&#x2F;PersonRepository.java</h3><p><code>PersonRepository</code> 是一个基于 Spring Data JPA 的 DAO 接口，负责对 Person 实体做数据库查询：根据 username 和 nickname 查人，供 Controller 或 Service 调用。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * PersonRepository</span></span><br><span class="line"><span class="comment"> * 基于 Spring Data JPA 的 DAO 接口，</span></span><br><span class="line"><span class="comment"> * 用于对 Person 实体进行数据库访问操作。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 通过继承 JpaRepository，可以直接使用通用的增删改查方法，</span></span><br><span class="line"><span class="comment"> * 同时也可以定义派生查询方法或自定义 <span class="doctag">@Query</span> 查询。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">PersonRepository</span> <span class="keyword">extends</span> <span class="title class_">JpaRepository</span>&lt;Person, String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用 Spring Data JPA 的“方法名派生查询”功能，</span></span><br><span class="line"><span class="comment">     * 根据 username 字段查询 Person 列表。</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 等价于：SELECT p FROM Person p WHERE p.username = ?1</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    List&lt;Person&gt; <span class="title function_">findPersonByUsername</span><span class="params">(String username)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用 <span class="doctag">@Query</span> 手写 JPQL 查询，根据 nickname 查询。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Query(&quot;SELECT nickname FROM Person WHERE nickname = &#x27;?1&#x27;&quot;)</span></span><br><span class="line">    List&lt;Person&gt; <span class="title function_">findPersonByNickname</span><span class="params">(String nickname)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="controller-VulnerabilitiesController-java"><a href="#controller-VulnerabilitiesController-java" class="headerlink" title="controller&#x2F;VulnerabilitiesController.java"></a>controller&#x2F;VulnerabilitiesController.java</h3><p><code>controller</code> 文件夹用来存放项目里的控制器类，也就是对外暴露 HTTP 接口的那一层。在 Spring Boot 里，Controller 负责接收浏览器或工具（如 Postman、burp）的请求，解析参数，把请求转交给逻辑层（logic&#x2F;service），再把返回结果封装成 JSON 或页面响应。</p>
-]]></content>
-      <categories>
-        <category>Java Security</category>
-      </categories>
-      <tags>
-        <tag>Java Security</tag>
-        <tag>Springboot</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Miniconda安装</title>
     <url>/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<p>Miniconda 是 Conda 的精简发行版，只包含最核心的包管理系统与 Python，可以快速搭建独立的 Python 环境。在进行数据分析、机器学习或科研开发时，相比于 Anaconda 更轻量、更灵活。</p>
@@ -543,6 +437,167 @@
       <tags>
         <tag>Config</tag>
         <tag>Miniconda</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OSCP学习心得</title>
+    <url>/2025/12/12/OSCP%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/</url>
+    <content><![CDATA[<p>在 OSCP 的学习和练习以及打靶场或者渗透测试过程中，我认为本质上不是掌握了多少工具，而是在规定时间内，能不能把渗透的全流程跑完，关键步骤上思维能否发散，能否有较为全面的思考和枚举，所以重心还是在思路上，渗透的思路和应对关键点时的经验，所以记录一些自己的思考。</p>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>重点在于覆盖面和可用性：</p>
+<ul>
+<li>覆盖面：全端口（服务）扫描，不要漏掉服务，不然可能会找不到正确的入口点；</li>
+<li>可用性：不同服务、版本都有什么漏洞，是否具备利用条件，无法利用的话是不是加了什么限制，是需要绕过限制还是需要转变路径，这些属于能否实现利用的范畴；</li>
+</ul>
+<blockquote>
+<p><strong>信息收集要得出一个结论：我到底能打哪些入口？哪些入口最可能实现边界突破？</strong></p>
+</blockquote>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>漏洞利用阶段不要盲目跑exp，最好是先验证控制程度，再拿shell。</p>
+<p>先确定漏洞是否真实存在，漏洞可控点在哪里，输入如何影响输出，然后再确认控制深度（能否读写文件&#x2F;命令执行&#x2F;鉴权绕过），最后在拿稳定shell。</p>
+<blockquote>
+<p><strong>先看能不能验证清楚，在考虑能否一步到位。</strong></p>
+</blockquote>
+<h2 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h2><p>提权并没有深入学习太多，但是感觉应该在于找到“权限边界被破坏”的证据，可以根据历史经验寻找线索，找到稳定可复现的思路。</p>
+<h2 id="横向移动"><a href="#横向移动" class="headerlink" title="横向移动"></a>横向移动</h2><blockquote>
+<p><strong>信任关系+凭证流向</strong>: 从以控制主机把影响力扩到更有价值的主机&#x2F;账号&#x2F;网段等。</p>
+</blockquote>
+<hr>
+<p>⭐<strong>持续更新 To be continued……</strong></p>
+]]></content>
+      <categories>
+        <category>OSCP</category>
+      </categories>
+      <tags>
+        <tag>OSCP</tag>
+        <tag>Penetration Test</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HEXO使用记录</title>
+    <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
+<p>官方文档：<a href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
+<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
+<span id="more"></span>
+
+<h2 id="一、Hexo-安装"><a href="#一、Hexo-安装" class="headerlink" title="一、Hexo 安装"></a>一、Hexo 安装</h2><p>Hexo 是一个快速、简单且功能强大的博客框架，可以使用 Markdown （或其他标记语言）编写文章，Hexo 会在几秒钟内生成带有对应主题的静态文件。</p>
+<p>安装 Hexo 需要 Node.js 以及 Git 环境。</p>
+<p>Node.js 下载地址 <a href="https://nodejs.org/en/download">Node.js Download</a></p>
+<p>Git 下载地址 <a href="https://git-scm.com/install/windows">Git Download</a></p>
+<p>所有必需组件安装完毕后，即可使用 npm 安装 Hexo：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<p>初始化 Hexo 站点：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br></pre></td></tr></table></figure>
+<p>hexo-site 也可以替换为其他路径名，以 hexo-site 为例，网站根目录被称为 <code>hexo-site</code>。 </p>
+<p>初始化完成后，可以到网站根目录下，下载对应主题并进行升级：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next@latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>注意事项：</p>
+<p>运行 npm install 时，对 node_modules 目录下主题所做的任何本地更改都将丢失。如果对主题进行了更改，则应在运行 npm install 之前备份这些更改，然后在安装完成后恢复这些更改。</p>
+<p>安装完 Hexo 和 NexT 主题后，可以通过修改配置文件来自定义博客。安装 Hexo 时，配套的配置文件位于网站根目录。博客配置文件名为 _config.yml ；我们称之为 Hexo 配置文件 NexT 主题的配置文件需要您自行创建；请在目录下创建一个 _config.next.yml 文件。 网站根目录我们将其称为 Next 配置文件在以下文本中。</p>
+<p>创建空的 _config.next.yml 文件后，可以将主题文件夹中的默认配置选项复制到该文件中，以便进行修改和自定义。根据安装方式，NexT 主题的默认配置文件可能位于 themes&#x2F;next&#x2F;_config.yml 或 node_modules&#x2F;hexo-theme-next&#x2F;_config.yml 中。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、Hexo-个性化设置"><a href="#二、Hexo-个性化设置" class="headerlink" title="二、Hexo 个性化设置"></a>二、Hexo 个性化设置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Allow to cache content generation.</span></span><br><span class="line">cache:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove unnecessary files after hexo generate.</span></span><br><span class="line">minify: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Schemes</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="comment">#scheme: Pisces</span></span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line">darkmode: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:zyufoye/zyufoye.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="三、Hexo-新建发布文章"><a href="#三、Hexo-新建发布文章" class="headerlink" title="三、Hexo 新建发布文章"></a>三、Hexo 新建发布文章</h2><p>新建发布文章：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post <span class="string">&quot;文章名称&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>生成并部署：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp;  hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
+
+<p>同步更新部署到github：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p>博客侧边栏添加 menu 菜单，以 tags 和 categories 为例：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
+
+<p>同时在index.md 中设置类别，不然点击跳转后不显示任何内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: categories</span><br></pre></td></tr></table></figure>
+
+<p>设置文章想要显示的内容时，可以用 more 进行切分， more以上的作为显示内容。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
+
+<p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CodeQL入门</title>
+    <url>/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
+<p>传统的扫描工具往往像是一个黑盒，你输入代码，它吐出报告。但 CodeQL 不同，它的核心理念非常有意思： <code>Code as Data</code> 代码即数据，CodeQL 把源代码转化成一个关系型数据库，而漏洞挖掘的过程，就变成了一次次编写 SQL（其实是 QL）查询语句的过程。</p>
+<p>CodeQL 工具包含两大部分组成：</p>
+<ul>
+<li>核心引擎(闭源)：用于解析源代码并存储于数据库，以及执行 QL 语句从数据库中进行查询；</li>
+<li>SDK代码库(开源)：包含各编程语言对应的 QL 代码库(属性&#x2F;谓词&#x2F;等)，以便快速编写查询语句。</li>
+</ul>
+<p>这给了安全研究员和开发者极大的自由度——不再受限于工具内置的规则，可以自己定义“什么样的代码长相存在漏洞”。这篇 Blog 记录了我第一次使用 CodeQL 进行静态代码分析的过程。</p>
+<span id="more"></span>
+
+<h2 id="一、CodeQL-核心工作流"><a href="#一、CodeQL-核心工作流" class="headerlink" title="一、CodeQL 核心工作流"></a>一、CodeQL 核心工作流</h2><p>使用 CodeQL 主要分为三个步骤：</p>
+<ol>
+<li><p><strong>创建数据库（Create Database）</strong>： 在编译&#x2F;构建代码的过程中，CodeQL 会“旁路监听”，捕捉所有的编译命令、文件结构、函数调用关系，生成一个快照数据库；</p>
+</li>
+<li><p><strong>编写&#x2F;运行查询（Analyze）</strong>： 使用一种类似 SQL 的面向对象查询语言（QL），在数据库中查找符合特征的代码片段；</p>
+</li>
+<li><p><strong>生成结果（Results）</strong>： 输出分析报告（通常是 SARIF 格式），定位到具体的代码行号。</p>
+</li>
+</ol>
+<h2 id="二、CodeQL-安装"><a href="#二、CodeQL-安装" class="headerlink" title="二、CodeQL 安装"></a>二、CodeQL 安装</h2><p>运行 CodeQL 需要安装 CodeQL CLI 工具，分开下载的话需要分别下载 CodeQL binary 和 SDK，需要放在相同目录下且版本保持一致，也可以直接下载捆绑包，以 Ubuntu 环境为例，安装命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.16.1/codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvzf codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/home/aono/codeqlsrc/codeql</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>检测是否安装成功：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">codeql --version</span><br></pre></td></tr></table></figure>
+
+<p>可以使用  <code>codeQL resolve languages</code> 可以查看支持的编程语言。</p>
+<h2 id="三、CodeQL-简单使用"><a href="#三、CodeQL-简单使用" class="headerlink" title="三、CodeQL 简单使用"></a>三、CodeQL 简单使用</h2><p>指定项目创建数据库，以 Java 目标（<a href="https://github.com/l4yn3/micro_service_seclab%EF%BC%89%E4%B8%BA%E4%BE%8B%EF%BC%8C%E9%A1%B9%E7%9B%AE%E9%80%9A%E8%BF%87">https://github.com/l4yn3/micro_service_seclab）为例，项目通过</a> mvn 构建，首先安装 mvn：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt install maven -y</span><br></pre></td></tr></table></figure>
+
+<p>创建数据库：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database create java_db --language=java --source-root=./test/micro_service_seclab/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../uploads/codeql_1.png"></p>
+<p>使用默认规则进行查询，生成 SARIF 文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database analyze java_db/ --format=sarif-latest --output=java_result.sarif</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../uploads/codeql_2.png"></p>
+]]></content>
+      <categories>
+        <category>SAST</category>
+      </categories>
+      <tags>
+        <tag>SAST</tag>
+        <tag>CodeQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows结束进程</title>
+    <url>/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/</url>
+    <content><![CDATA[<p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
+<p>首先查找占用 8080 的 PID：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -ano | findstr :8080</span><br></pre></td></tr></table></figure>
+
+<p>然后根据 PID 强制结束进程：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">taskkill /F /PID 3836</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<ol start="3">
+<li>实验</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;netstat -ano | findstr :8080</span><br><span class="line">  TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       3836</span><br><span class="line">  TCP    [::]:8080              [::]:0                 LISTENING       3836</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;taskkill /F /PID 3836</span><br><span class="line">成功: 已终止 PID 为 3836 的进程。</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -714,26 +769,59 @@
       </tags>
   </entry>
   <entry>
-    <title>Windows结束进程</title>
-    <url>/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/</url>
-    <content><![CDATA[<p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
-<p>首先查找占用 8080 的 PID：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -ano | findstr :8080</span><br></pre></td></tr></table></figure>
+    <title>解决VScode和Trae等无法加载conda虚拟环境的问题</title>
+    <url>/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="一、问题描述"><a href="#一、问题描述" class="headerlink" title="一、问题描述"></a>一、问题描述</h1><p>使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
 
-<p>然后根据 PID 强制结束进程：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">taskkill /F /PID 3836</span><br></pre></td></tr></table></figure>
+<p>但是，运行 <code>conda init</code> 后还是不起作用：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">λ conda init</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda.exe</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda-env.exe</span><br><span class="line">......</span><br><span class="line">no change     C:\Users\Username\Documents\WindowsPowerShell\profile.ps1</span><br><span class="line">modified      HKEY_CURRENT_USER\Software\Microsoft\Command Processor\AutoRun</span><br></pre></td></tr></table></figure>
 
+<h1 id="二、解决方案"><a href="#二、解决方案" class="headerlink" title="二、解决方案"></a>二、解决方案</h1><p>我是 win11 操作系统，需要以 <strong>管理员身份</strong> 打开powershell窗口，输入以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
+
+<p>重新加载即可生效。</p>
 <span id="more"></span>
 
-<ol start="3">
-<li>实验</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;netstat -ano | findstr :8080</span><br><span class="line">  TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       3836</span><br><span class="line">  TCP    [::]:8080              [::]:0                 LISTENING       3836</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;taskkill /F /PID 3836</span><br><span class="line">成功: 已终止 PID 为 3836 的进程。</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+<h1 id="三、原理"><a href="#三、原理" class="headerlink" title="三、原理"></a>三、原理</h1><p>简单说，这个问题本质上是：<strong>Conda 的初始化脚本被 PowerShell 的安全策略拦住了，所以每次新开终端时，Conda 都没真正“接管”当前 Shell。</strong></p>
+<h2 id="1-conda-init-实际在做什么？"><a href="#1-conda-init-实际在做什么？" class="headerlink" title="1. conda init 实际在做什么？"></a>1. <code>conda init</code> 实际在做什么？</h2><p>在 Windows + PowerShell 下，Conda 并不是简单地靠 <code>conda.exe</code> 来完成环境激活的，而是通过一套 <strong>Shell Hook 脚本</strong> 来接管当前会话：</p>
+<p><code>conda init</code> 会在 <code>C:\Users\Username\Documents\WindowsPowerShell\profile.ps1</code> 里写入一段初始化代码，这些脚本会去调用 <code>miniconda3\shell\condabin\conda-hook.ps1</code> 等文件，往当前 PowerShell 里注入 <code>conda</code> &#x2F; <code>conda activate</code> 等函数，并设置好 PATH、环境变量等。</p>
+<p><strong>只有这些 Hook 每次打开 PowerShell 时能顺利执行，当前终端才真正“支持” <code>conda activate</code>。</strong></p>
+<p>所以当你看到：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>其实意思是：<strong>当前这个 PowerShell 会话里没有被注入 Conda 的 Hook 脚本</strong>，所以它感觉自己还没 init。</p>
+<h2 id="2-PowerShell-执行策略的限制"><a href="#2-PowerShell-执行策略的限制" class="headerlink" title="2. PowerShell 执行策略的限制"></a>2. PowerShell 执行策略的限制</h2><p>PowerShell 为了安全，有一个 <strong>执行策略（Execution Policy）</strong>，决定哪些脚本可以被执行：</p>
+<p>常见几种：</p>
+<ul>
+<li><code>Restricted</code>：完全禁止执行脚本；</li>
+<li><code>AllSigned</code>：所有脚本都必须是签名的；</li>
+<li><code>RemoteSigned</code>：本地脚本可以执行，从互联网下载的脚本必须签名。</li>
+</ul>
+<p>在我机器上的情况是：</p>
+<ul>
+<li><p>Conda 的这些 hook &#x2F; profile 脚本属于 <strong>本地脚本</strong>；</p>
+</li>
+<li><p>但默认配置策略过于严格，导致：</p>
+<ul>
+<li>打开 PowerShell 时，<code>profile.ps1</code> &#x2F; <code>conda-hook.ps1</code> 没有被执行；</li>
+<li>于是 <code>conda</code> 函数、自动激活逻辑统统都没加载进当前会话；</li>
+<li>终端自然就会提示你先 <code>conda init</code>。</li>
+</ul>
+</li>
+</ul>
+<p>也就是说：<code>conda init</code> 写入的配置已经在那儿了，但每次启动 PowerShell 时都被策略挡在门外。 当以管理员身份执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
+
+<p>等于允许系统执行本地脚本，只对来源不明的远程脚本做限制。</p>
+<p>这样一来，再次打开 PowerShell &#x2F; VSCode 内置终端时，<code>profile.ps1</code> 会被正常加载，里面调用的 <code>conda-hook.ps1</code> 等本地脚本可以顺利执行， VSCode &#x2F; Trae 里就可以正常加载和激活 Conda 虚拟环境，不再报 Run ‘conda init’ before ‘conda activate’错误。</p>
+]]></content>
       <categories>
-        <category>Windows</category>
+        <category>Trouble shooting</category>
       </categories>
       <tags>
-        <tag>Windows</tag>
+        <tag>Config</tag>
+        <tag>Trouble shooting</tag>
       </tags>
   </entry>
   <entry>
@@ -792,62 +880,6 @@
       <tags>
         <tag>Config</tag>
         <tag>uv</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决VScode和Trae等无法加载conda虚拟环境的问题</title>
-    <url>/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="一、问题描述"><a href="#一、问题描述" class="headerlink" title="一、问题描述"></a>一、问题描述</h1><p>使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>但是，运行 <code>conda init</code> 后还是不起作用：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">λ conda init</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda.exe</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda-env.exe</span><br><span class="line">......</span><br><span class="line">no change     C:\Users\Username\Documents\WindowsPowerShell\profile.ps1</span><br><span class="line">modified      HKEY_CURRENT_USER\Software\Microsoft\Command Processor\AutoRun</span><br></pre></td></tr></table></figure>
-
-<h1 id="二、解决方案"><a href="#二、解决方案" class="headerlink" title="二、解决方案"></a>二、解决方案</h1><p>我是 win11 操作系统，需要以 <strong>管理员身份</strong> 打开powershell窗口，输入以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
-
-<p>重新加载即可生效。</p>
-<span id="more"></span>
-
-<h1 id="三、原理"><a href="#三、原理" class="headerlink" title="三、原理"></a>三、原理</h1><p>简单说，这个问题本质上是：<strong>Conda 的初始化脚本被 PowerShell 的安全策略拦住了，所以每次新开终端时，Conda 都没真正“接管”当前 Shell。</strong></p>
-<h2 id="1-conda-init-实际在做什么？"><a href="#1-conda-init-实际在做什么？" class="headerlink" title="1. conda init 实际在做什么？"></a>1. <code>conda init</code> 实际在做什么？</h2><p>在 Windows + PowerShell 下，Conda 并不是简单地靠 <code>conda.exe</code> 来完成环境激活的，而是通过一套 <strong>Shell Hook 脚本</strong> 来接管当前会话：</p>
-<p><code>conda init</code> 会在 <code>C:\Users\Username\Documents\WindowsPowerShell\profile.ps1</code> 里写入一段初始化代码，这些脚本会去调用 <code>miniconda3\shell\condabin\conda-hook.ps1</code> 等文件，往当前 PowerShell 里注入 <code>conda</code> &#x2F; <code>conda activate</code> 等函数，并设置好 PATH、环境变量等。</p>
-<p><strong>只有这些 Hook 每次打开 PowerShell 时能顺利执行，当前终端才真正“支持” <code>conda activate</code>。</strong></p>
-<p>所以当你看到：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>其实意思是：<strong>当前这个 PowerShell 会话里没有被注入 Conda 的 Hook 脚本</strong>，所以它感觉自己还没 init。</p>
-<h2 id="2-PowerShell-执行策略的限制"><a href="#2-PowerShell-执行策略的限制" class="headerlink" title="2. PowerShell 执行策略的限制"></a>2. PowerShell 执行策略的限制</h2><p>PowerShell 为了安全，有一个 <strong>执行策略（Execution Policy）</strong>，决定哪些脚本可以被执行：</p>
-<p>常见几种：</p>
-<ul>
-<li><code>Restricted</code>：完全禁止执行脚本；</li>
-<li><code>AllSigned</code>：所有脚本都必须是签名的；</li>
-<li><code>RemoteSigned</code>：本地脚本可以执行，从互联网下载的脚本必须签名。</li>
-</ul>
-<p>在我机器上的情况是：</p>
-<ul>
-<li><p>Conda 的这些 hook &#x2F; profile 脚本属于 <strong>本地脚本</strong>；</p>
-</li>
-<li><p>但默认配置策略过于严格，导致：</p>
-<ul>
-<li>打开 PowerShell 时，<code>profile.ps1</code> &#x2F; <code>conda-hook.ps1</code> 没有被执行；</li>
-<li>于是 <code>conda</code> 函数、自动激活逻辑统统都没加载进当前会话；</li>
-<li>终端自然就会提示你先 <code>conda init</code>。</li>
-</ul>
-</li>
-</ul>
-<p>也就是说：<code>conda init</code> 写入的配置已经在那儿了，但每次启动 PowerShell 时都被策略挡在门外。 当以管理员身份执行：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
-
-<p>等于允许系统执行本地脚本，只对来源不明的远程脚本做限制。</p>
-<p>这样一来，再次打开 PowerShell &#x2F; VSCode 内置终端时，<code>profile.ps1</code> 会被正常加载，里面调用的 <code>conda-hook.ps1</code> 等本地脚本可以顺利执行， VSCode &#x2F; Trae 里就可以正常加载和激活 Conda 虚拟环境，不再报 Run ‘conda init’ before ‘conda activate’错误。</p>
-]]></content>
-      <categories>
-        <category>Trouble shooting</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Trouble shooting</tag>
       </tags>
   </entry>
   <entry>

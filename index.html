@@ -172,18 +172,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -208,6 +208,104 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/12/OSCP%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/12/OSCP%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/" class="post-title-link" itemprop="url">OSCP学习心得</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-12 10:04:28 / 修改时间：11:20:39" itemprop="dateCreated datePublished" datetime="2025-12-12T10:04:28+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/OSCP/" itemprop="url" rel="index"><span itemprop="name">OSCP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在 OSCP 的学习和练习以及打靶场或者渗透测试过程中，我认为本质上不是掌握了多少工具，而是在规定时间内，能不能把渗透的全流程跑完，关键步骤上思维能否发散，能否有较为全面的思考和枚举，所以重心还是在思路上，渗透的思路和应对关键点时的经验，所以记录一些自己的思考。</p>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>重点在于覆盖面和可用性：</p>
+<ul>
+<li>覆盖面：全端口（服务）扫描，不要漏掉服务，不然可能会找不到正确的入口点；</li>
+<li>可用性：不同服务、版本都有什么漏洞，是否具备利用条件，无法利用的话是不是加了什么限制，是需要绕过限制还是需要转变路径，这些属于能否实现利用的范畴；</li>
+</ul>
+<blockquote>
+<p><strong>信息收集要得出一个结论：我到底能打哪些入口？哪些入口最可能实现边界突破？</strong></p>
+</blockquote>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>漏洞利用阶段不要盲目跑exp，最好是先验证控制程度，再拿shell。</p>
+<p>先确定漏洞是否真实存在，漏洞可控点在哪里，输入如何影响输出，然后再确认控制深度（能否读写文件&#x2F;命令执行&#x2F;鉴权绕过），最后在拿稳定shell。</p>
+<blockquote>
+<p><strong>先看能不能验证清楚，在考虑能否一步到位。</strong></p>
+</blockquote>
+<h2 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h2><p>提权并没有深入学习太多，但是感觉应该在于找到“权限边界被破坏”的证据，可以根据历史经验寻找线索，找到稳定可复现的思路。</p>
+<h2 id="横向移动"><a href="#横向移动" class="headerlink" title="横向移动"></a>横向移动</h2><blockquote>
+<p><strong>信任关系+凭证流向</strong>: 从以控制主机把影响力扩到更有价值的主机&#x2F;账号&#x2F;网段等。</p>
+</blockquote>
+<hr>
+<p>⭐<strong>持续更新 To be continued……</strong></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1046,105 +1144,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/12/09/Java%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8ESpringboot%E6%9E%B6%E6%9E%84/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/" class="post-title-link" itemprop="url">CodeQL入门</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-12-07 09:19:52" itemprop="dateCreated datePublished" datetime="2025-12-07T09:19:52+08:00">2025-12-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-12-09 19:06:42" itemprop="dateModified" datetime="2025-12-09T19:06:42+08:00">2025-12-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SAST/" itemprop="url" rel="index"><span itemprop="name">SAST</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
-<p>传统的扫描工具往往像是一个黑盒，你输入代码，它吐出报告。但 CodeQL 不同，它的核心理念非常有意思： <code>Code as Data</code> 代码即数据，CodeQL 把源代码转化成一个关系型数据库，而漏洞挖掘的过程，就变成了一次次编写 SQL（其实是 QL）查询语句的过程。</p>
-<p>CodeQL 工具包含两大部分组成：</p>
-<ul>
-<li>核心引擎(闭源)：用于解析源代码并存储于数据库，以及执行 QL 语句从数据库中进行查询；</li>
-<li>SDK代码库(开源)：包含各编程语言对应的 QL 代码库(属性&#x2F;谓词&#x2F;等)，以便快速编写查询语句。</li>
-</ul>
-<p>这给了安全研究员和开发者极大的自由度——不再受限于工具内置的规则，可以自己定义“什么样的代码长相存在漏洞”。这篇 Blog 记录了我第一次使用 CodeQL 进行静态代码分析的过程。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
