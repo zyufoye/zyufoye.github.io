@@ -1,124 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Function Call和MCP的区别</title>
-    <url>/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h2 id="Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）"><a href="#Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）" class="headerlink" title="Function Call和MCP的核心区别梳理（由GPT 5.1 生成）"></a>Function Call和MCP的核心区别梳理（由GPT 5.1 生成）</h2><h2 id="🧩核心区别总结"><a href="#🧩核心区别总结" class="headerlink" title="🧩核心区别总结"></a>🧩核心区别总结</h2><table>
-<thead>
-<tr>
-<th>特性</th>
-<th>Function Call</th>
-<th>MCP（Model Context Protocol）</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>定位</strong></td>
-<td>让模型按照开发者定义的结构化方式返回“调用某函数所需的参数”。</td>
-<td>让模型与外部工具、服务、数据源通过统一协议进行双向通信。</td>
-</tr>
-<tr>
-<td><strong>角色</strong></td>
-<td>模型只“产生命令”（函数+参数），不执行。执行由外部应用完成。</td>
-<td>除生成调用外，还可以<strong>发现、注册、调度、执行</strong>外部资源。</td>
-</tr>
-<tr>
-<td><strong>复杂度</strong></td>
-<td>简单、轻量级、多数场景够用。</td>
-<td>更底层、更通用，可连接复杂系统。</td>
-</tr>
-<tr>
-<td><strong>使用场景</strong></td>
-<td>调用某个特定函数、处理结构化任务。</td>
-<td>接入多个工具、多数据源、插件系统、企业级工作流。</td>
-</tr>
-</tbody></table>
-<hr>
-<span id="more"></span>
-
-<h2 id="🧠Function-Call-是什么？"><a href="#🧠Function-Call-是什么？" class="headerlink" title="🧠Function Call 是什么？"></a>🧠Function Call 是什么？</h2><p><strong>Function Call</strong> 是模型输出的一种结构化格式，模型输出它想调用什么函数并且要传什么参数。模型只负责<strong>输出结构化 JSON</strong>，实际执行由相关程序完成。</p>
-<p><strong>Function Call</strong>提供的是 API 层的能力，由开发者定义可调用函数列表，模型产出：函数名 + 参数，适用于简单逻辑。</p>
-<h3 id="✔-Function-Call-示例"><a href="#✔-Function-Call-示例" class="headerlink" title="✔ Function Call 示例"></a>✔ Function Call 示例</h3><p>假设开发者定义了一个函数：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;get_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;获取城市天气&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;parameters&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;required&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;city&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>用户问：</p>
-<blockquote>
-<p>“明天北京天气如何？”</p>
-</blockquote>
-<p>模型可能返回：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;get_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="string">&quot;北京&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>然后 <strong>相关程序</strong> 执行 get_weather(“北京”) 并把结果再返回给模型或用户。</p>
-<p>📌 <strong>关键点：模型不会执行，只会返回结构体。</strong></p>
-<h2 id="🧠MCP（Model-Context-Protocol）是什么？"><a href="#🧠MCP（Model-Context-Protocol）是什么？" class="headerlink" title="🧠MCP（Model Context Protocol）是什么？"></a>🧠MCP（Model Context Protocol）是什么？</h2><p>MCP 是一个<strong>通用协议</strong>，用于管理工具（tools），连接外部数据源（database、文件系统等），让模型能够发现并调用这些资源，同时统一不同工具的接口格式。</p>
-<p>可以把 MCP 理解为：</p>
-<blockquote>
-<p><strong>模型与外部世界的“操作系统抽象层”</strong><br>它让模型能直接访问文件、数据库、网络等工具。</p>
-</blockquote>
-<p>它的“能力”比 Function Call 强得多，因为：</p>
-<p>👉 <strong>Function Call 只能调用开发人员手工写死的函数</strong><br>👉 <strong>MCP 可以动态加载工具包、文件系统服务、环境服务，让模型像操作系统用户一样访问资源</strong></p>
-<hr>
-<h3 id="✔-MCP-示例"><a href="#✔-MCP-示例" class="headerlink" title="✔ MCP 示例"></a>✔ MCP 示例</h3><p>假设 MCP 提供一个工具 <code>fs.read_file</code>。</p>
-<p>用户问：</p>
-<blockquote>
-<p>“打开 &#x2F;docs&#x2F;intro.md 读给我听”</p>
-</blockquote>
-<p>模型实际会产生这样的消息（非 Function Call 风格，而是 MCP 消息协议）：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_tool&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fs.read_file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/docs/intro.md&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>服务端会执行 <strong>read_file</strong> 并返回文件内容。</p>
-<p>模型可以继续请求：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_tool&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fs.write_file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/docs/notes.txt&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里是我总结的内容...&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>这里体现 MCP 的本质：</p>
-<ul>
-<li>模型知道有哪些工具可用</li>
-<li>模型直接“操控”这些工具</li>
-<li>具有类似“文件读写”等复杂能力</li>
-<li>不需要开发者提前硬编码所有函数</li>
-</ul>
-<h2 id="⭐小结"><a href="#⭐小结" class="headerlink" title="⭐小结"></a>⭐小结</h2><table>
-<thead>
-<tr>
-<th>维度</th>
-<th>Function Call</th>
-<th>MCP</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>工具发现</td>
-<td>手工定义</td>
-<td>自动注册，模型可自动学习工具能力</td>
-</tr>
-<tr>
-<td>调用方式</td>
-<td>结构化 JSON</td>
-<td>双向协议、消息通信</td>
-</tr>
-<tr>
-<td>扩展性</td>
-<td>每加一个功能都要新增函数定义</td>
-<td>新增 MCP 服务即可扩展工具能力</td>
-</tr>
-<tr>
-<td>模型能力</td>
-<td>被动</td>
-<td>主动、可规划调用流程</td>
-</tr>
-<tr>
-<td>场景</td>
-<td>简单 API 调用、数据结构化</td>
-<td>IDE、数据库集成、文件系统、GitHub 操作、企业自动化</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>MCP</category>
-      </categories>
-      <tags>
-        <tag>MCP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CodeQL入门</title>
     <url>/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/</url>
     <content><![CDATA[<h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
@@ -168,53 +50,13 @@
       </tags>
   </entry>
   <entry>
-    <title>HEXO使用记录</title>
-    <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
-<p>官方文档：<a href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
-<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
-<span id="more"></span>
+    <title>HEXO链接站内文章方法</title>
+    <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>Hexo链接站内文章方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="一、Hexo-安装"><a href="#一、Hexo-安装" class="headerlink" title="一、Hexo 安装"></a>一、Hexo 安装</h2><p>Hexo 是一个快速、简单且功能强大的博客框架，可以使用 Markdown （或其他标记语言）编写文章，Hexo 会在几秒钟内生成带有对应主题的静态文件。</p>
-<p>安装 Hexo 需要 Node.js 以及 Git 环境。</p>
-<p>Node.js 下载地址 <a href="https://nodejs.org/en/download">Node.js Download</a></p>
-<p>Git 下载地址 <a href="https://git-scm.com/install/windows">Git Download</a></p>
-<p>所有必需组件安装完毕后，即可使用 npm 安装 Hexo：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-
-<p>初始化 Hexo 站点：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br></pre></td></tr></table></figure>
-<p>hexo-site 也可以替换为其他路径名，以 hexo-site 为例，网站根目录被称为 <code>hexo-site</code>。 </p>
-<p>初始化完成后，可以到网站根目录下，下载对应主题并进行升级：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next@latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>注意事项：</p>
-<p>运行 npm install 时，对 node_modules 目录下主题所做的任何本地更改都将丢失。如果对主题进行了更改，则应在运行 npm install 之前备份这些更改，然后在安装完成后恢复这些更改。</p>
-<p>安装完 Hexo 和 NexT 主题后，可以通过修改配置文件来自定义博客。安装 Hexo 时，配套的配置文件位于网站根目录。博客配置文件名为 _config.yml ；我们称之为 Hexo 配置文件 NexT 主题的配置文件需要您自行创建；请在目录下创建一个 _config.next.yml 文件。 网站根目录我们将其称为 Next 配置文件在以下文本中。</p>
-<p>创建空的 _config.next.yml 文件后，可以将主题文件夹中的默认配置选项复制到该文件中，以便进行修改和自定义。根据安装方式，NexT 主题的默认配置文件可能位于 themes&#x2F;next&#x2F;_config.yml 或 node_modules&#x2F;hexo-theme-next&#x2F;_config.yml 中。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure>
-
-<h2 id="二、Hexo-个性化设置"><a href="#二、Hexo-个性化设置" class="headerlink" title="二、Hexo 个性化设置"></a>二、Hexo 个性化设置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Allow to cache content generation.</span></span><br><span class="line">cache:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove unnecessary files after hexo generate.</span></span><br><span class="line">minify: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Schemes</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="comment">#scheme: Pisces</span></span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line">darkmode: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:zyufoye/zyufoye.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="三、Hexo-新建发布文章"><a href="#三、Hexo-新建发布文章" class="headerlink" title="三、Hexo 新建发布文章"></a>三、Hexo 新建发布文章</h2><p>新建发布文章：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post <span class="string">&quot;文章名称&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>生成并部署：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp;  hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
-
-<p>同步更新部署到github：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-
-<p>博客侧边栏添加 menu 菜单，以 tags 和 categories 为例：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
-
-<p>同时在index.md 中设置类别，不然点击跳转后不显示任何内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: categories</span><br></pre></td></tr></table></figure>
-
-<p>设置文章想要显示的内容时，可以用 more 进行切分， more以上的作为显示内容。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
-
-<p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
+<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 是显示的内容，如果不写的话就默认是文章名称。</p>
+<p>参考链接：<a href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
 ]]></content>
       <categories>
         <category>Config</category>
@@ -225,20 +67,245 @@
       </tags>
   </entry>
   <entry>
-    <title>HEXO链接站内文章方法</title>
-    <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>Hexo链接站内文章方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
+    <title>MCP stdio与sse模式的区别</title>
+    <url>/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h2 id="SSE-和-stdio-模式对比"><a href="#SSE-和-stdio-模式对比" class="headerlink" title="SSE 和 stdio 模式对比"></a>SSE 和 stdio 模式对比</h2><h3 id="架构差异"><a href="#架构差异" class="headerlink" title="架构差异"></a>架构差异</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">stdio 模式：</span><br><span class="line">Cursor/Claude Desktop</span><br><span class="line">    └─ 启动子进程：python server.py</span><br><span class="line">        └─ stdin/stdout 通信</span><br><span class="line">        └─ 服务器生命周期由客户端管理</span><br><span class="line"></span><br><span class="line">SSE 模式：</span><br><span class="line">独立运行：python server.py (后台持续运行)</span><br><span class="line">    ↑</span><br><span class="line">    └─ HTTP SSE 连接</span><br><span class="line">    ↑</span><br><span class="line">Cursor/Claude Desktop (通过 HTTP 连接)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 部分是现实的内容，如果不写的话就默认是文章名称。</p>
-<p>参考链接：<a href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
+<h3 id="详细对比"><a href="#详细对比" class="headerlink" title="详细对比"></a>详细对比</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>stdio 模式</th>
+<th>SSE 模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>启动方式</strong></td>
+<td>客户端自动启动</td>
+<td>手动启动（独立进程）</td>
+</tr>
+<tr>
+<td><strong>通信协议</strong></td>
+<td>stdin&#x2F;stdout 管道</td>
+<td>HTTP + Server-Sent Events</td>
+</tr>
+<tr>
+<td><strong>连接方式</strong></td>
+<td>单一客户端</td>
+<td>多客户端支持</td>
+</tr>
+<tr>
+<td><strong>调试难度</strong></td>
+<td>难（日志混在一起）</td>
+<td>易（可直接查看终端）</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>生产环境</td>
+<td>开发调试</td>
+</tr>
+<tr>
+<td><strong>进程管理</strong></td>
+<td>自动（随客户端）</td>
+<td>手动（需要单独管理）</td>
+</tr>
+<tr>
+<td><strong>网络要求</strong></td>
+<td>无</td>
+<td>需要监听端口</td>
+</tr>
+<tr>
+<td><strong>日志可见性</strong></td>
+<td>低</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<h3 id="测试时为什么选择-SSE？"><a href="#测试时为什么选择-SSE？" class="headerlink" title="测试时为什么选择 SSE？"></a>测试时为什么选择 SSE？</h3><ul>
+<li><p>✅ 开发调试更方便：可以直接在终端看到所有日志，手动重启服务器，用浏览器测试连接；</p>
+</li>
+<li><p>✅ 多客户端支持：多个 IDE 可以同时连接，可以同时在 Cursor 和 Claude Desktop 中使用；</p>
+</li>
+</ul>
 ]]></content>
       <categories>
-        <category>Config</category>
+        <category>MCP</category>
       </categories>
       <tags>
-        <tag>Config</tag>
-        <tag>Hexo</tag>
+        <tag>MCP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CodeQL-MCP架构解读</title>
+    <url>/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/</url>
+    <content><![CDATA[<p>本片内容以 <a href="https://github.com/JordyZomer/codeql-mcp">https://github.com/JordyZomer/codeql-mcp</a> 为基础，进行 CodeQL MCP 的开发学习。</p>
+<h2 id="CodeQL-MCP-整体架构分析"><a href="#CodeQL-MCP-整体架构分析" class="headerlink" title="CodeQL-MCP 整体架构分析"></a>CodeQL-MCP 整体架构分析</h2><p>项目中包含了两个核心文件 <code>codeqlclient.py</code> 和  <code>server.py</code> ：</p>
+<p><strong><code>codeqlclient.py</code></strong> 是一个底层通信客户端，负责与 CodeQL 查询服务器建立并管理 JSON-RPC 连接。它封装了进程启动、请求发送、响应解析、异步任务跟踪等复杂逻辑，提供了数据库注册、查询执行、结果解码等核心操作的原始接口。该文件不依赖任何高层框架，专注于可靠、高效地与 CodeQL 引擎交互，可作为独立库在不同上下文中复用。</p>
+<p><strong><code>server.py</code></strong> 是一个基于 Model Context Protocol（MCP）的服务层实现，利用 FastMCP 框架将 <code>codeqlclient.py</code> 提供的底层能力包装为用户友好的异步 API 工具。它定义了清晰的 HTTP 可调用接口，处理参数验证、错误反馈和结果格式化，使外部系统能通过标准 MCP 协议便捷地使用 CodeQL 功能，而无需关心底层通信细节。</p>
+<p>在 <code>codeqlclient.py</code> 中包含了一个核心类结构 CodeQLQueryServer 主要模块如下：</p>
+<ol>
+<li>服务器进程管理</li>
+</ol>
+<ul>
+<li>启动&#x2F;停止 ：通过 start() 和 stop() 方法管理 CodeQL 子进程</li>
+<li>进程通信 ：使用标准输入&#x2F;输出进行 JSON-RPC 通信</li>
+<li>线程管理 ：<ul>
+<li>_read_loop() ：主线程，读取服务器响应；_stderr_loop() ：处理标准错误输出；异步处理：支持并发请求</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>通信协议层</li>
+</ol>
+<ul>
+<li>JSON-RPC 2.0：定义消息格式，请求&#x2F;响应结构，支持异步调用</li>
+</ul>
+<ol start="3">
+<li>功能模块</li>
+</ol>
+<ul>
+<li><p>数据库管理</p>
+<ul>
+<li>register_databases() ：注册数据库</li>
+<li>deregister_databases() ：注销数据库</li>
+</ul>
+</li>
+<li><p>查询执行</p>
+<ul>
+<li>evaluate_queries() ：执行完整查询</li>
+<li>quick_evaluate() ：快速评估（针对特定代码位置）</li>
+<li>evaluate_and_wait() ：同步执行查询</li>
+<li>quick_evaluate_and_wait() ：同步快速评估</li>
+</ul>
+</li>
+<li><p>结果处理</p>
+<ul>
+<li>decode_bqrs() ：解码 BQRS 结果文件</li>
+</ul>
+</li>
+<li><p>代码分析辅助</p>
+<ul>
+<li>find_class_identifier_position() ：查找类标识符位置</li>
+<li>find_predicate_identifier_position() ：查找谓词标识符位置</li>
+</ul>
+</li>
+<li><p>进度回调机制（支持实时进度更新）</p>
+<ul>
+<li>wait_for_progress_done() ：等待进度完成</li>
+<li>wait_for_completion_callback() ：等待异步操作完成</li>
+<li>wait_for_progress_done() 创建进度跟踪器</li>
+<li>wait_for_completion_callback() 创建完成处理器</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>数据流：用户请求 -&gt; send_request()-&gt;JSON-RPC 消息-&gt;CodeQL 服务器-&gt;CodeQL 引擎-&gt;服务器响应-&gt;_read_loop()-&gt;_handle_message()-&gt;回调函数</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="关键模块解读"><a href="#关键模块解读" class="headerlink" title="关键模块解读"></a>关键模块解读</h2><h3 id="start"><a href="#start" class="headerlink" title="start()"></a>start()</h3><p>启动 CodeQL 查询服务器进程，并建立通信通道。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">self</span>.proc = subprocess.Popen(</span><br><span class="line">    [</span><br><span class="line">        <span class="variable language_">self</span>.codeql_path,        <span class="comment"># CodeQL 可执行文件路径</span></span><br><span class="line">        <span class="string">&quot;execute&quot;</span>,               <span class="comment"># 执行命令</span></span><br><span class="line">        <span class="string">&quot;query-server2&quot;</span>,         <span class="comment"># 启动查询服务器版本2</span></span><br><span class="line">        <span class="string">&quot;--debug&quot;</span>,               <span class="comment"># 启用调试模式</span></span><br><span class="line">        <span class="string">&quot;--tuple-counting&quot;</span>,      <span class="comment"># 启用元组计数（性能监控）</span></span><br><span class="line">        <span class="string">&quot;--threads=0&quot;</span>,           <span class="comment"># 使用所有可用线程（0=自动）</span></span><br><span class="line">        <span class="string">&quot;--evaluator-log-level&quot;</span>, <span class="comment"># 设置评估器日志级别</span></span><br><span class="line">        <span class="string">&quot;5&quot;</span>,                     <span class="comment"># 日志级别5（详细）</span></span><br><span class="line">        <span class="string">&quot;-v&quot;</span>,                    <span class="comment"># 详细输出</span></span><br><span class="line">        <span class="string">&quot;--log-to-stderr&quot;</span>,       <span class="comment"># 日志输出到标准错误</span></span><br><span class="line">    ],</span><br><span class="line">    stdin=subprocess.PIPE,      <span class="comment"># 标准输入管道（用于发送请求）</span></span><br><span class="line">    stdout=subprocess.PIPE,     <span class="comment"># 标准输出管道（用于接收响应）</span></span><br><span class="line">    stderr=subprocess.PIPE,     <span class="comment"># 标准错误管道（用于日志/错误）</span></span><br><span class="line">    text=<span class="literal">True</span>,                  <span class="comment"># 以文本模式处理输入输出</span></span><br><span class="line">    bufsize=<span class="number">1</span>,                  <span class="comment"># 行缓冲模式</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>启动读取线程：创建一个守护线程来持续读取服务器的标准输出，处理 JSON-RPC 响应。同时还有读取标准错误输出，防止缓冲区阻塞。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">self</span>.reader_thread = threading.Thread(</span><br><span class="line">    target=<span class="variable language_">self</span>._read_loop,  <span class="comment"># 目标函数：读取循环</span></span><br><span class="line">    daemon=<span class="literal">True</span>              <span class="comment"># 守护线程（主程序退出时自动结束）</span></span><br><span class="line">)</span><br><span class="line"><span class="variable language_">self</span>.reader_thread.start()   <span class="comment"># 启动线程</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">self</span>.stderr_thread = threading.Thread(</span><br><span class="line">    target=<span class="variable language_">self</span>._stderr_loop,  <span class="comment"># 目标函数：标准错误循环</span></span><br><span class="line">    daemon=<span class="literal">True</span>                <span class="comment"># 守护线程</span></span><br><span class="line">)</span><br><span class="line"><span class="variable language_">self</span>.stderr_thread.start()     <span class="comment"># 启动线程</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="stderr-loop"><a href="#stderr-loop" class="headerlink" title="_stderr_loop()"></a>_stderr_loop()</h3><p>标准错误处理循环：持续读取 CodeQL服务器的标准错误输出，防止stderr管道堵塞，在 start() 中作为守护线程启动。</p>
+<h3 id="read-loop"><a href="#read-loop" class="headerlink" title="_read_loop()"></a>_read_loop()</h3><p>主读取循环：读取并解析服务器响应，处理 JSON-RPC over HTTP 风格的消息格式。</p>
+<h3 id="handle-message"><a href="#handle-message" class="headerlink" title="_handle_message()"></a>_handle_message()</h3><p>消息分发器：是核心的消息处理函数，处理三种类型的消息：</p>
+<ul>
+<li>进度更新消息 ( ql&#x2F;progressUpdated )：处理查询执行进度更新</li>
+<li>评估进度消息 ( evaluation&#x2F;progress )：处理评估操作的进度信息</li>
+<li>请求响应消息：处理异步请求的响应</li>
+</ul>
+<h3 id="send"><a href="#send" class="headerlink" title="_send()"></a>_send()</h3><p>发送请求：发送JSON-RPC 请求到服务器。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_send</span>(<span class="params">self, payload</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="variable language_">self</span>.proc <span class="keyword">or</span> <span class="keyword">not</span> <span class="variable language_">self</span>.proc.stdin:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;[!] Tried to send but process not running.&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        data = json.dumps(payload)</span><br><span class="line">        content = <span class="string">f&quot;Content-Length: <span class="subst">&#123;<span class="built_in">len</span>(data)&#125;</span>\r\n\r\n<span class="subst">&#123;data&#125;</span>&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\n[→] Sending request:\n<span class="subst">&#123;json.dumps(payload, indent=<span class="number">2</span>)&#125;</span>\n&quot;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.proc.stdin.write(content)</span><br><span class="line">        <span class="variable language_">self</span>.proc.stdin.flush()</span><br></pre></td></tr></table></figure>
+
+<h3 id="send-request"><a href="#send-request" class="headerlink" title="send_request()"></a>send_request()</h3><p>高级发送接口：发送异步请求并管理回调，为每个请求生成唯一ID，关联请求 ID 与回调函数，支持进度回调注册和状态跟踪。</p>
+<h3 id="stop"><a href="#stop" class="headerlink" title="stop()"></a>stop()</h3><p>停止服务器</p>
+<h3 id="find-class-identifier-position"><a href="#find-class-identifier-position" class="headerlink" title="find_class_identifier_position()"></a>find_class_identifier_position()</h3><p>在 QL 文件中查找类名标识符的位置，返回基于 1 的行列坐标。CodeQL 快速评估功能的关键组件，通过定位代码中的特定标识符，实现对部分代码的针对性分析。</p>
+<h3 id="find-predicate-identifier-position"><a href="#find-predicate-identifier-position" class="headerlink" title="find_predicate_identifier_position()"></a>find_predicate_identifier_position()</h3><p>在 QL 文件中查找谓词（predicate）名称的位置，返回基于 1 的行列坐标。</p>
+<p>类名查找和谓词查找可以用于支持CodeQL的快速评估功能，就是只执行查询的一部分，而不是执行全量查询，可以进行快速迭代和调试。</p>
+<h3 id="register-databases-deregister-databases"><a href="#register-databases-deregister-databases" class="headerlink" title="register_databases() &amp;&amp; deregister_databases()"></a>register_databases() &amp;&amp; deregister_databases()</h3><p>注册注销数据库：向 CodeQL 查询服务器注册一个或多个数据库，使其可用于查询执行。</p>
+<p>这是CodeQL客户端资源管理的核心，确保数据库在查询执行前正确注册，在执行后及时清理，是高效使用 CodeQL 服务器的关键组件。</p>
+<h3 id="evaluate-queries"><a href="#evaluate-queries" class="headerlink" title="evaluate_queries()"></a>evaluate_queries()</h3><p>执行完整的 CodeQL 查询 ：在指定的数据库上运行一个 QL 查询文件，并将结果保存到输出文件。</p>
+<ul>
+<li>query_path ：QL 查询文件路径</li>
+<li>db_path ：CodeQL 数据库路径</li>
+<li>output_path ：结果输出文件路径（BQRS 格式）</li>
+<li>callback ：异步完成回调（可选）</li>
+<li>progress_callback ：进度回调（可选）</li>
+</ul>
+<p>默认完成处理：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">on_done</span>(<span class="params">result</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[evaluateQueries] done:&quot;</span>, result)</span><br><span class="line">    <span class="keyword">if</span> result.get(<span class="string">&quot;resultType&quot;</span>) != <span class="number">0</span>:  <span class="comment"># 0表示成功</span></span><br><span class="line">        <span class="keyword">raise</span> RuntimeError(<span class="string">f&quot;CodeQL evaluation failed: <span class="subst">&#123;result.get(<span class="string">&#x27;message&#x27;</span>, <span class="string">&#x27;Unknown error&#x27;</span>)&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>发送异步请求：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">self</span>.send_request(</span><br><span class="line">    <span class="string">&quot;evaluation/runQuery&quot;</span>,      <span class="comment"># JSON-RPC方法</span></span><br><span class="line">    params,                     <span class="comment"># 参数</span></span><br><span class="line">    callback <span class="keyword">or</span> on_done,        <span class="comment"># 使用用户回调或默认回调</span></span><br><span class="line">    progress_callback=progress_callback  <span class="comment"># 进度回调</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>函数会执行整个 QL 文件的所有查询，支持回调和进度跟踪。</p>
+<h3 id="evaluate-and-wait"><a href="#evaluate-and-wait" class="headerlink" title="evaluate_and_wait()"></a>evaluate_and_wait()</h3><p>同步执行完整查询的便捷方法，其中包装了 evaluate_queries() 的异步功能，使用 wait_for_progress_done() 等待查询完成，简化了同步使用场景。</p>
+<h3 id="quick-evaluate-and-wait"><a href="#quick-evaluate-and-wait" class="headerlink" title="quick_evaluate_and_wait()"></a>quick_evaluate_and_wait()</h3><p>同步执行快速评估，包装了quick_evaluate() 的异步功能，但是需要指定代码位置（行、列）。</p>
+<h3 id="quick-evaluate"><a href="#quick-evaluate" class="headerlink" title="quick_evaluate()"></a>quick_evaluate()</h3><p>执行快速评估（Quick Evaluation） ：只执行 QL 查询文件中 特定代码片段 的查询，而不是整个文件。</p>
+<ul>
+<li>file_path ：QL 查询文件路径</li>
+<li>db_path ：CodeQL 数据库路径</li>
+<li>output_path ：结果输出文件路径</li>
+<li>start_line , start_col ：起始位置（1-based）</li>
+<li>end_line , end_col ：结束位置（1-based）</li>
+<li>callback ：异步完成回调</li>
+<li>progress_callback ：进度回调</li>
+</ul>
+<h3 id="wait-for-progress-done-wait-for-completion-callback"><a href="#wait-for-progress-done-wait-for-completion-callback" class="headerlink" title="wait_for_progress_done() &amp;&amp; wait_for_completion_callback()"></a>wait_for_progress_done() &amp;&amp; wait_for_completion_callback()</h3><p>功能 ：创建一个进度完成等待器 和 完成回调等待器。这两个函数都是 异步转同步 的工具：</p>
+<ul>
+<li>将异步回调模式转换为同步等待模式</li>
+<li>简化了不需要复杂异步处理的场景</li>
+<li>提供了更直观的API使用方式</li>
+</ul>
+<h2 id="MCP-Server-构建"><a href="#MCP-Server-构建" class="headerlink" title="MCP Server 构建"></a>MCP Server 构建</h2><p>基于 FastMCP 框架构建的 CodeQL 分析服务器，提供了 6 个工具来与 CodeQL 进行交互。</p>
+<h3 id="核心组件"><a href="#核心组件" class="headerlink" title="核心组件"></a>核心组件</h3><p>服务器初始化：使用 FastMCP 创建名为 “CodeQL” 的 MCP 服务器，实例化 CodeQLQueryServer 并启动，用于处理 CodeQL 查询操作。</p>
+<h3 id="工具说明"><a href="#工具说明" class="headerlink" title="工具说明"></a>工具说明</h3><ol>
+<li>register_database</li>
+</ol>
+<p>注册 CodeQL 数据库到查询服务器。验证数据库路径和必需的 src.zip 文件是否存在。</p>
+<ol start="2">
+<li>quick_evaluate</li>
+</ol>
+<p>快速评估 CodeQL 查询文件中的特定类或谓词，自动定位符号位置并执行评估。</p>
+<ol start="3">
+<li>decode_bqrs</li>
+</ol>
+<p>解码 CodeQL 结果文件（.bqrs 格式），支持 CSV（用于问题查询）或 JSON（用于路径问题）格式。</p>
+<ol start="4">
+<li>evaluate_query</li>
+</ol>
+<p>在指定数据库上运行完整的 CodeQL 查询文件。</p>
+<ol start="5">
+<li>find_class_position</li>
+</ol>
+<p>查找查询文件中类定义的准确位置（行号和列号）。</p>
+<ol start="6">
+<li>find_predicate_position</li>
+</ol>
+<p>查找查询文件中谓词定义的准确位置（行号和列号）。</p>
+<h3 id="MCP-Server-代码"><a href="#MCP-Server-代码" class="headerlink" title="MCP Server 代码"></a>MCP Server 代码</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mcp = FastMCP(<span class="string">&quot;CodeQL&quot;</span>)</span><br><span class="line">qs = CodeQLQueryServer()</span><br><span class="line">qs.start()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">register_database</span>(<span class="params">db_path: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This tool registers a CodeQL database given a path&quot;&quot;&quot;</span></span><br><span class="line">    db_path_resolved = Path(db_path).resolve()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> db_path_resolved.exists():</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;Database path does not exist: <span class="subst">&#123;db_path&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">    source_zip = db_path_resolved / <span class="string">&quot;src.zip&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> source_zip.exists():</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;Missing required src.zip in: <span class="subst">&#123;db_path&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">    db_entry = &#123;</span><br><span class="line">        <span class="string">&quot;uri&quot;</span>: Path(db_path).resolve().as_uri(),</span><br><span class="line">        <span class="string">&quot;content&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;sourceArchiveZip&quot;</span>: (Path(db_path) / <span class="string">&quot;src.zip&quot;</span>).resolve().as_uri(),</span><br><span class="line">            <span class="string">&quot;dbDir&quot;</span>: Path(db_path).resolve().as_uri(),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">    callback, done, result_holder = qs.wait_for_completion_callback()</span><br><span class="line">    qs.register_databases(</span><br><span class="line">        [db_path],</span><br><span class="line">        callback=callback,</span><br><span class="line">        progress_callback=<span class="keyword">lambda</span> msg: <span class="built_in">print</span>(<span class="string">&quot;[progress] register:&quot;</span>, msg),</span><br><span class="line">    )</span><br><span class="line">    done.wait()</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Database registered: <span class="subst">&#123;db_path&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">quick_evaluate</span>(<span class="params"></span></span><br><span class="line"><span class="params">    file: <span class="built_in">str</span>, db: <span class="built_in">str</span>, symbol: <span class="built_in">str</span>, output_path: <span class="built_in">str</span> = <span class="string">&quot;/tmp/quickeval.bqrs&quot;</span></span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This will allow you to quick_evaluate either a class or a predicate in a codeql query&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        start, scol, end, ecol = qs.find_class_identifier_position(file, symbol)</span><br><span class="line">    <span class="keyword">except</span> ValueError:</span><br><span class="line">        start, scol, end, ecol = qs.find_predicate_identifier_position(</span><br><span class="line">            file, symbol</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        qs.quick_evaluate_and_wait(</span><br><span class="line">            file, db, output_path, start, scol, end, ecol</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">except</span> RuntimeError <span class="keyword">as</span> re:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;CodeQL evaluation failed: <span class="subst">&#123;re&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output_path</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">decode_bqrs</span>(<span class="params">bqrs_path: <span class="built_in">str</span>, fmt: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This can be used to decode CodeQL results, format is either csv for problem queries or json for path-problems&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> qs.decode_bqrs(bqrs_path, fmt)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">evaluate_query</span>(<span class="params"></span></span><br><span class="line"><span class="params">    query_path: <span class="built_in">str</span>, db_path: <span class="built_in">str</span>, output_path: <span class="built_in">str</span> = <span class="string">&quot;/tmp/eval.bqrs&quot;</span></span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Runs a CodeQL query on a given database&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        qs.evaluate_and_wait(query_path, db_path, output_path)</span><br><span class="line">    <span class="keyword">except</span> RuntimeError <span class="keyword">as</span> re:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;CodeQL evaluation failed: <span class="subst">&#123;re&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output_path</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">find_class_position</span>(<span class="params">file: <span class="built_in">str</span>, name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Finds startline, startcol, endline endcol of a class for quickeval&quot;&quot;&quot;</span></span><br><span class="line">    start, scol, end, ecol = qs.find_class_identifier_position(file, name)</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;start_line&quot;</span>: start,</span><br><span class="line">        <span class="string">&quot;start_col&quot;</span>: scol,</span><br><span class="line">        <span class="string">&quot;end_line&quot;</span>: end,</span><br><span class="line">        <span class="string">&quot;end_col&quot;</span>: ecol,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">find_predicate_position</span>(<span class="params">file: <span class="built_in">str</span>, name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Finds startline, startcol, endline endcol of a predicate for quickeval&quot;&quot;&quot;</span></span><br><span class="line">    start, scol, end, ecol = qs.find_predicate_identifier_position(file, name)</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;start_line&quot;</span>: start,</span><br><span class="line">        <span class="string">&quot;start_col&quot;</span>: scol,</span><br><span class="line">        <span class="string">&quot;end_line&quot;</span>: end,</span><br><span class="line">        <span class="string">&quot;end_col&quot;</span>: ecol,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Starting CodeQL MCP server...&quot;</span>)</span><br><span class="line">    mcp.run(host=<span class="string">&quot;0.0.0.0&quot;</span>, port=<span class="number">8000</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="MCP-Server-测试"><a href="#MCP-Server-测试" class="headerlink" title="MCP Server 测试"></a>MCP Server 测试</h2><p>以注册数据库为例，进行MCP Server功能测试：</p>
+<p>首先启动 MCP Server：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">(really_mcp) PS D:\Projects\codeql-mcp&gt; uv run mcp run server.py -t sse</span><br><span class="line">[*] Read loop started</span><br><span class="line">INFO:     Started server process [23464]</span><br><span class="line">INFO:     Waiting <span class="keyword">for</span> application startup.</span><br><span class="line">INFO:     Application startup complete.</span><br><span class="line">INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在 cursor 的 MCP tools 页面加载对应工具，选择启用状态：</p>
+<p><img src="/../uploads/CodeQL_MCP_1.png"></p>
+<p>对应配置文件如下：</p>
+<p><img src="/../uploads/CodeQL_MCP_2.png"></p>
+<p>MCP Server状态与 Tools 调用情况：</p>
+<p><img src="/../uploads/CodeQL_MCP_3.png"></p>
+<p>以上验证 CodeQL MCP 可成功调用并执行。</p>
+<p>与服务器通信的数据包数据：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Accepted</span><br><span class="line">[12/15/25 20:26:54] INFO     Processing request of type CallToolRequest                   server.py:674</span><br><span class="line">[DEBUG] Sending evaluation/registerDatabases with progressId=0</span><br><span class="line"></span><br><span class="line">[→] Sending request:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;jsonrpc&quot;: &quot;2.0&quot;,</span><br><span class="line">  &quot;id&quot;: 1,</span><br><span class="line">  &quot;method&quot;: &quot;evaluation/registerDatabases&quot;,</span><br><span class="line">  &quot;params&quot;: &#123;</span><br><span class="line">    &quot;body&quot;: &#123;</span><br><span class="line">      &quot;databases&quot;: [</span><br><span class="line">        &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;progressId&quot;: 0</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[stdout] Content-Length: 102</span><br><span class="line">[raw response body] &#123;&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:1,&quot;result&quot;:&#123;&quot;registeredDatabases&quot;:[&quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;]&#125;&#125;</span><br><span class="line"></span><br><span class="line">[←] Received response:</span><br><span class="line">&#123;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;jsonrpc&quot;: &quot;2.0&quot;,</span><br><span class="line">  &quot;id&quot;: 1,</span><br><span class="line">  &quot;result&quot;: &#123;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">  &quot;id&quot;: 1,</span><br><span class="line">  &quot;result&quot;: &#123;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">  &quot;result&quot;: &#123;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">    ]</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">INFO:     127.0.0.1:56577 - &quot;POST /messages/?session_id=d8bc9c141a864777b7a094f0a6abc6ad HTTP/1.1&quot; 202 Accepted</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>MCP</category>
+      </categories>
+      <tags>
+        <tag>CodeQL</tag>
+        <tag>MCP</tag>
       </tags>
   </entry>
   <entry>
@@ -606,33 +673,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Miniconda安装</title>
-    <url>/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p>Miniconda 是 Conda 的精简发行版，只包含最核心的包管理系统与 Python，可以快速搭建独立的 Python 环境。在进行数据分析、机器学习或科研开发时，相比于 Anaconda 更轻量、更灵活。</p>
-<h2 id="一、Miniconda-安装"><a href="#一、Miniconda-安装" class="headerlink" title="一、Miniconda 安装"></a>一、Miniconda 安装</h2><p>Windows 命令行安装方式，可以快速且安静地下载最新的 64 位 Windows 安装程序，将其重命名为较短的文件名，执行静默安装，然后删除安装程序：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe</span><br><span class="line">start /wait &quot;&quot; .\miniconda.exe /S</span><br><span class="line">del .\miniconda.exe</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<p>Windows Powershell：</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Invoke-WebRequest</span> <span class="literal">-Uri</span> <span class="string">&quot;https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe&quot;</span> <span class="literal">-outfile</span> <span class="string">&quot;.\miniconda.exe&quot;</span></span><br><span class="line"><span class="built_in">Start-Process</span> <span class="literal">-FilePath</span> <span class="string">&quot;.\miniconda.exe&quot;</span> <span class="literal">-ArgumentList</span> <span class="string">&quot;/S&quot;</span> <span class="literal">-Wait</span></span><br><span class="line"><span class="built_in">del</span> .\miniconda.exe</span><br></pre></td></tr></table></figure>
-
-<p>Linux 64位：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/miniconda3</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line"><span class="built_in">rm</span> ~/miniconda3/miniconda.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/miniconda3/bin/activate</span><br><span class="line"></span><br><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
-
-<h2 id="二、快速使用"><a href="#二、快速使用" class="headerlink" title="二、快速使用"></a>二、快速使用</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda create -n environment python=3.12</span><br><span class="line"></span><br><span class="line">conda activate environment</span><br><span class="line"></span><br><span class="line">conda deactivate environment</span><br></pre></td></tr></table></figure>
-
-<p>参考文献：<a href="https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt">https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt</a></p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Miniconda</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>OSCP学习心得</title>
     <url>/2025/12/12/OSCP%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/</url>
     <content><![CDATA[<p>在 OSCP 的学习和练习以及打靶场或者渗透测试过程中，我认为本质上不是掌握了多少工具，而是在规定时间内，能不能把渗透的全流程跑完，关键步骤上思维能否发散，能否有较为全面的思考和枚举，所以重心还是在思路上，渗透的思路和应对关键点时的经验，所以记录一些自己的思考。</p>
@@ -665,6 +705,124 @@
       </tags>
   </entry>
   <entry>
+    <title>Function Call和MCP的区别</title>
+    <url>/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h2 id="Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）"><a href="#Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）" class="headerlink" title="Function Call和MCP的核心区别梳理（由GPT 5.1 生成）"></a>Function Call和MCP的核心区别梳理（由GPT 5.1 生成）</h2><h2 id="🧩核心区别总结"><a href="#🧩核心区别总结" class="headerlink" title="🧩核心区别总结"></a>🧩核心区别总结</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Function Call</th>
+<th>MCP（Model Context Protocol）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>定位</strong></td>
+<td>让模型按照开发者定义的结构化方式返回“调用某函数所需的参数”。</td>
+<td>让模型与外部工具、服务、数据源通过统一协议进行双向通信。</td>
+</tr>
+<tr>
+<td><strong>角色</strong></td>
+<td>模型只“产生命令”（函数+参数），不执行。执行由外部应用完成。</td>
+<td>除生成调用外，还可以<strong>发现、注册、调度、执行</strong>外部资源。</td>
+</tr>
+<tr>
+<td><strong>复杂度</strong></td>
+<td>简单、轻量级、多数场景够用。</td>
+<td>更底层、更通用，可连接复杂系统。</td>
+</tr>
+<tr>
+<td><strong>使用场景</strong></td>
+<td>调用某个特定函数、处理结构化任务。</td>
+<td>接入多个工具、多数据源、插件系统、企业级工作流。</td>
+</tr>
+</tbody></table>
+<hr>
+<span id="more"></span>
+
+<h2 id="🧠Function-Call-是什么？"><a href="#🧠Function-Call-是什么？" class="headerlink" title="🧠Function Call 是什么？"></a>🧠Function Call 是什么？</h2><p><strong>Function Call</strong> 是模型输出的一种结构化格式，模型输出它想调用什么函数并且要传什么参数。模型只负责<strong>输出结构化 JSON</strong>，实际执行由相关程序完成。</p>
+<p><strong>Function Call</strong>提供的是 API 层的能力，由开发者定义可调用函数列表，模型产出：函数名 + 参数，适用于简单逻辑。</p>
+<h3 id="✔-Function-Call-示例"><a href="#✔-Function-Call-示例" class="headerlink" title="✔ Function Call 示例"></a>✔ Function Call 示例</h3><p>假设开发者定义了一个函数：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;get_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;获取城市天气&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;parameters&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;required&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;city&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>用户问：</p>
+<blockquote>
+<p>“明天北京天气如何？”</p>
+</blockquote>
+<p>模型可能返回：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;get_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="string">&quot;北京&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后 <strong>相关程序</strong> 执行 get_weather(“北京”) 并把结果再返回给模型或用户。</p>
+<p>📌 <strong>关键点：模型不会执行，只会返回结构体。</strong></p>
+<h2 id="🧠MCP（Model-Context-Protocol）是什么？"><a href="#🧠MCP（Model-Context-Protocol）是什么？" class="headerlink" title="🧠MCP（Model Context Protocol）是什么？"></a>🧠MCP（Model Context Protocol）是什么？</h2><p>MCP 是一个<strong>通用协议</strong>，用于管理工具（tools），连接外部数据源（database、文件系统等），让模型能够发现并调用这些资源，同时统一不同工具的接口格式。</p>
+<p>可以把 MCP 理解为：</p>
+<blockquote>
+<p><strong>模型与外部世界的“操作系统抽象层”</strong><br>它让模型能直接访问文件、数据库、网络等工具。</p>
+</blockquote>
+<p>它的“能力”比 Function Call 强得多，因为：</p>
+<p>👉 <strong>Function Call 只能调用开发人员手工写死的函数</strong><br>👉 <strong>MCP 可以动态加载工具包、文件系统服务、环境服务，让模型像操作系统用户一样访问资源</strong></p>
+<hr>
+<h3 id="✔-MCP-示例"><a href="#✔-MCP-示例" class="headerlink" title="✔ MCP 示例"></a>✔ MCP 示例</h3><p>假设 MCP 提供一个工具 <code>fs.read_file</code>。</p>
+<p>用户问：</p>
+<blockquote>
+<p>“打开 &#x2F;docs&#x2F;intro.md 读给我听”</p>
+</blockquote>
+<p>模型实际会产生这样的消息（非 Function Call 风格，而是 MCP 消息协议）：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_tool&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fs.read_file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/docs/intro.md&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>服务端会执行 <strong>read_file</strong> 并返回文件内容。</p>
+<p>模型可以继续请求：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_tool&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fs.write_file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/docs/notes.txt&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里是我总结的内容...&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里体现 MCP 的本质：</p>
+<ul>
+<li>模型知道有哪些工具可用</li>
+<li>模型直接“操控”这些工具</li>
+<li>具有类似“文件读写”等复杂能力</li>
+<li>不需要开发者提前硬编码所有函数</li>
+</ul>
+<h2 id="⭐小结"><a href="#⭐小结" class="headerlink" title="⭐小结"></a>⭐小结</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Function Call</th>
+<th>MCP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>工具发现</td>
+<td>手工定义</td>
+<td>自动注册，模型可自动学习工具能力</td>
+</tr>
+<tr>
+<td>调用方式</td>
+<td>结构化 JSON</td>
+<td>双向协议、消息通信</td>
+</tr>
+<tr>
+<td>扩展性</td>
+<td>每加一个功能都要新增函数定义</td>
+<td>新增 MCP 服务即可扩展工具能力</td>
+</tr>
+<tr>
+<td>模型能力</td>
+<td>被动</td>
+<td>主动、可规划调用流程</td>
+</tr>
+<tr>
+<td>场景</td>
+<td>简单 API 调用、数据结构化</td>
+<td>IDE、数据库集成、文件系统、GitHub 操作、企业自动化</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>MCP</category>
+      </categories>
+      <tags>
+        <tag>MCP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Win11 Java环境变量配置</title>
     <url>/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<p>找到JDK的路径，在系统环境变量中新建变量名和变量值：</p>
@@ -683,6 +841,90 @@
       <tags>
         <tag>Config</tag>
         <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Miniconda安装</title>
+    <url>/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Miniconda 是 Conda 的精简发行版，只包含最核心的包管理系统与 Python，可以快速搭建独立的 Python 环境。在进行数据分析、机器学习或科研开发时，相比于 Anaconda 更轻量、更灵活。</p>
+<h2 id="一、Miniconda-安装"><a href="#一、Miniconda-安装" class="headerlink" title="一、Miniconda 安装"></a>一、Miniconda 安装</h2><p>Windows 命令行安装方式，可以快速且安静地下载最新的 64 位 Windows 安装程序，将其重命名为较短的文件名，执行静默安装，然后删除安装程序：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe</span><br><span class="line">start /wait &quot;&quot; .\miniconda.exe /S</span><br><span class="line">del .\miniconda.exe</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>Windows Powershell：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Invoke-WebRequest</span> <span class="literal">-Uri</span> <span class="string">&quot;https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe&quot;</span> <span class="literal">-outfile</span> <span class="string">&quot;.\miniconda.exe&quot;</span></span><br><span class="line"><span class="built_in">Start-Process</span> <span class="literal">-FilePath</span> <span class="string">&quot;.\miniconda.exe&quot;</span> <span class="literal">-ArgumentList</span> <span class="string">&quot;/S&quot;</span> <span class="literal">-Wait</span></span><br><span class="line"><span class="built_in">del</span> .\miniconda.exe</span><br></pre></td></tr></table></figure>
+
+<p>Linux 64位：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/miniconda3</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line"><span class="built_in">rm</span> ~/miniconda3/miniconda.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/miniconda3/bin/activate</span><br><span class="line"></span><br><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、快速使用"><a href="#二、快速使用" class="headerlink" title="二、快速使用"></a>二、快速使用</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda create -n environment python=3.12</span><br><span class="line"></span><br><span class="line">conda activate environment</span><br><span class="line"></span><br><span class="line">conda deactivate environment</span><br></pre></td></tr></table></figure>
+
+<p>参考文献：<a href="https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt">https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt</a></p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Miniconda</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HEXO使用记录</title>
+    <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
+<p>官方文档：<a href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
+<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
+<span id="more"></span>
+
+<h2 id="一、Hexo-安装"><a href="#一、Hexo-安装" class="headerlink" title="一、Hexo 安装"></a>一、Hexo 安装</h2><p>Hexo 是一个快速、简单且功能强大的博客框架，可以使用 Markdown （或其他标记语言）编写文章，Hexo 会在几秒钟内生成带有对应主题的静态文件。</p>
+<p>安装 Hexo 需要 Node.js 以及 Git 环境。</p>
+<p>Node.js 下载地址 <a href="https://nodejs.org/en/download">Node.js Download</a></p>
+<p>Git 下载地址 <a href="https://git-scm.com/install/windows">Git Download</a></p>
+<p>所有必需组件安装完毕后，即可使用 npm 安装 Hexo：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<p>初始化 Hexo 站点：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br></pre></td></tr></table></figure>
+<p>hexo-site 也可以替换为其他路径名，以 hexo-site 为例，网站根目录被称为 <code>hexo-site</code>。 </p>
+<p>初始化完成后，可以到网站根目录下，下载对应主题并进行升级：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next@latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>注意事项：</p>
+<p>运行 npm install 时，对 node_modules 目录下主题所做的任何本地更改都将丢失。如果对主题进行了更改，则应在运行 npm install 之前备份这些更改，然后在安装完成后恢复这些更改。</p>
+<p>安装完 Hexo 和 NexT 主题后，可以通过修改配置文件来自定义博客。安装 Hexo 时，配套的配置文件位于网站根目录。博客配置文件名为 _config.yml ；我们称之为 Hexo 配置文件 NexT 主题的配置文件需要您自行创建；请在目录下创建一个 _config.next.yml 文件。 网站根目录我们将其称为 Next 配置文件在以下文本中。</p>
+<p>创建空的 _config.next.yml 文件后，可以将主题文件夹中的默认配置选项复制到该文件中，以便进行修改和自定义。根据安装方式，NexT 主题的默认配置文件可能位于 themes&#x2F;next&#x2F;_config.yml 或 node_modules&#x2F;hexo-theme-next&#x2F;_config.yml 中。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、Hexo-个性化设置"><a href="#二、Hexo-个性化设置" class="headerlink" title="二、Hexo 个性化设置"></a>二、Hexo 个性化设置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Allow to cache content generation.</span></span><br><span class="line">cache:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove unnecessary files after hexo generate.</span></span><br><span class="line">minify: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Schemes</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="comment">#scheme: Pisces</span></span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line">darkmode: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:zyufoye/zyufoye.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="三、Hexo-新建发布文章"><a href="#三、Hexo-新建发布文章" class="headerlink" title="三、Hexo 新建发布文章"></a>三、Hexo 新建发布文章</h2><p>新建发布文章：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post <span class="string">&quot;文章名称&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>生成并部署：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp;  hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
+
+<p>同步更新部署到github：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p>博客侧边栏添加 menu 菜单，以 tags 和 categories 为例：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
+
+<p>同时在index.md 中设置类别，不然点击跳转后不显示任何内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: categories</span><br></pre></td></tr></table></figure>
+
+<p>设置文章想要显示的内容时，可以用 more 进行切分， more以上的作为显示内容。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
+
+<p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -833,87 +1075,6 @@
       </tags>
   </entry>
   <entry>
-    <title>uv使用</title>
-    <url>/2025/12/10/uv%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<p>uv是一个用 Rust 编写的极快的 Python 包和项目管理工具。</p>
-<p>官方文档参考：<a href="https://docs.astral.sh/uv/">https://docs.astral.sh/uv/</a></p>
-<h2 id="uv安装"><a href="#uv安装" class="headerlink" title="uv安装"></a>uv安装</h2><p>Linux &amp; MacOS 安装</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -LsSf https://astral.sh/uv/install.sh | sh</span><br></pre></td></tr></table></figure>
-
-<p>Windows powershell 安装</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">powershell -ExecutionPolicy ByPass -c <span class="string">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<p>以Windows为例，下载uv并配置环境变量，在powershell中。</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">(base) <span class="built_in">PS</span> C:\Users\<span class="number">77319</span>&gt; powershell <span class="literal">-ExecutionPolicy</span> ByPass <span class="literal">-c</span> <span class="string">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></span><br><span class="line">Downloading uv <span class="number">0.9</span>.<span class="number">17</span> (x86_64<span class="literal">-pc-windows-msvc</span>)</span><br><span class="line">Installing to C:\Users\<span class="number">77319</span>\.local\bin</span><br><span class="line">  uv.exe</span><br><span class="line">  uvx.exe</span><br><span class="line">  uvw.exe</span><br><span class="line">everything<span class="string">&#x27;s installed!</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">To add C:\Users\77319\.local\bin to your PATH, either restart your shell or run:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    set Path=C:\Users\77319\.local\bin;%Path%   (cmd)</span></span><br><span class="line"><span class="string">    $env:Path = &quot;C:\Users\77319\.local\bin;$env:Path&quot;   (powershell)</span></span><br><span class="line"><span class="string">(base) PS C:\Users\77319&gt; $env:Path = &quot;C:\Users\77319\.local\bin;$env:Path&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>输入uv -h</p>
-<p><img src="/../uploads/uv.png"></p>
-<p>即表示安全成功。</p>
-<h2 id="uv使用"><a href="#uv使用" class="headerlink" title="uv使用"></a>uv使用</h2><p>以官方实践为例，展示uv如何初始化一个 Python 项目、添加依赖、运行工具、生成锁文件并同步环境。  </p>
-<p><code>uv init example</code> — 创建一个新的 Python 项目模板  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~$ uv init myproject_test</span><br><span class="line">Initialized project `myproject-test` at `/home/zyu/myproject_test`</span><br><span class="line">(base) zyu@zyu-virtual-machine:~$ <span class="built_in">cd</span> myproject_test/</span><br><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ tree .</span><br><span class="line">.</span><br><span class="line">├── main.py</span><br><span class="line">├── pyproject.toml</span><br><span class="line">└── README.md</span><br><span class="line"></span><br><span class="line">0 directories, 3 files</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><code>uv add ruff</code> — 安装依赖并更新 pyproject  </p>
-<p>自动创建项目虚拟环境，安装依赖包ruff，把依赖写入pyproject.toml：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv add ruff</span><br><span class="line">Using CPython 3.13.9 interpreter at: /home/zyu/miniconda3/bin/python3</span><br><span class="line">Creating virtual environment at: .venv</span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 864ms</span><br><span class="line">Prepared 1 package <span class="keyword">in</span> 1.30s</span><br><span class="line">Installed 1 package <span class="keyword">in</span> 1ms</span><br><span class="line"> + ruff==0.14.8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><code>uv run ruff check</code> — 运行 ruff 检查代码  </p>
-<p> 使用项目虚拟环境里的 ruff 执行代码风格检查 :</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv run ruff check</span><br><span class="line">All checks passed!</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><code>uv lock</code> — 生成锁文件 : 解析所有依赖版本  , 生成 <code>uv.lock</code>（类似 Pipfile.lock &#x2F; poetry.lock），保证这个项目未来依赖安装一致、可复现。  </p>
-<p><code>uv sync</code> — 按锁文件同步虚拟环境 ： 根据 <code>uv.lock</code> 安装或更新依赖  ， 确保 <code>.venv/</code> 完全匹配锁文件。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv lock</span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 0.84ms</span><br><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv <span class="built_in">sync</span></span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 0.70ms</span><br><span class="line">Audited 1 package <span class="keyword">in</span> 0.09ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><code>uvx pycowsay &#39;hello world!&#39; </code> uvx 等价于 <code>uv tool run</code>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uvx pycowsay <span class="string">&#x27;hello world!&#x27;</span></span><br><span class="line">Installed 1 package <span class="keyword">in</span> 5ms</span><br><span class="line">/home/zyu/.cache/uv/archive-v0/nYZiOnUm3DMddg7I9DLwr/lib/python3.13/site-packages/pycowsay/main.py:27: SyntaxWarning: invalid escape sequence <span class="string">&#x27;\ &#x27;</span></span><br><span class="line">  \   ^__^</span><br><span class="line"></span><br><span class="line">  ------------</span><br><span class="line">&lt; hello world! &gt;</span><br><span class="line">  ------------</span><br><span class="line">   \   ^__^</span><br><span class="line">    \  (oo)\_______</span><br><span class="line">       (__)\       )\/\</span><br><span class="line">           ||----w |</span><br><span class="line">           ||     ||</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>以上就是官方提供的示例Demo。</p>
-<p>在实际项目中使用（以<a href="https://github.com/JordyZomer/codeql-mcp#">https://github.com/JordyZomer/codeql-mcp#</a>为例）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install -r .\requirements.txt</span><br><span class="line">error: No virtual environment found; run `uv venv` to create an environment, or pass `--system` to install into a non-virtual environment</span><br></pre></td></tr></table></figure>
-
-<p> 使用 <code>uv pip</code> 安装依赖，但当前目录没有虚拟环境，所以 uv 不知道该把包装到哪里。  uv 的原则是如果不指定装到哪里，它默认要找一个虚拟环境（.venv），如果找不到就报错。所以需要先创建虚拟环境：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv venv</span><br><span class="line">Using CPython 3.11.7 interpreter at: C:\Users\77319\anaconda3\python.exe</span><br><span class="line">Creating virtual environment at: .venv</span><br><span class="line">Activate with: .venv\Scripts\activate</span><br><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install -r .\requirements.txt</span><br><span class="line">Resolved 60 packages <span class="keyword">in</span> 1.61s</span><br><span class="line">Prepared 60 packages <span class="keyword">in</span> 3.56s</span><br><span class="line">░░░░░░░░░░░░░░░░░░░░ [0/60] Installing wheels...                                                warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.                                                                                            </span><br><span class="line">         If the cache and target directories are on different filesystems, hardlinking may not be supported.                                                                                    </span><br><span class="line">         If this is intentional, <span class="built_in">set</span> `<span class="built_in">export</span> UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.                                                                             </span><br><span class="line">Installed 60 packages <span class="keyword">in</span> 4.17s</span><br><span class="line"> + annotated-types==0.7.0                                                                       </span><br><span class="line"> + anyio==4.12.0                                                                                </span><br><span class="line"> + attrs==25.4.0                                                                                </span><br><span class="line"> + authlib==1.6.5                                                                               </span><br><span class="line"> + beartype==0.22.8                                                                             </span><br><span class="line"> + cachetools==6.2.2</span><br><span class="line"> + certifi==2025.11.12</span><br><span class="line"> + cffi==2.0.0</span><br><span class="line"> + charset-normalizer==3.4.4</span><br><span class="line"> + click==8.3.1</span><br><span class="line"> + colorama==0.4.6</span><br><span class="line"> + cryptography==46.0.3</span><br><span class="line"> + cyclopts==4.3.0</span><br><span class="line"> + diskcache==5.6.3</span><br><span class="line"> + dnspython==2.8.0</span><br><span class="line"> + docstring-parser==0.17.0</span><br><span class="line"> + docutils==0.22.3</span><br><span class="line"> + email-validator==2.3.0</span><br><span class="line"> + exceptiongroup==1.3.1</span><br><span class="line"> + fastmcp==2.13.3</span><br><span class="line"> + h11==0.16.0</span><br><span class="line"> + httpcore==1.0.9</span><br><span class="line"> + httpx==0.28.1</span><br><span class="line"> + httpx-sse==0.4.3</span><br><span class="line"> + idna==3.11</span><br><span class="line"> + jsonschema==4.25.1</span><br><span class="line"> + jsonschema-path==0.3.4</span><br><span class="line"> + jsonschema-specifications==2025.9.1</span><br><span class="line"> + markdown-it-py==4.0.0</span><br><span class="line"> + mcp==1.22.0</span><br><span class="line"> + mdurl==0.1.2</span><br><span class="line"> + openapi-pydantic==0.5.1</span><br><span class="line"> + pathable==0.4.4</span><br><span class="line"> + pathvalidate==3.3.1</span><br><span class="line"> + platformdirs==4.5.1</span><br><span class="line"> + py-key-value-aio==0.3.0</span><br><span class="line"> + py-key-value-shared==0.3.0</span><br><span class="line"> + pycparser==2.23</span><br><span class="line"> + pydantic==2.12.5</span><br><span class="line"> + pydantic-core==2.41.5</span><br><span class="line"> + pydantic-settings==2.12.0</span><br><span class="line"> + pygments==2.19.2</span><br><span class="line"> + pyjwt==2.10.1</span><br><span class="line"> + pyperclip==1.11.0</span><br><span class="line"> + python-dotenv==1.2.1</span><br><span class="line"> + python-multipart==0.0.20</span><br><span class="line"> + pywin32==311</span><br><span class="line"> + pyyaml==6.0.3</span><br><span class="line"> + referencing==0.36.2</span><br><span class="line"> + requests==2.32.5</span><br><span class="line"> + rich==14.2.0</span><br><span class="line"> + rich-rst==1.3.2</span><br><span class="line"> + rpds-py==0.30.0</span><br><span class="line"> + sse-starlette==3.0.3</span><br><span class="line"> + starlette==0.50.0</span><br><span class="line"> + typing-extensions==4.15.0</span><br><span class="line"> + typing-inspection==0.4.2</span><br><span class="line"> + urllib3==2.6.1</span><br><span class="line"> + uvicorn==0.38.0</span><br><span class="line"> + websockets==15.0.1</span><br></pre></td></tr></table></figure>
-
-<p>关于报错信息可以忽略，大致意思是： uv 想用硬链接（hardlink）加速依赖安装，但我们的缓存目录和安装目录不在同一个文件系统上 → 无法硬链接 → 只能退回到“完整复制”文件，性能稍慢一点。  应该缓存目录在C盘，但是安装目录在D盘。</p>
-<p>运行mcp服务器：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv run mcp run server.py -t sse</span><br><span class="line">Error: typer is required. Install with <span class="string">&#x27;pip install mcp[cli]&#x27;</span></span><br><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install mcp[cli]</span><br><span class="line">Resolved 37 packages <span class="keyword">in</span> 710ms</span><br><span class="line">Prepared 2 packages <span class="keyword">in</span> 138ms</span><br><span class="line">░░░░░░░░░░░░░░░░░░░░ [0/2] Installing wheels...                                                 warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.</span><br><span class="line">         If the cache and target directories are on different filesystems, hardlinking may not be supported.</span><br><span class="line">         If this is intentional, <span class="built_in">set</span> `<span class="built_in">export</span> UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.</span><br><span class="line">Installed 2 packages <span class="keyword">in</span> 56ms</span><br><span class="line"> + shellingham==1.5.4</span><br><span class="line"> + typer==0.20.0</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>uv</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows结束进程</title>
-    <url>/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/</url>
-    <content><![CDATA[<p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
-<p>首先查找占用 8080 的 PID：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -ano | findstr :8080</span><br></pre></td></tr></table></figure>
-
-<p>然后根据 PID 强制结束进程：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">taskkill /F /PID 3836</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<ol start="3">
-<li>实验</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;netstat -ano | findstr :8080</span><br><span class="line">  TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       3836</span><br><span class="line">  TCP    [::]:8080              [::]:0                 LISTENING       3836</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;taskkill /F /PID 3836</span><br><span class="line">成功: 已终止 PID 为 3836 的进程。</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Windows</category>
-      </categories>
-      <tags>
-        <tag>Windows</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>解决VScode和Trae等无法加载conda虚拟环境的问题</title>
     <url>/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h1 id="一、问题描述"><a href="#一、问题描述" class="headerlink" title="一、问题描述"></a>一、问题描述</h1><p>使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题：</p>
@@ -970,6 +1131,29 @@
       </tags>
   </entry>
   <entry>
+    <title>Windows结束进程</title>
+    <url>/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/</url>
+    <content><![CDATA[<p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
+<p>首先查找占用 8080 的 PID：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -ano | findstr :8080</span><br></pre></td></tr></table></figure>
+
+<p>然后根据 PID 强制结束进程：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">taskkill /F /PID 3836</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<ol start="3">
+<li>实验</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;netstat -ano | findstr :8080</span><br><span class="line">  TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       3836</span><br><span class="line">  TCP    [::]:8080              [::]:0                 LISTENING       3836</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;taskkill /F /PID 3836</span><br><span class="line">成功: 已终止 PID 为 3836 的进程。</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>kali安装ssh</title>
     <url>/2025/12/10/kali%E5%AE%89%E8%A3%85ssh/</url>
     <content><![CDATA[<h1 id="kali-linux-安装ssh服务"><a href="#kali-linux-安装ssh服务" class="headerlink" title="kali linux 安装ssh服务"></a>kali linux 安装ssh服务</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get install ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl start ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> ssh <span class="comment">#设置开机自启</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl status ssh <span class="comment">#查看运行状态</span></span><br></pre></td></tr></table></figure>]]></content>
@@ -979,6 +1163,64 @@
       <tags>
         <tag>Config</tag>
         <tag>Kali Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>uv使用</title>
+    <url>/2025/12/10/uv%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>uv是一个用 Rust 编写的极快的 Python 包和项目管理工具。</p>
+<p>官方文档参考：<a href="https://docs.astral.sh/uv/">https://docs.astral.sh/uv/</a></p>
+<h2 id="uv安装"><a href="#uv安装" class="headerlink" title="uv安装"></a>uv安装</h2><p>Linux &amp; MacOS 安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -LsSf https://astral.sh/uv/install.sh | sh</span><br></pre></td></tr></table></figure>
+
+<p>Windows powershell 安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">powershell -ExecutionPolicy ByPass -c <span class="string">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>以Windows为例，下载uv并配置环境变量，在powershell中。</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">(base) <span class="built_in">PS</span> C:\Users\<span class="number">77319</span>&gt; powershell <span class="literal">-ExecutionPolicy</span> ByPass <span class="literal">-c</span> <span class="string">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></span><br><span class="line">Downloading uv <span class="number">0.9</span>.<span class="number">17</span> (x86_64<span class="literal">-pc-windows-msvc</span>)</span><br><span class="line">Installing to C:\Users\<span class="number">77319</span>\.local\bin</span><br><span class="line">  uv.exe</span><br><span class="line">  uvx.exe</span><br><span class="line">  uvw.exe</span><br><span class="line">everything<span class="string">&#x27;s installed!</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">To add C:\Users\77319\.local\bin to your PATH, either restart your shell or run:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    set Path=C:\Users\77319\.local\bin;%Path%   (cmd)</span></span><br><span class="line"><span class="string">    $env:Path = &quot;C:\Users\77319\.local\bin;$env:Path&quot;   (powershell)</span></span><br><span class="line"><span class="string">(base) PS C:\Users\77319&gt; $env:Path = &quot;C:\Users\77319\.local\bin;$env:Path&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>输入uv -h</p>
+<p><img src="/../uploads/uv.png"></p>
+<p>即表示安全成功。</p>
+<h2 id="uv使用"><a href="#uv使用" class="headerlink" title="uv使用"></a>uv使用</h2><p>以官方实践为例，展示uv如何初始化一个 Python 项目、添加依赖、运行工具、生成锁文件并同步环境。  </p>
+<p><code>uv init example</code> — 创建一个新的 Python 项目模板  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~$ uv init myproject_test</span><br><span class="line">Initialized project `myproject-test` at `/home/zyu/myproject_test`</span><br><span class="line">(base) zyu@zyu-virtual-machine:~$ <span class="built_in">cd</span> myproject_test/</span><br><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ tree .</span><br><span class="line">.</span><br><span class="line">├── main.py</span><br><span class="line">├── pyproject.toml</span><br><span class="line">└── README.md</span><br><span class="line"></span><br><span class="line">0 directories, 3 files</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>uv add ruff</code> — 安装依赖并更新 pyproject  </p>
+<p>自动创建项目虚拟环境，安装依赖包ruff，把依赖写入pyproject.toml：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv add ruff</span><br><span class="line">Using CPython 3.13.9 interpreter at: /home/zyu/miniconda3/bin/python3</span><br><span class="line">Creating virtual environment at: .venv</span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 864ms</span><br><span class="line">Prepared 1 package <span class="keyword">in</span> 1.30s</span><br><span class="line">Installed 1 package <span class="keyword">in</span> 1ms</span><br><span class="line"> + ruff==0.14.8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>uv run ruff check</code> — 运行 ruff 检查代码  </p>
+<p> 使用项目虚拟环境里的 ruff 执行代码风格检查 :</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv run ruff check</span><br><span class="line">All checks passed!</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>uv lock</code> — 生成锁文件 : 解析所有依赖版本  , 生成 <code>uv.lock</code>（类似 Pipfile.lock &#x2F; poetry.lock），保证这个项目未来依赖安装一致、可复现。  </p>
+<p><code>uv sync</code> — 按锁文件同步虚拟环境 ： 根据 <code>uv.lock</code> 安装或更新依赖  ， 确保 <code>.venv/</code> 完全匹配锁文件。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv lock</span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 0.84ms</span><br><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv <span class="built_in">sync</span></span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 0.70ms</span><br><span class="line">Audited 1 package <span class="keyword">in</span> 0.09ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>uvx pycowsay &#39;hello world!&#39; </code> uvx 等价于 <code>uv tool run</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uvx pycowsay <span class="string">&#x27;hello world!&#x27;</span></span><br><span class="line">Installed 1 package <span class="keyword">in</span> 5ms</span><br><span class="line">/home/zyu/.cache/uv/archive-v0/nYZiOnUm3DMddg7I9DLwr/lib/python3.13/site-packages/pycowsay/main.py:27: SyntaxWarning: invalid escape sequence <span class="string">&#x27;\ &#x27;</span></span><br><span class="line">  \   ^__^</span><br><span class="line"></span><br><span class="line">  ------------</span><br><span class="line">&lt; hello world! &gt;</span><br><span class="line">  ------------</span><br><span class="line">   \   ^__^</span><br><span class="line">    \  (oo)\_______</span><br><span class="line">       (__)\       )\/\</span><br><span class="line">           ||----w |</span><br><span class="line">           ||     ||</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>以上就是官方提供的示例Demo。</p>
+<p>在实际项目中使用（以<a href="https://github.com/JordyZomer/codeql-mcp#">https://github.com/JordyZomer/codeql-mcp#</a>为例）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install -r .\requirements.txt</span><br><span class="line">error: No virtual environment found; run `uv venv` to create an environment, or pass `--system` to install into a non-virtual environment</span><br></pre></td></tr></table></figure>
+
+<p> 使用 <code>uv pip</code> 安装依赖，但当前目录没有虚拟环境，所以 uv 不知道该把包装到哪里。  uv 的原则是如果不指定装到哪里，它默认要找一个虚拟环境（.venv），如果找不到就报错。所以需要先创建虚拟环境：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv venv</span><br><span class="line">Using CPython 3.11.7 interpreter at: C:\Users\77319\anaconda3\python.exe</span><br><span class="line">Creating virtual environment at: .venv</span><br><span class="line">Activate with: .venv\Scripts\activate</span><br><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install -r .\requirements.txt</span><br><span class="line">Resolved 60 packages <span class="keyword">in</span> 1.61s</span><br><span class="line">Prepared 60 packages <span class="keyword">in</span> 3.56s</span><br><span class="line">░░░░░░░░░░░░░░░░░░░░ [0/60] Installing wheels...                                                warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.                                                                                            </span><br><span class="line">         If the cache and target directories are on different filesystems, hardlinking may not be supported.                                                                                    </span><br><span class="line">         If this is intentional, <span class="built_in">set</span> `<span class="built_in">export</span> UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.                                                                             </span><br><span class="line">Installed 60 packages <span class="keyword">in</span> 4.17s</span><br><span class="line"> + annotated-types==0.7.0                                                                       </span><br><span class="line"> + anyio==4.12.0                                                                                </span><br><span class="line"> + attrs==25.4.0                                                                                </span><br><span class="line"> + authlib==1.6.5                                                                               </span><br><span class="line"> + beartype==0.22.8                                                                             </span><br><span class="line"> + cachetools==6.2.2</span><br><span class="line"> + certifi==2025.11.12</span><br><span class="line"> + cffi==2.0.0</span><br><span class="line"> + charset-normalizer==3.4.4</span><br><span class="line"> + click==8.3.1</span><br><span class="line"> + colorama==0.4.6</span><br><span class="line"> + cryptography==46.0.3</span><br><span class="line"> + cyclopts==4.3.0</span><br><span class="line"> + diskcache==5.6.3</span><br><span class="line"> + dnspython==2.8.0</span><br><span class="line"> + docstring-parser==0.17.0</span><br><span class="line"> + docutils==0.22.3</span><br><span class="line"> + email-validator==2.3.0</span><br><span class="line"> + exceptiongroup==1.3.1</span><br><span class="line"> + fastmcp==2.13.3</span><br><span class="line"> + h11==0.16.0</span><br><span class="line"> + httpcore==1.0.9</span><br><span class="line"> + httpx==0.28.1</span><br><span class="line"> + httpx-sse==0.4.3</span><br><span class="line"> + idna==3.11</span><br><span class="line"> + jsonschema==4.25.1</span><br><span class="line"> + jsonschema-path==0.3.4</span><br><span class="line"> + jsonschema-specifications==2025.9.1</span><br><span class="line"> + markdown-it-py==4.0.0</span><br><span class="line"> + mcp==1.22.0</span><br><span class="line"> + mdurl==0.1.2</span><br><span class="line"> + openapi-pydantic==0.5.1</span><br><span class="line"> + pathable==0.4.4</span><br><span class="line"> + pathvalidate==3.3.1</span><br><span class="line"> + platformdirs==4.5.1</span><br><span class="line"> + py-key-value-aio==0.3.0</span><br><span class="line"> + py-key-value-shared==0.3.0</span><br><span class="line"> + pycparser==2.23</span><br><span class="line"> + pydantic==2.12.5</span><br><span class="line"> + pydantic-core==2.41.5</span><br><span class="line"> + pydantic-settings==2.12.0</span><br><span class="line"> + pygments==2.19.2</span><br><span class="line"> + pyjwt==2.10.1</span><br><span class="line"> + pyperclip==1.11.0</span><br><span class="line"> + python-dotenv==1.2.1</span><br><span class="line"> + python-multipart==0.0.20</span><br><span class="line"> + pywin32==311</span><br><span class="line"> + pyyaml==6.0.3</span><br><span class="line"> + referencing==0.36.2</span><br><span class="line"> + requests==2.32.5</span><br><span class="line"> + rich==14.2.0</span><br><span class="line"> + rich-rst==1.3.2</span><br><span class="line"> + rpds-py==0.30.0</span><br><span class="line"> + sse-starlette==3.0.3</span><br><span class="line"> + starlette==0.50.0</span><br><span class="line"> + typing-extensions==4.15.0</span><br><span class="line"> + typing-inspection==0.4.2</span><br><span class="line"> + urllib3==2.6.1</span><br><span class="line"> + uvicorn==0.38.0</span><br><span class="line"> + websockets==15.0.1</span><br></pre></td></tr></table></figure>
+
+<p>关于报错信息可以忽略，大致意思是： uv 想用硬链接（hardlink）加速依赖安装，但我们的缓存目录和安装目录不在同一个文件系统上 → 无法硬链接 → 只能退回到“完整复制”文件，性能稍慢一点。  应该缓存目录在C盘，但是安装目录在D盘。</p>
+<p>运行mcp服务器：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv run mcp run server.py -t sse</span><br><span class="line">Error: typer is required. Install with <span class="string">&#x27;pip install mcp[cli]&#x27;</span></span><br><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install mcp[cli]</span><br><span class="line">Resolved 37 packages <span class="keyword">in</span> 710ms</span><br><span class="line">Prepared 2 packages <span class="keyword">in</span> 138ms</span><br><span class="line">░░░░░░░░░░░░░░░░░░░░ [0/2] Installing wheels...                                                 warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.</span><br><span class="line">         If the cache and target directories are on different filesystems, hardlinking may not be supported.</span><br><span class="line">         If this is intentional, <span class="built_in">set</span> `<span class="built_in">export</span> UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.</span><br><span class="line">Installed 2 packages <span class="keyword">in</span> 56ms</span><br><span class="line"> + shellingham==1.5.4</span><br><span class="line"> + typer==0.20.0</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>uv</tag>
       </tags>
   </entry>
 </search>

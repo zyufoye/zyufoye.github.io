@@ -20,25 +20,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Aono Note">
-<meta property="og:url" content="https://zyufoye.github.io/tags/Windows/index.html">
+    <meta name="description" content="SSE 和 stdio 模式对比架构差异12345678910111213stdio 模式：Cursor&#x2F;Claude Desktop    └─ 启动子进程：python server.py        └─ stdin&#x2F;stdout 通信        └─ 服务器生命周期由客户端管理SSE 模式：独立运行：python server.py (后台持续运行)    ↑    └─ HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP stdio与sse模式的区别">
+<meta property="og:url" content="https://zyufoye.github.io/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/index.html">
 <meta property="og:site_name" content="Aono Note">
-<meta property="og:description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+<meta property="og:description" content="SSE 和 stdio 模式对比架构差异12345678910111213stdio 模式：Cursor&#x2F;Claude Desktop    └─ 启动子进程：python server.py        └─ stdin&#x2F;stdout 通信        └─ 服务器生命周期由客户端管理SSE 模式：独立运行：python server.py (后台持续运行)    ↑    └─ HTTP">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-15T13:54:35.000Z">
+<meta property="article:modified_time" content="2025-12-15T13:55:10.090Z">
 <meta property="article:author" content="Aono">
-<meta property="article:tag" content="网络安全">
+<meta property="article:tag" content="MCP">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://zyufoye.github.io/tags/Windows/">
+<link rel="canonical" href="https://zyufoye.github.io/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"tags/Windows/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/","path":"2025/12/15/MCP-stdio与sse模式的区别/","title":"MCP stdio与sse模式的区别"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>标签: Windows | Aono Note</title>
+<title>MCP stdio与sse模式的区别 | Aono Note</title>
   
 
 
@@ -145,7 +147,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -158,6 +160,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SSE-%E5%92%8C-stdio-%E6%A8%A1%E5%BC%8F%E5%AF%B9%E6%AF%94"><span class="nav-number">1.</span> <span class="nav-text">SSE 和 stdio 模式对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E5%B7%AE%E5%BC%82"><span class="nav-number">1.1.</span> <span class="nav-text">架构差异</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E5%AF%B9%E6%AF%94"><span class="nav-number">1.2.</span> <span class="nav-text">详细对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%97%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9-SSE%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">测试时为什么选择 SSE？</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -207,50 +210,166 @@
 
     </div>
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h1 class="collection-header">Windows
-          <small>标签</small>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MCP stdio与sse模式的区别 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MCP stdio与sse模式的区别
         </h1>
-      </div>
 
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2025</span>
+
+      <time title="创建时间：2025-12-15 21:54:35 / 修改时间：21:55:10" itemprop="dateCreated datePublished" datetime="2025-12-15T21:54:35+08:00">2025-12-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="SSE-和-stdio-模式对比"><a href="#SSE-和-stdio-模式对比" class="headerlink" title="SSE 和 stdio 模式对比"></a>SSE 和 stdio 模式对比</h2><h3 id="架构差异"><a href="#架构差异" class="headerlink" title="架构差异"></a>架构差异</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">stdio 模式：</span><br><span class="line">Cursor/Claude Desktop</span><br><span class="line">    └─ 启动子进程：python server.py</span><br><span class="line">        └─ stdin/stdout 通信</span><br><span class="line">        └─ 服务器生命周期由客户端管理</span><br><span class="line"></span><br><span class="line">SSE 模式：</span><br><span class="line">独立运行：python server.py (后台持续运行)</span><br><span class="line">    ↑</span><br><span class="line">    └─ HTTP SSE 连接</span><br><span class="line">    ↑</span><br><span class="line">Cursor/Claude Desktop (通过 HTTP 连接)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="详细对比"><a href="#详细对比" class="headerlink" title="详细对比"></a>详细对比</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>stdio 模式</th>
+<th>SSE 模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>启动方式</strong></td>
+<td>客户端自动启动</td>
+<td>手动启动（独立进程）</td>
+</tr>
+<tr>
+<td><strong>通信协议</strong></td>
+<td>stdin&#x2F;stdout 管道</td>
+<td>HTTP + Server-Sent Events</td>
+</tr>
+<tr>
+<td><strong>连接方式</strong></td>
+<td>单一客户端</td>
+<td>多客户端支持</td>
+</tr>
+<tr>
+<td><strong>调试难度</strong></td>
+<td>难（日志混在一起）</td>
+<td>易（可直接查看终端）</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>生产环境</td>
+<td>开发调试</td>
+</tr>
+<tr>
+<td><strong>进程管理</strong></td>
+<td>自动（随客户端）</td>
+<td>手动（需要单独管理）</td>
+</tr>
+<tr>
+<td><strong>网络要求</strong></td>
+<td>无</td>
+<td>需要监听端口</td>
+</tr>
+<tr>
+<td><strong>日志可见性</strong></td>
+<td>低</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<h3 id="测试时为什么选择-SSE？"><a href="#测试时为什么选择-SSE？" class="headerlink" title="测试时为什么选择 SSE？"></a>测试时为什么选择 SSE？</h3><ul>
+<li><p>✅ 开发调试更方便：可以直接在终端看到所有日志，手动重启服务器，用浏览器测试连接；</p>
+</li>
+<li><p>✅ 多客户端支持：多个 IDE 可以同时连接，可以同时在 Cursor 和 Claude Desktop 中使用；</p>
+</li>
+</ul>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-12-09T18:05:39+08:00"
-              content="2025-12-09">
-          12-09
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/" itemprop="url">
-            <span itemprop="name">Windows结束进程</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MCP/" rel="tag"># MCP</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/12/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%89%EF%BC%89/" rel="prev" title="MCP编程快速入门（三）">
+                  <i class="fa fa-angle-left"></i> MCP编程快速入门（三）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/" rel="next" title="CodeQL-MCP架构解读">
+                  CodeQL-MCP架构解读 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-    </div>
-  </div>
-  
-  
-  
+
+
+
+
 
 </div>
   </main>

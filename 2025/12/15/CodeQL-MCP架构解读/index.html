@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="本片内容以 https:&#x2F;&#x2F;github.com&#x2F;JordyZomer&#x2F;codeql-mcp 为基础，进行 CodeQL MCP 的开发学习。 CodeQL-MCP 整体架构分析项目中包含了两个核心文件 codeqlclient.py 和  server.py ： codeqlclient.py 是一个底层通信客户端，负责与 CodeQL 查询服务器建立并管理 JSON-RPC 连接。它封装了进程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CodeQL-MCP架构解读">
+<meta property="og:url" content="https://zyufoye.github.io/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="本片内容以 https:&#x2F;&#x2F;github.com&#x2F;JordyZomer&#x2F;codeql-mcp 为基础，进行 CodeQL MCP 的开发学习。 CodeQL-MCP 整体架构分析项目中包含了两个核心文件 codeqlclient.py 和  server.py ： codeqlclient.py 是一个底层通信客户端，负责与 CodeQL 查询服务器建立并管理 JSON-RPC 连接。它封装了进程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/CodeQL_MCP_1.png">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/CodeQL_MCP_2.png">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/CodeQL_MCP_3.png">
+<meta property="article:published_time" content="2025-12-15T13:55:38.000Z">
+<meta property="article:modified_time" content="2025-12-15T14:04:55.299Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="CodeQL">
+<meta property="article:tag" content="MCP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zyufoye.github.io/uploads/CodeQL_MCP_1.png">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/","path":"2025/12/15/CodeQL-MCP架构解读/","title":"CodeQL-MCP架构解读"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CodeQL-MCP架构解读 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，分享生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CodeQL-MCP-%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">CodeQL-MCP 整体架构分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%A8%A1%E5%9D%97%E8%A7%A3%E8%AF%BB"><span class="nav-number">2.</span> <span class="nav-text">关键模块解读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#start"><span class="nav-number">2.1.</span> <span class="nav-text">start()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stderr-loop"><span class="nav-number">2.2.</span> <span class="nav-text">_stderr_loop()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#read-loop"><span class="nav-number">2.3.</span> <span class="nav-text">_read_loop()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#handle-message"><span class="nav-number">2.4.</span> <span class="nav-text">_handle_message()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#send"><span class="nav-number">2.5.</span> <span class="nav-text">_send()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#send-request"><span class="nav-number">2.6.</span> <span class="nav-text">send_request()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stop"><span class="nav-number">2.7.</span> <span class="nav-text">stop()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find-class-identifier-position"><span class="nav-number">2.8.</span> <span class="nav-text">find_class_identifier_position()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find-predicate-identifier-position"><span class="nav-number">2.9.</span> <span class="nav-text">find_predicate_identifier_position()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#register-databases-deregister-databases"><span class="nav-number">2.10.</span> <span class="nav-text">register_databases() &amp;&amp; deregister_databases()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#evaluate-queries"><span class="nav-number">2.11.</span> <span class="nav-text">evaluate_queries()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#evaluate-and-wait"><span class="nav-number">2.12.</span> <span class="nav-text">evaluate_and_wait()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#quick-evaluate-and-wait"><span class="nav-number">2.13.</span> <span class="nav-text">quick_evaluate_and_wait()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#quick-evaluate"><span class="nav-number">2.14.</span> <span class="nav-text">quick_evaluate()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wait-for-progress-done-wait-for-completion-callback"><span class="nav-number">2.15.</span> <span class="nav-text">wait_for_progress_done() &amp;&amp; wait_for_completion_callback()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MCP-Server-%E6%9E%84%E5%BB%BA"><span class="nav-number">3.</span> <span class="nav-text">MCP Server 构建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">核心组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E8%AF%B4%E6%98%8E"><span class="nav-number">3.2.</span> <span class="nav-text">工具说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MCP-Server-%E4%BB%A3%E7%A0%81"><span class="nav-number">3.3.</span> <span class="nav-text">MCP Server 代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MCP-Server-%E6%B5%8B%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text">MCP Server 测试</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CodeQL-MCP架构解读 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CodeQL-MCP架构解读
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-15 21:55:38 / 修改时间：22:04:55" itemprop="dateCreated datePublished" datetime="2025-12-15T21:55:38+08:00">2025-12-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本片内容以 <a target="_blank" rel="noopener" href="https://github.com/JordyZomer/codeql-mcp">https://github.com/JordyZomer/codeql-mcp</a> 为基础，进行 CodeQL MCP 的开发学习。</p>
+<h2 id="CodeQL-MCP-整体架构分析"><a href="#CodeQL-MCP-整体架构分析" class="headerlink" title="CodeQL-MCP 整体架构分析"></a>CodeQL-MCP 整体架构分析</h2><p>项目中包含了两个核心文件 <code>codeqlclient.py</code> 和  <code>server.py</code> ：</p>
+<p><strong><code>codeqlclient.py</code></strong> 是一个底层通信客户端，负责与 CodeQL 查询服务器建立并管理 JSON-RPC 连接。它封装了进程启动、请求发送、响应解析、异步任务跟踪等复杂逻辑，提供了数据库注册、查询执行、结果解码等核心操作的原始接口。该文件不依赖任何高层框架，专注于可靠、高效地与 CodeQL 引擎交互，可作为独立库在不同上下文中复用。</p>
+<p><strong><code>server.py</code></strong> 是一个基于 Model Context Protocol（MCP）的服务层实现，利用 FastMCP 框架将 <code>codeqlclient.py</code> 提供的底层能力包装为用户友好的异步 API 工具。它定义了清晰的 HTTP 可调用接口，处理参数验证、错误反馈和结果格式化，使外部系统能通过标准 MCP 协议便捷地使用 CodeQL 功能，而无需关心底层通信细节。</p>
+<p>在 <code>codeqlclient.py</code> 中包含了一个核心类结构 CodeQLQueryServer 主要模块如下：</p>
+<ol>
+<li>服务器进程管理</li>
+</ol>
+<ul>
+<li>启动&#x2F;停止 ：通过 start() 和 stop() 方法管理 CodeQL 子进程</li>
+<li>进程通信 ：使用标准输入&#x2F;输出进行 JSON-RPC 通信</li>
+<li>线程管理 ：<ul>
+<li>_read_loop() ：主线程，读取服务器响应；_stderr_loop() ：处理标准错误输出；异步处理：支持并发请求</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>通信协议层</li>
+</ol>
+<ul>
+<li>JSON-RPC 2.0：定义消息格式，请求&#x2F;响应结构，支持异步调用</li>
+</ul>
+<ol start="3">
+<li>功能模块</li>
+</ol>
+<ul>
+<li><p>数据库管理</p>
+<ul>
+<li>register_databases() ：注册数据库</li>
+<li>deregister_databases() ：注销数据库</li>
+</ul>
+</li>
+<li><p>查询执行</p>
+<ul>
+<li>evaluate_queries() ：执行完整查询</li>
+<li>quick_evaluate() ：快速评估（针对特定代码位置）</li>
+<li>evaluate_and_wait() ：同步执行查询</li>
+<li>quick_evaluate_and_wait() ：同步快速评估</li>
+</ul>
+</li>
+<li><p>结果处理</p>
+<ul>
+<li>decode_bqrs() ：解码 BQRS 结果文件</li>
+</ul>
+</li>
+<li><p>代码分析辅助</p>
+<ul>
+<li>find_class_identifier_position() ：查找类标识符位置</li>
+<li>find_predicate_identifier_position() ：查找谓词标识符位置</li>
+</ul>
+</li>
+<li><p>进度回调机制（支持实时进度更新）</p>
+<ul>
+<li>wait_for_progress_done() ：等待进度完成</li>
+<li>wait_for_completion_callback() ：等待异步操作完成</li>
+<li>wait_for_progress_done() 创建进度跟踪器</li>
+<li>wait_for_completion_callback() 创建完成处理器</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>数据流：用户请求 -&gt; send_request()-&gt;JSON-RPC 消息-&gt;CodeQL 服务器-&gt;CodeQL 引擎-&gt;服务器响应-&gt;_read_loop()-&gt;_handle_message()-&gt;回调函数</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="关键模块解读"><a href="#关键模块解读" class="headerlink" title="关键模块解读"></a>关键模块解读</h2><h3 id="start"><a href="#start" class="headerlink" title="start()"></a>start()</h3><p>启动 CodeQL 查询服务器进程，并建立通信通道。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">self</span>.proc = subprocess.Popen(</span><br><span class="line">    [</span><br><span class="line">        <span class="variable language_">self</span>.codeql_path,        <span class="comment"># CodeQL 可执行文件路径</span></span><br><span class="line">        <span class="string">&quot;execute&quot;</span>,               <span class="comment"># 执行命令</span></span><br><span class="line">        <span class="string">&quot;query-server2&quot;</span>,         <span class="comment"># 启动查询服务器版本2</span></span><br><span class="line">        <span class="string">&quot;--debug&quot;</span>,               <span class="comment"># 启用调试模式</span></span><br><span class="line">        <span class="string">&quot;--tuple-counting&quot;</span>,      <span class="comment"># 启用元组计数（性能监控）</span></span><br><span class="line">        <span class="string">&quot;--threads=0&quot;</span>,           <span class="comment"># 使用所有可用线程（0=自动）</span></span><br><span class="line">        <span class="string">&quot;--evaluator-log-level&quot;</span>, <span class="comment"># 设置评估器日志级别</span></span><br><span class="line">        <span class="string">&quot;5&quot;</span>,                     <span class="comment"># 日志级别5（详细）</span></span><br><span class="line">        <span class="string">&quot;-v&quot;</span>,                    <span class="comment"># 详细输出</span></span><br><span class="line">        <span class="string">&quot;--log-to-stderr&quot;</span>,       <span class="comment"># 日志输出到标准错误</span></span><br><span class="line">    ],</span><br><span class="line">    stdin=subprocess.PIPE,      <span class="comment"># 标准输入管道（用于发送请求）</span></span><br><span class="line">    stdout=subprocess.PIPE,     <span class="comment"># 标准输出管道（用于接收响应）</span></span><br><span class="line">    stderr=subprocess.PIPE,     <span class="comment"># 标准错误管道（用于日志/错误）</span></span><br><span class="line">    text=<span class="literal">True</span>,                  <span class="comment"># 以文本模式处理输入输出</span></span><br><span class="line">    bufsize=<span class="number">1</span>,                  <span class="comment"># 行缓冲模式</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>启动读取线程：创建一个守护线程来持续读取服务器的标准输出，处理 JSON-RPC 响应。同时还有读取标准错误输出，防止缓冲区阻塞。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">self</span>.reader_thread = threading.Thread(</span><br><span class="line">    target=<span class="variable language_">self</span>._read_loop,  <span class="comment"># 目标函数：读取循环</span></span><br><span class="line">    daemon=<span class="literal">True</span>              <span class="comment"># 守护线程（主程序退出时自动结束）</span></span><br><span class="line">)</span><br><span class="line"><span class="variable language_">self</span>.reader_thread.start()   <span class="comment"># 启动线程</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">self</span>.stderr_thread = threading.Thread(</span><br><span class="line">    target=<span class="variable language_">self</span>._stderr_loop,  <span class="comment"># 目标函数：标准错误循环</span></span><br><span class="line">    daemon=<span class="literal">True</span>                <span class="comment"># 守护线程</span></span><br><span class="line">)</span><br><span class="line"><span class="variable language_">self</span>.stderr_thread.start()     <span class="comment"># 启动线程</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="stderr-loop"><a href="#stderr-loop" class="headerlink" title="_stderr_loop()"></a>_stderr_loop()</h3><p>标准错误处理循环：持续读取 CodeQL服务器的标准错误输出，防止stderr管道堵塞，在 start() 中作为守护线程启动。</p>
+<h3 id="read-loop"><a href="#read-loop" class="headerlink" title="_read_loop()"></a>_read_loop()</h3><p>主读取循环：读取并解析服务器响应，处理 JSON-RPC over HTTP 风格的消息格式。</p>
+<h3 id="handle-message"><a href="#handle-message" class="headerlink" title="_handle_message()"></a>_handle_message()</h3><p>消息分发器：是核心的消息处理函数，处理三种类型的消息：</p>
+<ul>
+<li>进度更新消息 ( ql&#x2F;progressUpdated )：处理查询执行进度更新</li>
+<li>评估进度消息 ( evaluation&#x2F;progress )：处理评估操作的进度信息</li>
+<li>请求响应消息：处理异步请求的响应</li>
+</ul>
+<h3 id="send"><a href="#send" class="headerlink" title="_send()"></a>_send()</h3><p>发送请求：发送JSON-RPC 请求到服务器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_send</span>(<span class="params">self, payload</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="variable language_">self</span>.proc <span class="keyword">or</span> <span class="keyword">not</span> <span class="variable language_">self</span>.proc.stdin:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;[!] Tried to send but process not running.&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        data = json.dumps(payload)</span><br><span class="line">        content = <span class="string">f&quot;Content-Length: <span class="subst">&#123;<span class="built_in">len</span>(data)&#125;</span>\r\n\r\n<span class="subst">&#123;data&#125;</span>&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\n[→] Sending request:\n<span class="subst">&#123;json.dumps(payload, indent=<span class="number">2</span>)&#125;</span>\n&quot;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.proc.stdin.write(content)</span><br><span class="line">        <span class="variable language_">self</span>.proc.stdin.flush()</span><br></pre></td></tr></table></figure>
+
+<h3 id="send-request"><a href="#send-request" class="headerlink" title="send_request()"></a>send_request()</h3><p>高级发送接口：发送异步请求并管理回调，为每个请求生成唯一ID，关联请求 ID 与回调函数，支持进度回调注册和状态跟踪。</p>
+<h3 id="stop"><a href="#stop" class="headerlink" title="stop()"></a>stop()</h3><p>停止服务器</p>
+<h3 id="find-class-identifier-position"><a href="#find-class-identifier-position" class="headerlink" title="find_class_identifier_position()"></a>find_class_identifier_position()</h3><p>在 QL 文件中查找类名标识符的位置，返回基于 1 的行列坐标。CodeQL 快速评估功能的关键组件，通过定位代码中的特定标识符，实现对部分代码的针对性分析。</p>
+<h3 id="find-predicate-identifier-position"><a href="#find-predicate-identifier-position" class="headerlink" title="find_predicate_identifier_position()"></a>find_predicate_identifier_position()</h3><p>在 QL 文件中查找谓词（predicate）名称的位置，返回基于 1 的行列坐标。</p>
+<p>类名查找和谓词查找可以用于支持CodeQL的快速评估功能，就是只执行查询的一部分，而不是执行全量查询，可以进行快速迭代和调试。</p>
+<h3 id="register-databases-deregister-databases"><a href="#register-databases-deregister-databases" class="headerlink" title="register_databases() &amp;&amp; deregister_databases()"></a>register_databases() &amp;&amp; deregister_databases()</h3><p>注册注销数据库：向 CodeQL 查询服务器注册一个或多个数据库，使其可用于查询执行。</p>
+<p>这是CodeQL客户端资源管理的核心，确保数据库在查询执行前正确注册，在执行后及时清理，是高效使用 CodeQL 服务器的关键组件。</p>
+<h3 id="evaluate-queries"><a href="#evaluate-queries" class="headerlink" title="evaluate_queries()"></a>evaluate_queries()</h3><p>执行完整的 CodeQL 查询 ：在指定的数据库上运行一个 QL 查询文件，并将结果保存到输出文件。</p>
+<ul>
+<li>query_path ：QL 查询文件路径</li>
+<li>db_path ：CodeQL 数据库路径</li>
+<li>output_path ：结果输出文件路径（BQRS 格式）</li>
+<li>callback ：异步完成回调（可选）</li>
+<li>progress_callback ：进度回调（可选）</li>
+</ul>
+<p>默认完成处理：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">on_done</span>(<span class="params">result</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[evaluateQueries] done:&quot;</span>, result)</span><br><span class="line">    <span class="keyword">if</span> result.get(<span class="string">&quot;resultType&quot;</span>) != <span class="number">0</span>:  <span class="comment"># 0表示成功</span></span><br><span class="line">        <span class="keyword">raise</span> RuntimeError(<span class="string">f&quot;CodeQL evaluation failed: <span class="subst">&#123;result.get(<span class="string">&#x27;message&#x27;</span>, <span class="string">&#x27;Unknown error&#x27;</span>)&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>发送异步请求：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">self</span>.send_request(</span><br><span class="line">    <span class="string">&quot;evaluation/runQuery&quot;</span>,      <span class="comment"># JSON-RPC方法</span></span><br><span class="line">    params,                     <span class="comment"># 参数</span></span><br><span class="line">    callback <span class="keyword">or</span> on_done,        <span class="comment"># 使用用户回调或默认回调</span></span><br><span class="line">    progress_callback=progress_callback  <span class="comment"># 进度回调</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>函数会执行整个 QL 文件的所有查询，支持回调和进度跟踪。</p>
+<h3 id="evaluate-and-wait"><a href="#evaluate-and-wait" class="headerlink" title="evaluate_and_wait()"></a>evaluate_and_wait()</h3><p>同步执行完整查询的便捷方法，其中包装了 evaluate_queries() 的异步功能，使用 wait_for_progress_done() 等待查询完成，简化了同步使用场景。</p>
+<h3 id="quick-evaluate-and-wait"><a href="#quick-evaluate-and-wait" class="headerlink" title="quick_evaluate_and_wait()"></a>quick_evaluate_and_wait()</h3><p>同步执行快速评估，包装了quick_evaluate() 的异步功能，但是需要指定代码位置（行、列）。</p>
+<h3 id="quick-evaluate"><a href="#quick-evaluate" class="headerlink" title="quick_evaluate()"></a>quick_evaluate()</h3><p>执行快速评估（Quick Evaluation） ：只执行 QL 查询文件中 特定代码片段 的查询，而不是整个文件。</p>
+<ul>
+<li>file_path ：QL 查询文件路径</li>
+<li>db_path ：CodeQL 数据库路径</li>
+<li>output_path ：结果输出文件路径</li>
+<li>start_line , start_col ：起始位置（1-based）</li>
+<li>end_line , end_col ：结束位置（1-based）</li>
+<li>callback ：异步完成回调</li>
+<li>progress_callback ：进度回调</li>
+</ul>
+<h3 id="wait-for-progress-done-wait-for-completion-callback"><a href="#wait-for-progress-done-wait-for-completion-callback" class="headerlink" title="wait_for_progress_done() &amp;&amp; wait_for_completion_callback()"></a>wait_for_progress_done() &amp;&amp; wait_for_completion_callback()</h3><p>功能 ：创建一个进度完成等待器 和 完成回调等待器。这两个函数都是 异步转同步 的工具：</p>
+<ul>
+<li>将异步回调模式转换为同步等待模式</li>
+<li>简化了不需要复杂异步处理的场景</li>
+<li>提供了更直观的API使用方式</li>
+</ul>
+<h2 id="MCP-Server-构建"><a href="#MCP-Server-构建" class="headerlink" title="MCP Server 构建"></a>MCP Server 构建</h2><p>基于 FastMCP 框架构建的 CodeQL 分析服务器，提供了 6 个工具来与 CodeQL 进行交互。</p>
+<h3 id="核心组件"><a href="#核心组件" class="headerlink" title="核心组件"></a>核心组件</h3><p>服务器初始化：使用 FastMCP 创建名为 “CodeQL” 的 MCP 服务器，实例化 CodeQLQueryServer 并启动，用于处理 CodeQL 查询操作。</p>
+<h3 id="工具说明"><a href="#工具说明" class="headerlink" title="工具说明"></a>工具说明</h3><ol>
+<li>register_database</li>
+</ol>
+<p>注册 CodeQL 数据库到查询服务器。验证数据库路径和必需的 src.zip 文件是否存在。</p>
+<ol start="2">
+<li>quick_evaluate</li>
+</ol>
+<p>快速评估 CodeQL 查询文件中的特定类或谓词，自动定位符号位置并执行评估。</p>
+<ol start="3">
+<li>decode_bqrs</li>
+</ol>
+<p>解码 CodeQL 结果文件（.bqrs 格式），支持 CSV（用于问题查询）或 JSON（用于路径问题）格式。</p>
+<ol start="4">
+<li>evaluate_query</li>
+</ol>
+<p>在指定数据库上运行完整的 CodeQL 查询文件。</p>
+<ol start="5">
+<li>find_class_position</li>
+</ol>
+<p>查找查询文件中类定义的准确位置（行号和列号）。</p>
+<ol start="6">
+<li>find_predicate_position</li>
+</ol>
+<p>查找查询文件中谓词定义的准确位置（行号和列号）。</p>
+<h3 id="MCP-Server-代码"><a href="#MCP-Server-代码" class="headerlink" title="MCP Server 代码"></a>MCP Server 代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">mcp = FastMCP(<span class="string">&quot;CodeQL&quot;</span>)</span><br><span class="line">qs = CodeQLQueryServer()</span><br><span class="line">qs.start()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">register_database</span>(<span class="params">db_path: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This tool registers a CodeQL database given a path&quot;&quot;&quot;</span></span><br><span class="line">    db_path_resolved = Path(db_path).resolve()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> db_path_resolved.exists():</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;Database path does not exist: <span class="subst">&#123;db_path&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">    source_zip = db_path_resolved / <span class="string">&quot;src.zip&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> source_zip.exists():</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;Missing required src.zip in: <span class="subst">&#123;db_path&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">    db_entry = &#123;</span><br><span class="line">        <span class="string">&quot;uri&quot;</span>: Path(db_path).resolve().as_uri(),</span><br><span class="line">        <span class="string">&quot;content&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;sourceArchiveZip&quot;</span>: (Path(db_path) / <span class="string">&quot;src.zip&quot;</span>).resolve().as_uri(),</span><br><span class="line">            <span class="string">&quot;dbDir&quot;</span>: Path(db_path).resolve().as_uri(),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">    callback, done, result_holder = qs.wait_for_completion_callback()</span><br><span class="line">    qs.register_databases(</span><br><span class="line">        [db_path],</span><br><span class="line">        callback=callback,</span><br><span class="line">        progress_callback=<span class="keyword">lambda</span> msg: <span class="built_in">print</span>(<span class="string">&quot;[progress] register:&quot;</span>, msg),</span><br><span class="line">    )</span><br><span class="line">    done.wait()</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Database registered: <span class="subst">&#123;db_path&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">quick_evaluate</span>(<span class="params"></span></span><br><span class="line"><span class="params">    file: <span class="built_in">str</span>, db: <span class="built_in">str</span>, symbol: <span class="built_in">str</span>, output_path: <span class="built_in">str</span> = <span class="string">&quot;/tmp/quickeval.bqrs&quot;</span></span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This will allow you to quick_evaluate either a class or a predicate in a codeql query&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        start, scol, end, ecol = qs.find_class_identifier_position(file, symbol)</span><br><span class="line">    <span class="keyword">except</span> ValueError:</span><br><span class="line">        start, scol, end, ecol = qs.find_predicate_identifier_position(</span><br><span class="line">            file, symbol</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        qs.quick_evaluate_and_wait(</span><br><span class="line">            file, db, output_path, start, scol, end, ecol</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">except</span> RuntimeError <span class="keyword">as</span> re:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;CodeQL evaluation failed: <span class="subst">&#123;re&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output_path</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">decode_bqrs</span>(<span class="params">bqrs_path: <span class="built_in">str</span>, fmt: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This can be used to decode CodeQL results, format is either csv for problem queries or json for path-problems&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> qs.decode_bqrs(bqrs_path, fmt)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">evaluate_query</span>(<span class="params"></span></span><br><span class="line"><span class="params">    query_path: <span class="built_in">str</span>, db_path: <span class="built_in">str</span>, output_path: <span class="built_in">str</span> = <span class="string">&quot;/tmp/eval.bqrs&quot;</span></span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Runs a CodeQL query on a given database&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        qs.evaluate_and_wait(query_path, db_path, output_path)</span><br><span class="line">    <span class="keyword">except</span> RuntimeError <span class="keyword">as</span> re:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;CodeQL evaluation failed: <span class="subst">&#123;re&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output_path</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">find_class_position</span>(<span class="params">file: <span class="built_in">str</span>, name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Finds startline, startcol, endline endcol of a class for quickeval&quot;&quot;&quot;</span></span><br><span class="line">    start, scol, end, ecol = qs.find_class_identifier_position(file, name)</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;start_line&quot;</span>: start,</span><br><span class="line">        <span class="string">&quot;start_col&quot;</span>: scol,</span><br><span class="line">        <span class="string">&quot;end_line&quot;</span>: end,</span><br><span class="line">        <span class="string">&quot;end_col&quot;</span>: ecol,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">find_predicate_position</span>(<span class="params">file: <span class="built_in">str</span>, name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Finds startline, startcol, endline endcol of a predicate for quickeval&quot;&quot;&quot;</span></span><br><span class="line">    start, scol, end, ecol = qs.find_predicate_identifier_position(file, name)</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;start_line&quot;</span>: start,</span><br><span class="line">        <span class="string">&quot;start_col&quot;</span>: scol,</span><br><span class="line">        <span class="string">&quot;end_line&quot;</span>: end,</span><br><span class="line">        <span class="string">&quot;end_col&quot;</span>: ecol,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Starting CodeQL MCP server...&quot;</span>)</span><br><span class="line">    mcp.run(host=<span class="string">&quot;0.0.0.0&quot;</span>, port=<span class="number">8000</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="MCP-Server-测试"><a href="#MCP-Server-测试" class="headerlink" title="MCP Server 测试"></a>MCP Server 测试</h2><p>以注册数据库为例，进行MCP Server功能测试：</p>
+<p>首先启动 MCP Server：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">(really_mcp) PS D:\Projects\codeql-mcp&gt; uv run mcp run server.py -t sse</span><br><span class="line">[*] Read loop started</span><br><span class="line">INFO:     Started server process [23464]</span><br><span class="line">INFO:     Waiting <span class="keyword">for</span> application startup.</span><br><span class="line">INFO:     Application startup complete.</span><br><span class="line">INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在 cursor 的 MCP tools 页面加载对应工具，选择启用状态：</p>
+<p><img src="/../uploads/CodeQL_MCP_1.png"></p>
+<p>对应配置文件如下：</p>
+<p><img src="/../uploads/CodeQL_MCP_2.png"></p>
+<p>MCP Server状态与 Tools 调用情况：</p>
+<p><img src="/../uploads/CodeQL_MCP_3.png"></p>
+<p>以上验证 CodeQL MCP 可成功调用并执行。</p>
+<p>与服务器通信的数据包数据：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">Accepted</span><br><span class="line">[12/15/25 20:26:54] INFO     Processing request of type CallToolRequest                   server.py:674</span><br><span class="line">[DEBUG] Sending evaluation/registerDatabases with progressId=0</span><br><span class="line"></span><br><span class="line">[→] Sending request:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;jsonrpc&quot;: &quot;2.0&quot;,</span><br><span class="line">  &quot;id&quot;: 1,</span><br><span class="line">  &quot;method&quot;: &quot;evaluation/registerDatabases&quot;,</span><br><span class="line">  &quot;params&quot;: &#123;</span><br><span class="line">    &quot;body&quot;: &#123;</span><br><span class="line">      &quot;databases&quot;: [</span><br><span class="line">        &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;progressId&quot;: 0</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[stdout] Content-Length: 102</span><br><span class="line">[raw response body] &#123;&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:1,&quot;result&quot;:&#123;&quot;registeredDatabases&quot;:[&quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;]&#125;&#125;</span><br><span class="line"></span><br><span class="line">[←] Received response:</span><br><span class="line">&#123;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;jsonrpc&quot;: &quot;2.0&quot;,</span><br><span class="line">  &quot;id&quot;: 1,</span><br><span class="line">  &quot;result&quot;: &#123;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">  &quot;id&quot;: 1,</span><br><span class="line">  &quot;result&quot;: &#123;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">  &quot;result&quot;: &#123;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">    ]</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">INFO:     127.0.0.1:56577 - &quot;POST /messages/?session_id=d8bc9c141a864777b7a094f0a6abc6ad HTTP/1.1&quot; 202 Accepted</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CodeQL/" rel="tag"># CodeQL</a>
+              <a href="/tags/MCP/" rel="tag"># MCP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="prev" title="MCP stdio与sse模式的区别">
+                  <i class="fa fa-angle-left"></i> MCP stdio与sse模式的区别
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

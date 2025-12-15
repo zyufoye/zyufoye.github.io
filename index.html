@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -208,6 +208,289 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/" class="post-title-link" itemprop="url">CodeQL-MCP架构解读</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-15 21:55:38 / 修改时间：22:04:55" itemprop="dateCreated datePublished" datetime="2025-12-15T21:55:38+08:00">2025-12-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>本片内容以 <a target="_blank" rel="noopener" href="https://github.com/JordyZomer/codeql-mcp">https://github.com/JordyZomer/codeql-mcp</a> 为基础，进行 CodeQL MCP 的开发学习。</p>
+<h2 id="CodeQL-MCP-整体架构分析"><a href="#CodeQL-MCP-整体架构分析" class="headerlink" title="CodeQL-MCP 整体架构分析"></a>CodeQL-MCP 整体架构分析</h2><p>项目中包含了两个核心文件 <code>codeqlclient.py</code> 和  <code>server.py</code> ：</p>
+<p><strong><code>codeqlclient.py</code></strong> 是一个底层通信客户端，负责与 CodeQL 查询服务器建立并管理 JSON-RPC 连接。它封装了进程启动、请求发送、响应解析、异步任务跟踪等复杂逻辑，提供了数据库注册、查询执行、结果解码等核心操作的原始接口。该文件不依赖任何高层框架，专注于可靠、高效地与 CodeQL 引擎交互，可作为独立库在不同上下文中复用。</p>
+<p><strong><code>server.py</code></strong> 是一个基于 Model Context Protocol（MCP）的服务层实现，利用 FastMCP 框架将 <code>codeqlclient.py</code> 提供的底层能力包装为用户友好的异步 API 工具。它定义了清晰的 HTTP 可调用接口，处理参数验证、错误反馈和结果格式化，使外部系统能通过标准 MCP 协议便捷地使用 CodeQL 功能，而无需关心底层通信细节。</p>
+<p>在 <code>codeqlclient.py</code> 中包含了一个核心类结构 CodeQLQueryServer 主要模块如下：</p>
+<ol>
+<li>服务器进程管理</li>
+</ol>
+<ul>
+<li>启动&#x2F;停止 ：通过 start() 和 stop() 方法管理 CodeQL 子进程</li>
+<li>进程通信 ：使用标准输入&#x2F;输出进行 JSON-RPC 通信</li>
+<li>线程管理 ：<ul>
+<li>_read_loop() ：主线程，读取服务器响应；_stderr_loop() ：处理标准错误输出；异步处理：支持并发请求</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>通信协议层</li>
+</ol>
+<ul>
+<li>JSON-RPC 2.0：定义消息格式，请求&#x2F;响应结构，支持异步调用</li>
+</ul>
+<ol start="3">
+<li>功能模块</li>
+</ol>
+<ul>
+<li><p>数据库管理</p>
+<ul>
+<li>register_databases() ：注册数据库</li>
+<li>deregister_databases() ：注销数据库</li>
+</ul>
+</li>
+<li><p>查询执行</p>
+<ul>
+<li>evaluate_queries() ：执行完整查询</li>
+<li>quick_evaluate() ：快速评估（针对特定代码位置）</li>
+<li>evaluate_and_wait() ：同步执行查询</li>
+<li>quick_evaluate_and_wait() ：同步快速评估</li>
+</ul>
+</li>
+<li><p>结果处理</p>
+<ul>
+<li>decode_bqrs() ：解码 BQRS 结果文件</li>
+</ul>
+</li>
+<li><p>代码分析辅助</p>
+<ul>
+<li>find_class_identifier_position() ：查找类标识符位置</li>
+<li>find_predicate_identifier_position() ：查找谓词标识符位置</li>
+</ul>
+</li>
+<li><p>进度回调机制（支持实时进度更新）</p>
+<ul>
+<li>wait_for_progress_done() ：等待进度完成</li>
+<li>wait_for_completion_callback() ：等待异步操作完成</li>
+<li>wait_for_progress_done() 创建进度跟踪器</li>
+<li>wait_for_completion_callback() 创建完成处理器</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>数据流：用户请求 -&gt; send_request()-&gt;JSON-RPC 消息-&gt;CodeQL 服务器-&gt;CodeQL 引擎-&gt;服务器响应-&gt;_read_loop()-&gt;_handle_message()-&gt;回调函数</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">MCP stdio与sse模式的区别</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-15 21:54:35 / 修改时间：21:55:10" itemprop="dateCreated datePublished" datetime="2025-12-15T21:54:35+08:00">2025-12-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="SSE-和-stdio-模式对比"><a href="#SSE-和-stdio-模式对比" class="headerlink" title="SSE 和 stdio 模式对比"></a>SSE 和 stdio 模式对比</h2><h3 id="架构差异"><a href="#架构差异" class="headerlink" title="架构差异"></a>架构差异</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">stdio 模式：</span><br><span class="line">Cursor/Claude Desktop</span><br><span class="line">    └─ 启动子进程：python server.py</span><br><span class="line">        └─ stdin/stdout 通信</span><br><span class="line">        └─ 服务器生命周期由客户端管理</span><br><span class="line"></span><br><span class="line">SSE 模式：</span><br><span class="line">独立运行：python server.py (后台持续运行)</span><br><span class="line">    ↑</span><br><span class="line">    └─ HTTP SSE 连接</span><br><span class="line">    ↑</span><br><span class="line">Cursor/Claude Desktop (通过 HTTP 连接)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="详细对比"><a href="#详细对比" class="headerlink" title="详细对比"></a>详细对比</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>stdio 模式</th>
+<th>SSE 模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>启动方式</strong></td>
+<td>客户端自动启动</td>
+<td>手动启动（独立进程）</td>
+</tr>
+<tr>
+<td><strong>通信协议</strong></td>
+<td>stdin&#x2F;stdout 管道</td>
+<td>HTTP + Server-Sent Events</td>
+</tr>
+<tr>
+<td><strong>连接方式</strong></td>
+<td>单一客户端</td>
+<td>多客户端支持</td>
+</tr>
+<tr>
+<td><strong>调试难度</strong></td>
+<td>难（日志混在一起）</td>
+<td>易（可直接查看终端）</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>生产环境</td>
+<td>开发调试</td>
+</tr>
+<tr>
+<td><strong>进程管理</strong></td>
+<td>自动（随客户端）</td>
+<td>手动（需要单独管理）</td>
+</tr>
+<tr>
+<td><strong>网络要求</strong></td>
+<td>无</td>
+<td>需要监听端口</td>
+</tr>
+<tr>
+<td><strong>日志可见性</strong></td>
+<td>低</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<h3 id="测试时为什么选择-SSE？"><a href="#测试时为什么选择-SSE？" class="headerlink" title="测试时为什么选择 SSE？"></a>测试时为什么选择 SSE？</h3><ul>
+<li><p>✅ 开发调试更方便：可以直接在终端看到所有日志，手动重启服务器，用浏览器测试连接；</p>
+</li>
+<li><p>✅ 多客户端支持：多个 IDE 可以同时连接，可以同时在 Cursor 和 Claude Desktop 中使用；</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -600,9 +883,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-12-11 11:32:04 / 修改时间：11:35:38" itemprop="dateCreated datePublished" datetime="2025-12-11T11:32:04+08:00">2025-12-11</time>
+      <time title="创建时间：2025-12-11 11:32:04" itemprop="dateCreated datePublished" datetime="2025-12-11T11:32:04+08:00">2025-12-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-15 22:05:31" itemprop="dateModified" datetime="2025-12-15T22:05:31+08:00">2025-12-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -627,7 +916,7 @@
           <p>Hexo链接站内文章方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
 
-<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 部分是现实的内容，如果不写的话就默认是文章名称。</p>
+<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 是显示的内容，如果不写的话就默认是文章名称。</p>
 <p>参考链接：<a target="_blank" rel="noopener" href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
 
       
@@ -1037,175 +1326,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/12/10/uv%E4%BD%BF%E7%94%A8/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/10/kali%E5%AE%89%E8%A3%85ssh/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/10/kali%E5%AE%89%E8%A3%85ssh/" class="post-title-link" itemprop="url">kali安装ssh</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-10 15:49:51 / 修改时间：15:52:56" itemprop="dateCreated datePublished" datetime="2025-12-10T15:49:51+08:00">2025-12-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="kali-linux-安装ssh服务"><a href="#kali-linux-安装ssh服务" class="headerlink" title="kali linux 安装ssh服务"></a>kali linux 安装ssh服务</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt-get install ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl start ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> ssh <span class="comment">#设置开机自启</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl status ssh <span class="comment">#查看运行状态</span></span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/" class="post-title-link" itemprop="url">Windows结束进程</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-09 18:05:39 / 修改时间：19:06:35" itemprop="dateCreated datePublished" datetime="2025-12-09T18:05:39+08:00">2025-12-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
-<p>首先查找占用 8080 的 PID：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -ano | findstr :8080</span><br></pre></td></tr></table></figure>
-
-<p>然后根据 PID 强制结束进程：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">taskkill /F /PID 3836</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
