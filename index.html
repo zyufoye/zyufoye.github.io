@@ -172,18 +172,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">19</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -208,6 +208,130 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/16/Vulnhalla-QuickStart/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/16/Vulnhalla-QuickStart/" class="post-title-link" itemprop="url">Vulnhalla QuickStart</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-16 11:24:05 / 修改时间：11:26:25" itemprop="dateCreated datePublished" datetime="2025-12-16T11:24:05+08:00">2025-12-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Project/" itemprop="url" rel="index"><span itemprop="name">Project</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Vulnhalla"><a href="#Vulnhalla" class="headerlink" title="Vulnhalla"></a>Vulnhalla</h2><p>Vulnhalla 可以自动化执行完整的安全分析流程 (<a target="_blank" rel="noopener" href="https://github.com/cyberark/Vulnhalla">https://github.com/cyberark/Vulnhalla</a>)</p>
+<ol>
+<li>从 GitHub 获取指定编程语言的代码库</li>
+<li>下载其对应的 CodeQL 数据库（如果可用）</li>
+<li>在数据库上运行 CodeQL 查询以检测安全或代码质量问题</li>
+<li>使用 LLM（ChatGPT、Gemini 等）对结果进行后续处理，以分类和过滤问题</li>
+</ol>
+<p>项目提供了直接从 Github fetch repositories 的能力，但是需要本地配置 GitHub API token，为了简化实验流程，就直接把要分析的 Program git clone 到本地，然后本地生成 CodeQL Database 再进行后续的结果处理，<strong>这个 Project 的重点就是在于结果处理</strong>。</p>
+<h2 id="🚀-QuickStart"><a href="#🚀-QuickStart" class="headerlink" title="🚀 QuickStart"></a>🚀 QuickStart</h2><p>环境要求：</p>
+<ul>
+<li>python 3.11</li>
+<li>CodeQL CLI</li>
+<li>LLM API Key</li>
+</ul>
+<p>虚拟环境配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conda create -n vulnhalla python=3.11</span><br><span class="line"></span><br><span class="line">conda activate vulnhalla</span><br><span class="line"></span><br><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+<p>miniconda 下载可参考这篇文章： 。</p>
+<p>配置文件修改 project 中以 OpenAI gpt-4o为例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CODEQL_PATH=codeql</span><br><span class="line">GITHUB_TOKEN=ghp_your_token_here</span><br><span class="line">PROVIDER=openai</span><br><span class="line">MODEL=gpt-4o</span><br><span class="line">OPENAI_API_KEY=your-api-key-here</span><br><span class="line">LLM_TEMPERATURE=0.2</span><br><span class="line">LLM_TOP_P=0.2</span><br><span class="line"></span><br><span class="line"># Optional: Logging Configuration</span><br><span class="line">LOG_LEVEL=INFO                  # DEBUG, INFO, WARNING, ERROR</span><br><span class="line">LOG_FILE=                       # Optional: path to log file (e.g., logs/vulnhalla.log)</span><br><span class="line">LOG_FORMAT=default              # default or json</span><br><span class="line"># LOG_VERBOSE_CONSOLE=false     # If true, WARNING/ERROR use full format (timestamp - logger - level - message)</span><br></pre></td></tr></table></figure>
+
+<p>参数解析：</p>
+<ul>
+<li>CODEQL_PATH：指定 CodeQL 可执行文件的路径或命令名，用于运行代码安全分析（如漏洞扫描）。如果已加入系统 PATH，直接写 codeql 即可；</li>
+<li>GITHUB_TOKEN：GitHub 访问令牌，用于访问私有仓库、拉取代码、调用 GitHub API（如获取 PR、Issue、仓库信息等）；</li>
+<li>PROVIDER&#x2F;MODEL&#x2F;OPENAI_API_KEY：大模型相关配置，可替换为对应厂商；</li>
+<li>LLM_TEMPERATURE：控制模型输出的随机性，值越低输出越稳定、保守，适合分析、审计、代码检查等场景；</li>
+<li>LLM_TOP_P：控制采样范围（nucleus sampling），限制模型在高概率词汇中选择，进一步提升结果一致性和可控性；</li>
+<li>LOG_LEVEL&#x3D;INFO：日志级别，控制输出信息的详细程度，DEBUG是最详细的；</li>
+<li>LOG_FILE：日志文件输出路径，留空表示仅输出到控制台；</li>
+<li>LOG_FORMAT&#x2F;LOG_VERBOSE_CONSOLE：日志格式和日志记录格式；</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> .env.example .<span class="built_in">env</span></span><br><span class="line"></span><br><span class="line">python setup.py</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化CodeQL套件</span></span><br><span class="line"><span class="built_in">cd</span> data/queries/cpp/tools</span><br><span class="line">codeql pack install</span><br><span class="line"><span class="built_in">cd</span> ../issues</span><br><span class="line">codeql pack install</span><br><span class="line"><span class="built_in">cd</span> ../../../..</span><br></pre></td></tr></table></figure>
+
+<p>使用单个命令运行完整的 pipeline：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Analyze a specific repository</span></span><br><span class="line">python src/pipeline.py redis/redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># Analyze top 100 repositories</span></span><br><span class="line">python src/pipeline.py</span><br></pre></td></tr></table></figure>
+
+<p>这个 pipeline 会自动执行：获取CodeQL数据库，在所有下载的数据库上运行 CodeQL 查询，使用 LLM 分析结果并保存到 output&#x2F;results&#x2F;，打开 UI 浏览结果。</p>
+<p>Project 还提供了一个示例脚本，运行一个端到端示例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python examples/example.py</span><br></pre></td></tr></table></figure>
+
+<p>这个 example 会获取 videolan&#x2F;vlc 和 redis&#x2F;redis 的 CodeQL 数据库，在所有下载的数据库上运行 CodeQL 查询，使用 LLM 分析结果并保存到 output&#x2F;results&#x2F;。</p>
+<p>Vulnhalla 包含一个功能齐全的用户界面，用于浏览和探索分析结果。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python src/ui/ui_app.py</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">python examples/ui_example.py</span><br></pre></td></tr></table></figure>
+
+<p>至此，Vulnhalla 环境配置完成，可运行一个完整 pipeline。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1234,98 +1358,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/12/10/SARIF%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/10/uv%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/10/uv%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">uv使用</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-10 15:50:32 / 修改时间：15:56:49" itemprop="dateCreated datePublished" datetime="2025-12-10T15:50:32+08:00">2025-12-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>uv是一个用 Rust 编写的极快的 Python 包和项目管理工具。</p>
-<p>官方文档参考：<a target="_blank" rel="noopener" href="https://docs.astral.sh/uv/">https://docs.astral.sh/uv/</a></p>
-<h2 id="uv安装"><a href="#uv安装" class="headerlink" title="uv安装"></a>uv安装</h2><p>Linux &amp; MacOS 安装</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -LsSf https://astral.sh/uv/install.sh | sh</span><br></pre></td></tr></table></figure>
-
-<p>Windows powershell 安装</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell -ExecutionPolicy ByPass -c <span class="string">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/10/uv%E4%BD%BF%E7%94%A8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
