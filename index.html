@@ -217,7 +217,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/17/CodeQL%E5%85%A5%E9%97%A8-%E4%BA%8C/">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/17/CodeQL%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/kehan.jpg">
@@ -235,7 +235,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/17/CodeQL%E5%85%A5%E9%97%A8-%E4%BA%8C/" class="post-title-link" itemprop="url">CodeQL入门(二)</a>
+          <a href="/2025/12/17/CodeQL%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-title-link" itemprop="url">CodeQL入门（二）</a>
         </h2>
 
         <div class="post-meta-container">
@@ -247,7 +247,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-12-17 18:38:55 / 修改时间：18:39:20" itemprop="dateCreated datePublished" datetime="2025-12-17T18:38:55+08:00">2025-12-17</time>
+      <time title="创建时间：2025-12-17 18:38:55 / 修改时间：18:45:58" itemprop="dateCreated datePublished" datetime="2025-12-17T18:38:55+08:00">2025-12-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -296,127 +296,14 @@
 <li><p>CI&#x2F;CD：结合规则库将 CodeQL 添加进 CI&#x2F;CD 流程进行持续化的项目安全管理，在 CI&#x2F;CD 流程中自动执行；</p>
 </li>
 </ul>
-<h2 id="官方-CodeQL-tutorials"><a href="#官方-CodeQL-tutorials" class="headerlink" title="官方 CodeQL tutorials"></a>官方 CodeQL tutorials</h2><p>CodeQL 官方提供了 QL 教程(<a target="_blank" rel="noopener" href="https://codeql.github.com/docs/writing-codeql-queries/ql-tutorials/)%E4%BB%A5%E6%B8%B8%E6%88%8F%E7%9A%84%E6%96%B9%E5%BC%8F%E5%B8%AE%E5%8A%A9%E7%94%A8%E6%88%B7%E5%85%A5%E9%97%A8">https://codeql.github.com/docs/writing-codeql-queries/ql-tutorials/)以游戏的方式帮助用户入门</a> QL 并理解基础的语法规则。</p>
-<h3 id="CodeQL-baseline"><a href="#CodeQL-baseline" class="headerlink" title="CodeQL baseline"></a>CodeQL baseline</h3><p>官方文档中介绍，更加复杂的通用查询看起来像下面这样：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> <span class="comment">/* ... variable declarations ... */</span></span><br><span class="line"><span class="keyword">where</span> <span class="comment">/* ... logical formulas ... */</span></span><br><span class="line"><span class="keyword">select</span> <span class="comment">/* ... expressions ... */</span></span><br></pre></td></tr></table></figure>
-
-<p>示例1-以下面的这个为例，查询结果是数字 42：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> <span class="type">int</span> x, <span class="type">int</span> y</span><br><span class="line"><span class="keyword">where</span> x <span class="operator">=</span> <span class="number">6</span> <span class="keyword">and</span> y <span class="operator">=</span> <span class="number">7</span></span><br><span class="line"><span class="keyword">select</span> x <span class="operator">*</span> y</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">codeql query run -d test_db demo1.ql</span><br><span class="line">Compiling query plan <span class="keyword">for</span> /home/zyu/projects/python_codeql_demo/demo1.ql.</span><br><span class="line">[1/1 comp 805ms] Compiled /home/zyu/projects/python_codeql_demo/demo1.ql.</span><br><span class="line">demo1.ql: Evaluation completed (48ms).</span><br><span class="line">| col0 |</span><br><span class="line">+------+</span><br><span class="line">|   42 |</span><br><span class="line">Shutting down query evaluator.</span><br></pre></td></tr></table></figure>
-
-<p>示例2-多结果查询示例：查询计算 1 到 10 之间的所有勾股数，通过编写类的方式简化ql代码：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class <span class="type">SmallInt</span> extends <span class="type">int</span> &#123;</span><br><span class="line">  <span class="type">SmallInt</span>() &#123; this <span class="keyword">in</span> [<span class="number">1.</span><span class="number">.10</span>] &#125;</span><br><span class="line">  <span class="type">int</span> square() &#123; <span class="keyword">result</span> <span class="operator">=</span> this<span class="operator">*</span>this &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> <span class="type">SmallInt</span> x, <span class="type">SmallInt</span> y, <span class="type">SmallInt</span> z</span><br><span class="line"><span class="keyword">where</span> x.square() <span class="operator">+</span> y.square() <span class="operator">=</span> z.square()</span><br><span class="line"><span class="keyword">select</span> x, y, z</span><br></pre></td></tr></table></figure>
-
-<p>运行结果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">codeql query run -d test_db demo2.ql</span><br><span class="line">Compiling query plan <span class="keyword">for</span> /home/zyu/projects/python_codeql_demo/demo2.ql.</span><br><span class="line">[1/1 comp 900ms] Compiled /home/zyu/projects/python_codeql_demo/demo2.ql.</span><br><span class="line">demo2.ql: Evaluation completed (55ms).</span><br><span class="line">| x | y | z  |</span><br><span class="line">+---+---+----+</span><br><span class="line">| 3 | 4 | 5  |</span><br><span class="line">| 4 | 3 | 5  |</span><br><span class="line">| 6 | 8 | 10 |</span><br><span class="line">| 8 | 6 | 10 |</span><br><span class="line">Shutting down query evaluator.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>示例3-查询python中超过 7 个参数的函数</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import python</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> <span class="keyword">Function</span> f</span><br><span class="line"><span class="keyword">where</span> <span class="built_in">count</span>(f.getAnArg()) <span class="operator">&gt;</span> <span class="number">7</span></span><br><span class="line"><span class="keyword">select</span> f</span><br></pre></td></tr></table></figure>
-
-<p>要导入特定编程语言的 CodeQL 库，在查询开始处输入 <code>import language</code> 。from 子句定义了一个变量 f ，代表一个 Python 函数。 where 部分将函数 f 限制为那些具有超过 7 个参数的函数。最后， select 子句列出了这些函数。</p>
-<p>在运行这个查询时遇到了一些错误：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">codeql query run -d argdb demo3.ql</span><br><span class="line"></span><br><span class="line">Compiling query plan <span class="keyword">for</span> /home/zyu/projects/python_codeql_demo/demo3.ql.</span><br><span class="line">ERROR: could not resolve module python (/home/zyu/projects/python_codeql_demo/demo3.ql:1,8-14)</span><br><span class="line">ERROR: could not resolve <span class="built_in">type</span> Function (/home/zyu/projects/python_codeql_demo/demo3.ql:3,6-14)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>分析原因，错误信息 <code>could not resolve module python</code> 和 <code>could not resolve type Function</code> 表明 CodeQL 编译器无法找到 Python 标准查询库（Standard QL Libraries）。</p>
-<p>缺少 qlpack.yml 文件：CodeQL 现在强烈依赖 “CodeQL Packs” 系统。如果你直接运行一个裸露的 .ql 文件，而该文件所在目录没有声明它依赖 codeql&#x2F;python-all，编译器就不知道 import python 到底是指向哪里的库。</p>
-<p>创建 qlpack.yml 文件：</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">my-custom-queries</span></span><br><span class="line"><span class="attr">version:</span> <span class="number">1.0</span><span class="number">.0</span></span><br><span class="line"><span class="attr">dependencies:</span></span><br><span class="line">  <span class="attr">codeql/python-all:</span> <span class="string">&quot;*&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>之后执行 codeql pack install 出现如下提示：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">WARNING: Pack <span class="string">&#x27;codeql/xml&#x27;</span> was found via <span class="string">&#x27;--additional-packs&#x27;</span>. If the generated <span class="string">&#x27;codeql-pack.lock.yml&#x27;</span> file is committed to <span class="built_in">source</span> control, other <span class="built_in">users</span> will also have to use <span class="string">&#x27;--additional-packs&#x27;</span> when compiling or running queries.  (/home/zyu/codeql/qlpacks/codeql/xml/1.0.38/qlpack.yml:1,1-1)</span><br><span class="line">......</span><br><span class="line">WARNING: Pack <span class="string">&#x27;codeql/yaml&#x27;</span> was found via <span class="string">&#x27;--additional-packs&#x27;</span>. If the generated <span class="string">&#x27;codeql-pack.lock.yml&#x27;</span> file is committed to <span class="built_in">source</span> control, other <span class="built_in">users</span> will also have to use <span class="string">&#x27;--additional-packs&#x27;</span> when compiling or running queries.  (/home/zyu/codeql/qlpacks/codeql/yaml/1.0.38/qlpack.yml:1,1-1)</span><br><span class="line">WARNING: To avoid these warnings <span class="keyword">in</span> the future, use the <span class="string">&#x27;--no-strict-mode&#x27;</span> option. (/home/zyu/projects/python_codeql_demo/qlpack.yml:1,1-1)</span><br><span class="line"></span><br><span class="line">Dependencies resolved. Installing packages...</span><br><span class="line">Install location: /home/zyu/.codeql/packages</span><br><span class="line">Nothing to install.</span><br><span class="line">Package install location: /home/zyu/.codeql/packages</span><br><span class="line">Nothing downloaded.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>警告部分大致的意思是：我知道你需要 python-all，我也找到了它。但是 python-all 内部还依赖 dataflow。虽然我现在能找到它们，但因为你没有一个全局的 codeql-workspace.yml 文件来统一管理这些路径，我担心等到你真正运行查询的时候，我可能会找不到这些底层依赖。</p>
-<p><strong>但在使用 CodeQL Bundle（下载的那个大压缩包）时，通常 CLI 会自动处理这些路径，所以这些警告往往可以忽略。</strong></p>
-<p>返回结果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">codeql query run -d argdb demo3.ql</span><br><span class="line"></span><br><span class="line">Compiling query plan <span class="keyword">for</span> /home/zyu/projects/python_codeql_demo/demo3.ql.</span><br><span class="line">[1/1 comp 12s] Compiled /home/zyu/projects/python_codeql_demo/demo3.ql.</span><br><span class="line">demo3.ql: Evaluation completed (113ms).</span><br><span class="line">|           f            |</span><br><span class="line">+------------------------+</span><br><span class="line">| Function test_function |</span><br><span class="line">Shutting down query evaluator.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="官方示例-Find-the-thief"><a href="#官方示例-Find-the-thief" class="headerlink" title="官方示例 Find the thief"></a>官方示例 Find the thief</h3><p>把以下内容转换为 ql 查询：</p>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>问题</th>
-<th>答案</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>小偷身高超过 150 厘米吗？</td>
-<td>是</td>
-</tr>
-<tr>
-<td>2</td>
-<td>小偷有金发吗？</td>
-<td>不</td>
-</tr>
-<tr>
-<td>3</td>
-<td>小偷秃头吗？</td>
-<td>不</td>
-</tr>
-<tr>
-<td>4</td>
-<td>小偷是否小于 30 岁？</td>
-<td>不</td>
-</tr>
-<tr>
-<td>5</td>
-<td>小偷是否住在城堡的东边？</td>
-<td>是</td>
-</tr>
-<tr>
-<td>6</td>
-<td>小偷有黑色或棕色头发吗？</td>
-<td>是</td>
-</tr>
-<tr>
-<td>7</td>
-<td>小偷身高是否超过 180 厘米且低于 190 厘米？</td>
-<td>不</td>
-</tr>
-<tr>
-<td>8</td>
-<td>小偷是村里年纪最大的人吗？</td>
-<td>不</td>
-</tr>
-<tr>
-<td>9</td>
-<td>小偷是村里最高的人吗？</td>
-<td>不</td>
-</tr>
-<tr>
-<td>10</td>
-<td>小偷比村民的平均身高矮吗？</td>
-<td>是</td>
-</tr>
-<tr>
-<td>11</td>
-<td>小偷是村东部最年长的人吗？</td>
-<td>是</td>
-</tr>
-</tbody></table>
-<p>查询语句如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import tutorial</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> Person t</span><br><span class="line"><span class="keyword">where</span></span><br><span class="line">  <span class="comment">/* 1 */</span> t.getHeight() <span class="operator">&gt;</span> <span class="number">150</span> <span class="keyword">and</span></span><br><span class="line">  <span class="comment">/* 2 */</span> <span class="keyword">not</span> t.getHairColor() <span class="operator">=</span> &quot;blond&quot; <span class="keyword">and</span></span><br><span class="line">  <span class="comment">/* 3 */</span> <span class="keyword">exists</span> (string c <span class="operator">|</span> t.getHairColor() <span class="operator">=</span> c) <span class="keyword">and</span></span><br><span class="line">  <span class="comment">/* 4 */</span> <span class="keyword">not</span> t.getAge() <span class="operator">&lt;</span> <span class="number">30</span> <span class="keyword">and</span></span><br><span class="line">  <span class="comment">/* 5 */</span> t.getLocation() <span class="operator">=</span> &quot;east&quot; <span class="keyword">and</span></span><br><span class="line">  <span class="comment">/* 6 */</span> (t.getHairColor() <span class="operator">=</span> &quot;black&quot; <span class="keyword">or</span> t.getHairColor() <span class="operator">=</span> &quot;brown&quot;) <span class="keyword">and</span></span><br><span class="line">  <span class="comment">/* 7 */</span> <span class="keyword">not</span> (t.getHeight() <span class="operator">&gt;</span> <span class="number">180</span> <span class="keyword">and</span> t.getHeight() <span class="operator">&lt;</span> <span class="number">190</span>) <span class="keyword">and</span></span><br><span class="line">  <span class="comment">/* 8 */</span> <span class="keyword">exists</span>(Person p <span class="operator">|</span> p.getAge() <span class="operator">&gt;</span> t.getAge()) <span class="keyword">and</span></span><br><span class="line">  <span class="comment">/* 9 */</span> <span class="keyword">not</span> t <span class="operator">=</span> <span class="built_in">max</span>(Person p <span class="operator">|</span> <span class="operator">|</span> p <span class="keyword">order</span> <span class="keyword">by</span> p.getHeight()) <span class="keyword">and</span></span><br><span class="line">  <span class="comment">/* 10 */</span> t.getHeight() <span class="operator">&lt;</span> <span class="built_in">avg</span>(<span class="type">float</span> i <span class="operator">|</span> <span class="keyword">exists</span>(Person p <span class="operator">|</span> p.getHeight() <span class="operator">=</span> i) <span class="operator">|</span> i) <span class="keyword">and</span></span><br><span class="line">  <span class="comment">/* 11 */</span> t <span class="operator">=</span> <span class="built_in">max</span>(Person p <span class="operator">|</span> p.getLocation() <span class="operator">=</span> &quot;east&quot; <span class="operator">|</span> p <span class="keyword">order</span> <span class="keyword">by</span> p.getAge())</span><br><span class="line"><span class="keyword">select</span> &quot;The thief is &quot; <span class="operator">+</span> t <span class="operator">+</span> &quot;!&quot;</span><br></pre></td></tr></table></figure>
-
-<h3 id="官方示例-Catch-the-fire-starter"><a href="#官方示例-Catch-the-fire-starter" class="headerlink" title="官方示例 Catch the fire starter"></a>官方示例 Catch the fire starter</h3><p>本节主要介绍了 codeql 的谓词和类。因为对<strong>谓词</strong>的理解不是很明白，所以这里多一点背景介绍。</p>
-<p>学习 QL 谓词和类，作为 QL 侦探解决你的第二个谜团。就像你成功找到小偷并将金冠归还城堡一样，另一场可怕的犯罪发生了。清晨，几个人在村庄北面的田野里纵火，烧毁了所有的庄稼！你现在以 QL 侦探专家的声誉而闻名，因此再次被要求找出罪魁祸首。这次，你有一些额外信息。村庄的南北两侧存在激烈竞争，而且你知道罪犯住在南边。通过以下示例学习如何在 QL 中定义谓词和类。这将使你的查询逻辑更易于理解，并有助于简化你的侦探工作。</p>
-<p>这次你只需要考虑一个特定的村民群体，即住在村庄南边的人。你不必在所有查询中都写 <code>getLocation() = &quot;south&quot; </code>，可以定义一个新的谓词 <code>isSouthern </code>:</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">predicate isSouthern(Person p) &#123;</span><br><span class="line">  p.getLocation() <span class="operator">=</span> &quot;south&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>谓词 <code>isSouthern(p)</code> 接受一个参数 <code>p</code> 并检查 <code>p</code> 是否满足属性 <code>p.getLocation() = &quot;south&quot;</code> 。</p>
-<p>谓词的名称总是以小写字母开头。</p>
-<p>王冠被盗后开始实施旅行限制。最初，村民们可以在村庄内自由旅行，没有限制。因此，谓词 isAllowedIn(string region) 对任何人和任何地区都成立。以下查询列出了所有村民，因为他们都可以去北方：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Person p</span><br><span class="line"><span class="keyword">where</span> p.isAllowedIn(&quot;north&quot;)</span><br><span class="line"><span class="keyword">select</span> p</span><br></pre></td></tr></table></figure>
-
-<p>然而，在最近的盗窃事件后，村民们对村周围潜伏的罪犯变得更加担忧，他们不再允许 10 岁以下的儿童离开他们的居住区域。这意味着 <code>isAllowedIn(string region)</code> 不再对所有人和所有地区成立，因此如果 p 是一个孩子，应该暂时覆盖原始谓词。</p>
-<p>首先定义一个包含所有 10 岁以下村民的类 <code>Child</code> 。然后你可以将 <code>isAllowedIn(string region)</code> 重新定义为 <code>Child</code> 的成员谓词，以允许儿童只在自己的区域内移动。这由 <code>region = this.getLocation()</code> 表示。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Child extends Person &#123;</span><br><span class="line">  <span class="comment">/* the characteristic predicate */</span></span><br><span class="line">  Child() &#123; this.getAge() <span class="operator">&lt;</span> <span class="number">10</span> &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* a member predicate */</span></span><br><span class="line">  override predicate isAllowedIn(string region) &#123;</span><br><span class="line">    region <span class="operator">=</span> this.getLocation()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>现在尝试将 <code>isAllowedIn(string region)</code> 应用于一个人 <code>p</code> 。如果 <code>p</code> 不是孩子，则使用原始定义，但如果 <code>p</code> 是孩子，则新的谓词定义会覆盖原始定义。</p>
-<p>知道火种者住在南方，而且他们必须能够前往北方。写一个查询来找出可能的嫌疑人。也可以扩展 select 子句来列出嫌疑人的年龄。这样就能清楚地看到所有孩子都被排除在名单之外。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">import tutorial</span><br><span class="line"></span><br><span class="line">predicate isSouthern(Person p) &#123; p.getLocation() <span class="operator">=</span> &quot;south&quot; &#125;</span><br><span class="line"></span><br><span class="line">class Southerner extends Person &#123;</span><br><span class="line">  <span class="comment">/* the characteristic predicate */</span></span><br><span class="line">  Southerner() &#123; isSouthern(this) &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Child extends Person &#123;</span><br><span class="line">  <span class="comment">/* the characteristic predicate */</span></span><br><span class="line">  Child() &#123; this.getAge() <span class="operator">&lt;</span> <span class="number">10</span> &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* a member predicate */</span></span><br><span class="line">  override predicate isAllowedIn(string region) &#123; region <span class="operator">=</span> this.getLocation() &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> Southerner s</span><br><span class="line"><span class="keyword">where</span> s.isAllowedIn(&quot;north&quot;)</span><br><span class="line"><span class="keyword">select</span> s, s.getAge()</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/12/17/CodeQL%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
