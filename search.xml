@@ -1,69 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>HEXO链接站内文章方法</title>
-    <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>Hexo链接站内文章方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 是显示的内容，如果不写的话就默认是文章名称。</p>
-<p>参考链接：<a href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CodeQL入门</title>
-    <url>/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/</url>
-    <content><![CDATA[<h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
-<p>传统的扫描工具往往像是一个黑盒，你输入代码，它吐出报告。但 CodeQL 不同，它的核心理念非常有意思： <code>Code as Data</code> 代码即数据，CodeQL 把源代码转化成一个关系型数据库，而漏洞挖掘的过程，就变成了一次次编写 SQL（其实是 QL）查询语句的过程。</p>
-<p>CodeQL 工具包含两大部分组成：</p>
+    <title>CodeQL-MCP架构解读</title>
+    <url>/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/</url>
+    <content><![CDATA[<p>本片内容以 <a href="https://github.com/JordyZomer/codeql-mcp">https://github.com/JordyZomer/codeql-mcp</a> 为基础，进行 CodeQL MCP 的开发学习。</p>
+<h2 id="CodeQL-MCP-整体架构分析"><a href="#CodeQL-MCP-整体架构分析" class="headerlink" title="CodeQL-MCP 整体架构分析"></a>CodeQL-MCP 整体架构分析</h2><p>项目中包含了两个核心文件 <code>codeqlclient.py</code> 和  <code>server.py</code> ：</p>
+<p><strong><code>codeqlclient.py</code></strong> 是一个底层通信客户端，负责与 CodeQL 查询服务器建立并管理 JSON-RPC 连接。它封装了进程启动、请求发送、响应解析、异步任务跟踪等复杂逻辑，提供了数据库注册、查询执行、结果解码等核心操作的原始接口。该文件不依赖任何高层框架，专注于可靠、高效地与 CodeQL 引擎交互，可作为独立库在不同上下文中复用。</p>
+<p><strong><code>server.py</code></strong> 是一个基于 Model Context Protocol（MCP）的服务层实现，利用 FastMCP 框架将 <code>codeqlclient.py</code> 提供的底层能力包装为用户友好的异步 API 工具。它定义了清晰的 HTTP 可调用接口，处理参数验证、错误反馈和结果格式化，使外部系统能通过标准 MCP 协议便捷地使用 CodeQL 功能，而无需关心底层通信细节。</p>
+<p>在 <code>codeqlclient.py</code> 中包含了一个核心类结构 CodeQLQueryServer 主要模块如下：</p>
+<ol>
+<li>服务器进程管理</li>
+</ol>
 <ul>
-<li>核心引擎(闭源)：用于解析源代码并存储于数据库，以及执行 QL 语句从数据库中进行查询；</li>
-<li>SDK代码库(开源)：包含各编程语言对应的 QL 代码库(属性&#x2F;谓词&#x2F;等)，以便快速编写查询语句。</li>
+<li>启动&#x2F;停止 ：通过 start() 和 stop() 方法管理 CodeQL 子进程</li>
+<li>进程通信 ：使用标准输入&#x2F;输出进行 JSON-RPC 通信</li>
+<li>线程管理 ：<ul>
+<li>_read_loop() ：主线程，读取服务器响应；_stderr_loop() ：处理标准错误输出；异步处理：支持并发请求</li>
 </ul>
-<p>这给了安全研究员和开发者极大的自由度——不再受限于工具内置的规则，可以自己定义“什么样的代码长相存在漏洞”。这篇 Blog 记录了我第一次使用 CodeQL 进行静态代码分析的过程。</p>
+</li>
+</ul>
+<ol start="2">
+<li>通信协议层</li>
+</ol>
+<ul>
+<li>JSON-RPC 2.0：定义消息格式，请求&#x2F;响应结构，支持异步调用</li>
+</ul>
+<ol start="3">
+<li>功能模块</li>
+</ol>
+<ul>
+<li><p>数据库管理</p>
+<ul>
+<li>register_databases() ：注册数据库</li>
+<li>deregister_databases() ：注销数据库</li>
+</ul>
+</li>
+<li><p>查询执行</p>
+<ul>
+<li>evaluate_queries() ：执行完整查询</li>
+<li>quick_evaluate() ：快速评估（针对特定代码位置）</li>
+<li>evaluate_and_wait() ：同步执行查询</li>
+<li>quick_evaluate_and_wait() ：同步快速评估</li>
+</ul>
+</li>
+<li><p>结果处理</p>
+<ul>
+<li>decode_bqrs() ：解码 BQRS 结果文件</li>
+</ul>
+</li>
+<li><p>代码分析辅助</p>
+<ul>
+<li>find_class_identifier_position() ：查找类标识符位置</li>
+<li>find_predicate_identifier_position() ：查找谓词标识符位置</li>
+</ul>
+</li>
+<li><p>进度回调机制（支持实时进度更新）</p>
+<ul>
+<li>wait_for_progress_done() ：等待进度完成</li>
+<li>wait_for_completion_callback() ：等待异步操作完成</li>
+<li>wait_for_progress_done() 创建进度跟踪器</li>
+<li>wait_for_completion_callback() 创建完成处理器</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>数据流：用户请求 -&gt; send_request()-&gt;JSON-RPC 消息-&gt;CodeQL 服务器-&gt;CodeQL 引擎-&gt;服务器响应-&gt;_read_loop()-&gt;_handle_message()-&gt;回调函数</p>
+</blockquote>
 <span id="more"></span>
 
-<h2 id="一、CodeQL-核心工作流"><a href="#一、CodeQL-核心工作流" class="headerlink" title="一、CodeQL 核心工作流"></a>一、CodeQL 核心工作流</h2><p>使用 CodeQL 主要分为三个步骤：</p>
-<ol>
-<li><p><strong>创建数据库（Create Database）</strong>： 在编译&#x2F;构建代码的过程中，CodeQL 会“旁路监听”，捕捉所有的编译命令、文件结构、函数调用关系，生成一个快照数据库；</p>
-</li>
-<li><p><strong>编写&#x2F;运行查询（Analyze）</strong>： 使用一种类似 SQL 的面向对象查询语言（QL），在数据库中查找符合特征的代码片段；</p>
-</li>
-<li><p><strong>生成结果（Results）</strong>： 输出分析报告（通常是 SARIF 格式），定位到具体的代码行号。</p>
-</li>
+<h2 id="关键模块解读"><a href="#关键模块解读" class="headerlink" title="关键模块解读"></a>关键模块解读</h2><h3 id="start"><a href="#start" class="headerlink" title="start()"></a>start()</h3><p>启动 CodeQL 查询服务器进程，并建立通信通道。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">self</span>.proc = subprocess.Popen(</span><br><span class="line">    [</span><br><span class="line">        <span class="variable language_">self</span>.codeql_path,        <span class="comment"># CodeQL 可执行文件路径</span></span><br><span class="line">        <span class="string">&quot;execute&quot;</span>,               <span class="comment"># 执行命令</span></span><br><span class="line">        <span class="string">&quot;query-server2&quot;</span>,         <span class="comment"># 启动查询服务器版本2</span></span><br><span class="line">        <span class="string">&quot;--debug&quot;</span>,               <span class="comment"># 启用调试模式</span></span><br><span class="line">        <span class="string">&quot;--tuple-counting&quot;</span>,      <span class="comment"># 启用元组计数（性能监控）</span></span><br><span class="line">        <span class="string">&quot;--threads=0&quot;</span>,           <span class="comment"># 使用所有可用线程（0=自动）</span></span><br><span class="line">        <span class="string">&quot;--evaluator-log-level&quot;</span>, <span class="comment"># 设置评估器日志级别</span></span><br><span class="line">        <span class="string">&quot;5&quot;</span>,                     <span class="comment"># 日志级别5（详细）</span></span><br><span class="line">        <span class="string">&quot;-v&quot;</span>,                    <span class="comment"># 详细输出</span></span><br><span class="line">        <span class="string">&quot;--log-to-stderr&quot;</span>,       <span class="comment"># 日志输出到标准错误</span></span><br><span class="line">    ],</span><br><span class="line">    stdin=subprocess.PIPE,      <span class="comment"># 标准输入管道（用于发送请求）</span></span><br><span class="line">    stdout=subprocess.PIPE,     <span class="comment"># 标准输出管道（用于接收响应）</span></span><br><span class="line">    stderr=subprocess.PIPE,     <span class="comment"># 标准错误管道（用于日志/错误）</span></span><br><span class="line">    text=<span class="literal">True</span>,                  <span class="comment"># 以文本模式处理输入输出</span></span><br><span class="line">    bufsize=<span class="number">1</span>,                  <span class="comment"># 行缓冲模式</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>启动读取线程：创建一个守护线程来持续读取服务器的标准输出，处理 JSON-RPC 响应。同时还有读取标准错误输出，防止缓冲区阻塞。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">self</span>.reader_thread = threading.Thread(</span><br><span class="line">    target=<span class="variable language_">self</span>._read_loop,  <span class="comment"># 目标函数：读取循环</span></span><br><span class="line">    daemon=<span class="literal">True</span>              <span class="comment"># 守护线程（主程序退出时自动结束）</span></span><br><span class="line">)</span><br><span class="line"><span class="variable language_">self</span>.reader_thread.start()   <span class="comment"># 启动线程</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">self</span>.stderr_thread = threading.Thread(</span><br><span class="line">    target=<span class="variable language_">self</span>._stderr_loop,  <span class="comment"># 目标函数：标准错误循环</span></span><br><span class="line">    daemon=<span class="literal">True</span>                <span class="comment"># 守护线程</span></span><br><span class="line">)</span><br><span class="line"><span class="variable language_">self</span>.stderr_thread.start()     <span class="comment"># 启动线程</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="stderr-loop"><a href="#stderr-loop" class="headerlink" title="_stderr_loop()"></a>_stderr_loop()</h3><p>标准错误处理循环：持续读取 CodeQL服务器的标准错误输出，防止stderr管道堵塞，在 start() 中作为守护线程启动。</p>
+<h3 id="read-loop"><a href="#read-loop" class="headerlink" title="_read_loop()"></a>_read_loop()</h3><p>主读取循环：读取并解析服务器响应，处理 JSON-RPC over HTTP 风格的消息格式。</p>
+<h3 id="handle-message"><a href="#handle-message" class="headerlink" title="_handle_message()"></a>_handle_message()</h3><p>消息分发器：是核心的消息处理函数，处理三种类型的消息：</p>
+<ul>
+<li>进度更新消息 ( ql&#x2F;progressUpdated )：处理查询执行进度更新</li>
+<li>评估进度消息 ( evaluation&#x2F;progress )：处理评估操作的进度信息</li>
+<li>请求响应消息：处理异步请求的响应</li>
+</ul>
+<h3 id="send"><a href="#send" class="headerlink" title="_send()"></a>_send()</h3><p>发送请求：发送JSON-RPC 请求到服务器。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_send</span>(<span class="params">self, payload</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="variable language_">self</span>.proc <span class="keyword">or</span> <span class="keyword">not</span> <span class="variable language_">self</span>.proc.stdin:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;[!] Tried to send but process not running.&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        data = json.dumps(payload)</span><br><span class="line">        content = <span class="string">f&quot;Content-Length: <span class="subst">&#123;<span class="built_in">len</span>(data)&#125;</span>\r\n\r\n<span class="subst">&#123;data&#125;</span>&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\n[→] Sending request:\n<span class="subst">&#123;json.dumps(payload, indent=<span class="number">2</span>)&#125;</span>\n&quot;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.proc.stdin.write(content)</span><br><span class="line">        <span class="variable language_">self</span>.proc.stdin.flush()</span><br></pre></td></tr></table></figure>
+
+<h3 id="send-request"><a href="#send-request" class="headerlink" title="send_request()"></a>send_request()</h3><p>高级发送接口：发送异步请求并管理回调，为每个请求生成唯一ID，关联请求 ID 与回调函数，支持进度回调注册和状态跟踪。</p>
+<h3 id="stop"><a href="#stop" class="headerlink" title="stop()"></a>stop()</h3><p>停止服务器</p>
+<h3 id="find-class-identifier-position"><a href="#find-class-identifier-position" class="headerlink" title="find_class_identifier_position()"></a>find_class_identifier_position()</h3><p>在 QL 文件中查找类名标识符的位置，返回基于 1 的行列坐标。CodeQL 快速评估功能的关键组件，通过定位代码中的特定标识符，实现对部分代码的针对性分析。</p>
+<h3 id="find-predicate-identifier-position"><a href="#find-predicate-identifier-position" class="headerlink" title="find_predicate_identifier_position()"></a>find_predicate_identifier_position()</h3><p>在 QL 文件中查找谓词（predicate）名称的位置，返回基于 1 的行列坐标。</p>
+<p>类名查找和谓词查找可以用于支持CodeQL的快速评估功能，就是只执行查询的一部分，而不是执行全量查询，可以进行快速迭代和调试。</p>
+<h3 id="register-databases-deregister-databases"><a href="#register-databases-deregister-databases" class="headerlink" title="register_databases() &amp;&amp; deregister_databases()"></a>register_databases() &amp;&amp; deregister_databases()</h3><p>注册注销数据库：向 CodeQL 查询服务器注册一个或多个数据库，使其可用于查询执行。</p>
+<p>这是CodeQL客户端资源管理的核心，确保数据库在查询执行前正确注册，在执行后及时清理，是高效使用 CodeQL 服务器的关键组件。</p>
+<h3 id="evaluate-queries"><a href="#evaluate-queries" class="headerlink" title="evaluate_queries()"></a>evaluate_queries()</h3><p>执行完整的 CodeQL 查询 ：在指定的数据库上运行一个 QL 查询文件，并将结果保存到输出文件。</p>
+<ul>
+<li>query_path ：QL 查询文件路径</li>
+<li>db_path ：CodeQL 数据库路径</li>
+<li>output_path ：结果输出文件路径（BQRS 格式）</li>
+<li>callback ：异步完成回调（可选）</li>
+<li>progress_callback ：进度回调（可选）</li>
+</ul>
+<p>默认完成处理：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">on_done</span>(<span class="params">result</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[evaluateQueries] done:&quot;</span>, result)</span><br><span class="line">    <span class="keyword">if</span> result.get(<span class="string">&quot;resultType&quot;</span>) != <span class="number">0</span>:  <span class="comment"># 0表示成功</span></span><br><span class="line">        <span class="keyword">raise</span> RuntimeError(<span class="string">f&quot;CodeQL evaluation failed: <span class="subst">&#123;result.get(<span class="string">&#x27;message&#x27;</span>, <span class="string">&#x27;Unknown error&#x27;</span>)&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>发送异步请求：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">self</span>.send_request(</span><br><span class="line">    <span class="string">&quot;evaluation/runQuery&quot;</span>,      <span class="comment"># JSON-RPC方法</span></span><br><span class="line">    params,                     <span class="comment"># 参数</span></span><br><span class="line">    callback <span class="keyword">or</span> on_done,        <span class="comment"># 使用用户回调或默认回调</span></span><br><span class="line">    progress_callback=progress_callback  <span class="comment"># 进度回调</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>函数会执行整个 QL 文件的所有查询，支持回调和进度跟踪。</p>
+<h3 id="evaluate-and-wait"><a href="#evaluate-and-wait" class="headerlink" title="evaluate_and_wait()"></a>evaluate_and_wait()</h3><p>同步执行完整查询的便捷方法，其中包装了 evaluate_queries() 的异步功能，使用 wait_for_progress_done() 等待查询完成，简化了同步使用场景。</p>
+<h3 id="quick-evaluate-and-wait"><a href="#quick-evaluate-and-wait" class="headerlink" title="quick_evaluate_and_wait()"></a>quick_evaluate_and_wait()</h3><p>同步执行快速评估，包装了quick_evaluate() 的异步功能，但是需要指定代码位置（行、列）。</p>
+<h3 id="quick-evaluate"><a href="#quick-evaluate" class="headerlink" title="quick_evaluate()"></a>quick_evaluate()</h3><p>执行快速评估（Quick Evaluation） ：只执行 QL 查询文件中 特定代码片段 的查询，而不是整个文件。</p>
+<ul>
+<li>file_path ：QL 查询文件路径</li>
+<li>db_path ：CodeQL 数据库路径</li>
+<li>output_path ：结果输出文件路径</li>
+<li>start_line , start_col ：起始位置（1-based）</li>
+<li>end_line , end_col ：结束位置（1-based）</li>
+<li>callback ：异步完成回调</li>
+<li>progress_callback ：进度回调</li>
+</ul>
+<h3 id="wait-for-progress-done-wait-for-completion-callback"><a href="#wait-for-progress-done-wait-for-completion-callback" class="headerlink" title="wait_for_progress_done() &amp;&amp; wait_for_completion_callback()"></a>wait_for_progress_done() &amp;&amp; wait_for_completion_callback()</h3><p>功能 ：创建一个进度完成等待器 和 完成回调等待器。这两个函数都是 异步转同步 的工具：</p>
+<ul>
+<li>将异步回调模式转换为同步等待模式</li>
+<li>简化了不需要复杂异步处理的场景</li>
+<li>提供了更直观的API使用方式</li>
+</ul>
+<h2 id="MCP-Server-构建"><a href="#MCP-Server-构建" class="headerlink" title="MCP Server 构建"></a>MCP Server 构建</h2><p>基于 FastMCP 框架构建的 CodeQL 分析服务器，提供了 6 个工具来与 CodeQL 进行交互。</p>
+<h3 id="核心组件"><a href="#核心组件" class="headerlink" title="核心组件"></a>核心组件</h3><p>服务器初始化：使用 FastMCP 创建名为 “CodeQL” 的 MCP 服务器，实例化 CodeQLQueryServer 并启动，用于处理 CodeQL 查询操作。</p>
+<h3 id="工具说明"><a href="#工具说明" class="headerlink" title="工具说明"></a>工具说明</h3><ol>
+<li>register_database</li>
 </ol>
-<h2 id="二、CodeQL-安装"><a href="#二、CodeQL-安装" class="headerlink" title="二、CodeQL 安装"></a>二、CodeQL 安装</h2><p>运行 CodeQL 需要安装 CodeQL CLI 工具，分开下载的话需要分别下载 CodeQL binary 和 SDK，需要放在相同目录下且版本保持一致，也可以直接下载捆绑包，以 Ubuntu 环境为例，安装命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.16.1/codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvzf codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/home/aono/codeqlsrc/codeql</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+<p>注册 CodeQL 数据库到查询服务器。验证数据库路径和必需的 src.zip 文件是否存在。</p>
+<ol start="2">
+<li>quick_evaluate</li>
+</ol>
+<p>快速评估 CodeQL 查询文件中的特定类或谓词，自动定位符号位置并执行评估。</p>
+<ol start="3">
+<li>decode_bqrs</li>
+</ol>
+<p>解码 CodeQL 结果文件（.bqrs 格式），支持 CSV（用于问题查询）或 JSON（用于路径问题）格式。</p>
+<ol start="4">
+<li>evaluate_query</li>
+</ol>
+<p>在指定数据库上运行完整的 CodeQL 查询文件。</p>
+<ol start="5">
+<li>find_class_position</li>
+</ol>
+<p>查找查询文件中类定义的准确位置（行号和列号）。</p>
+<ol start="6">
+<li>find_predicate_position</li>
+</ol>
+<p>查找查询文件中谓词定义的准确位置（行号和列号）。</p>
+<h3 id="MCP-Server-代码"><a href="#MCP-Server-代码" class="headerlink" title="MCP Server 代码"></a>MCP Server 代码</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mcp = FastMCP(<span class="string">&quot;CodeQL&quot;</span>)</span><br><span class="line">qs = CodeQLQueryServer()</span><br><span class="line">qs.start()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">register_database</span>(<span class="params">db_path: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This tool registers a CodeQL database given a path&quot;&quot;&quot;</span></span><br><span class="line">    db_path_resolved = Path(db_path).resolve()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> db_path_resolved.exists():</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;Database path does not exist: <span class="subst">&#123;db_path&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">    source_zip = db_path_resolved / <span class="string">&quot;src.zip&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> source_zip.exists():</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;Missing required src.zip in: <span class="subst">&#123;db_path&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">    db_entry = &#123;</span><br><span class="line">        <span class="string">&quot;uri&quot;</span>: Path(db_path).resolve().as_uri(),</span><br><span class="line">        <span class="string">&quot;content&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;sourceArchiveZip&quot;</span>: (Path(db_path) / <span class="string">&quot;src.zip&quot;</span>).resolve().as_uri(),</span><br><span class="line">            <span class="string">&quot;dbDir&quot;</span>: Path(db_path).resolve().as_uri(),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">    callback, done, result_holder = qs.wait_for_completion_callback()</span><br><span class="line">    qs.register_databases(</span><br><span class="line">        [db_path],</span><br><span class="line">        callback=callback,</span><br><span class="line">        progress_callback=<span class="keyword">lambda</span> msg: <span class="built_in">print</span>(<span class="string">&quot;[progress] register:&quot;</span>, msg),</span><br><span class="line">    )</span><br><span class="line">    done.wait()</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Database registered: <span class="subst">&#123;db_path&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">quick_evaluate</span>(<span class="params"></span></span><br><span class="line"><span class="params">    file: <span class="built_in">str</span>, db: <span class="built_in">str</span>, symbol: <span class="built_in">str</span>, output_path: <span class="built_in">str</span> = <span class="string">&quot;/tmp/quickeval.bqrs&quot;</span></span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This will allow you to quick_evaluate either a class or a predicate in a codeql query&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        start, scol, end, ecol = qs.find_class_identifier_position(file, symbol)</span><br><span class="line">    <span class="keyword">except</span> ValueError:</span><br><span class="line">        start, scol, end, ecol = qs.find_predicate_identifier_position(</span><br><span class="line">            file, symbol</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        qs.quick_evaluate_and_wait(</span><br><span class="line">            file, db, output_path, start, scol, end, ecol</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">except</span> RuntimeError <span class="keyword">as</span> re:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;CodeQL evaluation failed: <span class="subst">&#123;re&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output_path</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">decode_bqrs</span>(<span class="params">bqrs_path: <span class="built_in">str</span>, fmt: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This can be used to decode CodeQL results, format is either csv for problem queries or json for path-problems&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> qs.decode_bqrs(bqrs_path, fmt)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">evaluate_query</span>(<span class="params"></span></span><br><span class="line"><span class="params">    query_path: <span class="built_in">str</span>, db_path: <span class="built_in">str</span>, output_path: <span class="built_in">str</span> = <span class="string">&quot;/tmp/eval.bqrs&quot;</span></span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Runs a CodeQL query on a given database&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        qs.evaluate_and_wait(query_path, db_path, output_path)</span><br><span class="line">    <span class="keyword">except</span> RuntimeError <span class="keyword">as</span> re:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;CodeQL evaluation failed: <span class="subst">&#123;re&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output_path</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">find_class_position</span>(<span class="params">file: <span class="built_in">str</span>, name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Finds startline, startcol, endline endcol of a class for quickeval&quot;&quot;&quot;</span></span><br><span class="line">    start, scol, end, ecol = qs.find_class_identifier_position(file, name)</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;start_line&quot;</span>: start,</span><br><span class="line">        <span class="string">&quot;start_col&quot;</span>: scol,</span><br><span class="line">        <span class="string">&quot;end_line&quot;</span>: end,</span><br><span class="line">        <span class="string">&quot;end_col&quot;</span>: ecol,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">find_predicate_position</span>(<span class="params">file: <span class="built_in">str</span>, name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Finds startline, startcol, endline endcol of a predicate for quickeval&quot;&quot;&quot;</span></span><br><span class="line">    start, scol, end, ecol = qs.find_predicate_identifier_position(file, name)</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;start_line&quot;</span>: start,</span><br><span class="line">        <span class="string">&quot;start_col&quot;</span>: scol,</span><br><span class="line">        <span class="string">&quot;end_line&quot;</span>: end,</span><br><span class="line">        <span class="string">&quot;end_col&quot;</span>: ecol,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Starting CodeQL MCP server...&quot;</span>)</span><br><span class="line">    mcp.run(host=<span class="string">&quot;0.0.0.0&quot;</span>, port=<span class="number">8000</span>)</span><br></pre></td></tr></table></figure>
 
-<p>检测是否安装成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">codeql --version</span><br></pre></td></tr></table></figure>
+<h2 id="MCP-Server-测试"><a href="#MCP-Server-测试" class="headerlink" title="MCP Server 测试"></a>MCP Server 测试</h2><p>以注册数据库为例，进行MCP Server功能测试：</p>
+<p>首先启动 MCP Server：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">(really_mcp) PS D:\Projects\codeql-mcp&gt; uv run mcp run server.py -t sse</span><br><span class="line">[*] Read loop started</span><br><span class="line">INFO:     Started server process [23464]</span><br><span class="line">INFO:     Waiting <span class="keyword">for</span> application startup.</span><br><span class="line">INFO:     Application startup complete.</span><br><span class="line">INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>可以使用  <code>codeQL resolve languages</code> 可以查看支持的编程语言。</p>
-<h2 id="三、CodeQL-简单使用"><a href="#三、CodeQL-简单使用" class="headerlink" title="三、CodeQL 简单使用"></a>三、CodeQL 简单使用</h2><p>指定项目创建数据库，以 Java 目标（<a href="https://github.com/l4yn3/micro_service_seclab%EF%BC%89%E4%B8%BA%E4%BE%8B%EF%BC%8C%E9%A1%B9%E7%9B%AE%E9%80%9A%E8%BF%87">https://github.com/l4yn3/micro_service_seclab）为例，项目通过</a> mvn 构建，首先安装 mvn：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt install maven -y</span><br></pre></td></tr></table></figure>
-
-<p>创建数据库：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database create java_db --language=java --source-root=./test/micro_service_seclab/</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../uploads/codeql_1.png"></p>
-<p>使用默认规则进行查询，生成 SARIF 文件：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database analyze java_db/ --format=sarif-latest --output=java_result.sarif</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../uploads/codeql_2.png"></p>
-]]></content>
+<p>在 cursor 的 MCP tools 页面加载对应工具，选择启用状态：</p>
+<p><img src="/../uploads/CodeQL_MCP_1.png"></p>
+<p>对应配置文件如下：</p>
+<p><img src="/../uploads/CodeQL_MCP_2.png"></p>
+<p>MCP Server状态与 Tools 调用情况：</p>
+<p><img src="/../uploads/CodeQL_MCP_3.png"></p>
+<p>以上验证 CodeQL MCP 可成功调用并执行。</p>
+<p>与服务器通信的数据包数据：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Accepted</span><br><span class="line">[12/15/25 20:26:54] INFO     Processing request of type CallToolRequest                   server.py:674</span><br><span class="line">[DEBUG] Sending evaluation/registerDatabases with progressId=0</span><br><span class="line"></span><br><span class="line">[→] Sending request:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;jsonrpc&quot;: &quot;2.0&quot;,</span><br><span class="line">  &quot;id&quot;: 1,</span><br><span class="line">  &quot;method&quot;: &quot;evaluation/registerDatabases&quot;,</span><br><span class="line">  &quot;params&quot;: &#123;</span><br><span class="line">    &quot;body&quot;: &#123;</span><br><span class="line">      &quot;databases&quot;: [</span><br><span class="line">        &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;progressId&quot;: 0</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[stdout] Content-Length: 102</span><br><span class="line">[raw response body] &#123;&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:1,&quot;result&quot;:&#123;&quot;registeredDatabases&quot;:[&quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;]&#125;&#125;</span><br><span class="line"></span><br><span class="line">[←] Received response:</span><br><span class="line">&#123;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;jsonrpc&quot;: &quot;2.0&quot;,</span><br><span class="line">  &quot;id&quot;: 1,</span><br><span class="line">  &quot;result&quot;: &#123;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">  &quot;id&quot;: 1,</span><br><span class="line">  &quot;result&quot;: &#123;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">  &quot;result&quot;: &#123;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">    ]</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">INFO:     127.0.0.1:56577 - &quot;POST /messages/?session_id=d8bc9c141a864777b7a094f0a6abc6ad HTTP/1.1&quot; 202 Accepted</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>SAST</category>
+        <category>MCP</category>
       </categories>
       <tags>
-        <tag>SAST</tag>
         <tag>CodeQL</tag>
+        <tag>MCP</tag>
       </tags>
   </entry>
   <entry>
@@ -182,6 +290,185 @@
       </categories>
       <tags>
         <tag>MCP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux服务器系统资源查看</title>
+    <url>/2025/12/17/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E6%9F%A5%E7%9C%8B/</url>
+    <content><![CDATA[<h2 id="Linux服务器系统资源查看"><a href="#Linux服务器系统资源查看" class="headerlink" title="Linux服务器系统资源查看"></a>Linux服务器系统资源查看</h2><p>系统性地查看 Linux 服务器资源，也就是看CPU、内存、磁盘、网络、负载、系统等这几个层面，就能了解服务器性能以及运行情况。</p>
+<h3 id="uptime"><a href="#uptime" class="headerlink" title="uptime"></a>uptime</h3><p>查看系统负载和运行时间</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">uptime</span></span><br><span class="line"></span><br><span class="line">10:35:15 up  1:34, 13 <span class="built_in">users</span>,  load average: 0.41, 0.30, 0.25</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>10:35:15</code> 表示当前系统时间是 10 点 35 分 15 秒，<code>up 1:34</code> 表示系统已经连续运行了 1 小时 34 分钟，<code>13 users</code>表示当前有 13 个用户会话登录到系统中，<code>load average: 0.41, 0.30, 0.25</code> 表示系统负载均值（Load Average），表示正在运行 + 等待运行的进程数量的平均值，三个数字分别表示最近1&#x2F;5&#x2F;15 分钟的平均负载。</p>
+<blockquote>
+<p><strong>Load Average &#x3D; 在某段时间内，处于「可运行状态」和「不可中断睡眠状态」进程数量的指数加权移动平均（EWMA），统计的是想用 CPU 的进程有多少。</strong></p>
+</blockquote>
+<h3 id="top"><a href="#top" class="headerlink" title="top"></a>top</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">top</span><br><span class="line"></span><br><span class="line">top - 10:52:33 up  1:52, 11 <span class="built_in">users</span>,  load average: 1.14, 0.57, 0.32</span><br><span class="line">Tasks: 2645 total,   2 running, 2643 sleeping,   0 stopped,   0 zombie</span><br><span class="line">%Cpu(s):  0.1 us,  0.0 sy,  0.0 ni, 99.8 <span class="built_in">id</span>,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span><br><span class="line">MiB Mem : 10 total, 8 free,  6 used,  4 buff/cache</span><br><span class="line">MiB Swap:  3 total, 2 free,  1 used.  2 avail Mem</span><br><span class="line"></span><br><span class="line">    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND</span><br><span class="line">  77552 xrdp      20   0   50360  20344   6856 R  18.0   0.0   0:30.70 xrdp</span><br><span class="line">  77960 mark      20   0 9361988 422920 185124 S  14.1   0.1   0:59.67 gnome-shell</span><br><span class="line">  77569 mark      20   0  382544 138588  80324 S   5.6   0.0   0:11.17 Xorg</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>详解 top 输出命令内容：</p>
+<p>第一行表示时间、运行时长、登录用户、平均负载；</p>
+<p>第二行展示了任务数和进程状态，包含进程&#x2F;线程统计总数、正在 CPU 上运行的（或准备运行的）任务数、睡眠、进程和僵尸进程数量；</p>
+<p>第三行展示了 CPU 使用构成，us用户态、sy内核态、ni被nice调整过优先级的用户态进程、id (idle) CPU空闲率、wa CPU在等 IO（磁盘&#x2F;网络存储）导致空转等待率，hi硬中断消耗，si软中断消耗；</p>
+<p>第四行展示了内存：total总内存、free完全空闲内存、used真正被进程使用的内存、buff&#x2F;cache文件缓存块设备缓存；</p>
+<p>第五行展示了 Swap 交换分区，Swap（交换分区&#x2F;交换文件）是内存不足时的“备用空间”，当 物理内存（RAM）不够用 时，Linux 会把暂时不用的内存页交换到磁盘上的 swap 中，从而防止系统因内存耗尽而直接崩溃（OOM），让系统还能继续运行；</p>
+<p>下面展示了系统进程的详细信息：</p>
+<p>表头：</p>
+<p><code>PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND</code></p>
+<p>PID：进程号</p>
+<p>USER：所属用户</p>
+<p>PR：动态优先级（数值越小优先级越高；20 常见）</p>
+<p>NI：nice 值（-20 到 19，越小越“抢”CPU；0 默认）</p>
+<p>VIRT：虚拟内存占用（进程可见的地址空间总量，包含映射文件、共享库、未实际用到的保留空间等）</p>
+<p>RES：常驻内存（实际占用物理内存，最值得关注）</p>
+<p>SHR：共享内存部分（共享库等）</p>
+<p>S：状态</p>
+<p>R&#x3D;运行，S&#x3D;睡眠，D&#x3D;不可中断睡眠(常见 IO 卡住)，Z&#x3D;僵尸</p>
+<p>%CPU：CPU 占比（注意：多核时可能 &gt;100%）</p>
+<p>%MEM：内存占比</p>
+<p>TIME+：累计消耗 CPU 时间</p>
+<p>COMMAND：命令名</p>
+<h3 id="lscpu"><a href="#lscpu" class="headerlink" title="lscpu"></a>lscpu</h3><p>查看 cpu 架构，重点关注 CPU 型号、数量、解构等信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Architecture: x86_64</span><br><span class="line"></span><br><span class="line">Model name: AMD</span><br><span class="line"></span><br><span class="line">CPU(s):                2</span><br><span class="line">Thread(s) per core:    2</span><br><span class="line">Core(s) per socket:    1</span><br><span class="line">Socket(s):             1</span><br></pre></td></tr></table></figure>
+
+<h3 id="free-h"><a href="#free-h" class="headerlink" title="free -h"></a>free -h</h3><p>查看内存资源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">free -h</span><br><span class="line">             total       used      free      shared  buff/cache   available</span><br><span class="line">Mem:           5Gi        1Gi       4Gi        87Mi         1Gi         3Gi</span><br><span class="line">Swap:          1Gi         0B       1Gi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="df-h"><a href="#df-h" class="headerlink" title="df -h"></a>df -h</h3><p>查看磁盘资源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br><span class="line"></span><br><span class="line">Filesystem      Size  Used Avail  Use%  Mounted on</span><br><span class="line">tmpfs             2G  3.9M    1G   50%  /run</span><br><span class="line">/dev/nvme        10G    5G    5G   50%  /</span><br><span class="line">......</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="ip-s-link"><a href="#ip-s-link" class="headerlink" title="ip -s link"></a>ip -s link</h3><p>查看网络资源，这个要视情况而定，还有ss、netstat等命令。</p>
+<h3 id="uname-a"><a href="#uname-a" class="headerlink" title="uname -a"></a>uname -a</h3><p>查看系统及内核版本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> /etc/os-release</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="lspci"><a href="#lspci" class="headerlink" title="lspci"></a>lspci</h3><p>查看系统中安装的所有PCI设备。</p>
+<h3 id="nvidia-smi"><a href="#nvidia-smi" class="headerlink" title="nvidia-smi"></a>nvidia-smi</h3><p>查看显卡型号。</p>
+<h2 id="服务器使用规范"><a href="#服务器使用规范" class="headerlink" title="服务器使用规范"></a>服务器使用规范</h2><p>w 或 who 查看当前在线登录的用户</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 查看当前系统下的所有用户</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建用户</span></span><br><span class="line"><span class="built_in">sudo</span> useradd name</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> useradd -m -s /bin/bash name</span><br><span class="line"></span><br><span class="line"><span class="comment"># -m 自动创建家目录，-s指定shell</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为新用户指定密码</span></span><br><span class="line"><span class="built_in">sudo</span> passwd name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给新用户追加到 sudo 组</span></span><br><span class="line"><span class="built_in">sudo</span> usermod -aG <span class="built_in">sudo</span> name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 简化版，添加用户时即指定其加入sudo组</span></span><br><span class="line"><span class="built_in">sudo</span> useradd -m -s /bin/bash -G <span class="built_in">sudo</span> name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换用户环境 - 表示加载用户环境</span></span><br><span class="line">su - name </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MCP stdio与sse模式的区别</title>
+    <url>/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h2 id="SSE-和-stdio-模式对比"><a href="#SSE-和-stdio-模式对比" class="headerlink" title="SSE 和 stdio 模式对比"></a>SSE 和 stdio 模式对比</h2><h3 id="架构差异"><a href="#架构差异" class="headerlink" title="架构差异"></a>架构差异</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">stdio 模式：</span><br><span class="line">Cursor/Claude Desktop</span><br><span class="line">    └─ 启动子进程：python server.py</span><br><span class="line">        └─ stdin/stdout 通信</span><br><span class="line">        └─ 服务器生命周期由客户端管理</span><br><span class="line"></span><br><span class="line">SSE 模式：</span><br><span class="line">独立运行：python server.py (后台持续运行)</span><br><span class="line">    ↑</span><br><span class="line">    └─ HTTP SSE 连接</span><br><span class="line">    ↑</span><br><span class="line">Cursor/Claude Desktop (通过 HTTP 连接)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="详细对比"><a href="#详细对比" class="headerlink" title="详细对比"></a>详细对比</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>stdio 模式</th>
+<th>SSE 模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>启动方式</strong></td>
+<td>客户端自动启动</td>
+<td>手动启动（独立进程）</td>
+</tr>
+<tr>
+<td><strong>通信协议</strong></td>
+<td>stdin&#x2F;stdout 管道</td>
+<td>HTTP + Server-Sent Events</td>
+</tr>
+<tr>
+<td><strong>连接方式</strong></td>
+<td>单一客户端</td>
+<td>多客户端支持</td>
+</tr>
+<tr>
+<td><strong>调试难度</strong></td>
+<td>难（日志混在一起）</td>
+<td>易（可直接查看终端）</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>生产环境</td>
+<td>开发调试</td>
+</tr>
+<tr>
+<td><strong>进程管理</strong></td>
+<td>自动（随客户端）</td>
+<td>手动（需要单独管理）</td>
+</tr>
+<tr>
+<td><strong>网络要求</strong></td>
+<td>无</td>
+<td>需要监听端口</td>
+</tr>
+<tr>
+<td><strong>日志可见性</strong></td>
+<td>低</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<h3 id="测试时为什么选择-SSE？"><a href="#测试时为什么选择-SSE？" class="headerlink" title="测试时为什么选择 SSE？"></a>测试时为什么选择 SSE？</h3><ul>
+<li><p>✅ 开发调试更方便：可以直接在终端看到所有日志，手动重启服务器，用浏览器测试连接；</p>
+</li>
+<li><p>✅ 多客户端支持：多个 IDE 可以同时连接，可以同时在 Cursor 和 Claude Desktop 中使用；</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>MCP</category>
+      </categories>
+      <tags>
+        <tag>MCP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CodeQL入门</title>
+    <url>/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
+<p>传统的扫描工具往往像是一个黑盒，你输入代码，它吐出报告。但 CodeQL 不同，它的核心理念非常有意思： <code>Code as Data</code> 代码即数据，CodeQL 把源代码转化成一个关系型数据库，而漏洞挖掘的过程，就变成了一次次编写 SQL（其实是 QL）查询语句的过程。</p>
+<p>CodeQL 工具包含两大部分组成：</p>
+<ul>
+<li>核心引擎(闭源)：用于解析源代码并存储于数据库，以及执行 QL 语句从数据库中进行查询；</li>
+<li>SDK代码库(开源)：包含各编程语言对应的 QL 代码库(属性&#x2F;谓词&#x2F;等)，以便快速编写查询语句。</li>
+</ul>
+<p>这给了安全研究员和开发者极大的自由度——不再受限于工具内置的规则，可以自己定义“什么样的代码长相存在漏洞”。这篇 Blog 记录了我第一次使用 CodeQL 进行静态代码分析的过程。</p>
+<span id="more"></span>
+
+<h2 id="一、CodeQL-核心工作流"><a href="#一、CodeQL-核心工作流" class="headerlink" title="一、CodeQL 核心工作流"></a>一、CodeQL 核心工作流</h2><p>使用 CodeQL 主要分为三个步骤：</p>
+<ol>
+<li><p><strong>创建数据库（Create Database）</strong>： 在编译&#x2F;构建代码的过程中，CodeQL 会“旁路监听”，捕捉所有的编译命令、文件结构、函数调用关系，生成一个快照数据库；</p>
+</li>
+<li><p><strong>编写&#x2F;运行查询（Analyze）</strong>： 使用一种类似 SQL 的面向对象查询语言（QL），在数据库中查找符合特征的代码片段；</p>
+</li>
+<li><p><strong>生成结果（Results）</strong>： 输出分析报告（通常是 SARIF 格式），定位到具体的代码行号。</p>
+</li>
+</ol>
+<h2 id="二、CodeQL-安装"><a href="#二、CodeQL-安装" class="headerlink" title="二、CodeQL 安装"></a>二、CodeQL 安装</h2><p>运行 CodeQL 需要安装 CodeQL CLI 工具，分开下载的话需要分别下载 CodeQL binary 和 SDK，需要放在相同目录下且版本保持一致，也可以直接下载捆绑包，以 Ubuntu 环境为例，安装命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.16.1/codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvzf codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/home/aono/codeqlsrc/codeql</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>检测是否安装成功：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">codeql --version</span><br></pre></td></tr></table></figure>
+
+<p>可以使用  <code>codeQL resolve languages</code> 可以查看支持的编程语言。</p>
+<h2 id="三、CodeQL-简单使用"><a href="#三、CodeQL-简单使用" class="headerlink" title="三、CodeQL 简单使用"></a>三、CodeQL 简单使用</h2><p>指定项目创建数据库，以 Java 目标（<a href="https://github.com/l4yn3/micro_service_seclab%EF%BC%89%E4%B8%BA%E4%BE%8B%EF%BC%8C%E9%A1%B9%E7%9B%AE%E9%80%9A%E8%BF%87">https://github.com/l4yn3/micro_service_seclab）为例，项目通过</a> mvn 构建，首先安装 mvn：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt install maven -y</span><br></pre></td></tr></table></figure>
+
+<p>创建数据库：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database create java_db --language=java --source-root=./test/micro_service_seclab/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../uploads/codeql_1.png"></p>
+<p>使用默认规则进行查询，生成 SARIF 文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database analyze java_db/ --format=sarif-latest --output=java_result.sarif</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../uploads/codeql_2.png"></p>
+]]></content>
+      <categories>
+        <category>SAST</category>
+      </categories>
+      <tags>
+        <tag>CodeQL</tag>
+        <tag>SAST</tag>
       </tags>
   </entry>
   <entry>
@@ -428,74 +715,6 @@
       </tags>
   </entry>
   <entry>
-    <title>MCP stdio与sse模式的区别</title>
-    <url>/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h2 id="SSE-和-stdio-模式对比"><a href="#SSE-和-stdio-模式对比" class="headerlink" title="SSE 和 stdio 模式对比"></a>SSE 和 stdio 模式对比</h2><h3 id="架构差异"><a href="#架构差异" class="headerlink" title="架构差异"></a>架构差异</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">stdio 模式：</span><br><span class="line">Cursor/Claude Desktop</span><br><span class="line">    └─ 启动子进程：python server.py</span><br><span class="line">        └─ stdin/stdout 通信</span><br><span class="line">        └─ 服务器生命周期由客户端管理</span><br><span class="line"></span><br><span class="line">SSE 模式：</span><br><span class="line">独立运行：python server.py (后台持续运行)</span><br><span class="line">    ↑</span><br><span class="line">    └─ HTTP SSE 连接</span><br><span class="line">    ↑</span><br><span class="line">Cursor/Claude Desktop (通过 HTTP 连接)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="详细对比"><a href="#详细对比" class="headerlink" title="详细对比"></a>详细对比</h3><table>
-<thead>
-<tr>
-<th>特性</th>
-<th>stdio 模式</th>
-<th>SSE 模式</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>启动方式</strong></td>
-<td>客户端自动启动</td>
-<td>手动启动（独立进程）</td>
-</tr>
-<tr>
-<td><strong>通信协议</strong></td>
-<td>stdin&#x2F;stdout 管道</td>
-<td>HTTP + Server-Sent Events</td>
-</tr>
-<tr>
-<td><strong>连接方式</strong></td>
-<td>单一客户端</td>
-<td>多客户端支持</td>
-</tr>
-<tr>
-<td><strong>调试难度</strong></td>
-<td>难（日志混在一起）</td>
-<td>易（可直接查看终端）</td>
-</tr>
-<tr>
-<td><strong>适用场景</strong></td>
-<td>生产环境</td>
-<td>开发调试</td>
-</tr>
-<tr>
-<td><strong>进程管理</strong></td>
-<td>自动（随客户端）</td>
-<td>手动（需要单独管理）</td>
-</tr>
-<tr>
-<td><strong>网络要求</strong></td>
-<td>无</td>
-<td>需要监听端口</td>
-</tr>
-<tr>
-<td><strong>日志可见性</strong></td>
-<td>低</td>
-<td>高</td>
-</tr>
-</tbody></table>
-<h3 id="测试时为什么选择-SSE？"><a href="#测试时为什么选择-SSE？" class="headerlink" title="测试时为什么选择 SSE？"></a>测试时为什么选择 SSE？</h3><ul>
-<li><p>✅ 开发调试更方便：可以直接在终端看到所有日志，手动重启服务器，用浏览器测试连接；</p>
-</li>
-<li><p>✅ 多客户端支持：多个 IDE 可以同时连接，可以同时在 Cursor 和 Claude Desktop 中使用；</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>MCP</category>
-      </categories>
-      <tags>
-        <tag>MCP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MCP编程快速入门（二）</title>
     <url>/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
     <content><![CDATA[<h2 id="模型如何确定工具选用？"><a href="#模型如何确定工具选用？" class="headerlink" title="模型如何确定工具选用？"></a>模型如何确定工具选用？</h2><p>Anthropic 详细解释了这个问题：模型在什么时候确定使用哪些工具。</p>
@@ -587,6 +806,38 @@
       </tags>
   </entry>
   <entry>
+    <title>OSCP学习心得</title>
+    <url>/2025/12/12/OSCP%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/</url>
+    <content><![CDATA[<p>在 OSCP 的学习和练习以及打靶场或者渗透测试过程中，我认为本质上不是掌握了多少工具，而是在规定时间内，能不能把渗透的全流程跑完，关键步骤上思维能否发散，能否有较为全面的思考和枚举，所以重心还是在思路上，渗透的思路和应对关键点时的经验，所以记录一些自己的思考。</p>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>重点在于覆盖面和可用性：</p>
+<ul>
+<li>覆盖面：全端口（服务）扫描，不要漏掉服务，不然可能会找不到正确的入口点；</li>
+<li>可用性：不同服务、版本都有什么漏洞，是否具备利用条件，无法利用的话是不是加了什么限制，是需要绕过限制还是需要转变路径，这些属于能否实现利用的范畴；</li>
+</ul>
+<blockquote>
+<p><strong>信息收集要得出一个结论：我到底能打哪些入口？哪些入口最可能实现边界突破？</strong></p>
+</blockquote>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>漏洞利用阶段不要盲目跑exp，最好是先验证控制程度，再拿shell。</p>
+<p>先确定漏洞是否真实存在，漏洞可控点在哪里，输入如何影响输出，然后再确认控制深度（能否读写文件&#x2F;命令执行&#x2F;鉴权绕过），最后在拿稳定shell。</p>
+<blockquote>
+<p><strong>先看能不能验证清楚，在考虑能否一步到位。</strong></p>
+</blockquote>
+<h2 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h2><p>提权并没有深入学习太多，但是感觉应该在于找到“权限边界被破坏”的证据，可以根据历史经验寻找线索，找到稳定可复现的思路。</p>
+<h2 id="横向移动"><a href="#横向移动" class="headerlink" title="横向移动"></a>横向移动</h2><blockquote>
+<p><strong>信任关系+凭证流向</strong>: 从以控制主机把影响力扩到更有价值的主机&#x2F;账号&#x2F;网段等。</p>
+</blockquote>
+<hr>
+<p>⭐<strong>持续更新 To be continued……</strong></p>
+]]></content>
+      <categories>
+        <category>OSCP</category>
+      </categories>
+      <tags>
+        <tag>OSCP</tag>
+        <tag>Penetration Test</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MCP编程快速入门（三）</title>
     <url>/2025/12/12/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%89%EF%BC%89/</url>
     <content><![CDATA[<h2 id="MCP-Server-开发实践"><a href="#MCP-Server-开发实践" class="headerlink" title="MCP Server 开发实践"></a>MCP Server 开发实践</h2><p>对于大部分 AI 开发者来说，MCP 只需要关心 Server 的实现，通过一个简单示例学习如何实现一个 MCP Server。</p>
@@ -674,207 +925,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CodeQL-MCP架构解读</title>
-    <url>/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/</url>
-    <content><![CDATA[<p>本片内容以 <a href="https://github.com/JordyZomer/codeql-mcp">https://github.com/JordyZomer/codeql-mcp</a> 为基础，进行 CodeQL MCP 的开发学习。</p>
-<h2 id="CodeQL-MCP-整体架构分析"><a href="#CodeQL-MCP-整体架构分析" class="headerlink" title="CodeQL-MCP 整体架构分析"></a>CodeQL-MCP 整体架构分析</h2><p>项目中包含了两个核心文件 <code>codeqlclient.py</code> 和  <code>server.py</code> ：</p>
-<p><strong><code>codeqlclient.py</code></strong> 是一个底层通信客户端，负责与 CodeQL 查询服务器建立并管理 JSON-RPC 连接。它封装了进程启动、请求发送、响应解析、异步任务跟踪等复杂逻辑，提供了数据库注册、查询执行、结果解码等核心操作的原始接口。该文件不依赖任何高层框架，专注于可靠、高效地与 CodeQL 引擎交互，可作为独立库在不同上下文中复用。</p>
-<p><strong><code>server.py</code></strong> 是一个基于 Model Context Protocol（MCP）的服务层实现，利用 FastMCP 框架将 <code>codeqlclient.py</code> 提供的底层能力包装为用户友好的异步 API 工具。它定义了清晰的 HTTP 可调用接口，处理参数验证、错误反馈和结果格式化，使外部系统能通过标准 MCP 协议便捷地使用 CodeQL 功能，而无需关心底层通信细节。</p>
-<p>在 <code>codeqlclient.py</code> 中包含了一个核心类结构 CodeQLQueryServer 主要模块如下：</p>
-<ol>
-<li>服务器进程管理</li>
-</ol>
-<ul>
-<li>启动&#x2F;停止 ：通过 start() 和 stop() 方法管理 CodeQL 子进程</li>
-<li>进程通信 ：使用标准输入&#x2F;输出进行 JSON-RPC 通信</li>
-<li>线程管理 ：<ul>
-<li>_read_loop() ：主线程，读取服务器响应；_stderr_loop() ：处理标准错误输出；异步处理：支持并发请求</li>
-</ul>
-</li>
-</ul>
-<ol start="2">
-<li>通信协议层</li>
-</ol>
-<ul>
-<li>JSON-RPC 2.0：定义消息格式，请求&#x2F;响应结构，支持异步调用</li>
-</ul>
-<ol start="3">
-<li>功能模块</li>
-</ol>
-<ul>
-<li><p>数据库管理</p>
-<ul>
-<li>register_databases() ：注册数据库</li>
-<li>deregister_databases() ：注销数据库</li>
-</ul>
-</li>
-<li><p>查询执行</p>
-<ul>
-<li>evaluate_queries() ：执行完整查询</li>
-<li>quick_evaluate() ：快速评估（针对特定代码位置）</li>
-<li>evaluate_and_wait() ：同步执行查询</li>
-<li>quick_evaluate_and_wait() ：同步快速评估</li>
-</ul>
-</li>
-<li><p>结果处理</p>
-<ul>
-<li>decode_bqrs() ：解码 BQRS 结果文件</li>
-</ul>
-</li>
-<li><p>代码分析辅助</p>
-<ul>
-<li>find_class_identifier_position() ：查找类标识符位置</li>
-<li>find_predicate_identifier_position() ：查找谓词标识符位置</li>
-</ul>
-</li>
-<li><p>进度回调机制（支持实时进度更新）</p>
-<ul>
-<li>wait_for_progress_done() ：等待进度完成</li>
-<li>wait_for_completion_callback() ：等待异步操作完成</li>
-<li>wait_for_progress_done() 创建进度跟踪器</li>
-<li>wait_for_completion_callback() 创建完成处理器</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>数据流：用户请求 -&gt; send_request()-&gt;JSON-RPC 消息-&gt;CodeQL 服务器-&gt;CodeQL 引擎-&gt;服务器响应-&gt;_read_loop()-&gt;_handle_message()-&gt;回调函数</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="关键模块解读"><a href="#关键模块解读" class="headerlink" title="关键模块解读"></a>关键模块解读</h2><h3 id="start"><a href="#start" class="headerlink" title="start()"></a>start()</h3><p>启动 CodeQL 查询服务器进程，并建立通信通道。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">self</span>.proc = subprocess.Popen(</span><br><span class="line">    [</span><br><span class="line">        <span class="variable language_">self</span>.codeql_path,        <span class="comment"># CodeQL 可执行文件路径</span></span><br><span class="line">        <span class="string">&quot;execute&quot;</span>,               <span class="comment"># 执行命令</span></span><br><span class="line">        <span class="string">&quot;query-server2&quot;</span>,         <span class="comment"># 启动查询服务器版本2</span></span><br><span class="line">        <span class="string">&quot;--debug&quot;</span>,               <span class="comment"># 启用调试模式</span></span><br><span class="line">        <span class="string">&quot;--tuple-counting&quot;</span>,      <span class="comment"># 启用元组计数（性能监控）</span></span><br><span class="line">        <span class="string">&quot;--threads=0&quot;</span>,           <span class="comment"># 使用所有可用线程（0=自动）</span></span><br><span class="line">        <span class="string">&quot;--evaluator-log-level&quot;</span>, <span class="comment"># 设置评估器日志级别</span></span><br><span class="line">        <span class="string">&quot;5&quot;</span>,                     <span class="comment"># 日志级别5（详细）</span></span><br><span class="line">        <span class="string">&quot;-v&quot;</span>,                    <span class="comment"># 详细输出</span></span><br><span class="line">        <span class="string">&quot;--log-to-stderr&quot;</span>,       <span class="comment"># 日志输出到标准错误</span></span><br><span class="line">    ],</span><br><span class="line">    stdin=subprocess.PIPE,      <span class="comment"># 标准输入管道（用于发送请求）</span></span><br><span class="line">    stdout=subprocess.PIPE,     <span class="comment"># 标准输出管道（用于接收响应）</span></span><br><span class="line">    stderr=subprocess.PIPE,     <span class="comment"># 标准错误管道（用于日志/错误）</span></span><br><span class="line">    text=<span class="literal">True</span>,                  <span class="comment"># 以文本模式处理输入输出</span></span><br><span class="line">    bufsize=<span class="number">1</span>,                  <span class="comment"># 行缓冲模式</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p>启动读取线程：创建一个守护线程来持续读取服务器的标准输出，处理 JSON-RPC 响应。同时还有读取标准错误输出，防止缓冲区阻塞。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">self</span>.reader_thread = threading.Thread(</span><br><span class="line">    target=<span class="variable language_">self</span>._read_loop,  <span class="comment"># 目标函数：读取循环</span></span><br><span class="line">    daemon=<span class="literal">True</span>              <span class="comment"># 守护线程（主程序退出时自动结束）</span></span><br><span class="line">)</span><br><span class="line"><span class="variable language_">self</span>.reader_thread.start()   <span class="comment"># 启动线程</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">self</span>.stderr_thread = threading.Thread(</span><br><span class="line">    target=<span class="variable language_">self</span>._stderr_loop,  <span class="comment"># 目标函数：标准错误循环</span></span><br><span class="line">    daemon=<span class="literal">True</span>                <span class="comment"># 守护线程</span></span><br><span class="line">)</span><br><span class="line"><span class="variable language_">self</span>.stderr_thread.start()     <span class="comment"># 启动线程</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="stderr-loop"><a href="#stderr-loop" class="headerlink" title="_stderr_loop()"></a>_stderr_loop()</h3><p>标准错误处理循环：持续读取 CodeQL服务器的标准错误输出，防止stderr管道堵塞，在 start() 中作为守护线程启动。</p>
-<h3 id="read-loop"><a href="#read-loop" class="headerlink" title="_read_loop()"></a>_read_loop()</h3><p>主读取循环：读取并解析服务器响应，处理 JSON-RPC over HTTP 风格的消息格式。</p>
-<h3 id="handle-message"><a href="#handle-message" class="headerlink" title="_handle_message()"></a>_handle_message()</h3><p>消息分发器：是核心的消息处理函数，处理三种类型的消息：</p>
-<ul>
-<li>进度更新消息 ( ql&#x2F;progressUpdated )：处理查询执行进度更新</li>
-<li>评估进度消息 ( evaluation&#x2F;progress )：处理评估操作的进度信息</li>
-<li>请求响应消息：处理异步请求的响应</li>
-</ul>
-<h3 id="send"><a href="#send" class="headerlink" title="_send()"></a>_send()</h3><p>发送请求：发送JSON-RPC 请求到服务器。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_send</span>(<span class="params">self, payload</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="variable language_">self</span>.proc <span class="keyword">or</span> <span class="keyword">not</span> <span class="variable language_">self</span>.proc.stdin:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;[!] Tried to send but process not running.&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        data = json.dumps(payload)</span><br><span class="line">        content = <span class="string">f&quot;Content-Length: <span class="subst">&#123;<span class="built_in">len</span>(data)&#125;</span>\r\n\r\n<span class="subst">&#123;data&#125;</span>&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\n[→] Sending request:\n<span class="subst">&#123;json.dumps(payload, indent=<span class="number">2</span>)&#125;</span>\n&quot;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.proc.stdin.write(content)</span><br><span class="line">        <span class="variable language_">self</span>.proc.stdin.flush()</span><br></pre></td></tr></table></figure>
-
-<h3 id="send-request"><a href="#send-request" class="headerlink" title="send_request()"></a>send_request()</h3><p>高级发送接口：发送异步请求并管理回调，为每个请求生成唯一ID，关联请求 ID 与回调函数，支持进度回调注册和状态跟踪。</p>
-<h3 id="stop"><a href="#stop" class="headerlink" title="stop()"></a>stop()</h3><p>停止服务器</p>
-<h3 id="find-class-identifier-position"><a href="#find-class-identifier-position" class="headerlink" title="find_class_identifier_position()"></a>find_class_identifier_position()</h3><p>在 QL 文件中查找类名标识符的位置，返回基于 1 的行列坐标。CodeQL 快速评估功能的关键组件，通过定位代码中的特定标识符，实现对部分代码的针对性分析。</p>
-<h3 id="find-predicate-identifier-position"><a href="#find-predicate-identifier-position" class="headerlink" title="find_predicate_identifier_position()"></a>find_predicate_identifier_position()</h3><p>在 QL 文件中查找谓词（predicate）名称的位置，返回基于 1 的行列坐标。</p>
-<p>类名查找和谓词查找可以用于支持CodeQL的快速评估功能，就是只执行查询的一部分，而不是执行全量查询，可以进行快速迭代和调试。</p>
-<h3 id="register-databases-deregister-databases"><a href="#register-databases-deregister-databases" class="headerlink" title="register_databases() &amp;&amp; deregister_databases()"></a>register_databases() &amp;&amp; deregister_databases()</h3><p>注册注销数据库：向 CodeQL 查询服务器注册一个或多个数据库，使其可用于查询执行。</p>
-<p>这是CodeQL客户端资源管理的核心，确保数据库在查询执行前正确注册，在执行后及时清理，是高效使用 CodeQL 服务器的关键组件。</p>
-<h3 id="evaluate-queries"><a href="#evaluate-queries" class="headerlink" title="evaluate_queries()"></a>evaluate_queries()</h3><p>执行完整的 CodeQL 查询 ：在指定的数据库上运行一个 QL 查询文件，并将结果保存到输出文件。</p>
-<ul>
-<li>query_path ：QL 查询文件路径</li>
-<li>db_path ：CodeQL 数据库路径</li>
-<li>output_path ：结果输出文件路径（BQRS 格式）</li>
-<li>callback ：异步完成回调（可选）</li>
-<li>progress_callback ：进度回调（可选）</li>
-</ul>
-<p>默认完成处理：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">on_done</span>(<span class="params">result</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[evaluateQueries] done:&quot;</span>, result)</span><br><span class="line">    <span class="keyword">if</span> result.get(<span class="string">&quot;resultType&quot;</span>) != <span class="number">0</span>:  <span class="comment"># 0表示成功</span></span><br><span class="line">        <span class="keyword">raise</span> RuntimeError(<span class="string">f&quot;CodeQL evaluation failed: <span class="subst">&#123;result.get(<span class="string">&#x27;message&#x27;</span>, <span class="string">&#x27;Unknown error&#x27;</span>)&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>发送异步请求：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">self</span>.send_request(</span><br><span class="line">    <span class="string">&quot;evaluation/runQuery&quot;</span>,      <span class="comment"># JSON-RPC方法</span></span><br><span class="line">    params,                     <span class="comment"># 参数</span></span><br><span class="line">    callback <span class="keyword">or</span> on_done,        <span class="comment"># 使用用户回调或默认回调</span></span><br><span class="line">    progress_callback=progress_callback  <span class="comment"># 进度回调</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p>函数会执行整个 QL 文件的所有查询，支持回调和进度跟踪。</p>
-<h3 id="evaluate-and-wait"><a href="#evaluate-and-wait" class="headerlink" title="evaluate_and_wait()"></a>evaluate_and_wait()</h3><p>同步执行完整查询的便捷方法，其中包装了 evaluate_queries() 的异步功能，使用 wait_for_progress_done() 等待查询完成，简化了同步使用场景。</p>
-<h3 id="quick-evaluate-and-wait"><a href="#quick-evaluate-and-wait" class="headerlink" title="quick_evaluate_and_wait()"></a>quick_evaluate_and_wait()</h3><p>同步执行快速评估，包装了quick_evaluate() 的异步功能，但是需要指定代码位置（行、列）。</p>
-<h3 id="quick-evaluate"><a href="#quick-evaluate" class="headerlink" title="quick_evaluate()"></a>quick_evaluate()</h3><p>执行快速评估（Quick Evaluation） ：只执行 QL 查询文件中 特定代码片段 的查询，而不是整个文件。</p>
-<ul>
-<li>file_path ：QL 查询文件路径</li>
-<li>db_path ：CodeQL 数据库路径</li>
-<li>output_path ：结果输出文件路径</li>
-<li>start_line , start_col ：起始位置（1-based）</li>
-<li>end_line , end_col ：结束位置（1-based）</li>
-<li>callback ：异步完成回调</li>
-<li>progress_callback ：进度回调</li>
-</ul>
-<h3 id="wait-for-progress-done-wait-for-completion-callback"><a href="#wait-for-progress-done-wait-for-completion-callback" class="headerlink" title="wait_for_progress_done() &amp;&amp; wait_for_completion_callback()"></a>wait_for_progress_done() &amp;&amp; wait_for_completion_callback()</h3><p>功能 ：创建一个进度完成等待器 和 完成回调等待器。这两个函数都是 异步转同步 的工具：</p>
-<ul>
-<li>将异步回调模式转换为同步等待模式</li>
-<li>简化了不需要复杂异步处理的场景</li>
-<li>提供了更直观的API使用方式</li>
-</ul>
-<h2 id="MCP-Server-构建"><a href="#MCP-Server-构建" class="headerlink" title="MCP Server 构建"></a>MCP Server 构建</h2><p>基于 FastMCP 框架构建的 CodeQL 分析服务器，提供了 6 个工具来与 CodeQL 进行交互。</p>
-<h3 id="核心组件"><a href="#核心组件" class="headerlink" title="核心组件"></a>核心组件</h3><p>服务器初始化：使用 FastMCP 创建名为 “CodeQL” 的 MCP 服务器，实例化 CodeQLQueryServer 并启动，用于处理 CodeQL 查询操作。</p>
-<h3 id="工具说明"><a href="#工具说明" class="headerlink" title="工具说明"></a>工具说明</h3><ol>
-<li>register_database</li>
-</ol>
-<p>注册 CodeQL 数据库到查询服务器。验证数据库路径和必需的 src.zip 文件是否存在。</p>
-<ol start="2">
-<li>quick_evaluate</li>
-</ol>
-<p>快速评估 CodeQL 查询文件中的特定类或谓词，自动定位符号位置并执行评估。</p>
-<ol start="3">
-<li>decode_bqrs</li>
-</ol>
-<p>解码 CodeQL 结果文件（.bqrs 格式），支持 CSV（用于问题查询）或 JSON（用于路径问题）格式。</p>
-<ol start="4">
-<li>evaluate_query</li>
-</ol>
-<p>在指定数据库上运行完整的 CodeQL 查询文件。</p>
-<ol start="5">
-<li>find_class_position</li>
-</ol>
-<p>查找查询文件中类定义的准确位置（行号和列号）。</p>
-<ol start="6">
-<li>find_predicate_position</li>
-</ol>
-<p>查找查询文件中谓词定义的准确位置（行号和列号）。</p>
-<h3 id="MCP-Server-代码"><a href="#MCP-Server-代码" class="headerlink" title="MCP Server 代码"></a>MCP Server 代码</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mcp = FastMCP(<span class="string">&quot;CodeQL&quot;</span>)</span><br><span class="line">qs = CodeQLQueryServer()</span><br><span class="line">qs.start()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">register_database</span>(<span class="params">db_path: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This tool registers a CodeQL database given a path&quot;&quot;&quot;</span></span><br><span class="line">    db_path_resolved = Path(db_path).resolve()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> db_path_resolved.exists():</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;Database path does not exist: <span class="subst">&#123;db_path&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">    source_zip = db_path_resolved / <span class="string">&quot;src.zip&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> source_zip.exists():</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;Missing required src.zip in: <span class="subst">&#123;db_path&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line">    db_entry = &#123;</span><br><span class="line">        <span class="string">&quot;uri&quot;</span>: Path(db_path).resolve().as_uri(),</span><br><span class="line">        <span class="string">&quot;content&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;sourceArchiveZip&quot;</span>: (Path(db_path) / <span class="string">&quot;src.zip&quot;</span>).resolve().as_uri(),</span><br><span class="line">            <span class="string">&quot;dbDir&quot;</span>: Path(db_path).resolve().as_uri(),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">    callback, done, result_holder = qs.wait_for_completion_callback()</span><br><span class="line">    qs.register_databases(</span><br><span class="line">        [db_path],</span><br><span class="line">        callback=callback,</span><br><span class="line">        progress_callback=<span class="keyword">lambda</span> msg: <span class="built_in">print</span>(<span class="string">&quot;[progress] register:&quot;</span>, msg),</span><br><span class="line">    )</span><br><span class="line">    done.wait()</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Database registered: <span class="subst">&#123;db_path&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">quick_evaluate</span>(<span class="params"></span></span><br><span class="line"><span class="params">    file: <span class="built_in">str</span>, db: <span class="built_in">str</span>, symbol: <span class="built_in">str</span>, output_path: <span class="built_in">str</span> = <span class="string">&quot;/tmp/quickeval.bqrs&quot;</span></span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This will allow you to quick_evaluate either a class or a predicate in a codeql query&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        start, scol, end, ecol = qs.find_class_identifier_position(file, symbol)</span><br><span class="line">    <span class="keyword">except</span> ValueError:</span><br><span class="line">        start, scol, end, ecol = qs.find_predicate_identifier_position(</span><br><span class="line">            file, symbol</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        qs.quick_evaluate_and_wait(</span><br><span class="line">            file, db, output_path, start, scol, end, ecol</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">except</span> RuntimeError <span class="keyword">as</span> re:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;CodeQL evaluation failed: <span class="subst">&#123;re&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output_path</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">decode_bqrs</span>(<span class="params">bqrs_path: <span class="built_in">str</span>, fmt: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;This can be used to decode CodeQL results, format is either csv for problem queries or json for path-problems&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> qs.decode_bqrs(bqrs_path, fmt)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">evaluate_query</span>(<span class="params"></span></span><br><span class="line"><span class="params">    query_path: <span class="built_in">str</span>, db_path: <span class="built_in">str</span>, output_path: <span class="built_in">str</span> = <span class="string">&quot;/tmp/eval.bqrs&quot;</span></span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Runs a CodeQL query on a given database&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        qs.evaluate_and_wait(query_path, db_path, output_path)</span><br><span class="line">    <span class="keyword">except</span> RuntimeError <span class="keyword">as</span> re:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;CodeQL evaluation failed: <span class="subst">&#123;re&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> output_path</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">find_class_position</span>(<span class="params">file: <span class="built_in">str</span>, name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Finds startline, startcol, endline endcol of a class for quickeval&quot;&quot;&quot;</span></span><br><span class="line">    start, scol, end, ecol = qs.find_class_identifier_position(file, name)</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;start_line&quot;</span>: start,</span><br><span class="line">        <span class="string">&quot;start_col&quot;</span>: scol,</span><br><span class="line">        <span class="string">&quot;end_line&quot;</span>: end,</span><br><span class="line">        <span class="string">&quot;end_col&quot;</span>: ecol,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">find_predicate_position</span>(<span class="params">file: <span class="built_in">str</span>, name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Finds startline, startcol, endline endcol of a predicate for quickeval&quot;&quot;&quot;</span></span><br><span class="line">    start, scol, end, ecol = qs.find_predicate_identifier_position(file, name)</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;start_line&quot;</span>: start,</span><br><span class="line">        <span class="string">&quot;start_col&quot;</span>: scol,</span><br><span class="line">        <span class="string">&quot;end_line&quot;</span>: end,</span><br><span class="line">        <span class="string">&quot;end_col&quot;</span>: ecol,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Starting CodeQL MCP server...&quot;</span>)</span><br><span class="line">    mcp.run(host=<span class="string">&quot;0.0.0.0&quot;</span>, port=<span class="number">8000</span>)</span><br></pre></td></tr></table></figure>
-
-<h2 id="MCP-Server-测试"><a href="#MCP-Server-测试" class="headerlink" title="MCP Server 测试"></a>MCP Server 测试</h2><p>以注册数据库为例，进行MCP Server功能测试：</p>
-<p>首先启动 MCP Server：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">(really_mcp) PS D:\Projects\codeql-mcp&gt; uv run mcp run server.py -t sse</span><br><span class="line">[*] Read loop started</span><br><span class="line">INFO:     Started server process [23464]</span><br><span class="line">INFO:     Waiting <span class="keyword">for</span> application startup.</span><br><span class="line">INFO:     Application startup complete.</span><br><span class="line">INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>在 cursor 的 MCP tools 页面加载对应工具，选择启用状态：</p>
-<p><img src="/../uploads/CodeQL_MCP_1.png"></p>
-<p>对应配置文件如下：</p>
-<p><img src="/../uploads/CodeQL_MCP_2.png"></p>
-<p>MCP Server状态与 Tools 调用情况：</p>
-<p><img src="/../uploads/CodeQL_MCP_3.png"></p>
-<p>以上验证 CodeQL MCP 可成功调用并执行。</p>
-<p>与服务器通信的数据包数据：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Accepted</span><br><span class="line">[12/15/25 20:26:54] INFO     Processing request of type CallToolRequest                   server.py:674</span><br><span class="line">[DEBUG] Sending evaluation/registerDatabases with progressId=0</span><br><span class="line"></span><br><span class="line">[→] Sending request:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;jsonrpc&quot;: &quot;2.0&quot;,</span><br><span class="line">  &quot;id&quot;: 1,</span><br><span class="line">  &quot;method&quot;: &quot;evaluation/registerDatabases&quot;,</span><br><span class="line">  &quot;params&quot;: &#123;</span><br><span class="line">    &quot;body&quot;: &#123;</span><br><span class="line">      &quot;databases&quot;: [</span><br><span class="line">        &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;progressId&quot;: 0</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[stdout] Content-Length: 102</span><br><span class="line">[raw response body] &#123;&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:1,&quot;result&quot;:&#123;&quot;registeredDatabases&quot;:[&quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;]&#125;&#125;</span><br><span class="line"></span><br><span class="line">[←] Received response:</span><br><span class="line">&#123;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;jsonrpc&quot;: &quot;2.0&quot;,</span><br><span class="line">  &quot;id&quot;: 1,</span><br><span class="line">  &quot;result&quot;: &#123;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">  &quot;id&quot;: 1,</span><br><span class="line">  &quot;result&quot;: &#123;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">  &quot;result&quot;: &#123;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">    &quot;registeredDatabases&quot;: [</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">      &quot;D:\\Code\\codeql-mcp\\Test_demo\\test_db&quot;</span><br><span class="line">    ]</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">INFO:     127.0.0.1:56577 - &quot;POST /messages/?session_id=d8bc9c141a864777b7a094f0a6abc6ad HTTP/1.1&quot; 202 Accepted</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>MCP</category>
-      </categories>
-      <tags>
-        <tag>CodeQL</tag>
-        <tag>MCP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Miniconda安装</title>
-    <url>/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p>Miniconda 是 Conda 的精简发行版，只包含最核心的包管理系统与 Python，可以快速搭建独立的 Python 环境。在进行数据分析、机器学习或科研开发时，相比于 Anaconda 更轻量、更灵活。</p>
-<h2 id="一、Miniconda-安装"><a href="#一、Miniconda-安装" class="headerlink" title="一、Miniconda 安装"></a>一、Miniconda 安装</h2><p>Windows 命令行安装方式，可以快速且安静地下载最新的 64 位 Windows 安装程序，将其重命名为较短的文件名，执行静默安装，然后删除安装程序：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe</span><br><span class="line">start /wait &quot;&quot; .\miniconda.exe /S</span><br><span class="line">del .\miniconda.exe</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<p>Windows Powershell：</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Invoke-WebRequest</span> <span class="literal">-Uri</span> <span class="string">&quot;https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe&quot;</span> <span class="literal">-outfile</span> <span class="string">&quot;.\miniconda.exe&quot;</span></span><br><span class="line"><span class="built_in">Start-Process</span> <span class="literal">-FilePath</span> <span class="string">&quot;.\miniconda.exe&quot;</span> <span class="literal">-ArgumentList</span> <span class="string">&quot;/S&quot;</span> <span class="literal">-Wait</span></span><br><span class="line"><span class="built_in">del</span> .\miniconda.exe</span><br></pre></td></tr></table></figure>
-
-<p>Linux 64位：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/miniconda3</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line"><span class="built_in">rm</span> ~/miniconda3/miniconda.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/miniconda3/bin/activate</span><br><span class="line"></span><br><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
-
-<h2 id="二、快速使用"><a href="#二、快速使用" class="headerlink" title="二、快速使用"></a>二、快速使用</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda create -n environment python=3.12</span><br><span class="line"></span><br><span class="line">conda activate environment</span><br><span class="line"></span><br><span class="line">conda deactivate environment</span><br></pre></td></tr></table></figure>
-
-<p>参考文献：<a href="https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt">https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt</a></p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Miniconda</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Vulnhalla QuickStart</title>
     <url>/2025/12/16/Vulnhalla-QuickStart/</url>
     <content><![CDATA[<h2 id="Vulnhalla"><a href="#Vulnhalla" class="headerlink" title="Vulnhalla"></a>Vulnhalla</h2><p>Vulnhalla 可以自动化执行完整的安全分析流程 (<a href="https://github.com/cyberark/Vulnhalla">https://github.com/cyberark/Vulnhalla</a>)</p>
@@ -934,35 +984,24 @@
       </tags>
   </entry>
   <entry>
-    <title>OSCP学习心得</title>
-    <url>/2025/12/12/OSCP%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/</url>
-    <content><![CDATA[<p>在 OSCP 的学习和练习以及打靶场或者渗透测试过程中，我认为本质上不是掌握了多少工具，而是在规定时间内，能不能把渗透的全流程跑完，关键步骤上思维能否发散，能否有较为全面的思考和枚举，所以重心还是在思路上，渗透的思路和应对关键点时的经验，所以记录一些自己的思考。</p>
-<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>重点在于覆盖面和可用性：</p>
-<ul>
-<li>覆盖面：全端口（服务）扫描，不要漏掉服务，不然可能会找不到正确的入口点；</li>
-<li>可用性：不同服务、版本都有什么漏洞，是否具备利用条件，无法利用的话是不是加了什么限制，是需要绕过限制还是需要转变路径，这些属于能否实现利用的范畴；</li>
-</ul>
-<blockquote>
-<p><strong>信息收集要得出一个结论：我到底能打哪些入口？哪些入口最可能实现边界突破？</strong></p>
-</blockquote>
-<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>漏洞利用阶段不要盲目跑exp，最好是先验证控制程度，再拿shell。</p>
-<p>先确定漏洞是否真实存在，漏洞可控点在哪里，输入如何影响输出，然后再确认控制深度（能否读写文件&#x2F;命令执行&#x2F;鉴权绕过），最后在拿稳定shell。</p>
-<blockquote>
-<p><strong>先看能不能验证清楚，在考虑能否一步到位。</strong></p>
-</blockquote>
-<h2 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h2><p>提权并没有深入学习太多，但是感觉应该在于找到“权限边界被破坏”的证据，可以根据历史经验寻找线索，找到稳定可复现的思路。</p>
-<h2 id="横向移动"><a href="#横向移动" class="headerlink" title="横向移动"></a>横向移动</h2><blockquote>
-<p><strong>信任关系+凭证流向</strong>: 从以控制主机把影响力扩到更有价值的主机&#x2F;账号&#x2F;网段等。</p>
-</blockquote>
-<hr>
-<p>⭐<strong>持续更新 To be continued……</strong></p>
-]]></content>
+    <title>Win11 Java环境变量配置</title>
+    <url>/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<p>找到JDK的路径，在系统环境变量中新建变量名和变量值：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">JAVA_HOME</span><br><span class="line">C:\Program Files\Java\jdk1.8.0_202</span><br></pre></td></tr></table></figure>
+
+<p>然后在系统变量path中，新建两条：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">%JAVA_HOME%\bin</span><br><span class="line">%JAVA_HOME%\jre\bin</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>验证配置是否成功：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;java -version</span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;javac -version</span><br><span class="line">javac 1.8.0_202</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>OSCP</category>
+        <category>Config</category>
       </categories>
       <tags>
-        <tag>OSCP</tag>
-        <tag>Penetration Test</tag>
+        <tag>Config</tag>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -1107,30 +1146,76 @@
         <category>CodeQL</category>
       </categories>
       <tags>
-        <tag>SAST</tag>
         <tag>CodeQL</tag>
+        <tag>SAST</tag>
         <tag>SARIF</tag>
       </tags>
   </entry>
   <entry>
-    <title>Win11 Java环境变量配置</title>
-    <url>/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<p>找到JDK的路径，在系统环境变量中新建变量名和变量值：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">JAVA_HOME</span><br><span class="line">C:\Program Files\Java\jdk1.8.0_202</span><br></pre></td></tr></table></figure>
+    <title>HEXO链接站内文章方法</title>
+    <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>Hexo链接站内文章方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
 
-<p>然后在系统变量path中，新建两条：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">%JAVA_HOME%\bin</span><br><span class="line">%JAVA_HOME%\jre\bin</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<p>验证配置是否成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;java -version</span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;javac -version</span><br><span class="line">javac 1.8.0_202</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 是显示的内容，如果不写的话就默认是文章名称。</p>
+<p>参考链接：<a href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
+]]></content>
       <categories>
         <category>Config</category>
       </categories>
       <tags>
         <tag>Config</tag>
-        <tag>Java</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Miniconda安装</title>
+    <url>/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Miniconda 是 Conda 的精简发行版，只包含最核心的包管理系统与 Python，可以快速搭建独立的 Python 环境。在进行数据分析、机器学习或科研开发时，相比于 Anaconda 更轻量、更灵活。</p>
+<h2 id="一、Miniconda-安装"><a href="#一、Miniconda-安装" class="headerlink" title="一、Miniconda 安装"></a>一、Miniconda 安装</h2><p>Windows 命令行安装方式，可以快速且安静地下载最新的 64 位 Windows 安装程序，将其重命名为较短的文件名，执行静默安装，然后删除安装程序：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe</span><br><span class="line">start /wait &quot;&quot; .\miniconda.exe /S</span><br><span class="line">del .\miniconda.exe</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>Windows Powershell：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Invoke-WebRequest</span> <span class="literal">-Uri</span> <span class="string">&quot;https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe&quot;</span> <span class="literal">-outfile</span> <span class="string">&quot;.\miniconda.exe&quot;</span></span><br><span class="line"><span class="built_in">Start-Process</span> <span class="literal">-FilePath</span> <span class="string">&quot;.\miniconda.exe&quot;</span> <span class="literal">-ArgumentList</span> <span class="string">&quot;/S&quot;</span> <span class="literal">-Wait</span></span><br><span class="line"><span class="built_in">del</span> .\miniconda.exe</span><br></pre></td></tr></table></figure>
+
+<p>Linux 64位：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/miniconda3</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line"><span class="built_in">rm</span> ~/miniconda3/miniconda.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/miniconda3/bin/activate</span><br><span class="line"></span><br><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、快速使用"><a href="#二、快速使用" class="headerlink" title="二、快速使用"></a>二、快速使用</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda create -n environment python=3.12</span><br><span class="line"></span><br><span class="line">conda activate environment</span><br><span class="line"></span><br><span class="line">conda deactivate environment</span><br></pre></td></tr></table></figure>
+
+<p>参考文献：<a href="https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt">https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt</a></p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Miniconda</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows结束进程</title>
+    <url>/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/</url>
+    <content><![CDATA[<p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
+<p>首先查找占用 8080 的 PID：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -ano | findstr :8080</span><br></pre></td></tr></table></figure>
+
+<p>然后根据 PID 强制结束进程：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">taskkill /F /PID 3836</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<ol start="3">
+<li>实验</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;netstat -ano | findstr :8080</span><br><span class="line">  TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       3836</span><br><span class="line">  TCP    [::]:8080              [::]:0                 LISTENING       3836</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;taskkill /F /PID 3836</span><br><span class="line">成功: 已终止 PID 为 3836 的进程。</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -1187,29 +1272,6 @@
       <tags>
         <tag>Config</tag>
         <tag>Trouble shooting</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows结束进程</title>
-    <url>/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/</url>
-    <content><![CDATA[<p>今天在跑 Springboot 的 Java 项目时，遇到了端口占用问题，记一下 Windows 的根据相关端口杀进程命令。</p>
-<p>首先查找占用 8080 的 PID：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -ano | findstr :8080</span><br></pre></td></tr></table></figure>
-
-<p>然后根据 PID 强制结束进程：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">taskkill /F /PID 3836</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<ol start="3">
-<li>实验</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">C:\Users\77319&gt;netstat -ano | findstr :8080</span><br><span class="line">  TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       3836</span><br><span class="line">  TCP    [::]:8080              [::]:0                 LISTENING       3836</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;taskkill /F /PID 3836</span><br><span class="line">成功: 已终止 PID 为 3836 的进程。</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Windows</category>
-      </categories>
-      <tags>
-        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>

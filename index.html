@@ -172,18 +172,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -208,6 +208,134 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/17/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E6%9F%A5%E7%9C%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/17/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E6%9F%A5%E7%9C%8B/" class="post-title-link" itemprop="url">Linux服务器系统资源查看</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-17 13:46:55 / 修改时间：13:49:52" itemprop="dateCreated datePublished" datetime="2025-12-17T13:46:55+08:00">2025-12-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Linux服务器系统资源查看"><a href="#Linux服务器系统资源查看" class="headerlink" title="Linux服务器系统资源查看"></a>Linux服务器系统资源查看</h2><p>系统性地查看 Linux 服务器资源，也就是看CPU、内存、磁盘、网络、负载、系统等这几个层面，就能了解服务器性能以及运行情况。</p>
+<h3 id="uptime"><a href="#uptime" class="headerlink" title="uptime"></a>uptime</h3><p>查看系统负载和运行时间</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uptime</span></span><br><span class="line"></span><br><span class="line">10:35:15 up  1:34, 13 <span class="built_in">users</span>,  load average: 0.41, 0.30, 0.25</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>10:35:15</code> 表示当前系统时间是 10 点 35 分 15 秒，<code>up 1:34</code> 表示系统已经连续运行了 1 小时 34 分钟，<code>13 users</code>表示当前有 13 个用户会话登录到系统中，<code>load average: 0.41, 0.30, 0.25</code> 表示系统负载均值（Load Average），表示正在运行 + 等待运行的进程数量的平均值，三个数字分别表示最近1&#x2F;5&#x2F;15 分钟的平均负载。</p>
+<blockquote>
+<p><strong>Load Average &#x3D; 在某段时间内，处于「可运行状态」和「不可中断睡眠状态」进程数量的指数加权移动平均（EWMA），统计的是想用 CPU 的进程有多少。</strong></p>
+</blockquote>
+<h3 id="top"><a href="#top" class="headerlink" title="top"></a>top</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">top</span><br><span class="line"></span><br><span class="line">top - 10:52:33 up  1:52, 11 <span class="built_in">users</span>,  load average: 1.14, 0.57, 0.32</span><br><span class="line">Tasks: 2645 total,   2 running, 2643 sleeping,   0 stopped,   0 zombie</span><br><span class="line">%Cpu(s):  0.1 us,  0.0 sy,  0.0 ni, 99.8 <span class="built_in">id</span>,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span><br><span class="line">MiB Mem : 10 total, 8 free,  6 used,  4 buff/cache</span><br><span class="line">MiB Swap:  3 total, 2 free,  1 used.  2 avail Mem</span><br><span class="line"></span><br><span class="line">    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND</span><br><span class="line">  77552 xrdp      20   0   50360  20344   6856 R  18.0   0.0   0:30.70 xrdp</span><br><span class="line">  77960 mark      20   0 9361988 422920 185124 S  14.1   0.1   0:59.67 gnome-shell</span><br><span class="line">  77569 mark      20   0  382544 138588  80324 S   5.6   0.0   0:11.17 Xorg</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>详解 top 输出命令内容：</p>
+<p>第一行表示时间、运行时长、登录用户、平均负载；</p>
+<p>第二行展示了任务数和进程状态，包含进程&#x2F;线程统计总数、正在 CPU 上运行的（或准备运行的）任务数、睡眠、进程和僵尸进程数量；</p>
+<p>第三行展示了 CPU 使用构成，us用户态、sy内核态、ni被nice调整过优先级的用户态进程、id (idle) CPU空闲率、wa CPU在等 IO（磁盘&#x2F;网络存储）导致空转等待率，hi硬中断消耗，si软中断消耗；</p>
+<p>第四行展示了内存：total总内存、free完全空闲内存、used真正被进程使用的内存、buff&#x2F;cache文件缓存块设备缓存；</p>
+<p>第五行展示了 Swap 交换分区，Swap（交换分区&#x2F;交换文件）是内存不足时的“备用空间”，当 物理内存（RAM）不够用 时，Linux 会把暂时不用的内存页交换到磁盘上的 swap 中，从而防止系统因内存耗尽而直接崩溃（OOM），让系统还能继续运行；</p>
+<p>下面展示了系统进程的详细信息：</p>
+<p>表头：</p>
+<p><code>PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND</code></p>
+<p>PID：进程号</p>
+<p>USER：所属用户</p>
+<p>PR：动态优先级（数值越小优先级越高；20 常见）</p>
+<p>NI：nice 值（-20 到 19，越小越“抢”CPU；0 默认）</p>
+<p>VIRT：虚拟内存占用（进程可见的地址空间总量，包含映射文件、共享库、未实际用到的保留空间等）</p>
+<p>RES：常驻内存（实际占用物理内存，最值得关注）</p>
+<p>SHR：共享内存部分（共享库等）</p>
+<p>S：状态</p>
+<p>R&#x3D;运行，S&#x3D;睡眠，D&#x3D;不可中断睡眠(常见 IO 卡住)，Z&#x3D;僵尸</p>
+<p>%CPU：CPU 占比（注意：多核时可能 &gt;100%）</p>
+<p>%MEM：内存占比</p>
+<p>TIME+：累计消耗 CPU 时间</p>
+<p>COMMAND：命令名</p>
+<h3 id="lscpu"><a href="#lscpu" class="headerlink" title="lscpu"></a>lscpu</h3><p>查看 cpu 架构，重点关注 CPU 型号、数量、解构等信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Architecture: x86_64</span><br><span class="line"></span><br><span class="line">Model name: AMD</span><br><span class="line"></span><br><span class="line">CPU(s):                2</span><br><span class="line">Thread(s) per core:    2</span><br><span class="line">Core(s) per socket:    1</span><br><span class="line">Socket(s):             1</span><br></pre></td></tr></table></figure>
+
+<h3 id="free-h"><a href="#free-h" class="headerlink" title="free -h"></a>free -h</h3><p>查看内存资源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">free -h</span><br><span class="line">             total       used      free      shared  buff/cache   available</span><br><span class="line">Mem:           5Gi        1Gi       4Gi        87Mi         1Gi         3Gi</span><br><span class="line">Swap:          1Gi         0B       1Gi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="df-h"><a href="#df-h" class="headerlink" title="df -h"></a>df -h</h3><p>查看磁盘资源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br><span class="line"></span><br><span class="line">Filesystem      Size  Used Avail  Use%  Mounted on</span><br><span class="line">tmpfs             2G  3.9M    1G   50%  /run</span><br><span class="line">/dev/nvme        10G    5G    5G   50%  /</span><br><span class="line">......</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="ip-s-link"><a href="#ip-s-link" class="headerlink" title="ip -s link"></a>ip -s link</h3><p>查看网络资源，这个要视情况而定，还有ss、netstat等命令。</p>
+<h3 id="uname-a"><a href="#uname-a" class="headerlink" title="uname -a"></a>uname -a</h3><p>查看系统及内核版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> /etc/os-release</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="lspci"><a href="#lspci" class="headerlink" title="lspci"></a>lspci</h3><p>查看系统中安装的所有PCI设备。</p>
+<h3 id="nvidia-smi"><a href="#nvidia-smi" class="headerlink" title="nvidia-smi"></a>nvidia-smi</h3><p>查看显卡型号。</p>
+<h2 id="服务器使用规范"><a href="#服务器使用规范" class="headerlink" title="服务器使用规范"></a>服务器使用规范</h2><p>w 或 who 查看当前在线登录的用户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 查看当前系统下的所有用户</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建用户</span></span><br><span class="line"><span class="built_in">sudo</span> useradd name</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> useradd -m -s /bin/bash name</span><br><span class="line"></span><br><span class="line"><span class="comment"># -m 自动创建家目录，-s指定shell</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为新用户指定密码</span></span><br><span class="line"><span class="built_in">sudo</span> passwd name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给新用户追加到 sudo 组</span></span><br><span class="line"><span class="built_in">sudo</span> usermod -aG <span class="built_in">sudo</span> name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 简化版，添加用户时即指定其加入sudo组</span></span><br><span class="line"><span class="built_in">sudo</span> useradd -m -s /bin/bash -G <span class="built_in">sudo</span> name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换用户环境 - 表示加载用户环境</span></span><br><span class="line">su - name </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1250,114 +1378,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%80%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/10/SARIF%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/10/SARIF%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/" class="post-title-link" itemprop="url">SARIF文件架构解读</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-12-10 23:23:33" itemprop="dateCreated datePublished" datetime="2025-12-10T23:23:33+08:00">2025-12-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-12-11 10:10:22" itemprop="dateModified" datetime="2025-12-11T10:10:22+08:00">2025-12-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CodeQL/" itemprop="url" rel="index"><span itemprop="name">CodeQL</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="SARIF-文件架构架构解读"><a href="#SARIF-文件架构架构解读" class="headerlink" title="SARIF 文件架构架构解读"></a>SARIF 文件架构架构解读</h2><p>SARIF（Static Analysis Results Interchange Format）本质是一个 JSON 日志规范，用于统一表达静态分析（SAST、Lint、CodeQL、依赖扫描等）的扫描结果，方便不同工具之间共享、聚合、展示与追踪。</p>
-<p>SARIF 简单文件结构如下：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;$schema&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;https://json.schemastore.org/sarif-2.1.0.json&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;2.1.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;runs&quot;</span> <span class="punctuation">:</span> <span class="punctuation">[</span>&#x27;tool&#x27;<span class="punctuation">,</span> &#x27;invocations&#x27;<span class="punctuation">,</span> &#x27;artifacts&#x27;<span class="punctuation">,</span> &#x27;results&#x27;<span class="punctuation">,</span> &#x27;columnKind&#x27;<span class="punctuation">,</span>&#x27;properties&#x27;<span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>SARIF &#x3D; 多次运行 runs 的集合，每次运行包含：工具信息 + 运行元数据 + 被分析对象（artifacts）+ 分析结果（results）</p>
-</blockquote>
-<p>对各部分内容介绍如下：</p>
-<ol>
-<li>tool 工具信息：检查员身份信息和检查手册，记录了用哪个工具进行了扫描，版本号是多少，包含了 driver 驱动程序信息 和 rules 检查规则清单；</li>
-<li>invocations 调用信息：检查员的工作日志，记录了这次检查是在什么环境下进行的，以及是否顺利完成，executionSuccessful: true&#x2F;false；</li>
-<li>artifacts 被扫描的文件：检查了哪些地点，列出了所有被 CodeQL 扫描过的源文件（Source Code），包含文件的路径（location），有时也包含文件的具体内容或哈希值，方便后续定位；</li>
-<li><strong>results 结果</strong> ：这是问题清单，这是整份报告里最重要的部分，列出了扫描出来的所有 Bug和漏洞信息，关键单：ruleId 记录违反了哪条规则（对应 tool 里的规则），message 记录问题的具体描述，locations 记录了问题在哪个文件的第几行、第几列；</li>
-<li>columnKind 列的计算方式：用于告诉 IDE（如 VS Code）如何正确高亮代码；</li>
-<li>properties 附加属性：记录了杂项信息，存放标准字段里放不下的、或者工具特有的自定义数据，可能会包含构建时的标签（Build Tags）、项目的元数据（Project Metadata）和一些给特定显示面板用的统计数据；</li>
-</ol>
-<p>通俗的讲，就是这一次扫描 (run)，是由名为 CodeQL 的 (tool) 进行的。它在一个特定的时间以特定的参数运行 (invocations)，按照特定的刻度标准 (columnKind)，扫描了这一堆文件 (artifacts)，最后发现了这些漏洞 (results)，并在最后贴了一些标签 (properties)。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/10/SARIF%E6%96%87%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
