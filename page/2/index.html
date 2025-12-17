@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -208,6 +208,103 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">MCP编程快速入门（一）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-11 10:15:07 / 修改时间：17:46:31" itemprop="dateCreated datePublished" datetime="2025-12-11T10:15:07+08:00">2025-12-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="MCP-概念"><a href="#MCP-概念" class="headerlink" title="MCP 概念"></a>MCP 概念</h2><p>MCP 编程快速入门，MCP 全称 Model Context Protocol 模型上下文协议，其定义了 LLMs 与外部世界的互动方式，MCP 提供了一种标准化方法，使任意 LLMs 能够轻松连接各种数据源和工具，实现信息的高效交互和处理。</p>
+<p>目前的 AI 朝着两个方向发展：<strong>掌握更多信息</strong> 或 <strong>控制更多工具</strong>，在没有联网搜索之前，LLM 的数据来源只有训练时和推理时我们提供的数据。</p>
+<p>在MCP出现之前，如果LLM要访问外部数据，通常使用<code>Function Call</code>的方式，<code>Function Call</code>通过给模型预设函数描述（包括函数名、参数说明、返回值格式等），让模型在合适的时候返回一个符合结构的 JSON 格式，外部系统再解析这个 JSON，调用实际的后端函数。关于 <code>Function Call</code> 和<code>MCP</code> 的具体区别在 <a href="/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/" title="Function Call和MCP的区别">Function Call和MCP的区别</a></p>
+<p>但 <code>Function Call</code> 的方式没有一个统一的开发规范，你开发的函数我不能用，我开发的函数你不能用，而且开发起来很麻烦，为了解决这个问题，MCP 出现了。MCP作为LLMs的标准化工具箱，可以通过MCP调用外界的AI工具，而AI工具在开发的时候也需要遵循MCP协议。MCP 允许应用以标准化的方式向 LLM 提供上下文，并将<strong>提供上下文的逻辑</strong>与<strong>实际的LLM交互逻辑”</strong>解耦。</p>
+<p>在没有 MCP 之前，如果我们希望让模型使用本地数据，通常需要把这些数据直接复制到对话框中，让模型从文本中获取信息。而有了 MCP 之后，我们可以为特定能力编写一个 MCP Server，例如数据库读取、GitHub 操作、文件系统访问或获取当前时间等。模型通过 MCP 与这些 Server 通信，就能在无需手动粘贴数据的情况下，实时访问这些外部资源。</p>
+<p><img src="/../uploads/MCP_1.png"></p>
+<p>MCP 服务器可以提供三种主要类型的功能:</p>
+<ol>
+<li>资源访问：客户端读取文件等数据；</li>
+<li>工具调用：由LLM调用的函数；</li>
+<li>Prompt模板：预先编写的帮助客户完成特定任务的Prompt；</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%80%EF%BC%89/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1035,109 +1132,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">解决VScode和Trae等无法加载conda虚拟环境的问题</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-12-02 20:11:22" itemprop="dateCreated datePublished" datetime="2025-12-02T20:11:22+08:00">2025-12-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-12-04 10:19:41" itemprop="dateModified" datetime="2025-12-04T10:19:41+08:00">2025-12-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Trouble-shooting/" itemprop="url" rel="index"><span itemprop="name">Trouble shooting</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="一、问题描述"><a href="#一、问题描述" class="headerlink" title="一、问题描述"></a>一、问题描述</h1><p>使用 conda 或 miniconda 配置虚拟环境时，当启动虚拟环境时，遇到如下问题：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CondaError: Run <span class="string">&#x27;conda init&#x27;</span> before <span class="string">&#x27;conda activate&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>但是，运行 <code>conda init</code> 后还是不起作用：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">λ conda init</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda.exe</span><br><span class="line">no change     C:\Users\Username\miniconda3\Scripts\conda-env.exe</span><br><span class="line">......</span><br><span class="line">no change     C:\Users\Username\Documents\WindowsPowerShell\profile.ps1</span><br><span class="line">modified      HKEY_CURRENT_USER\Software\Microsoft\Command Processor\AutoRun</span><br></pre></td></tr></table></figure>
-
-<h1 id="二、解决方案"><a href="#二、解决方案" class="headerlink" title="二、解决方案"></a>二、解决方案</h1><p>我是 win11 操作系统，需要以 <strong>管理员身份</strong> 打开powershell窗口，输入以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
-
-<p>重新加载即可生效。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/02/%E8%A7%A3%E5%86%B3VScode%E5%92%8CTrae%E7%AD%89%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BDconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E9%97%AE%E9%A2%98/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
