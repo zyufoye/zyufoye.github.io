@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="环境准备Ubuntu 24.04python 3.12.3ollama 0.13.4git 2.43.0 换源 123456789101112131415161718192021# 备份sudo cp &#x2F;etc&#x2F;apt&#x2F;sources.list.d&#x2F;ubuntu.sources &#x2F;etc&#x2F;apt&#x2F;sources.list.d&#x2F;ubuntu.sources.bak# 编辑文件sudo vim &#x2F;et">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu通过Ollama部署LLM">
+<meta property="og:url" content="https://zyufoye.github.io/2025/12/18/Ubuntu%E9%80%9A%E8%BF%87Ollama%E9%83%A8%E7%BD%B2LLM/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="环境准备Ubuntu 24.04python 3.12.3ollama 0.13.4git 2.43.0 换源 123456789101112131415161718192021# 备份sudo cp &#x2F;etc&#x2F;apt&#x2F;sources.list.d&#x2F;ubuntu.sources &#x2F;etc&#x2F;apt&#x2F;sources.list.d&#x2F;ubuntu.sources.bak# 编辑文件sudo vim &#x2F;et">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/ollama_1.png">
+<meta property="article:published_time" content="2025-12-18T14:16:48.000Z">
+<meta property="article:modified_time" content="2025-12-18T14:19:43.871Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="Config">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zyufoye.github.io/uploads/ollama_1.png">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2025/12/18/Ubuntu%E9%80%9A%E8%BF%87Ollama%E9%83%A8%E7%BD%B2LLM/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2025/12/18/Ubuntu%E9%80%9A%E8%BF%87Ollama%E9%83%A8%E7%BD%B2LLM/","path":"2025/12/18/Ubuntu通过Ollama部署LLM/","title":"Ubuntu通过Ollama部署LLM"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Ubuntu通过Ollama部署LLM | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，分享生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">1.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ollama-%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">Ollama 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ollama-%E5%91%BD%E4%BB%A4%E4%B8%80%E8%A7%88%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">Ollama 命令一览表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ollama-%E6%A8%A1%E5%9E%8B%E6%94%AF%E6%8C%81"><span class="nav-number">4.</span> <span class="nav-text">Ollama 模型支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E4%B8%8B%E8%BD%BD%E9%83%A8%E7%BD%B2"><span class="nav-number">5.</span> <span class="nav-text">模型下载部署</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/18/Ubuntu%E9%80%9A%E8%BF%87Ollama%E9%83%A8%E7%BD%B2LLM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Ubuntu通过Ollama部署LLM | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ubuntu通过Ollama部署LLM
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-18 22:16:48 / 修改时间：22:19:43" itemprop="dateCreated datePublished" datetime="2025-12-18T22:16:48+08:00">2025-12-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>Ubuntu 24.04<br>python 3.12.3<br>ollama 0.13.4<br>git 2.43.0</p>
+<p>换源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 备份</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">cp</span> /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources.bak</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑文件</span></span><br><span class="line"><span class="built_in">sudo</span> vim /etc/apt/sources.list.d/ubuntu.sources</span><br><span class="line"></span><br><span class="line">Types: deb</span><br><span class="line">URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu/</span><br><span class="line">Suites: noble noble-updates noble-backports</span><br><span class="line">Components: main restricted universe multiverse</span><br><span class="line">Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg</span><br><span class="line"></span><br><span class="line">Types: deb</span><br><span class="line">URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu/</span><br><span class="line">Suites: noble-security</span><br><span class="line">Components: main restricted universe multiverse</span><br><span class="line">Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt upgrade -y</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="Ollama-安装"><a href="#Ollama-安装" class="headerlink" title="Ollama 安装"></a>Ollama 安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://ollama.com/install.sh | sh</span><br><span class="line"></span><br><span class="line">ollama --version</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl start ollama</span><br><span class="line"></span><br><span class="line">systemctl status ollama</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> ollama</span><br></pre></td></tr></table></figure>
+
+<h2 id="Ollama-命令一览表"><a href="#Ollama-命令一览表" class="headerlink" title="Ollama 命令一览表"></a>Ollama 命令一览表</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+<th>常见使用场景 &#x2F; 示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ollama serve</code></td>
+<td>启动 Ollama 后台服务</td>
+<td>作为 daemon 运行（一般系统已自动启动）<br><code>ollama serve</code></td>
+</tr>
+<tr>
+<td><code>ollama create</code></td>
+<td>创建自定义模型</td>
+<td>基于 Modelfile 定制模型（prompt、参数、adapter）<br><code>ollama create mymodel -f Modelfile</code></td>
+</tr>
+<tr>
+<td><code>ollama show</code></td>
+<td>查看模型详细信息</td>
+<td>查看模型结构、参数、上下文长度等<br><code>ollama show llama3</code></td>
+</tr>
+<tr>
+<td><code>ollama run</code></td>
+<td>运行模型（交互或单次）</td>
+<td>最常用命令，拉取并运行模型<br><code>ollama run qwen2.5:7b</code></td>
+</tr>
+<tr>
+<td><code>ollama stop</code></td>
+<td>停止正在运行的模型</td>
+<td>释放内存 &#x2F; CPU<br><code>ollama stop llama3</code></td>
+</tr>
+<tr>
+<td><code>ollama pull</code></td>
+<td>从仓库下载模型</td>
+<td>只下载不运行<br><code>ollama pull deepseek-coder:6.7b</code></td>
+</tr>
+<tr>
+<td><code>ollama push</code></td>
+<td>推送模型到仓库</td>
+<td>分享你自定义的模型（需登录）<br><code>ollama push username/mymodel</code></td>
+</tr>
+<tr>
+<td><code>ollama signin</code></td>
+<td>登录 ollama.com</td>
+<td>用于 push &#x2F; 私有模型<br><code>ollama signin</code></td>
+</tr>
+<tr>
+<td><code>ollama signout</code></td>
+<td>登出 ollama.com</td>
+<td>退出当前账号<br><code>ollama signout</code></td>
+</tr>
+<tr>
+<td><code>ollama list</code></td>
+<td>列出本地已有模型</td>
+<td>查看你已下载的模型<br><code>ollama list</code></td>
+</tr>
+<tr>
+<td><code>ollama ps</code></td>
+<td>查看正在运行的模型</td>
+<td>类似 <code>docker ps</code><br><code>ollama ps</code></td>
+</tr>
+<tr>
+<td><code>ollama cp</code></td>
+<td>复制模型</td>
+<td>基于现有模型创建新模型<br><code>ollama cp llama3 my-llama3</code></td>
+</tr>
+<tr>
+<td><code>ollama rm</code></td>
+<td>删除本地模型</td>
+<td>释放磁盘空间<br><code>ollama rm mistral</code></td>
+</tr>
+<tr>
+<td><code>ollama help</code></td>
+<td>查看帮助</td>
+<td>查看全局或子命令帮助<br><code>ollama help run</code></td>
+</tr>
+</tbody></table>
+<h2 id="Ollama-模型支持"><a href="#Ollama-模型支持" class="headerlink" title="Ollama 模型支持"></a>Ollama 模型支持</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看本地模型列表</span></span><br><span class="line">ollama list</span><br></pre></td></tr></table></figure>
+
+<p>查看 ollama 中能下载哪些模型：<a target="_blank" rel="noopener" href="https://ollama.com/library">https://ollama.com/library</a></p>
+<p>开源模型按照综合排序简单列出 10 个</p>
+<table>
+<thead>
+<tr>
+<th><strong>Model</strong></th>
+<th><strong>description</strong></th>
+<th><strong>Tags</strong></th>
+<th><strong>Update</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>deepseek-r1</td>
+<td>DeepSeek-R1 是一系列开放式推理模型，其性能接近领先的模型，例如 O3 和 Gemini 2.5 Pro</td>
+<td><code>tools</code> <code>thinking</code> <code>70b</code> <code>671b</code></td>
+<td>2025-7</td>
+</tr>
+<tr>
+<td>deepseek-v3.2</td>
+<td>DeepSeek-V3.2 是一款兼具高计算效率、卓越推理能力和智能体性能的模型</td>
+<td><code>cloud</code></td>
+<td>2025-12</td>
+</tr>
+<tr>
+<td>deepseek-coder</td>
+<td>DeepSeek Coder 是一个功能强大的编码模型，它经过两万亿个代码和自然语言标记的训练</td>
+<td><code>6.7b``33b</code></td>
+<td>2024-12</td>
+</tr>
+<tr>
+<td>gemini-3-flash-preview</td>
+<td>Gemini 3 Flash 以极低的成本提供专为速度而打造的前沿智能</td>
+<td><code>tools</code> <code>thinking</code> <code>cloud</code></td>
+<td>2025-12</td>
+</tr>
+<tr>
+<td>gemini-3-pro-preview</td>
+<td>谷歌最智能的模型，具备最先进的推理和多模态理解能力，以及强大的智能体和氛围编码能力</td>
+<td><code>tools</code> <code>thinking</code> <code>cloud</code></td>
+<td>2025-11</td>
+</tr>
+<tr>
+<td>qwen3-coder</td>
+<td>阿里巴巴针对智能体和编码任务的高性能长上下文模型</td>
+<td><code>tools</code> <code>cloud</code> <code>30b</code> <code>480b</code></td>
+<td>2025-10</td>
+</tr>
+<tr>
+<td>qwen3</td>
+<td>Qwen3 是 Qwen 系列中最新一代的大型语言模型，提供了一套全面的密集型和混合专家 (MoE) 模型</td>
+<td><code>tools</code> <code>thinking</code> <code>32b</code> <code>235b</code></td>
+<td>2025-12</td>
+</tr>
+<tr>
+<td>codellama</td>
+<td>一个大型语言模型，可以使用文本提示来生成和讨论代码</td>
+<td><code>34b</code> <code>70b</code></td>
+<td>2023-8</td>
+</tr>
+<tr>
+<td>llama3.1</td>
+<td>Llama 3.1 是 Meta 推出的一款全新尖端模型，提供 8B、70B 和 405B 参数大小</td>
+<td><code>tools</code> <code>8b</code> <code>70b</code> <code>405b</code></td>
+<td>2024-7</td>
+</tr>
+<tr>
+<td>gpt-oss</td>
+<td>OpenAI 的开放权重模型专为强大的推理能力、智能体任务和多样化的开发者用例而设计</td>
+<td><code>tools</code> <code>thinking</code> <code>cloud</code> <code>20b</code> <code>120b</code></td>
+<td>2025-10</td>
+</tr>
+</tbody></table>
+<h2 id="模型下载部署"><a href="#模型下载部署" class="headerlink" title="模型下载部署"></a>模型下载部署</h2><p>以 deepseek-r1:latest 为例，记录部署流程。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载模型</span></span><br><span class="line">ollama pull deepseek-r1:latest</span><br><span class="line"></span><br><span class="line">ollama run deepseek-r1:latest</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在 Web 用户界面中运行 DeepSeek</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建虚拟环境</span></span><br><span class="line"><span class="built_in">sudo</span> apt install python3-venv</span><br><span class="line">python3 -m venv ~/open-webui-venv</span><br><span class="line"><span class="built_in">source</span> ~/open-webui-venv/bin/activate</span><br><span class="line"></span><br><span class="line">pip install open-webui -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line"></span><br><span class="line">open-webui serve</span><br><span class="line"></span><br><span class="line"><span class="comment"># 访问 http://localhost:8080</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl status open-webui</span><br></pre></td></tr></table></figure>
+
+<p>注意在初次启动时，我们本地只有“大脑”（DeepSeek），Open WebUI 还会试图下载一个“图书管理员”（Embedding 模型）。虽然已经成功部署了 DeepSeek，但 Open WebUI 是一个功能完整的界面系统，它默认开启了<strong>RAG（检索增强生成）</strong>功能（即知识库&#x2F;文档上传功能）。</p>
+<p>所以默认还会下载一个 all-MiniLM-L6-v2 模型，它不负责对话。它的唯一作用是将你上传的文档、文字转换成计算机能理解的“向量（数字列表）”。当你问 DeepSeek 关于你上传文档的问题时，Open WebUI 先用这个小模型去搜索文档中的相关段落，然后把段落喂给 DeepSeek。它是“图书管理员”。</p>
+<p>如果他发现本地没有默认的 Embedding 模型（all-MiniLM-L6-v2），就会自动去 Hugging Face 下载。也就是说会卡在这里，需要配置国内的镜像源。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> HF_ENDPOINT=https://hf-mirror.com</span><br></pre></td></tr></table></figure>
+
+<p>成功运行如下图所示：</p>
+<p><img src="/../uploads/ollama_1.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Config/" rel="tag"># Config</a>
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/17/CodeQL%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/" rel="prev" title="CodeQL入门（二）">
+                  <i class="fa fa-angle-left"></i> CodeQL入门（二）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/12/18/Vulnhalla%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/" rel="next" title="Vulnhalla文章阅读">
+                  Vulnhalla文章阅读 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
