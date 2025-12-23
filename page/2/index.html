@@ -172,18 +172,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">26</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -208,6 +208,258 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/12/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%89%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/12/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%89%EF%BC%89/" class="post-title-link" itemprop="url">MCP编程快速入门（三）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-12 14:08:48 / 修改时间：15:55:03" itemprop="dateCreated datePublished" datetime="2025-12-12T14:08:48+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="MCP-Server-开发实践"><a href="#MCP-Server-开发实践" class="headerlink" title="MCP Server 开发实践"></a>MCP Server 开发实践</h2><p>对于大部分 AI 开发者来说，MCP 只需要关心 Server 的实现，通过一个简单示例学习如何实现一个 MCP Server。</p>
+<p>MCP Server 可以提供三种主要类型的功能：</p>
+<ul>
+<li>Resources（资源）：类似文件的数据，可以被客户端读取；</li>
+<li>Tools（工具）：可以被LLM调用的函数；</li>
+<li>Prompt（提示）：预先编写的模版，帮助用户完成特定任务；</li>
+</ul>
+<p>任务：使用Python实现一个MCP Server，用来统计当前桌面上的 txt 文件数量和获取对应文件的名字。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 MCP Server</span></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;桌面 TXT 文件统计器&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">count_desktop_txt_files</span>() -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Count the number of .txt files on the desktop.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># Get the desktop path</span></span><br><span class="line">    username = os.getenv(<span class="string">&quot;USER&quot;</span>) <span class="keyword">or</span> os.getenv(<span class="string">&quot;USERNAME&quot;</span>)</span><br><span class="line">    desktop_path = Path(<span class="string">f&quot;C:\\Users\\<span class="subst">&#123;username&#125;</span>\\Desktop&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Count .txt files</span></span><br><span class="line">    txt_files = <span class="built_in">list</span>(desktop_path.glob(<span class="string">&quot;*.txt&quot;</span>))</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">len</span>(txt_files)</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">list_desktop_txt_files</span>() -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Get a list of all .txt filenames on the desktop.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># Get the desktop path</span></span><br><span class="line">    username = os.getenv(<span class="string">&quot;USER&quot;</span>) <span class="keyword">or</span> os.getenv(<span class="string">&quot;USERNAME&quot;</span>)</span><br><span class="line">    desktop_path = Path(<span class="string">f&quot;C:\\Users\\<span class="subst">&#123;username&#125;</span>\\Desktop&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Get all .txt files</span></span><br><span class="line">    txt_files = <span class="built_in">list</span>(desktop_path.glob(<span class="string">&quot;*.txt&quot;</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Return the filenames</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> txt_files:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;No .txt files found on desktop.&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Format the list of filenames</span></span><br><span class="line">    file_list = <span class="string">&quot;\n&quot;</span>.join([<span class="string">f&quot;- <span class="subst">&#123;file.name&#125;</span>&quot;</span> <span class="keyword">for</span> file <span class="keyword">in</span> txt_files])</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Found <span class="subst">&#123;<span class="built_in">len</span>(txt_files)&#125;</span> .txt files on desktop:\n<span class="subst">&#123;file_list&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># Initialize and run the server</span></span><br><span class="line">    mcp.run()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="MCP-Server-测试"><a href="#MCP-Server-测试" class="headerlink" title="MCP Server 测试"></a>MCP Server 测试</h3><p>测试 MCP Server， <code>mcp dev server.py</code> ，进行服务测试。</p>
+<p><img src="/../uploads/MCP_12.png"></p>
+<p>如图所示，成功生成了对应的 Tool Result ，即为测试成功。</p>
+<h3 id="接入-Claude-Desktop"><a href="#接入-Claude-Desktop" class="headerlink" title="接入 Claude Desktop"></a>接入 Claude Desktop</h3><p>这里 Claude Desktop 注册时需要手机号绑定，目前没有外国手机号，所以找了个平替的平台 Trae。</p>
+<p>配置文件如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;server_txt&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C:\\Users\\77319\\.local\\bin\\uv.exe&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;--directory&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;D:\\Code\\mcp-demo&quot;</span><span class="punctuation">,</span> <span class="comment">// 你的项目路径（这里是我的）</span></span><br><span class="line">        <span class="string">&quot;run&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;server_txt.py&quot;</span> <span class="comment">// 你的 MCP Server 文件名</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>手动添加 MCP 配置：</p>
+<p><img src="/../uploads/MCP_13.png"></p>
+<p>选择 MCP ：</p>
+<p><img src="/../uploads/MCP_14.png"></p>
+<p>提出问题：帮我分析桌面txt文件的含义</p>
+<p>思考过程：</p>
+<p>用户让我推测桌面txt文件名的含义，之前已经通过MCP工具获取到桌面上有3个txt文件：</p>
+<ul>
+<li>3.多模态信息融合.txt</li>
+<li>API Key.txt</li>
+<li>密码本.txt<br>我需要基于文件名来推测它们的含义，不需要查看文件内容。让我分析每个文件名：</li>
+</ul>
+<ol>
+<li><p>“3.多模态信息融合.txt”：</p>
+<ul>
+<li>“3.” 可能表示这是一系列文件中的第3个</li>
+<li>“多模态信息融合” 是一个专业术语，通常指将不同类型的数据（如文本、图像、音频等）结合起来进行分析和处理</li>
+<li>这个文件可能包含关于多模态信息融合技术的笔记、研究或资料</li>
+</ul>
+</li>
+<li><p>“API Key.txt”：</p>
+<ul>
+<li>“API Key” 是应用程序接口密钥的缩写，用于身份验证和授权</li>
+<li>这个文件可能包含各种服务或平台的API密钥</li>
+</ul>
+</li>
+<li><p>“密码本.txt”：</p>
+<ul>
+<li>“密码本” 通常指存储密码的文档</li>
+<li>这个文件可能包含各种账户的用户名和密码信息</li>
+</ul>
+</li>
+</ol>
+<p>我需要将这些分析整理成一个清晰的回应。</p>
+<p>回复内容：</p>
+<p>基于之前获取的桌面上的txt文件名，我可以推测它们的含义。让我分析每个文件名并提供合理的解释。基于桌面txt文件名，我可以做出以下推测：</p>
+<ol>
+<li><p><strong>3.多模态信息融合.txt</strong></p>
+<ul>
+<li>“3.” 可能表示这是一系列相关文件中的第3个</li>
+<li>“多模态信息融合” 是人工智能领域的专业术语，指将不同类型的数据（如文本、图像、音频、视频等）结合起来进行分析和处理的技术</li>
+<li>这个文件很可能包含关于多模态信息融合技术的研究资料、学习笔记或项目文档</li>
+</ul>
+</li>
+<li><p><strong>API Key.txt</strong></p>
+<ul>
+<li>“API Key”（应用程序接口密钥）是用于身份验证和授权的安全凭证</li>
+<li>这个文件可能存储了各种在线服务、开发平台或应用程序的API密钥，方便用户在开发或使用相关服务时快速获取</li>
+</ul>
+</li>
+<li><p><strong>密码本.txt</strong></p>
+<ul>
+<li>“密码本” 是一个常见的术语，指专门用于记录密码的文档</li>
+<li>这个文件很可能包含了用户在各种网站、应用程序或服务上的账户名称和对应的密码信息，用于集中管理和记忆</li>
+</ul>
+</li>
+</ol>
+<p>这些文件都与数字信息管理和技术相关，可能是用户在学习、工作或日常使用计算机时创建的重要参考文档。</p>
+<p>上述结果表明 MCP Server 已经可以正常工作。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/12/OSCP%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/12/OSCP%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/" class="post-title-link" itemprop="url">OSCP学习心得</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-12 10:04:28 / 修改时间：11:20:39" itemprop="dateCreated datePublished" datetime="2025-12-12T10:04:28+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/OSCP/" itemprop="url" rel="index"><span itemprop="name">OSCP</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在 OSCP 的学习和练习以及打靶场或者渗透测试过程中，我认为本质上不是掌握了多少工具，而是在规定时间内，能不能把渗透的全流程跑完，关键步骤上思维能否发散，能否有较为全面的思考和枚举，所以重心还是在思路上，渗透的思路和应对关键点时的经验，所以记录一些自己的思考。</p>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>重点在于覆盖面和可用性：</p>
+<ul>
+<li>覆盖面：全端口（服务）扫描，不要漏掉服务，不然可能会找不到正确的入口点；</li>
+<li>可用性：不同服务、版本都有什么漏洞，是否具备利用条件，无法利用的话是不是加了什么限制，是需要绕过限制还是需要转变路径，这些属于能否实现利用的范畴；</li>
+</ul>
+<blockquote>
+<p><strong>信息收集要得出一个结论：我到底能打哪些入口？哪些入口最可能实现边界突破？</strong></p>
+</blockquote>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>漏洞利用阶段不要盲目跑exp，最好是先验证控制程度，再拿shell。</p>
+<p>先确定漏洞是否真实存在，漏洞可控点在哪里，输入如何影响输出，然后再确认控制深度（能否读写文件&#x2F;命令执行&#x2F;鉴权绕过），最后在拿稳定shell。</p>
+<blockquote>
+<p><strong>先看能不能验证清楚，在考虑能否一步到位。</strong></p>
+</blockquote>
+<h2 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h2><p>提权并没有深入学习太多，但是感觉应该在于找到“权限边界被破坏”的证据，可以根据历史经验寻找线索，找到稳定可复现的思路。</p>
+<h2 id="横向移动"><a href="#横向移动" class="headerlink" title="横向移动"></a>横向移动</h2><blockquote>
+<p><strong>信任关系+凭证流向</strong>: 从以控制主机把影响力扩到更有价值的主机&#x2F;账号&#x2F;网段等。</p>
+</blockquote>
+<hr>
+<p>⭐<strong>持续更新 To be continued……</strong></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -960,197 +1212,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/12/09/Windows%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/09/Java%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8ESpringboot%E6%9E%B6%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/09/Java%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8ESpringboot%E6%9E%B6%E6%9E%84/" class="post-title-link" itemprop="url">Java漏洞靶场搭建学习(一)：环境搭建与Springboot架构</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-09 17:53:16 / 修改时间：19:07:04" itemprop="dateCreated datePublished" datetime="2025-12-09T17:53:16+08:00">2025-12-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Java漏洞靶场搭建学习"><a href="#Java漏洞靶场搭建学习" class="headerlink" title="Java漏洞靶场搭建学习"></a>Java漏洞靶场搭建学习</h1><p>在学习 Java Web 安全的过程中，目前状态是只能理解相关的漏洞原理，根据 PoC 做题或者复现漏洞，但是这些对于 <strong>代码审计、漏洞挖掘、SDL</strong> 等都没有实质性帮助，想要在学习或工作过程中提升相关能力，计划实现以下目标：</p>
-<ul>
-<li>理解漏洞产生的真实上下文；</li>
-<li>搭建一个可控、可扩展的实验环境；</li>
-<li>训练从代码层面定位与修复问题的能力；</li>
-</ul>
-<p>这篇博客记录了学习搭建 Java 漏洞靶场的过程，作为一个学习记录，为后续能够快速搭建测试环境，验证代码审计工具能力奠定基础。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/09/Java%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8ESpringboot%E6%9E%B6%E6%9E%84/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/" class="post-title-link" itemprop="url">CodeQL入门</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-12-07 09:19:52" itemprop="dateCreated datePublished" datetime="2025-12-07T09:19:52+08:00">2025-12-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-12-09 19:06:42" itemprop="dateModified" datetime="2025-12-09T19:06:42+08:00">2025-12-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SAST/" itemprop="url" rel="index"><span itemprop="name">SAST</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
-<p>传统的扫描工具往往像是一个黑盒，你输入代码，它吐出报告。但 CodeQL 不同，它的核心理念非常有意思： <code>Code as Data</code> 代码即数据，CodeQL 把源代码转化成一个关系型数据库，而漏洞挖掘的过程，就变成了一次次编写 SQL（其实是 QL）查询语句的过程。</p>
-<p>CodeQL 工具包含两大部分组成：</p>
-<ul>
-<li>核心引擎(闭源)：用于解析源代码并存储于数据库，以及执行 QL 语句从数据库中进行查询；</li>
-<li>SDK代码库(开源)：包含各编程语言对应的 QL 代码库(属性&#x2F;谓词&#x2F;等)，以便快速编写查询语句。</li>
-</ul>
-<p>这给了安全研究员和开发者极大的自由度——不再受限于工具内置的规则，可以自己定义“什么样的代码长相存在漏洞”。这篇 Blog 记录了我第一次使用 CodeQL 进行静态代码分析的过程。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
