@@ -20,27 +20,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="最近在学习一些体量较大的开源项目时，明显感受到和阅读中小型项目完全不同的困难：代码量庞大、模块之间耦合复杂、很难快速抓住主线流程。 如果一开始就陷入细节，很容易在函数和类之间迷失方向。因此，我尝试整理了一套从“跑起来”到“抓主线”，再到“逐模块理解”的学习思路，希望能帮助自己，也给后来者提供一个参考的学习框架。 项目目标这一部分回答三个问题：这个项目是什么？解决什么问题？你为什么要学它？  项目背">
+    <meta name="description" content="软考信息安全工程师涉及到的考试章节和具体考点如下，科目一考点：    章节名称 章节内容    1. 网络信息安全概述 网络发展现状、安全属性、安全管理、生命周期   2. 网络攻击原理与常用方法 攻击概述、常见攻击方法、黑客常用工具、攻击案例   3. 密码学基本理论 概况、密码学体制、常见密码算法、数字签名、安全协议   4. 网络安全体系与网络安全模型 概述、网络安全体系模型、建设原则、建设">
 <meta property="og:type" content="article">
-<meta property="og:title" content="大型开源项目学习经验">
-<meta property="og:url" content="https://zyufoye.github.io/2025/12/23/%E5%A4%A7%E5%9E%8B%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%AD%A6%E4%B9%A0%E7%BB%8F%E9%AA%8C/index.html">
+<meta property="og:title" content="软考信息安全工程师考点概述">
+<meta property="og:url" content="https://zyufoye.github.io/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/index.html">
 <meta property="og:site_name" content="Aono Note">
-<meta property="og:description" content="最近在学习一些体量较大的开源项目时，明显感受到和阅读中小型项目完全不同的困难：代码量庞大、模块之间耦合复杂、很难快速抓住主线流程。 如果一开始就陷入细节，很容易在函数和类之间迷失方向。因此，我尝试整理了一套从“跑起来”到“抓主线”，再到“逐模块理解”的学习思路，希望能帮助自己，也给后来者提供一个参考的学习框架。 项目目标这一部分回答三个问题：这个项目是什么？解决什么问题？你为什么要学它？  项目背">
+<meta property="og:description" content="软考信息安全工程师涉及到的考试章节和具体考点如下，科目一考点：    章节名称 章节内容    1. 网络信息安全概述 网络发展现状、安全属性、安全管理、生命周期   2. 网络攻击原理与常用方法 攻击概述、常见攻击方法、黑客常用工具、攻击案例   3. 密码学基本理论 概况、密码学体制、常见密码算法、数字签名、安全协议   4. 网络安全体系与网络安全模型 概述、网络安全体系模型、建设原则、建设">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-23T12:32:26.000Z">
-<meta property="article:modified_time" content="2025-12-23T12:57:12.038Z">
+<meta property="article:published_time" content="2026-01-03T14:05:33.000Z">
+<meta property="article:modified_time" content="2026-01-03T14:10:47.941Z">
 <meta property="article:author" content="Aono">
-<meta property="article:tag" content="Learning">
+<meta property="article:tag" content="软考">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://zyufoye.github.io/2025/12/23/%E5%A4%A7%E5%9E%8B%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%AD%A6%E4%B9%A0%E7%BB%8F%E9%AA%8C/">
+<link rel="canonical" href="https://zyufoye.github.io/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2025/12/23/%E5%A4%A7%E5%9E%8B%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%AD%A6%E4%B9%A0%E7%BB%8F%E9%AA%8C/","path":"2025/12/23/大型开源项目学习经验/","title":"大型开源项目学习经验"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/","path":"2026/01/03/软考信息安全工程师考点概述/","title":"软考信息安全工程师考点概述"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>大型开源项目学习经验 | Aono Note</title>
+<title>软考信息安全工程师考点概述 | Aono Note</title>
   
 
 
@@ -147,7 +147,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -160,7 +160,6 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E7%9B%AE%E6%A0%87"><span class="nav-number">1.</span> <span class="nav-text">项目目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%96%B9%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">运行方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%EF%BC%88%E7%B3%BB%E7%BB%9F%E4%B8%BB%E7%BA%BF%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">核心流程（系统主线）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E9%80%9A%E6%A8%A1%E5%9D%97"><span class="nav-number">4.</span> <span class="nav-text">调通模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AA%E8%B0%83%E9%80%9A%E6%A8%A1%E5%9D%97"><span class="nav-number">5.</span> <span class="nav-text">未调通模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E5%AD%A6%E4%B9%A0%E6%9E%B6%E6%9E%84-Demo"><span class="nav-number">6.</span> <span class="nav-text">项目学习架构 Demo</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -221,7 +220,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/23/%E5%A4%A7%E5%9E%8B%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%AD%A6%E4%B9%A0%E7%BB%8F%E9%AA%8C/">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/kehan.jpg">
@@ -234,12 +233,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="大型开源项目学习经验 | Aono Note">
+      <meta itemprop="name" content="软考信息安全工程师考点概述 | Aono Note">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          大型开源项目学习经验
+          软考信息安全工程师考点概述
         </h1>
 
         <div class="post-meta-container">
@@ -251,7 +250,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-12-23 20:32:26 / 修改时间：20:57:12" itemprop="dateCreated datePublished" datetime="2025-12-23T20:32:26+08:00">2025-12-23</time>
+      <time title="创建时间：2026-01-03 22:05:33 / 修改时间：22:10:47" itemprop="dateCreated datePublished" datetime="2026-01-03T22:05:33+08:00">2026-01-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -259,7 +258,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
         </span>
     </span>
 
@@ -279,41 +278,149 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>最近在学习一些体量较大的开源项目时，明显感受到和阅读中小型项目完全不同的困难：代码量庞大、模块之间耦合复杂、很难快速抓住主线流程。</p>
-<p>如果一开始就陷入细节，很容易在函数和类之间迷失方向。因此，我尝试整理了一套从“跑起来”到“抓主线”，再到“逐模块理解”的学习思路，希望能帮助自己，也给后来者提供一个参考的学习框架。</p>
-<h2 id="项目目标"><a href="#项目目标" class="headerlink" title="项目目标"></a>项目目标</h2><p>这一部分回答三个问题：这个项目是什么？解决什么问题？你为什么要学它？</p>
-<ul>
-<li>项目背景：目前存在什么问题？</li>
-<li>项目核心目标：该项目解决了什么问题？</li>
-<li>个人学习目标：我需要用这个项目实现什么？</li>
-</ul>
-<h2 id="运行方式"><a href="#运行方式" class="headerlink" title="运行方式"></a>运行方式</h2><p>这一部分回答：项目如何跑起来？最简单的运行方式和运行路径是什么？</p>
-<ul>
-<li>环境依赖配置</li>
-<li>最小可运行实例</li>
-<li>运行结果分析</li>
-</ul>
-<h2 id="核心流程（系统主线）"><a href="#核心流程（系统主线）" class="headerlink" title="核心流程（系统主线）"></a>核心流程（系统主线）</h2><p>程序从启动到结束经历了什么？需要描述出一条清晰的执行链路。</p>
-<ul>
-<li>输出 &amp;&amp; 输出</li>
-<li>核心功能一执行链路</li>
-<li>核心功能二执行链路</li>
-<li>等等</li>
-</ul>
-<h2 id="调通模块"><a href="#调通模块" class="headerlink" title="调通模块"></a>调通模块</h2><ol>
-<li>XX模块<ul>
-<li>模块功能</li>
-<li>输出 &amp;&amp; 输出</li>
-</ul>
-</li>
-</ol>
-<h2 id="未调通模块"><a href="#未调通模块" class="headerlink" title="未调通模块"></a>未调通模块</h2><ol>
-<li>XX模块<ul>
-<li>价值分析</li>
-</ul>
-</li>
-</ol>
-<h2 id="项目学习架构-Demo"><a href="#项目学习架构-Demo" class="headerlink" title="项目学习架构 Demo"></a>项目学习架构 Demo</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">## 项目目标</span><br><span class="line"></span><br><span class="line">## 运行方式</span><br><span class="line"></span><br><span class="line">## 核心流程（系统主线）</span><br><span class="line"></span><br><span class="line">- 输出 &amp;&amp; 输出</span><br><span class="line">- 核心功能一执行链路</span><br><span class="line">- 核心功能二执行链路</span><br><span class="line"></span><br><span class="line">## 调通模块</span><br><span class="line"></span><br><span class="line">## 未调通模块</span><br></pre></td></tr></table></figure>
+    <div class="post-body" itemprop="articleBody"><p>软考信息安全工程师涉及到的考试章节和具体考点如下，科目一考点：</p>
+<table>
+<thead>
+<tr>
+<th><strong>章节名称</strong></th>
+<th><strong>章节内容</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. 网络信息安全概述</td>
+<td>网络发展现状、安全属性、安全管理、生命周期</td>
+</tr>
+<tr>
+<td>2. 网络攻击原理与常用方法</td>
+<td>攻击概述、常见攻击方法、黑客常用工具、攻击案例</td>
+</tr>
+<tr>
+<td>3. 密码学基本理论</td>
+<td>概况、密码学体制、常见密码算法、数字签名、安全协议</td>
+</tr>
+<tr>
+<td>4. 网络安全体系与网络安全模型</td>
+<td>概述、网络安全体系模型、建设原则、建设内容、参考案例</td>
+</tr>
+<tr>
+<td>5. 物理与环境安全技术</td>
+<td>物理安全、环境安全、机房安全、通信安全、设备安全、介质安全</td>
+</tr>
+<tr>
+<td>6. 认证技术原理与应用</td>
+<td>概述、认证类型与认证过程、认证技术、认证产品和技术指标</td>
+</tr>
+<tr>
+<td>7. 访问控制技术原理与应用</td>
+<td>访问控制原理、模型、类型、策略设计与实现、安全管理、产品</td>
+</tr>
+<tr>
+<td>8. 防火墙技术原理与应用</td>
+<td>防火墙原理、类型与实现技术、产品与技术指标、体系结构</td>
+</tr>
+<tr>
+<td>9. VPN 技术原理与应用</td>
+<td>概述、类型和实现技术、产品与技术指标、技术应用</td>
+</tr>
+<tr>
+<td>10. 入侵检测技术原理与应用</td>
+<td>概述、入侵检测技术、组成与分类、产品与技术指标、应用</td>
+</tr>
+<tr>
+<td>11. 网络物理隔离技术原理与应用</td>
+<td>网络物理隔离概述、系统与类型、机制与技术、产品与指标</td>
+</tr>
+<tr>
+<td>12. 网络安全审计技术原理与应用</td>
+<td>安全审计概述、组成与类型、机制与实现技术、产品与技术</td>
+</tr>
+<tr>
+<td>13. 网络安全漏洞防护技术原理与应用</td>
+<td>网络安全漏洞概述、分类与管理、漏洞扫描技术、处置技术、产品</td>
+</tr>
+<tr>
+<td>14. 恶意代码防范技术原理</td>
+<td>计算机病毒、特洛伊木马、网络蠕虫、僵尸网络等</td>
+</tr>
+<tr>
+<td>15. 网络安全主动防御技术与应用</td>
+<td>入侵阻断、软件白名单、网络流量清洗、可信计算、数字水印等</td>
+</tr>
+<tr>
+<td>16. 网络安全风险评估技术原理与应用</td>
+<td>风险评估概述、评估过程、评估技术、工作流程</td>
+</tr>
+<tr>
+<td>17. 网络安全应急响应技术原理与应用</td>
+<td>网络安全应急响应概述、工作机制、预案内容、应急处理</td>
+</tr>
+<tr>
+<td>18. 网络安全测评技术与标准</td>
+<td>网络安全测评概述、类型、流程与内容、技术工具、标准</td>
+</tr>
+<tr>
+<td>19. 操作系统安全保护</td>
+<td>概述、Windows &#x2F; Linux 操作系统安全、国产操作系统安全</td>
+</tr>
+<tr>
+<td>20. 数据库系统安全</td>
+<td>概述、安全机制和技术、Oracle、MS SQL、MySQL、国产数据库安全</td>
+</tr>
+<tr>
+<td>21. 网络设备安全</td>
+<td>网络设备安全概述、机制与技术、增强技术、漏洞和解决方法</td>
+</tr>
+<tr>
+<td>22. 网站安全需求分析与安全保护</td>
+<td>网络安全威胁、Apache Web 安全、IIS 安全、Web 漏洞、网站安全</td>
+</tr>
+<tr>
+<td>23. 云计算安全需求分析与安全保护</td>
+<td>云计算安全威胁、安全需求、安全保护机制与技术、案例</td>
+</tr>
+<tr>
+<td>24. 工控安全需求分析与安全保护</td>
+<td>工控系统安全威胁、安全需求、安全保护机制与技术、案例</td>
+</tr>
+<tr>
+<td>25. 移动应用安全需求分析与安全保护</td>
+<td>移动应用安全威胁、Android、iOS 安全、保护机制和技术、案例</td>
+</tr>
+<tr>
+<td>26. 大数据安全需求分析与安全保护</td>
+<td>大数据安全威胁、安全需求、安全保护机制与技术、案例</td>
+</tr>
+<tr>
+<td>专业英语</td>
+<td>专业英语</td>
+</tr>
+</tbody></table>
+<p>科目二考点：</p>
+<table>
+<thead>
+<tr>
+<th><strong>考试专题</strong></th>
+<th><strong>知识点</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>密码学</td>
+<td>1. 安全目标等基础概念。<br>2. RSA 加解密详细过程，其他加密算法概述。<br>3. 公钥私钥加解密、数字签名过程，文字表示及识图。<br>4. 密钥管理技术、安全认证协议等。</td>
+</tr>
+<tr>
+<td>网络安全</td>
+<td>1. 防火墙概念（iptables 过滤规则及配置命令）、体系结构、包过滤规则填表，Windows &#x2F; Linux 配置。<br>2. 各种网络攻击和威胁，数据敏感度、隐私分类、隐私保护等。<br>3. 网络协议数据包含义分析。<br>4. 重要网络协议如 TCP、DNS、DHCP 等。<br>5. 华为交换机、路由器等安全配置命令。</td>
+</tr>
+<tr>
+<td>信息系统安全</td>
+<td>1. 信息安全概述、目标、访问控制原理、BLP 等模型。<br>2. C 语言代码漏洞分析，变量内存图等。<br>3. Linux 重要配置文件名及内容含义、文件权限、配置命令等。<br>4. Windows 重要配置：日志、防火墙、安全策略等界面。</td>
+</tr>
+<tr>
+<td>新技术</td>
+<td>移动应用——安卓系统和 iOS 系统；<br>数据敏感度、隐私保护、隐私分类等；<br>其他可能会考察的有：云计算、工控系统、移动应用、大数据、应急响应等安全新技术内容。</td>
+</tr>
+</tbody></table>
+
     </div>
 
     
@@ -322,21 +429,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Learning/" rel="tag"># Learning</a>
+              <a href="/tags/%E8%BD%AF%E8%80%83/" rel="tag"># 软考</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/12/20/%E5%B8%B8%E8%A7%81CWE%E7%B1%BB%E5%9E%8B/" rel="prev" title="常见CWE类型">
-                  <i class="fa fa-angle-left"></i> 常见CWE类型
+                <a href="/2025/12/23/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%882024%E7%9C%9F%E9%A2%98%E9%80%89%E6%8B%A9/" rel="prev" title="软考信息安全工程师2024真题选择">
+                  <i class="fa fa-angle-left"></i> 软考信息安全工程师2024真题选择
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/12/23/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%882024%E7%9C%9F%E9%A2%98%E9%80%89%E6%8B%A9/" rel="next" title="软考信息安全工程师2024真题选择">
-                  软考信息安全工程师2024真题选择 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
