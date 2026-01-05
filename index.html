@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -183,7 +183,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -208,6 +208,147 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/05/WebGoat%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/05/WebGoat%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA/" class="post-title-link" itemprop="url">WebGoat靶场搭建</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-05 22:42:51 / 修改时间：22:45:00" itemprop="dateCreated datePublished" datetime="2026-01-05T22:42:51+08:00">2026-01-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 SAST 和 CodeQL 的学习过程中，需要找到一个比较有价值的测试目标，目前考虑到的关键点是代码不能过于简单，否则不具备测试深度，提出的方法不具备应用价值，这里选择 WebGoat 作为初步测试目标，结合 CodeQL-Community-Packs 进行学习、分析和测试。</p>
+<p>靶场地址下载地址：<a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat/releases">https://github.com/WebGoat/WebGoat/releases</a></p>
+<p>也可以直接下载 jar 包：<a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat/releases/download/v2025.3/webgoat-2025.3.jar">https://github.com/WebGoat/WebGoat/releases/download/v2025.3/webgoat-2025.3.jar</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export TZ=Asia/Shanghai # or your timezone</span><br><span class="line">java -Dfile.encoding=UTF-8 -jar webgoat-2025.3.jar</span><br></pre></td></tr></table></figure>
+
+<p>export TZ 用来设置时区，java 启动WebGoat应用程序，-Dfile.encoding&#x3D;UTF-8 设置Java虚拟机的文件编码为UTF-8，-jar webgoat-2023.8.jar 运行名为webgoat-2023.8.jar的可执行JAR文件。</p>
+<h2 id="漏洞代码分析"><a href="#漏洞代码分析" class="headerlink" title="漏洞代码分析"></a>漏洞代码分析</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/SqlInjection/attack2&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> AttackResult <span class="title function_">completed</span><span class="params">(<span class="meta">@RequestParam</span> String query)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> injectableQuery(query);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码定义了一个<strong>Spring MVC 控制器方法（Controller Method）</strong>，它是后端处理前端请求的入口点。</p>
+<h3 id="代码逐行详细解读"><a href="#代码逐行详细解读" class="headerlink" title="代码逐行详细解读"></a>代码逐行详细解读</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/SqlInjection/attack2&quot;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>功能</strong>：这是一个<strong>路由映射</strong>注解。</li>
+<li><strong>含义</strong>：它告诉 Spring 框架，当服务器收到一个 <strong>HTTP POST</strong> 请求，且请求的路径（URL）是 <strong>&#x2F;SqlInjection&#x2F;attack2</strong> 时，请把这个请求交给下面定义的 <code>completed</code> 方法来处理。</li>
+<li><strong>对应前端行为</strong>：用户在浏览器点击“提交”按钮时，浏览器会向这个地址发送数据。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>功能</strong>：这是一个<strong>响应处理</strong>注解。</li>
+<li><strong>含义</strong>：它告诉 Spring，这个方法的<strong>返回值</strong>（<code>AttackResult</code> 对象）应该直接被序列化（通常转为 JSON 格式）并写入 HTTP 响应体（Body）中返回给浏览器，而不是被解析为 JSP 或 HTML 页面模板。</li>
+<li><strong>对应前端行为</strong>：浏览器收到的不是一个新网页，而是一段 JSON 数据（如 <code>&#123;&quot;lessonCompleted&quot;: true, &quot;feedback&quot;: &quot;...&quot;&#125;</code>），前端 JS 脚本会读取这个 JSON 并弹窗提示结果。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> AttackResult <span class="title function_">completed</span><span class="params">(<span class="meta">@RequestParam</span> String query)</span> &#123;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>方法签名</strong>：定义了一个名为 <code>completed</code> 的公共方法。</li>
+<li>**<code>@RequestParam String query</code>**：<ul>
+<li>这是<strong>参数绑定</strong>。它告诉 Spring 从 HTTP 请求的参数中提取名为 <strong>“query”</strong> 的值，并将其赋值给方法参数 <code>query</code>。</li>
+<li>如果请求是 <code>POST /SqlInjection/attack2?query=SELECT...</code> 或者表单数据中包含 <code>query=SELECT...</code>，那么这里的 <code>String query</code> 就会得到那个 SQL 字符串。</li>
+</ul>
+</li>
+<li>**返回值类型 <code>AttackResult</code>**：这是 WebGoat 自定义的一个类，用来封装“练习结果”，包含是否通关、反馈信息等。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">return</span> injectableQuery(query);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>逻辑</strong>：它没有自己处理业务逻辑，而是直接调用了同一个类中的辅助方法 <code>injectableQuery(query)</code>，并将结果直接返回。</li>
+<li><strong>作用</strong>：这是一个简单的<strong>入口转发</strong>。真正执行 SQL 查询和判定是否通关的逻辑都在 <code>injectableQuery</code> 方法里（也就是下面那段有漏洞的代码）。</li>
+</ul>
+<h3 id="总结功能"><a href="#总结功能" class="headerlink" title="总结功能"></a>总结功能</h3><p>这段代码的作用是在服务器上开放了一个名为 <code>/SqlInjection/attack2</code> 的接口，专门接收用户 POST 过来的 <code>query</code> 参数，然后把这个参数扔给内部逻辑去执行，最后把执行结果（成功或失败的消息）以 JSON 格式扔回给用户。</p>
+<h2 id="CodeQL-分析"><a href="#CodeQL-分析" class="headerlink" title="CodeQL 分析"></a>CodeQL 分析</h2><p>如果使用 CodeQL 进行静态分析，它识别到的<strong>Source（污染源&#x2F;用户输入点）</strong> 就是：</p>
+<p><strong><code>@RequestParam String query</code></strong></p>
+<p>具体来说，CodeQL 的污点跟踪（Taint Tracking）分析会标记以下位置为 Source：</p>
+<ol>
+<li><strong>位置</strong>：第 42 行的参数声明 <code>String query</code>。</li>
+<li><strong>原因</strong>：<ul>
+<li>该方法被注解 <code>@PostMapping</code> 标记，表明这是一个处理 HTTP 请求的 Handler 方法。</li>
+<li>参数被注解 <code>@RequestParam</code> 标记（即使没有显式标记，Spring Boot 中默认非简单类型或特定配置下也会被视为输入）。</li>
+<li>CodeQL 的 <code>RemoteFlowSource</code> 库（尤其是针对 Spring MVC 的建模）明确定义了被 <code>@RequestParam</code>、<code>@RequestBody</code>、<code>@PathVariable</code> 等注解修饰的控制器方法参数均视为不可信的外部输入（Untrusted User Input）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="CodeQL-视角的污点路径（Data-Flow-Path）"><a href="#CodeQL-视角的污点路径（Data-Flow-Path）" class="headerlink" title="CodeQL 视角的污点路径（Data Flow Path）"></a>CodeQL 视角的污点路径（Data Flow Path）</h3><p>CodeQL 会追踪数据流，构建如下的路径：</p>
+<ol>
+<li><strong>Source (源头)</strong>: 第 42 行 <code>completed(@RequestParam String query)</code> 中的 <strong><code>query</code></strong> 变量。<ul>
+<li><em>标记：Remote user input source</em></li>
+</ul>
+</li>
+<li><strong>Flow (传递)</strong>: 第 43 行 <code>return injectableQuery(query);</code>，<code>query</code> 被传递给 <code>injectableQuery</code> 方法。</li>
+<li><strong>Flow (传递)</strong>: 第 46 行 <code>protected AttackResult injectableQuery(String query)</code>，参数 <code>query</code> 接收了污点。</li>
+<li><strong>Sink (汇聚点&#x2F;漏洞点)</strong>: 第 49 行 <code>statement.executeQuery(query);</code>。<ul>
+<li><em>标记：SQL Injection Sink (java.sql.Statement.executeQuery)</em></li>
+</ul>
+</li>
+</ol>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>CodeQL 会准确地将 <strong>第 42 行的 <code>query</code> 参数</strong> 识别为用户输入的源头。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1508,154 +1649,6 @@
 
 <p>至此，Vulnhalla 环境配置完成，可运行一个完整 pipeline。</p>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/" class="post-title-link" itemprop="url">CodeQL-MCP架构解读</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-15 21:55:38 / 修改时间：22:04:55" itemprop="dateCreated datePublished" datetime="2025-12-15T21:55:38+08:00">2025-12-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>本片内容以 <a target="_blank" rel="noopener" href="https://github.com/JordyZomer/codeql-mcp">https://github.com/JordyZomer/codeql-mcp</a> 为基础，进行 CodeQL MCP 的开发学习。</p>
-<h2 id="CodeQL-MCP-整体架构分析"><a href="#CodeQL-MCP-整体架构分析" class="headerlink" title="CodeQL-MCP 整体架构分析"></a>CodeQL-MCP 整体架构分析</h2><p>项目中包含了两个核心文件 <code>codeqlclient.py</code> 和  <code>server.py</code> ：</p>
-<p><strong><code>codeqlclient.py</code></strong> 是一个底层通信客户端，负责与 CodeQL 查询服务器建立并管理 JSON-RPC 连接。它封装了进程启动、请求发送、响应解析、异步任务跟踪等复杂逻辑，提供了数据库注册、查询执行、结果解码等核心操作的原始接口。该文件不依赖任何高层框架，专注于可靠、高效地与 CodeQL 引擎交互，可作为独立库在不同上下文中复用。</p>
-<p><strong><code>server.py</code></strong> 是一个基于 Model Context Protocol（MCP）的服务层实现，利用 FastMCP 框架将 <code>codeqlclient.py</code> 提供的底层能力包装为用户友好的异步 API 工具。它定义了清晰的 HTTP 可调用接口，处理参数验证、错误反馈和结果格式化，使外部系统能通过标准 MCP 协议便捷地使用 CodeQL 功能，而无需关心底层通信细节。</p>
-<p>在 <code>codeqlclient.py</code> 中包含了一个核心类结构 CodeQLQueryServer 主要模块如下：</p>
-<ol>
-<li>服务器进程管理</li>
-</ol>
-<ul>
-<li>启动&#x2F;停止 ：通过 start() 和 stop() 方法管理 CodeQL 子进程</li>
-<li>进程通信 ：使用标准输入&#x2F;输出进行 JSON-RPC 通信</li>
-<li>线程管理 ：<ul>
-<li>_read_loop() ：主线程，读取服务器响应；_stderr_loop() ：处理标准错误输出；异步处理：支持并发请求</li>
-</ul>
-</li>
-</ul>
-<ol start="2">
-<li>通信协议层</li>
-</ol>
-<ul>
-<li>JSON-RPC 2.0：定义消息格式，请求&#x2F;响应结构，支持异步调用</li>
-</ul>
-<ol start="3">
-<li>功能模块</li>
-</ol>
-<ul>
-<li><p>数据库管理</p>
-<ul>
-<li>register_databases() ：注册数据库</li>
-<li>deregister_databases() ：注销数据库</li>
-</ul>
-</li>
-<li><p>查询执行</p>
-<ul>
-<li>evaluate_queries() ：执行完整查询</li>
-<li>quick_evaluate() ：快速评估（针对特定代码位置）</li>
-<li>evaluate_and_wait() ：同步执行查询</li>
-<li>quick_evaluate_and_wait() ：同步快速评估</li>
-</ul>
-</li>
-<li><p>结果处理</p>
-<ul>
-<li>decode_bqrs() ：解码 BQRS 结果文件</li>
-</ul>
-</li>
-<li><p>代码分析辅助</p>
-<ul>
-<li>find_class_identifier_position() ：查找类标识符位置</li>
-<li>find_predicate_identifier_position() ：查找谓词标识符位置</li>
-</ul>
-</li>
-<li><p>进度回调机制（支持实时进度更新）</p>
-<ul>
-<li>wait_for_progress_done() ：等待进度完成</li>
-<li>wait_for_completion_callback() ：等待异步操作完成</li>
-<li>wait_for_progress_done() 创建进度跟踪器</li>
-<li>wait_for_completion_callback() 创建完成处理器</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>数据流：用户请求 -&gt; send_request()-&gt;JSON-RPC 消息-&gt;CodeQL 服务器-&gt;CodeQL 引擎-&gt;服务器响应-&gt;_read_loop()-&gt;_handle_message()-&gt;回调函数</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
       
     </div>
 
