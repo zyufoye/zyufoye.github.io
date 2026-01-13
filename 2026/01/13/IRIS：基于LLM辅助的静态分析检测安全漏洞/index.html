@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="软件容易受到安全漏洞的影响。用于检测这些漏洞的程序分析工具由于依赖人工标注的规范，在实践中效果有限。大型语言模型（LLM）展现出令人印象深刻的代码生成能力，但它们无法对代码进行复杂推理以检测此类漏洞，特别是因为此任务需要全仓库分析。我们提出了IRIS，一种神经符号方法，系统地结合LLM与静态分析来执行全仓库推理以检测安全漏洞。具体来说，IRIS利用LLM推断污点规范并执行上下文分析，从而减轻对人工">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IRIS：基于LLM辅助的静态分析检测安全漏洞">
+<meta property="og:url" content="https://zyufoye.github.io/2026/01/13/IRIS%EF%BC%9A%E5%9F%BA%E4%BA%8ELLM%E8%BE%85%E5%8A%A9%E7%9A%84%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%A3%80%E6%B5%8B%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="软件容易受到安全漏洞的影响。用于检测这些漏洞的程序分析工具由于依赖人工标注的规范，在实践中效果有限。大型语言模型（LLM）展现出令人印象深刻的代码生成能力，但它们无法对代码进行复杂推理以检测此类漏洞，特别是因为此任务需要全仓库分析。我们提出了IRIS，一种神经符号方法，系统地结合LLM与静态分析来执行全仓库推理以检测安全漏洞。具体来说，IRIS利用LLM推断污点规范并执行上下文分析，从而减轻对人工">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-13T14:38:54.000Z">
+<meta property="article:modified_time" content="2026-01-13T14:40:58.504Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="CodeQL">
+<meta property="article:tag" content="SAST">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/01/13/IRIS%EF%BC%9A%E5%9F%BA%E4%BA%8ELLM%E8%BE%85%E5%8A%A9%E7%9A%84%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%A3%80%E6%B5%8B%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/01/13/IRIS%EF%BC%9A%E5%9F%BA%E4%BA%8ELLM%E8%BE%85%E5%8A%A9%E7%9A%84%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%A3%80%E6%B5%8B%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/","path":"2026/01/13/IRIS：基于LLM辅助的静态分析检测安全漏洞/","title":"IRIS：基于LLM辅助的静态分析检测安全漏洞"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>IRIS：基于LLM辅助的静态分析检测安全漏洞 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，分享生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8C-%E5%85%B3%E9%94%AE%E8%A7%A3%E8%AF%BB1%EF%BC%9A%E7%A0%94%E7%A9%B6%E5%8A%A8%E6%9C%BA%E4%B8%8E%E6%A0%B8%E5%BF%83%E8%B4%A1%E7%8C%AE"><span class="nav-number">1.</span> <span class="nav-text">📌 关键解读1：研究动机与核心贡献</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">核心问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%88%9B%E6%96%B0"><span class="nav-number">1.2.</span> <span class="nav-text">核心创新</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%BC%95%E8%A8%80"><span class="nav-number">2.</span> <span class="nav-text">1. 引言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E4%B8%BB%E8%A6%81%E6%8C%91%E6%88%98"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 主要挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%85%88%E5%89%8D%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8%E6%96%B9%E6%B3%95%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 先前数据驱动方法的局限性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8C-%E5%85%B3%E9%94%AE%E8%A7%A3%E8%AF%BB2%EF%BC%9AIRIS%E7%9A%84%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">📌 关键解读2：IRIS的技术架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B51%EF%BC%9A%E5%80%99%E9%80%89%E6%8F%90%E5%8F%96"><span class="nav-number">3.1.</span> <span class="nav-text">阶段1：候选提取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B52%EF%BC%9ALLM%E8%A7%84%E8%8C%83%E6%8E%A8%E6%96%AD"><span class="nav-number">3.2.</span> <span class="nav-text">阶段2：LLM规范推断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B53%EF%BC%9A%E9%9D%99%E6%80%81%E6%B1%A1%E7%82%B9%E5%88%86%E6%9E%90"><span class="nav-number">3.3.</span> <span class="nav-text">阶段3：静态污点分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B54%EF%BC%9A%E4%B8%8A%E4%B8%8B%E6%96%87%E8%BF%87%E6%BB%A4"><span class="nav-number">3.4.</span> <span class="nav-text">阶段4：上下文过滤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8A%A8%E6%9C%BA%E7%A4%BA%E4%BE%8B"><span class="nav-number">4.</span> <span class="nav-text">2. 动机示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="nav-number">4.1.</span> <span class="nav-text">漏洞分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E6%8C%91%E6%88%98"><span class="nav-number">4.2.</span> <span class="nav-text">检测挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IRIS%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">4.3.</span> <span class="nav-text">IRIS的优势</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8C-%E5%85%B3%E9%94%AE%E8%A7%A3%E8%AF%BB3%EF%BC%9ALLM%E5%9C%A8%E8%A7%84%E8%8C%83%E6%8E%A8%E6%96%AD%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">📌 关键解读3：LLM在规范推断中的作用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88LLM%E9%80%82%E5%90%88%E8%BF%99%E4%B8%AA%E4%BB%BB%E5%8A%A1%EF%BC%9F"><span class="nav-number">5.1.</span> <span class="nav-text">为什么LLM适合这个任务？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA%E5%B7%A5%E7%A8%8B%E7%9A%84%E5%85%B3%E9%94%AE%E8%AE%BE%E8%AE%A1"><span class="nav-number">5.2.</span> <span class="nav-text">提示工程的关键设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%88%E6%9E%9C%E8%AF%84%E4%BC%B0"><span class="nav-number">5.3.</span> <span class="nav-text">效果评估</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-CWE-Bench-Java%EF%BC%9AJava%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">6.</span> <span class="nav-text">3. CWE-Bench-Java：Java安全漏洞数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B"><span class="nav-number">6.1.</span> <span class="nav-text">数据集构建流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E7%89%B9%E5%BE%81"><span class="nav-number">6.2.</span> <span class="nav-text">数据集特征</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8C-%E5%85%B3%E9%94%AE%E8%A7%A3%E8%AF%BB4%EF%BC%9A%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="nav-number">7.</span> <span class="nav-text">📌 关键解读4：数据集的重要性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%96%B0%E6%95%B0%E6%8D%AE%E9%9B%86%EF%BC%9F"><span class="nav-number">7.1.</span> <span class="nav-text">为什么需要新数据集？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CWE-Bench-Java%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">7.2.</span> <span class="nav-text">CWE-Bench-Java的优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%A0%94%E7%A9%B6%E7%9A%84%E6%84%8F%E4%B9%89"><span class="nav-number">7.3.</span> <span class="nav-text">对研究的意义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%AF%84%E4%BC%B0"><span class="nav-number">8.</span> <span class="nav-text">5. 评估</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%AE%9E%E9%AA%8C%E8%AE%BE%E7%BD%AE"><span class="nav-number">8.1.</span> <span class="nav-text">5.1 实验设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-RQ1%EF%BC%9AIRIS%E5%9C%A8%E6%A3%80%E6%B5%8B%E7%8E%B0%E6%9C%89%E6%BC%8F%E6%B4%9E%E6%96%B9%E9%9D%A2%E7%9A%84%E6%9C%89%E6%95%88%E6%80%A7"><span class="nav-number">8.2.</span> <span class="nav-text">5.2 RQ1：IRIS在检测现有漏洞方面的有效性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-RQ2%EF%BC%9AIRIS%E5%8F%91%E7%8E%B0%E7%9A%84%E5%85%88%E5%89%8D%E6%9C%AA%E7%9F%A5%E6%BC%8F%E6%B4%9E"><span class="nav-number">8.3.</span> <span class="nav-text">5.3 RQ2：IRIS发现的先前未知漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-RQ3%EF%BC%9ALLM%E6%8E%A8%E6%96%AD%E7%9A%84%E6%B1%A1%E7%82%B9%E8%A7%84%E8%8C%83%E8%B4%A8%E9%87%8F"><span class="nav-number">8.4.</span> <span class="nav-text">5.4 RQ3：LLM推断的污点规范质量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AC%E5%9B%9E%E7%8E%87%E8%AF%84%E4%BC%B0%EF%BC%88%E5%9B%BE6%EF%BC%89"><span class="nav-number">8.4.1.</span> <span class="nav-text">召回率评估（图6）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B2%BE%E7%A1%AE%E5%BA%A6%E8%AF%84%E4%BC%B0%EF%BC%88%E5%9B%BE7%EF%BC%89"><span class="nav-number">8.4.2.</span> <span class="nav-text">精确度评估（图7）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%84%E8%8C%83%E7%BB%9F%E8%AE%A1"><span class="nav-number">8.4.3.</span> <span class="nav-text">规范统计</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-RQ4%EF%BC%9A%E6%B6%88%E8%9E%8D%E7%A0%94%E7%A9%B6"><span class="nav-number">8.5.</span> <span class="nav-text">5.5 RQ4：消融研究</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BA%90%E5%92%8C%E6%B1%87%E7%82%B9%E8%A7%84%E8%8C%83%E9%83%BD%E6%98%AF%E5%BF%85%E9%9C%80%E7%9A%84%EF%BC%88%E8%A1%A83%EF%BC%89"><span class="nav-number">8.5.1.</span> <span class="nav-text">源和汇点规范都是必需的（表3）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%86%E6%9E%90%E7%9A%84%E6%80%A7%E8%83%BD%E6%8F%90%E5%8D%87%EF%BC%88%E5%9B%BE9%EF%BC%89"><span class="nav-number">8.5.2.</span> <span class="nav-text">上下文分析的性能提升（图9）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8C-%E5%85%B3%E9%94%AE%E8%A7%A3%E8%AF%BB5%EF%BC%9A%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E6%B7%B1%E5%B1%82%E5%90%AB%E4%B9%89"><span class="nav-number">9.</span> <span class="nav-text">📌 关键解读5：实验结果的深层含义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IRIS%E6%88%90%E5%8A%9F%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">9.1.</span> <span class="nav-text">IRIS成功的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">9.2.</span> <span class="nav-text">仍存在的挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%9C%AA%E6%9D%A5%E7%A0%94%E7%A9%B6%E7%9A%84%E5%90%AF%E7%A4%BA"><span class="nav-number">9.3.</span> <span class="nav-text">对未来研究的启示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="nav-number">10.</span> <span class="nav-text">6. 相关工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95"><span class="nav-number">10.1.</span> <span class="nav-text">基于学习的漏洞检测方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="nav-number">10.2.</span> <span class="nav-text">静态分析工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8ELLM%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E6%96%B9%E6%B3%95"><span class="nav-number">10.3.</span> <span class="nav-text">基于LLM的软件工程方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E7%BB%93%E8%AE%BA%E4%B8%8E%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">11.</span> <span class="nav-text">7. 结论与局限性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E8%B4%A1%E7%8C%AE"><span class="nav-number">11.1.</span> <span class="nav-text">主要贡献</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%8F%91%E7%8E%B0"><span class="nav-number">11.2.</span> <span class="nav-text">关键发现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">11.3.</span> <span class="nav-text">局限性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AA%E6%9D%A5%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%90%91"><span class="nav-number">11.4.</span> <span class="nav-text">未来工作方向</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="nav-number">12.</span> <span class="nav-text">附录：实现细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-%E9%80%89%E6%8B%A9%E5%80%99%E9%80%89%E8%A7%84%E8%8C%83%E7%9A%84%E6%A0%87%E5%87%86"><span class="nav-number">12.1.</span> <span class="nav-text">A.1 选择候选规范的标准</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-2-LLM%E6%8F%90%E7%A4%BA%E8%AF%8D%E8%AE%BE%E8%AE%A1"><span class="nav-number">12.2.</span> <span class="nav-text">A.2 LLM提示词设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-CodeQL%E6%9F%A5%E8%AF%A2%E7%94%9F%E6%88%90"><span class="nav-number">12.3.</span> <span class="nav-text">A.3 CodeQL查询生成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8C-%E6%80%BB%E7%BB%93%E6%80%A7%E8%A7%A3%E8%AF%BB%EF%BC%9AIRIS%E7%9A%84%E7%AA%81%E7%A0%B4%E4%B8%8E%E5%90%AF%E7%A4%BA"><span class="nav-number">13.</span> <span class="nav-text">📌 总结性解读：IRIS的突破与启示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E7%AA%81%E7%A0%B4"><span class="nav-number">13.1.</span> <span class="nav-text">技术突破</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E5%AE%9E%E8%B7%B5%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">13.2.</span> <span class="nav-text">对实践的影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%A0%94%E7%A9%B6%E7%9A%84%E5%90%AF%E7%A4%BA"><span class="nav-number">13.3.</span> <span class="nav-text">对研究的启示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E9%99%90%E6%80%A7%E7%9A%84%E5%90%AF%E7%A4%BA"><span class="nav-number">13.4.</span> <span class="nav-text">局限性的启示</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/13/IRIS%EF%BC%9A%E5%9F%BA%E4%BA%8ELLM%E8%BE%85%E5%8A%A9%E7%9A%84%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%A3%80%E6%B5%8B%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="IRIS：基于LLM辅助的静态分析检测安全漏洞 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IRIS：基于LLM辅助的静态分析检测安全漏洞
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-13 22:38:54 / 修改时间：22:40:58" itemprop="dateCreated datePublished" datetime="2026-01-13T22:38:54+08:00">2026-01-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SAST/" itemprop="url" rel="index"><span itemprop="name">SAST</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>软件容易受到安全漏洞的影响。用于检测这些漏洞的程序分析工具由于依赖人工标注的规范，在实践中效果有限。大型语言模型（LLM）展现出令人印象深刻的代码生成能力，但它们无法对代码进行复杂推理以检测此类漏洞，特别是因为此任务需要全仓库分析。我们提出了IRIS，一种神经符号方法，系统地结合LLM与静态分析来执行全仓库推理以检测安全漏洞。具体来说，IRIS利用LLM推断污点规范并执行上下文分析，从而减轻对人工规范和检查的需求。为了评估，我们策划了一个新数据集CWE-Bench-Java，包含120个经过人工验证的真实Java项目中的安全漏洞。最先进的静态分析工具CodeQL仅检测到其中27个漏洞，而使用GPT-4的IRIS检测到55个（+28），并将CodeQL的平均误报发现率提高了5个百分点。此外，IRIS识别出4个以前未知的漏洞，这些漏洞无法被现有工具发现。IRIS已公开发布于 <a target="_blank" rel="noopener" href="https://github.com/iris-sast/iris%E3%80%82">https://github.com/iris-sast/iris。</a></p>
+<h2 id="📌-关键解读1：研究动机与核心贡献"><a href="#📌-关键解读1：研究动机与核心贡献" class="headerlink" title="📌 关键解读1：研究动机与核心贡献"></a>📌 关键解读1：研究动机与核心贡献</h2><h3 id="核心问题"><a href="#核心问题" class="headerlink" title="核心问题"></a>核心问题</h3><ol>
+<li><p><strong>静态污点分析的局限</strong>：传统工具如CodeQL严重依赖人工标注的API规范（源、汇点、净化器），这导致：</p>
+<ul>
+<li>规范缺失→漏报</li>
+<li>规范不精确→误报</li>
+</ul>
+</li>
+<li><p><strong>LLM的潜力与限制</strong>：</p>
+<ul>
+<li>LLM能理解代码但无法进行复杂的全项目推理</li>
+<li>需要结合静态分析的精确性</li>
+</ul>
+</li>
+</ol>
+<h3 id="核心创新"><a href="#核心创新" class="headerlink" title="核心创新"></a>核心创新</h3><p>IRIS提出的<strong>神经符号方法</strong>实现了三个关键突破：</p>
+<ol>
+<li><strong>自动规范推断</strong>：使用LLM从API文档和代码中推断污点源和汇点</li>
+<li><strong>上下文感知过滤</strong>：利用LLM理解代码上下文，减少误报</li>
+<li><strong>全仓库分析</strong>：结合静态分析的数据流追踪能力</li>
+</ol>
+<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>安全漏洞对软件应用程序及其用户的安全构成重大威胁。仅在2023年，就报告了超过29,000个CVE——比2022年高出近4000个（CVE趋势）。尽管在揭示漏洞的技术方面取得了进展，检测漏洞仍然极具挑战性。</p>
+<p>一种名为<strong>静态污点分析</strong>的有前景技术被广泛应用于流行工具中，如GitHub CodeQL、Facebook Infer、Checker Framework和Snyk Code。然而，这些工具面临几个极大限制其在实践中有效性和可访问性的挑战。</p>
+<h3 id="1-1-主要挑战"><a href="#1-1-主要挑战" class="headerlink" title="1.1 主要挑战"></a>1.1 主要挑战</h3><p><strong>由于缺少第三方库API的污点规范而导致的漏报</strong></p>
+<p>静态污点分析主要依赖第三方库API作为源、汇点或净化器的规范。在实践中，开发人员和分析工程师必须根据他们的领域知识和API文档手动制作这些规范。这是一个费力且容易出错的过程，经常导致规范缺失和漏洞分析不完整。此外，即使这些规范可能存在于许多库中，它们也需要定期更新以捕获这些库新版本中的变化，并覆盖开发的新库。</p>
+<p><strong>由于缺乏精确的上下文感知和直观推理而导致的误报</strong></p>
+<p>众所周知，静态分析经常受到低精度的困扰，即可能产生许多虚假警报。这种不精确源于多种来源。例如，源或汇点规范可能是虚假的，或者分析可能过度近似代码中的分支或可能的输入。此外，即使规范正确，检测到的源或汇点所使用的上下文可能无法被利用。因此，开发人员可能需要筛选几个潜在的虚假安全警报，浪费大量时间和精力。</p>
+<h3 id="1-2-先前数据驱动方法的局限性"><a href="#1-2-先前数据驱动方法的局限性" class="headerlink" title="1.2 先前数据驱动方法的局限性"></a>1.2 先前数据驱动方法的局限性</h3><p>已经提出了许多技术来解决静态污点分析的挑战。例如，MERLIN提出了一种概率方法来自动挖掘污点规范。最近的工作Seldon通过将污点规范推断问题表述为线性优化任务来提高这种方法的可扩展性。然而，这些方法依赖于分析第三方库的代码来提取规范，这既昂贵又难以扩展。研究人员还开发了统计和基于学习的技术来缓解虚假正警报。然而，这些方法在实践中仍然效果有限。</p>
+<hr>
+<h2 id="📌-关键解读2：IRIS的技术架构"><a href="#📌-关键解读2：IRIS的技术架构" class="headerlink" title="📌 关键解读2：IRIS的技术架构"></a>📌 关键解读2：IRIS的技术架构</h2><p>IRIS采用<strong>四阶段流水线</strong>设计：</p>
+<h3 id="阶段1：候选提取"><a href="#阶段1：候选提取" class="headerlink" title="阶段1：候选提取"></a>阶段1：候选提取</h3><ul>
+<li>从项目中提取所有外部API调用和内部函数参数</li>
+<li>这些是潜在的污点源&#x2F;汇点候选</li>
+</ul>
+<h3 id="阶段2：LLM规范推断"><a href="#阶段2：LLM规范推断" class="headerlink" title="阶段2：LLM规范推断"></a>阶段2：LLM规范推断</h3><ul>
+<li>使用LLM标注这些API为源&#x2F;汇点</li>
+<li>针对特定CWE类型定制提示词</li>
+<li>利用few-shot学习提高准确性</li>
+</ul>
+<h3 id="阶段3：静态污点分析"><a href="#阶段3：静态污点分析" class="headerlink" title="阶段3：静态污点分析"></a>阶段3：静态污点分析</h3><ul>
+<li>将LLM推断的规范转换为CodeQL查询</li>
+<li>执行数据流分析找到不净化路径</li>
+</ul>
+<h3 id="阶段4：上下文过滤"><a href="#阶段4：上下文过滤" class="headerlink" title="阶段4：上下文过滤"></a>阶段4：上下文过滤</h3><ul>
+<li>使用LLM分析每条警报路径的上下文</li>
+<li>过滤误报，保留真实漏洞</li>
+</ul>
+<p>这种设计巧妙地：</p>
+<ul>
+<li><strong>利用LLM的优势</strong>：理解API语义和代码上下文</li>
+<li><strong>弥补LLM的不足</strong>：用静态分析处理全项目数据流</li>
+<li><strong>减少人工工作</strong>：自动化规范生成和误报过滤</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="2-动机示例"><a href="#2-动机示例" class="headerlink" title="2. 动机示例"></a>2. 动机示例</h2><p>我们通过检测cron-utils（版本9.1.5）中一个先前已知的代码注入漏洞（CWE-094）来说明IRIS的有效性，这是一个用于Cron数据操作的Java库。图2展示了相关代码片段。</p>
+<h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>传递给<code>isValid</code>函数的用户控制字符串<code>value</code>在未经净化的情况下被传递给<code>parse</code>函数。如果抛出异常，该函数会使用输入构造错误消息。然而，错误消息被用于调用<code>javax.validator</code>中<code>ConstraintValidatorContext</code>类的<code>buildConstraintViolationWithTemplate</code>方法，该方法将消息字符串解释为Java表达式语言（Java EL）表达式。恶意用户可以通过制作包含shell命令的字符串（如<code>Runtime.exec(&#39;rm -rf /&#39;)</code>）来利用此漏洞，删除服务器上的关键文件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CVE-2021-41269 示例</span></span><br><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isValid</span><span class="params">(String value, ConstraintValidatorContext context)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        cronParser.parse(value).validate(); <span class="comment">// 污点源：用户输入</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (IllegalArgumentException e) &#123;</span><br><span class="line">        context</span><br><span class="line">            .buildConstraintViolationWithTemplate(e.getMessage()) <span class="comment">// 汇点：可执行EL表达式</span></span><br><span class="line">            .addConstraintViolation();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="检测挑战"><a href="#检测挑战" class="headerlink" title="检测挑战"></a>检测挑战</h3><p>检测此漏洞面临几个挑战：</p>
+<ol>
+<li><strong>代码规模</strong>：cron-utils库包含13K SLOC（不包括空行和注释的代码行），需要分析才能找到此漏洞</li>
+<li><strong>跨方法分析</strong>：需要分析跨多个内部方法和第三方API的数据和控制流</li>
+<li><strong>规范识别</strong>：分析需要识别相关的源和汇点</li>
+<li><strong>净化器检测</strong>：分析还需要识别任何阻止不受信任数据流动的净化器</li>
+</ol>
+<h3 id="IRIS的优势"><a href="#IRIS的优势" class="headerlink" title="IRIS的优势"></a>IRIS的优势</h3><p>现代静态分析工具（如CodeQL）擅长跟踪复杂代码库中的污点数据流。然而，由于缺少规范，CodeQL未能检测到此漏洞。CodeQL包含360多个流行Java库模块的许多手动策划的源和汇点规范。然而，手动获取这些规范需要大量人力来分析、指定和验证。</p>
+<p>相比之下，<strong>IRIS采用不同的方法</strong>，通过使用LLM即时推断项目和漏洞特定的规范：</p>
+<ol>
+<li>IRIS中基于LLM的组件正确识别了不受信任的源和易受攻击的汇点</li>
+<li>IRIS使用这些规范增强CodeQL，成功检测到仓库中检测到的源和汇点之间的未净化数据流路径</li>
+<li>对于增强CodeQL产生的误报，IRIS将检测到的代码路径和周围上下文编码到简单提示中，使用LLM将其分类为真或假阳性</li>
+</ol>
+<p>在8条静态分析报告的路径中，5个误报被过滤掉，留下图2中的路径作为最终警报之一。</p>
+<h2 id="📌-关键解读3：LLM在规范推断中的作用"><a href="#📌-关键解读3：LLM在规范推断中的作用" class="headerlink" title="📌 关键解读3：LLM在规范推断中的作用"></a>📌 关键解读3：LLM在规范推断中的作用</h2><h3 id="为什么LLM适合这个任务？"><a href="#为什么LLM适合这个任务？" class="headerlink" title="为什么LLM适合这个任务？"></a>为什么LLM适合这个任务？</h3><ol>
+<li><strong>丰富的训练数据</strong>：LLM在互联网规模的代码和文档上训练，见过大量API使用模式</li>
+<li><strong>语义理解</strong>：能理解API的目的和行为，而不仅仅是语法</li>
+<li><strong>零样本泛化</strong>：可以推断未见过的API的行为</li>
+</ol>
+<h3 id="提示工程的关键设计"><a href="#提示工程的关键设计" class="headerlink" title="提示工程的关键设计"></a>提示工程的关键设计</h3><p><strong>外部API标注提示</strong>包含：</p>
+<ul>
+<li>系统提示：定义源&#x2F;汇点&#x2F;传播器的概念</li>
+<li>CWE描述：提供漏洞类型的上下文</li>
+<li>Few-shot示例：为特定CWE提供3-4个标注示例</li>
+<li>批量API列表：以CSV格式列出待标注的API</li>
+</ul>
+<p><strong>内部API标注提示</strong>包含：</p>
+<ul>
+<li>项目README摘要：帮助理解库的高层目的</li>
+<li>函数文档：提供API的具体语义</li>
+<li>Zero-shot查询：询问哪些参数可能接收恶意输入</li>
+</ul>
+<h3 id="效果评估"><a href="#效果评估" class="headerlink" title="效果评估"></a>效果评估</h3><p>从论文结果看：</p>
+<ul>
+<li>GPT-4在源规范上达到60.58%召回率，75.73%精确度</li>
+<li>GPT-4在汇点规范上达到87.11%召回率，69.12%精确度</li>
+<li>较小模型倾向于过度近似（高召回率，低精确度）</li>
+<li>这种过度近似反而有助于覆盖CodeQL缺失的规范！</li>
+</ul>
+<p><strong>上下文分析提示设计</strong>：</p>
+<p>提示包含CWE信息和路径上节点的代码片段，重点是源和汇点：</p>
+<ul>
+<li><strong>源代码上下文</strong>：源位置周围±5行代码，标记确切的源位置</li>
+<li><strong>中间步骤</strong>：对于长路径，选择关键步骤（优先函数调用）</li>
+<li><strong>汇点代码上下文</strong>：汇点位置周围±5行代码，标记确切的汇点位置</li>
+<li><strong>CWE描述</strong>：提供漏洞类型的定义</li>
+</ul>
+<p>我们期望LLM以JSON格式响应，包含：</p>
+<ul>
+<li><code>is_vulnerable</code>：最终判断</li>
+<li><code>explanation</code>：判断的解释</li>
+<li><code>source_is_false_positive</code>：源是否为误报</li>
+<li><code>sink_is_false_positive</code>：汇点是否为误报</li>
+</ul>
+<p>JSON格式促使LLM在给出判断之前生成解释，因为在推理过程后呈现判断已知会产生更好的结果。</p>
+<h2 id="3-CWE-Bench-Java：Java安全漏洞数据集"><a href="#3-CWE-Bench-Java：Java安全漏洞数据集" class="headerlink" title="3. CWE-Bench-Java：Java安全漏洞数据集"></a>3. CWE-Bench-Java：Java安全漏洞数据集</h2><p>为了评估我们的方法，我们需要一个具有几个重要特征的易受攻击版本Java项目数据集：</p>
+<ol>
+<li>每个基准测试都应有相关的漏洞元数据，如CWE ID、CVE ID、修复提交和易受攻击的项目版本</li>
+<li>数据集中的每个项目都必须可编译</li>
+<li>项目必须是真实世界的</li>
+<li>每个漏洞及其在项目中的位置必须经过验证</li>
+</ol>
+<p>不幸的是，没有现有数据集满足所有这些要求。</p>
+<h3 id="数据集构建流程"><a href="#数据集构建流程" class="headerlink" title="数据集构建流程"></a>数据集构建流程</h3><p>我们策划了自己的漏洞数据集，包含6个步骤：</p>
+<p><strong>步骤1：选择漏洞类别</strong><br>选择4个常见的CWE类别：</p>
+<ul>
+<li>CWE-22：路径遍历</li>
+<li>CWE-78：OS命令注入  </li>
+<li>CWE-79：跨站脚本（XSS）</li>
+<li>CWE-94：代码注入</li>
+</ul>
+<p><strong>步骤2：获取漏洞</strong><br>从GitHub Advisory数据库获取CVE，获得1065个初始CVE</p>
+<p><strong>步骤3：获取Git信息</strong><br>从libraries.io获取GitHub URL、易受攻击版本和修复版本，剩余430个CVE</p>
+<p><strong>步骤4：交叉验证修复</strong><br>使用snyk.io添加修复信息和提交，剩余265个CVE</p>
+<p><strong>步骤5：构建和编译</strong><br>使用MAVEN构建，手动指定Java和MAVEN版本，剩余149个CVE</p>
+<p><strong>步骤6：人工检查</strong><br>验证：</p>
+<ul>
+<li>CWE分类正确</li>
+<li>漏洞不在依赖项中</li>
+<li>手动标注易受攻击的代码位置</li>
+<li>检查是否有Java代码被修复</li>
+</ul>
+<p>最终得到<strong>120个漏洞</strong>：</p>
+<ul>
+<li>CWE-22：55个</li>
+<li>CWE-78：13个</li>
+<li>CWE-79：31个  </li>
+<li>CWE-94：21个</li>
+</ul>
+<h3 id="数据集特征"><a href="#数据集特征" class="headerlink" title="数据集特征"></a>数据集特征</h3><p><strong>项目规模</strong>：</p>
+<ul>
+<li>平均SLOC：300K</li>
+<li>最大SLOC：7M</li>
+<li>10个项目超过100万行代码</li>
+</ul>
+<p>这使得CWE-Bench-Java成为漏洞检测的<strong>极具挑战性的基准测试</strong>。</p>
+<h2 id="📌-关键解读4：数据集的重要性"><a href="#📌-关键解读4：数据集的重要性" class="headerlink" title="📌 关键解读4：数据集的重要性"></a>📌 关键解读4：数据集的重要性</h2><h3 id="为什么需要新数据集？"><a href="#为什么需要新数据集？" class="headerlink" title="为什么需要新数据集？"></a>为什么需要新数据集？</h3><p>现有数据集的问题：</p>
+<ol>
+<li><strong>BigVul, Reveal</strong>：不可编译，无法用于静态分析</li>
+<li><strong>Juliet</strong>：合成数据，不代表真实复杂性</li>
+<li>**Li et al. (2023a)**：缺少构建脚本，CWE分布不均</li>
+<li><strong>CVEFixes</strong>：未验证，可能包含误分类</li>
+</ol>
+<h3 id="CWE-Bench-Java的优势"><a href="#CWE-Bench-Java的优势" class="headerlink" title="CWE-Bench-Java的优势"></a>CWE-Bench-Java的优势</h3><p>是<strong>唯一满足所有标准</strong>的数据集：</p>
+<ul>
+<li>✅ 包含CVE元数据</li>
+<li>✅ 真实世界项目</li>
+<li>✅ 修复位置信息</li>
+<li>✅ 端到端可编译</li>
+<li>✅ 人工验证</li>
+</ul>
+<h3 id="对研究的意义"><a href="#对研究的意义" class="headerlink" title="对研究的意义"></a>对研究的意义</h3><ol>
+<li><strong>可重现性</strong>：自动化脚本可获取、构建和分析项目</li>
+<li><strong>挑战性</strong>：平均30万行代码，需要全仓库分析</li>
+<li><strong>实用性</strong>：反映真实世界的漏洞模式</li>
+<li><strong>可扩展性</strong>：框架可轻松扩展到更多CWE类别</li>
+</ol>
+<h2 id="5-评估"><a href="#5-评估" class="headerlink" title="5. 评估"></a>5. 评估</h2><p>我们对IRIS进行了广泛的实验评估，并展示了其在CWE-Bench-Java真实Java仓库中检测漏洞的实际有效性。我们解决以下关键研究问题：</p>
+<ul>
+<li><strong>RQ 1</strong>：IRIS能检测多少先前已知的漏洞？</li>
+<li><strong>RQ 2</strong>：IRIS是否检测到新的、先前未知的漏洞？</li>
+<li><strong>RQ 3</strong>：IRIS推断的源&#x2F;汇点规范质量如何？</li>
+<li><strong>RQ 4</strong>：IRIS各个组件的有效性如何？</li>
+</ul>
+<h3 id="5-1-实验设置"><a href="#5-1-实验设置" class="headerlink" title="5.1 实验设置"></a>5.1 实验设置</h3><p><strong>选择的LLM</strong>：</p>
+<ul>
+<li><strong>闭源</strong>：GPT-4（gpt-4-0125-preview）、GPT-3.5（gpt-3.5-turbo-0125）</li>
+<li><strong>开源</strong>：<ul>
+<li>Llama 3（8B和70B）</li>
+<li>Qwen-2.5-Coder 32B</li>
+<li>Gemma-2 27B</li>
+<li>DeepSeekCoder 7B</li>
+</ul>
+</li>
+</ul>
+<p><strong>基线工具</strong>：</p>
+<ul>
+<li>CodeQL（版本2.15.3）及其内置安全查询</li>
+<li>Facebook Infer</li>
+<li>SpotBugs</li>
+<li>Snyk</li>
+</ul>
+<h3 id="5-2-RQ1：IRIS在检测现有漏洞方面的有效性"><a href="#5-2-RQ1：IRIS在检测现有漏洞方面的有效性" class="headerlink" title="5.2 RQ1：IRIS在检测现有漏洞方面的有效性"></a>5.2 RQ1：IRIS在检测现有漏洞方面的有效性</h3><p><strong>主要结果</strong>（表1）：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>检测数量(&#x2F;120)</th>
+<th>检测率(%)</th>
+<th>平均FDR(%)</th>
+<th>平均F1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CodeQL</td>
+<td>27</td>
+<td>22.50</td>
+<td>90.03</td>
+<td>0.076</td>
+</tr>
+<tr>
+<td>IRIS + GPT-4</td>
+<td><strong>55 (↑28)</strong></td>
+<td><strong>45.83 (↑23.33)</strong></td>
+<td><strong>84.82 (↓5.21)</strong></td>
+<td><strong>0.177 (↑0.101)</strong></td>
+</tr>
+<tr>
+<td>IRIS + GPT-3.5</td>
+<td>47 (↑20)</td>
+<td>39.17 (↑16.67)</td>
+<td>90.42 (↑0.39)</td>
+<td>0.096 (↑0.020)</td>
+</tr>
+<tr>
+<td>IRIS + L3 8B</td>
+<td>41 (↑14)</td>
+<td>34.17 (↑11.67)</td>
+<td>95.55 (↑5.52)</td>
+<td>0.058 (↓0.018)</td>
+</tr>
+<tr>
+<td>IRIS + L3 70B</td>
+<td>54 (↑27)</td>
+<td>45.00 (↑22.50)</td>
+<td>90.96 (↑0.93)</td>
+<td>0.113 (↑0.037)</td>
+</tr>
+<tr>
+<td>IRIS + Q2.5C 32B</td>
+<td>47 (↑20)</td>
+<td>39.17 (↑16.67)</td>
+<td>92.38 (↑2.35)</td>
+<td>0.097 (↑0.021)</td>
+</tr>
+<tr>
+<td>IRIS + G2 27B</td>
+<td>45 (↑18)</td>
+<td>37.50 (↑15.00)</td>
+<td>91.23 (↑1.20)</td>
+<td>0.100 (↑0.024)</td>
+</tr>
+<tr>
+<td>IRIS + DSC 7B</td>
+<td>52 (↑25)</td>
+<td>43.33 (↑20.83)</td>
+<td>95.40 (↑5.37)</td>
+<td>0.062 (↓0.014)</td>
+</tr>
+</tbody></table>
+<p><strong>关键发现</strong>：</p>
+<ol>
+<li><strong>检测率显著提升</strong>：IRIS + GPT-4检测到55个漏洞，比CodeQL多28个（提升103.7%）</li>
+<li><strong>误报率降低</strong>：平均FDR从90.03%降至84.82%（降低5.21%）</li>
+<li><strong>较小模型也有效</strong>：DeepSeekCoder 7B检测52个漏洞，展示了可及性</li>
+<li><strong>F1分数提升</strong>：从0.076提升至0.177，反映了精确度和召回率的更好平衡</li>
+</ol>
+<p><strong>每个CWE的详细统计</strong>（表2）：</p>
+<table>
+<thead>
+<tr>
+<th>CWE</th>
+<th>数量</th>
+<th>CodeQL</th>
+<th>Infer</th>
+<th>SpotBugs</th>
+<th>Snyk</th>
+<th>IRIS+GPT-4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CWE-22</td>
+<td>55</td>
+<td>22</td>
+<td>0</td>
+<td>2</td>
+<td>21</td>
+<td><strong>31 (↑9)</strong></td>
+</tr>
+<tr>
+<td>CWE-78</td>
+<td>13</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td><strong>3 (↑2)</strong></td>
+</tr>
+<tr>
+<td>CWE-79</td>
+<td>31</td>
+<td>4</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td><strong>13 (↑9)</strong></td>
+</tr>
+<tr>
+<td>CWE-94</td>
+<td>21</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td><strong>8 (↑8)</strong></td>
+</tr>
+<tr>
+<td><strong>总计</strong></td>
+<td><strong>120</strong></td>
+<td><strong>27</strong></td>
+<td><strong>0</strong></td>
+<td><strong>4</strong></td>
+<td><strong>23</strong></td>
+<td><strong>55 (↑28)</strong></td>
+</tr>
+</tbody></table>
+<p><strong>重要观察</strong>：</p>
+<ul>
+<li>CWE-78（OS命令注入）对所有工具都特别具有挑战性</li>
+<li>CodeQL完全无法检测到任何CWE-94（代码注入）漏洞</li>
+<li>IRIS在所有CWE类别上都有改进</li>
+</ul>
+<h3 id="5-3-RQ2：IRIS发现的先前未知漏洞"><a href="#5-3-RQ2：IRIS发现的先前未知漏洞" class="headerlink" title="5.3 RQ2：IRIS发现的先前未知漏洞"></a>5.3 RQ2：IRIS发现的先前未知漏洞</h3><p>我们将IRIS + GPT-4应用于30个Java项目的最新版本。在IRIS至少报告一个警报的16个检查项目中，我们识别出<strong>4个漏洞</strong>：</p>
+<ul>
+<li>3个路径注入实例（CWE-22）</li>
+<li>1个代码注入案例（CWE-94）</li>
+</ul>
+<p><strong>案例研究：alluxio 2.9.4中的Zip-Slip漏洞</strong>（图8）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// alluxio/dora/core/.../rocks/RocksStore.java</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">restoreFromCheckpoint</span><span class="params">(CheckpointInputStream input)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> (<span class="type">FileOutputStream</span> <span class="variable">fos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(tmpPath)) &#123;</span><br><span class="line">        IOUtils.copy(input, fos);  <span class="comment">// ← 源：用户可控的检查点输入</span></span><br><span class="line">    &#125;</span><br><span class="line">    ZipUtils.decompress(Paths.get(mDbPath), tmpZipFilePath, ...);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// alluxio/dora/core/.../util/compression/ParallelZipUtils.java</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">unzipEntry</span><span class="params">(ZipFile zipFile, ZipArchiveEntry entry, ...)</span> &#123;</span><br><span class="line">    <span class="type">File</span> <span class="variable">outputFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(dirPath.toFile(), entry.getName());</span><br><span class="line">    <span class="keyword">if</span> (!entry.isDirectory()) &#123;</span><br><span class="line">        <span class="keyword">try</span> (<span class="type">FileOutputStream</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(outputFile)) &#123;</span><br><span class="line">            <span class="comment">// ← 汇点：写入可能在预期目录外的文件</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>漏洞说明</strong>：</p>
+<ul>
+<li>具有数据库恢复权限的用户可以提供带有恶意条目名称的数据库检查点Zip文件</li>
+<li>解压缩时，条目可能被写入任意目录</li>
+<li>这可能损坏托管服务器（Zip-Slip漏洞，CWE-022）</li>
+</ul>
+<p><strong>为什么CodeQL未检测到</strong>：</p>
+<ul>
+<li>缺少<code>restoreFromCheckpoint</code>作为潜在攻击入口点的源规范</li>
+<li>GPT-4成功将此API端点标记为潜在源</li>
+</ul>
+<h3 id="5-4-RQ3：LLM推断的污点规范质量"><a href="#5-4-RQ3：LLM推断的污点规范质量" class="headerlink" title="5.4 RQ3：LLM推断的污点规范质量"></a>5.4 RQ3：LLM推断的污点规范质量</h3><h4 id="召回率评估（图6）"><a href="#召回率评估（图6）" class="headerlink" title="召回率评估（图6）"></a>召回率评估（图6）</h4><p>针对CodeQL的污点规范测试LLM推断规范的召回率：</p>
+<p><strong>源规范召回率</strong>：</p>
+<ul>
+<li>GPT-4：60.58%</li>
+<li>GPT-3.5：25.87%</li>
+<li>Llama 3 70B：38.03%</li>
+<li>DSC 7B：28.87%</li>
+</ul>
+<p><strong>汇点规范召回率</strong>：</p>
+<ul>
+<li>GPT-4：<strong>87.11%</strong></li>
+<li>GPT-3.5：65.19%</li>
+<li>Llama 3 70B：87.76%</li>
+<li>DSC 7B：78.78%</li>
+</ul>
+<p><strong>关键发现</strong>：</p>
+<ul>
+<li>LLM在汇点检测上表现优异，GPT-4达到87%召回率</li>
+<li>源规范召回率较低，因为CodeQL倾向于过度近似源规范以补偿低检测率</li>
+<li>GPT-4实现了最佳平衡</li>
+</ul>
+<h4 id="精确度评估（图7）"><a href="#精确度评估（图7）" class="headerlink" title="精确度评估（图7）"></a>精确度评估（图7）</h4><p>通过人工分析960个随机样本（每个CWE和LLM组合30个）：</p>
+<p><strong>源规范精确度</strong>：</p>
+<ul>
+<li>GPT-4：<strong>75.73%</strong></li>
+<li>GPT-3.5：35.91%</li>
+<li>Llama 3 70B：38.11%</li>
+<li>DSC 7B：39.22%</li>
+</ul>
+<p><strong>汇点规范精确度</strong>：</p>
+<ul>
+<li>GPT-4：<strong>69.12%</strong></li>
+<li>GPT-3.5：33.56%</li>
+<li>Llama 3 70B：33.56%</li>
+<li>DSC 7B：30.77%</li>
+</ul>
+<p><strong>关键观察</strong>：</p>
+<ul>
+<li>GPT-4在精确度上显著优于其他模型（&gt;70%）</li>
+<li>较小模型倾向于过度近似（高召回率，低精确度）</li>
+<li>过度近似实际上有助于扩大CodeQL的规范覆盖范围</li>
+<li>上下文分析可以缓解不精确的影响</li>
+</ul>
+<h4 id="规范统计"><a href="#规范统计" class="headerlink" title="规范统计"></a>规范统计</h4><p><strong>唯一规范</strong>（表7）：</p>
+<table>
+<thead>
+<tr>
+<th>CWE</th>
+<th>唯一源</th>
+<th>唯一汇点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>22</td>
+<td>1,348</td>
+<td>1,069</td>
+</tr>
+<tr>
+<td>78</td>
+<td>899</td>
+<td>575</td>
+</tr>
+<tr>
+<td>79</td>
+<td>598</td>
+<td>514</td>
+</tr>
+<tr>
+<td>94</td>
+<td>810</td>
+<td>1,281</td>
+</tr>
+</tbody></table>
+<p><strong>重复规范</strong>（表8）：</p>
+<table>
+<thead>
+<tr>
+<th>CWE</th>
+<th>重复源</th>
+<th>重复汇点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>22</td>
+<td>908</td>
+<td>919</td>
+</tr>
+<tr>
+<td>78</td>
+<td>232</td>
+<td>201</td>
+</tr>
+<tr>
+<td>79</td>
+<td>1,118</td>
+<td>911</td>
+</tr>
+<tr>
+<td>94</td>
+<td>626</td>
+<td>961</td>
+</tr>
+</tbody></table>
+<p><strong>意义</strong>：</p>
+<ul>
+<li>大量唯一规范表明需要项目特定的规范推断</li>
+<li>重复规范表明可以复用，但不足以完全解决问题</li>
+<li>支持IRIS的即时规范推断设计</li>
+</ul>
+<h3 id="5-5-RQ4：消融研究"><a href="#5-5-RQ4：消融研究" class="headerlink" title="5.5 RQ4：消融研究"></a>5.5 RQ4：消融研究</h3><h4 id="源和汇点规范都是必需的（表3）"><a href="#源和汇点规范都是必需的（表3）" class="headerlink" title="源和汇点规范都是必需的（表3）"></a>源和汇点规范都是必需的（表3）</h4><p>测试仅使用源或汇点规范时的效果（使用GPT-4）：</p>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>CWE-22</th>
+<th>CWE-78</th>
+<th>CWE-79</th>
+<th>CWE-94</th>
+<th>总计</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CodeQL源 + CodeQL汇点</td>
+<td>22</td>
+<td>1</td>
+<td>4</td>
+<td>0</td>
+<td>27</td>
+</tr>
+<tr>
+<td>GPT-4源 + CodeQL汇点</td>
+<td>28</td>
+<td>3</td>
+<td>5</td>
+<td>0</td>
+<td>36 (↓19)</td>
+</tr>
+<tr>
+<td>CodeQL源 + GPT-4汇点</td>
+<td>10</td>
+<td>1</td>
+<td>9</td>
+<td>4</td>
+<td>24 (↓31)</td>
+</tr>
+<tr>
+<td>GPT-4源 + GPT-4汇点</td>
+<td><strong>31</strong></td>
+<td><strong>3</strong></td>
+<td><strong>13</strong></td>
+<td><strong>8</strong></td>
+<td><strong>55</strong></td>
+</tr>
+</tbody></table>
+<p><strong>结论</strong>：省略任何一种规范都会导致召回率急剧下降。</p>
+<h4 id="上下文分析的性能提升（图9）"><a href="#上下文分析的性能提升（图9）" class="headerlink" title="上下文分析的性能提升（图9）"></a>上下文分析的性能提升（图9）</h4><p>上下文分析后的平均精确度和F1分数改进：</p>
+<table>
+<thead>
+<tr>
+<th>LLM</th>
+<th>精确度改进</th>
+<th>F1改进</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPT-4</td>
+<td>+0.074</td>
+<td>+0.074</td>
+</tr>
+<tr>
+<td>GPT-3.5</td>
+<td>+0.055</td>
+<td>+0.055</td>
+</tr>
+<tr>
+<td>L3 8B</td>
+<td>-0.007</td>
+<td>-0.010</td>
+</tr>
+<tr>
+<td>L3 70B</td>
+<td>+0.033</td>
+<td>+0.023</td>
+</tr>
+<tr>
+<td>DSC 7B</td>
+<td>-0.004</td>
+<td>-0.012</td>
+</tr>
+</tbody></table>
+<p><strong>关键发现</strong>：</p>
+<ul>
+<li>上下文分析对精确度和F1分数的提升至关重要</li>
+<li>只有GPT-4、GPT-3.5和Llama 3 70B从上下文分析中获得正面影响</li>
+<li>较小模型反而受到负面影响</li>
+<li>上下文分析的误报减少在LLM具有良好推理能力时最有效</li>
+<li>较小模型更可能响应”易受攻击”而非正确分析</li>
+</ul>
+<h2 id="📌-关键解读5：实验结果的深层含义"><a href="#📌-关键解读5：实验结果的深层含义" class="headerlink" title="📌 关键解读5：实验结果的深层含义"></a>📌 关键解读5：实验结果的深层含义</h2><h3 id="IRIS成功的原因"><a href="#IRIS成功的原因" class="headerlink" title="IRIS成功的原因"></a>IRIS成功的原因</h3><ol>
+<li><p><strong>LLM的语义理解能力</strong></p>
+<ul>
+<li>能理解API的高层目的和行为</li>
+<li>利用在大规模代码上的预训练知识</li>
+<li>特别擅长识别汇点（87%召回率）</li>
+</ul>
+</li>
+<li><p><strong>静态分析的精确数据流追踪</strong></p>
+<ul>
+<li>CodeQL提供可靠的过程间分析</li>
+<li>能处理大型代码库（平均30万行）</li>
+<li>确保路径的正确性</li>
+</ul>
+</li>
+<li><p><strong>上下文感知过滤</strong></p>
+<ul>
+<li>利用代码上下文减少误报</li>
+<li>GPT-4的推理能力在此步骤至关重要</li>
+<li>将FDR从90%降至85%</li>
+</ul>
+</li>
+</ol>
+<h3 id="仍存在的挑战"><a href="#仍存在的挑战" class="headerlink" title="仍存在的挑战"></a>仍存在的挑战</h3><ol>
+<li><p><strong>OS命令注入（CWE-78）最难检测</strong></p>
+<ul>
+<li>涉及gadget链</li>
+<li>需要外部副作用（如文件写入）</li>
+<li>静态分析的固有限制</li>
+</ul>
+</li>
+<li><p><strong>较小模型的限制</strong></p>
+<ul>
+<li>精确度较低（约30-40%）</li>
+<li>上下文分析可能反而降低性能</li>
+<li>需要更好的推理能力</li>
+</ul>
+</li>
+<li><p><strong>成本考虑</strong></p>
+<ul>
+<li>每个项目需要多次LLM调用</li>
+<li>规范推断：批量API标注</li>
+<li>上下文过滤：每条路径一次调用</li>
+<li>需要平衡成本和性能</li>
+</ul>
+</li>
+</ol>
+<h3 id="对未来研究的启示"><a href="#对未来研究的启示" class="headerlink" title="对未来研究的启示"></a>对未来研究的启示</h3><ol>
+<li><p><strong>神经符号方法的潜力</strong></p>
+<ul>
+<li>LLM + 静态分析优于单独使用任一方法</li>
+<li>需要精心设计交互界面</li>
+<li>可扩展到其他程序分析任务</li>
+</ul>
+</li>
+<li><p><strong>数据集的重要性</strong></p>
+<ul>
+<li>需要更多真实世界、可编译的基准测试</li>
+<li>人工验证至关重要</li>
+<li>CWE-Bench-Java填补了重要空白</li>
+</ul>
+</li>
+<li><p><strong>实用性考虑</strong></p>
+<ul>
+<li>开源模型（DeepSeekCoder 7B）也能取得不错效果</li>
+<li>可能不需要最大最贵的模型</li>
+<li>需要工具支持和工程优化</li>
+</ul>
+</li>
+</ol>
+<h2 id="6-相关工作"><a href="#6-相关工作" class="headerlink" title="6. 相关工作"></a>6. 相关工作</h2><h3 id="基于学习的漏洞检测方法"><a href="#基于学习的漏洞检测方法" class="headerlink" title="基于学习的漏洞检测方法"></a>基于学习的漏洞检测方法</h3><p>许多先前技术结合深度学习来检测漏洞：</p>
+<ul>
+<li><strong>图神经网络模型</strong>：Zhou et al. (2019)、Chakraborty et al. (2020)、Dinella et al. (2020)、Hin et al. (2022)、Li et al. (2021a)</li>
+<li><strong>LSTM模型</strong>：Li et al. (2020; 2021b)</li>
+<li><strong>Transformer微调</strong>：Fu &amp; Tantithamthavorn (2022)、Steenhoek et al. (2023)、Cheng et al. (2022)</li>
+</ul>
+<p><strong>局限性</strong>：</p>
+<ul>
+<li>这些方法专注于方法级检测</li>
+<li>仅提供二进制标签（易受攻击&#x2F;不易受攻击）</li>
+<li>相比之下，IRIS执行全项目分析并提供从源到汇点的不同代码路径</li>
+</ul>
+<p>最近的研究表明，<strong>LLM在真实世界代码中检测漏洞并不有效</strong>（Steenhoek et al., 2024; Ding et al., 2024; Khare et al., 2023）。虽然这些研究仅关注方法级漏洞检测，但它强化了我们的动机：<strong>检测漏洞需要全项目推理</strong>，这是LLM目前无法单独完成的。</p>
+<h3 id="静态分析工具"><a href="#静态分析工具" class="headerlink" title="静态分析工具"></a>静态分析工具</h3><p>除了CodeQL，其他静态分析工具也包含漏洞检测分析：</p>
+<ul>
+<li><strong>开源工具</strong>：CPPCheck、Semgrep、FlawFinder、FB Infer、Code Checker</li>
+<li><strong>商业工具</strong>：Snyk、SonarQube</li>
+</ul>
+<p><strong>共同问题</strong>：</p>
+<ul>
+<li>缺少规范</li>
+<li>高误报率</li>
+<li>需要大量人工工作</li>
+</ul>
+<p><strong>规范推断工作</strong>：</p>
+<ul>
+<li><strong>MERLIN</strong>（Livshits et al., 2009）：概率方法自动挖掘污点规范</li>
+<li><strong>Seldon</strong>（Chibotaru et al., 2019）：将问题表述为线性优化任务</li>
+<li><strong>InspectJS</strong>（Dutta et al., 2022）：也增强CodeQL，但依赖种子规范并需要昂贵的库分析</li>
+</ul>
+<p><strong>IRIS的优势</strong>：</p>
+<ul>
+<li>不需要分析第三方库代码</li>
+<li>不依赖种子规范</li>
+<li>更可扩展和实用</li>
+</ul>
+<h3 id="基于LLM的软件工程方法"><a href="#基于LLM的软件工程方法" class="headerlink" title="基于LLM的软件工程方法"></a>基于LLM的软件工程方法</h3><p>研究人员越来越多地将LLM与程序推理工具结合用于挑战性任务：</p>
+<ul>
+<li><strong>模糊测试</strong>：Lemieux et al. (2023)、Xia et al. (2024)</li>
+<li><strong>程序修复</strong>：Xia et al. (2023)、Joshi et al. (2023)、Xia &amp; Zhang (2022)</li>
+<li><strong>故障定位</strong>：Yang et al. (2023)</li>
+<li><strong>静态分析</strong>：Li et al. (2024)、Wang et al. (2024)</li>
+</ul>
+<p>IRIS是首批将LLM与静态分析结合以通过全项目分析检测应用程序级安全漏洞的工作之一。</p>
+<h2 id="7-结论与局限性"><a href="#7-结论与局限性" class="headerlink" title="7. 结论与局限性"></a>7. 结论与局限性</h2><h3 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h3><p>我们提出了<strong>IRIS</strong>，一种新颖的神经符号方法，将LLM与静态分析结合用于漏洞检测。我们策划了数据集<strong>CWE-Bench-Java</strong>，包含真实项目中四个类别的120个安全漏洞。我们的结果表明，系统地将LLM与静态分析结合在检测到的漏洞和减轻开发人员负担方面显著优于单独的传统静态分析。</p>
+<h3 id="关键发现"><a href="#关键发现" class="headerlink" title="关键发现"></a>关键发现</h3><ol>
+<li><strong>检测率提升</strong>：IRIS + GPT-4检测55个漏洞，比CodeQL多28个（提升103.7%）</li>
+<li><strong>误报率降低</strong>：平均FDR降低5.21%</li>
+<li><strong>新漏洞发现</strong>：在最新版本中发现4个先前未知的漏洞</li>
+<li><strong>规范质量</strong>：GPT-4在源和汇点识别上达到60-87%召回率和70%精确度</li>
+<li><strong>可及性</strong>：较小的开源模型（DeepSeekCoder 7B）也能取得不错效果</li>
+</ol>
+<h3 id="局限性"><a href="#局限性" class="headerlink" title="局限性"></a>局限性</h3><ol>
+<li><p><strong>仍有许多漏洞IRIS无法检测</strong></p>
+<ul>
+<li>未来方法可能探索这两种工具的更紧密集成以提高性能</li>
+</ul>
+</li>
+<li><p><strong>LLM调用成本</strong></p>
+<ul>
+<li>IRIS对规范推断和过滤误报进行大量LLM调用，增加了分析的潜在成本</li>
+</ul>
+</li>
+<li><p><strong>语言限制</strong></p>
+<ul>
+<li>虽然我们在Java上的结果很有前景，但不知道IRIS在其他语言上的表现如何</li>
+</ul>
+</li>
+<li><p><strong>报告差距</strong></p>
+<ul>
+<li>IRIS生成的报告与开发人员希望看到的报告之间仍存在差距</li>
+<li>我们计划在未来工作中进一步探索这一点</li>
+</ul>
+</li>
+</ol>
+<h3 id="未来工作方向"><a href="#未来工作方向" class="headerlink" title="未来工作方向"></a>未来工作方向</h3><ol>
+<li><p><strong>更紧密的集成</strong></p>
+<ul>
+<li>探索LLM和静态分析之间更深层次的交互</li>
+<li>可能的迭代细化过程</li>
+</ul>
+</li>
+<li><p><strong>成本优化</strong></p>
+<ul>
+<li>减少LLM调用次数</li>
+<li>使用更小但更高效的模型</li>
+<li>缓存和重用规范</li>
+</ul>
+</li>
+<li><p><strong>多语言支持</strong></p>
+<ul>
+<li>扩展到C&#x2F;C++、Python等其他语言</li>
+<li>评估跨语言的有效性</li>
+</ul>
+</li>
+<li><p><strong>用户体验</strong></p>
+<ul>
+<li>改进警报报告格式</li>
+<li>提供更好的解释和修复建议</li>
+<li>集成到开发工作流中</li>
+</ul>
+</li>
+<li><p><strong>动态分析集成</strong></p>
+<ul>
+<li>结合动态测试来验证静态分析结果</li>
+<li>处理难以静态检测的漏洞（如CWE-78）</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="附录：实现细节"><a href="#附录：实现细节" class="headerlink" title="附录：实现细节"></a>附录：实现细节</h2><h3 id="A-1-选择候选规范的标准"><a href="#A-1-选择候选规范的标准" class="headerlink" title="A.1 选择候选规范的标准"></a>A.1 选择候选规范的标准</h3><p><strong>外部API过滤</strong>：</p>
+<ul>
+<li>过滤常用Java库（JUnit、Hamcrest、Mockito等测试&#x2F;模拟库）</li>
+<li>允许从外部类或接口继承的方法</li>
+<li>示例：<code>Class.getResource(String path)</code>可能导致路径遍历</li>
+</ul>
+<p><strong>源候选标准</strong>：</p>
+<ul>
+<li>外部API：具有非void返回类型</li>
+<li>内部API：被单元测试直接调用的公共函数的形式参数</li>
+</ul>
+<p><strong>汇点候选标准</strong>：</p>
+<ul>
+<li>外部API的显式参数</li>
+<li>非静态函数的隐式<code>this</code>参数</li>
+</ul>
+<h3 id="A-2-LLM提示词设计"><a href="#A-2-LLM提示词设计" class="headerlink" title="A.2 LLM提示词设计"></a>A.2 LLM提示词设计</h3><p><strong>外部API标注提示</strong>包含：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">System: 你是安全专家...定义源/汇点/传播器...以JSON格式返回</span><br><span class="line"></span><br><span class="line">User: </span><br><span class="line">[CWE长描述]</span><br><span class="line">示例源/汇点/传播器方法：</span><br><span class="line">[CWE源汇点示例]</span><br><span class="line">在以下方法中，假设传递给函数的参数是恶意的，</span><br><span class="line">哪些函数是[CWE_TITLE]攻击（CWE-[CWE_ID]）的潜在源、汇点或污点传播器？</span><br><span class="line"></span><br><span class="line">Package,Class,Method,Signature</span><br><span class="line">[批量API列表...]</span><br></pre></td></tr></table></figure>
+
+<p><strong>内部API标注提示</strong>包含：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">System: 你是安全专家...识别可能被下游库调用的API...</span><br><span class="line"></span><br><span class="line">User:</span><br><span class="line">你正在分析Java包[PROJECT_NAME]</span><br><span class="line">包摘要：[PROJECT_README_SUMMARY]</span><br><span class="line"></span><br><span class="line">请查看以下公共方法及其文档。哪些最重要的函数看起来</span><br><span class="line">可以被依赖于[PROJECT_NAME]的下游Java包调用，</span><br><span class="line">并且该函数可以使用潜在的恶意最终用户输入调用？</span><br><span class="line"></span><br><span class="line">Package,Class,Method,Doc</span><br><span class="line">[内部API列表与文档...]</span><br></pre></td></tr></table></figure>
+
+<h3 id="A-3-CodeQL查询生成"><a href="#A-3-CodeQL查询生成" class="headerlink" title="A.3 CodeQL查询生成"></a>A.3 CodeQL查询生成</h3><p><strong>路径遍历（CWE-22）查询示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import java</span><br><span class="line">import MySources</span><br><span class="line">import MySinks</span><br><span class="line"></span><br><span class="line">module MyTaintedPathConfig implements DataFlow::ConfigSig &#123;</span><br><span class="line">    predicate isSource(DataFlow::Node source) &#123;</span><br><span class="line">        isLLMDetectedSource(source)  // LLM推断的源</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    predicate isSink(DataFlow::Node sink) &#123;</span><br><span class="line">        isLLMDetectedSink(sink)  // LLM推断的汇点</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    predicate isBarrier(DataFlow::Node sanitizer) &#123;</span><br><span class="line">        // 净化器规范...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module MyTaintedPathFlow = TaintTracking::Global&lt;MyTaintedPathConfig&gt;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>源规范示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">predicate isLLMDetectedSource(DataFlow::Node src) &#123;</span><br><span class="line">    // 返回值源</span><br><span class="line">    src.asExpr().(Call).getCallee().getName() = &quot;getName&quot; and</span><br><span class="line">    src.asExpr().(Call).getCallee().getDeclaringType()</span><br><span class="line">        .getSourceDeclaration().hasQualifiedName(&quot;java.util.zip&quot;, &quot;ZipEntry&quot;)</span><br><span class="line">    or</span><br><span class="line">    // 函数参数源</span><br><span class="line">    exists(Parameter p |</span><br><span class="line">        src.asParameter() = p and</span><br><span class="line">        p.getCallable().getName() = &quot;setUserName&quot; and</span><br><span class="line">        p.getName() = &quot;userName&quot;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="📌-总结性解读：IRIS的突破与启示"><a href="#📌-总结性解读：IRIS的突破与启示" class="headerlink" title="📌 总结性解读：IRIS的突破与启示"></a>📌 总结性解读：IRIS的突破与启示</h2><h3 id="技术突破"><a href="#技术突破" class="headerlink" title="技术突破"></a>技术突破</h3><p><strong>1. 神经符号融合的成功案例</strong></p>
+<ul>
+<li>IRIS证明了LLM和传统程序分析可以互补</li>
+<li>LLM处理语义理解，静态分析处理精确推理</li>
+<li>不是简单的组合，而是精心设计的交互</li>
+</ul>
+<p><strong>2. 实用性导向的设计</strong></p>
+<ul>
+<li>解决真实痛点：规范缺失和误报过多</li>
+<li>可扩展：无需分析第三方库源码</li>
+<li>可负担：开源模型也能取得不错效果</li>
+</ul>
+<p><strong>3. 方法论贡献</strong></p>
+<ul>
+<li>提示工程：如何让LLM理解安全概念</li>
+<li>上下文编码：如何向LLM呈现代码路径</li>
+<li>评估框架：如何公平评估混合系统</li>
+</ul>
+<h3 id="对实践的影响"><a href="#对实践的影响" class="headerlink" title="对实践的影响"></a>对实践的影响</h3><p><strong>1. 安全工具开发</strong></p>
+<ul>
+<li>传统静态分析工具可以整合LLM</li>
+<li>不需要完全重写，可以增量改进</li>
+<li>开源化促进社区贡献</li>
+</ul>
+<p><strong>2. 漏洞检测流程</strong></p>
+<ul>
+<li>减少人工规范编写工作</li>
+<li>降低误报分类负担</li>
+<li>加速漏洞发现周期</li>
+</ul>
+<p><strong>3. 成本效益考量</strong></p>
+<ul>
+<li>LLM API成本 vs 人工成本</li>
+<li>时间节省 vs 金钱花费</li>
+<li>需要组织根据情况权衡</li>
+</ul>
+<h3 id="对研究的启示"><a href="#对研究的启示" class="headerlink" title="对研究的启示"></a>对研究的启示</h3><p><strong>1. 数据集建设的重要性</strong></p>
+<ul>
+<li>CWE-Bench-Java填补了重要空白</li>
+<li>可重现性是评估的基础</li>
+<li>社区需要更多高质量基准</li>
+</ul>
+<p><strong>2. 评估方法的复杂性</strong></p>
+<ul>
+<li>简单的准确率指标不足够</li>
+<li>需要考虑误报成本和漏报风险</li>
+<li>人工验证仍然必不可少</li>
+</ul>
+<p><strong>3. 未来研究方向</strong></p>
+<ul>
+<li>更紧密的神经符号集成</li>
+<li>多模态分析（静态+动态）</li>
+<li>跨语言通用方法</li>
+<li>可解释性和可信度</li>
+</ul>
+<h3 id="局限性的启示"><a href="#局限性的启示" class="headerlink" title="局限性的启示"></a>局限性的启示</h3><p><strong>1. LLM不是万能的</strong></p>
+<ul>
+<li>推理能力有限（较小模型尤其明显）</li>
+<li>需要精心设计的提示和后处理</li>
+<li>成本和准确性需要权衡</li>
+</ul>
+<p><strong>2. 静态分析的固有限制</strong></p>
+<ul>
+<li>某些漏洞类型难以静态检测</li>
+<li>需要与动态分析结合</li>
+<li>完美精确度不可能实现</li>
+</ul>
+<p><strong>3. 实用化的挑战</strong></p>
+<ul>
+<li>工具集成和工程优化</li>
+<li>用户界面和体验设计</li>
+<li>持续维护和更新</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CodeQL/" rel="tag"># CodeQL</a>
+              <a href="/tags/SAST/" rel="tag"># SAST</a>
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/01/10/SSH%E7%A7%81%E9%92%A5%E8%BF%9E%E6%8E%A5%E5%8F%8AVScode%E9%85%8D%E7%BD%AE/" rel="prev" title="SSH私钥连接服务器及VScode配置">
+                  <i class="fa fa-angle-left"></i> SSH私钥连接服务器及VScode配置
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -208,6 +208,144 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/13/IRIS%EF%BC%9A%E5%9F%BA%E4%BA%8ELLM%E8%BE%85%E5%8A%A9%E7%9A%84%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%A3%80%E6%B5%8B%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/13/IRIS%EF%BC%9A%E5%9F%BA%E4%BA%8ELLM%E8%BE%85%E5%8A%A9%E7%9A%84%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%A3%80%E6%B5%8B%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">IRIS：基于LLM辅助的静态分析检测安全漏洞</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-13 22:38:54 / 修改时间：22:40:58" itemprop="dateCreated datePublished" datetime="2026-01-13T22:38:54+08:00">2026-01-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SAST/" itemprop="url" rel="index"><span itemprop="name">SAST</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>软件容易受到安全漏洞的影响。用于检测这些漏洞的程序分析工具由于依赖人工标注的规范，在实践中效果有限。大型语言模型（LLM）展现出令人印象深刻的代码生成能力，但它们无法对代码进行复杂推理以检测此类漏洞，特别是因为此任务需要全仓库分析。我们提出了IRIS，一种神经符号方法，系统地结合LLM与静态分析来执行全仓库推理以检测安全漏洞。具体来说，IRIS利用LLM推断污点规范并执行上下文分析，从而减轻对人工规范和检查的需求。为了评估，我们策划了一个新数据集CWE-Bench-Java，包含120个经过人工验证的真实Java项目中的安全漏洞。最先进的静态分析工具CodeQL仅检测到其中27个漏洞，而使用GPT-4的IRIS检测到55个（+28），并将CodeQL的平均误报发现率提高了5个百分点。此外，IRIS识别出4个以前未知的漏洞，这些漏洞无法被现有工具发现。IRIS已公开发布于 <a target="_blank" rel="noopener" href="https://github.com/iris-sast/iris%E3%80%82">https://github.com/iris-sast/iris。</a></p>
+<h2 id="📌-关键解读1：研究动机与核心贡献"><a href="#📌-关键解读1：研究动机与核心贡献" class="headerlink" title="📌 关键解读1：研究动机与核心贡献"></a>📌 关键解读1：研究动机与核心贡献</h2><h3 id="核心问题"><a href="#核心问题" class="headerlink" title="核心问题"></a>核心问题</h3><ol>
+<li><p><strong>静态污点分析的局限</strong>：传统工具如CodeQL严重依赖人工标注的API规范（源、汇点、净化器），这导致：</p>
+<ul>
+<li>规范缺失→漏报</li>
+<li>规范不精确→误报</li>
+</ul>
+</li>
+<li><p><strong>LLM的潜力与限制</strong>：</p>
+<ul>
+<li>LLM能理解代码但无法进行复杂的全项目推理</li>
+<li>需要结合静态分析的精确性</li>
+</ul>
+</li>
+</ol>
+<h3 id="核心创新"><a href="#核心创新" class="headerlink" title="核心创新"></a>核心创新</h3><p>IRIS提出的<strong>神经符号方法</strong>实现了三个关键突破：</p>
+<ol>
+<li><strong>自动规范推断</strong>：使用LLM从API文档和代码中推断污点源和汇点</li>
+<li><strong>上下文感知过滤</strong>：利用LLM理解代码上下文，减少误报</li>
+<li><strong>全仓库分析</strong>：结合静态分析的数据流追踪能力</li>
+</ol>
+<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>安全漏洞对软件应用程序及其用户的安全构成重大威胁。仅在2023年，就报告了超过29,000个CVE——比2022年高出近4000个（CVE趋势）。尽管在揭示漏洞的技术方面取得了进展，检测漏洞仍然极具挑战性。</p>
+<p>一种名为<strong>静态污点分析</strong>的有前景技术被广泛应用于流行工具中，如GitHub CodeQL、Facebook Infer、Checker Framework和Snyk Code。然而，这些工具面临几个极大限制其在实践中有效性和可访问性的挑战。</p>
+<h3 id="1-1-主要挑战"><a href="#1-1-主要挑战" class="headerlink" title="1.1 主要挑战"></a>1.1 主要挑战</h3><p><strong>由于缺少第三方库API的污点规范而导致的漏报</strong></p>
+<p>静态污点分析主要依赖第三方库API作为源、汇点或净化器的规范。在实践中，开发人员和分析工程师必须根据他们的领域知识和API文档手动制作这些规范。这是一个费力且容易出错的过程，经常导致规范缺失和漏洞分析不完整。此外，即使这些规范可能存在于许多库中，它们也需要定期更新以捕获这些库新版本中的变化，并覆盖开发的新库。</p>
+<p><strong>由于缺乏精确的上下文感知和直观推理而导致的误报</strong></p>
+<p>众所周知，静态分析经常受到低精度的困扰，即可能产生许多虚假警报。这种不精确源于多种来源。例如，源或汇点规范可能是虚假的，或者分析可能过度近似代码中的分支或可能的输入。此外，即使规范正确，检测到的源或汇点所使用的上下文可能无法被利用。因此，开发人员可能需要筛选几个潜在的虚假安全警报，浪费大量时间和精力。</p>
+<h3 id="1-2-先前数据驱动方法的局限性"><a href="#1-2-先前数据驱动方法的局限性" class="headerlink" title="1.2 先前数据驱动方法的局限性"></a>1.2 先前数据驱动方法的局限性</h3><p>已经提出了许多技术来解决静态污点分析的挑战。例如，MERLIN提出了一种概率方法来自动挖掘污点规范。最近的工作Seldon通过将污点规范推断问题表述为线性优化任务来提高这种方法的可扩展性。然而，这些方法依赖于分析第三方库的代码来提取规范，这既昂贵又难以扩展。研究人员还开发了统计和基于学习的技术来缓解虚假正警报。然而，这些方法在实践中仍然效果有限。</p>
+<hr>
+<h2 id="📌-关键解读2：IRIS的技术架构"><a href="#📌-关键解读2：IRIS的技术架构" class="headerlink" title="📌 关键解读2：IRIS的技术架构"></a>📌 关键解读2：IRIS的技术架构</h2><p>IRIS采用<strong>四阶段流水线</strong>设计：</p>
+<h3 id="阶段1：候选提取"><a href="#阶段1：候选提取" class="headerlink" title="阶段1：候选提取"></a>阶段1：候选提取</h3><ul>
+<li>从项目中提取所有外部API调用和内部函数参数</li>
+<li>这些是潜在的污点源&#x2F;汇点候选</li>
+</ul>
+<h3 id="阶段2：LLM规范推断"><a href="#阶段2：LLM规范推断" class="headerlink" title="阶段2：LLM规范推断"></a>阶段2：LLM规范推断</h3><ul>
+<li>使用LLM标注这些API为源&#x2F;汇点</li>
+<li>针对特定CWE类型定制提示词</li>
+<li>利用few-shot学习提高准确性</li>
+</ul>
+<h3 id="阶段3：静态污点分析"><a href="#阶段3：静态污点分析" class="headerlink" title="阶段3：静态污点分析"></a>阶段3：静态污点分析</h3><ul>
+<li>将LLM推断的规范转换为CodeQL查询</li>
+<li>执行数据流分析找到不净化路径</li>
+</ul>
+<h3 id="阶段4：上下文过滤"><a href="#阶段4：上下文过滤" class="headerlink" title="阶段4：上下文过滤"></a>阶段4：上下文过滤</h3><ul>
+<li>使用LLM分析每条警报路径的上下文</li>
+<li>过滤误报，保留真实漏洞</li>
+</ul>
+<p>这种设计巧妙地：</p>
+<ul>
+<li><strong>利用LLM的优势</strong>：理解API语义和代码上下文</li>
+<li><strong>弥补LLM的不足</strong>：用静态分析处理全项目数据流</li>
+<li><strong>减少人工工作</strong>：自动化规范生成和误报过滤</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/13/IRIS%EF%BC%9A%E5%9F%BA%E4%BA%8ELLM%E8%BE%85%E5%8A%A9%E7%9A%84%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%A3%80%E6%B5%8B%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1586,151 +1724,6 @@
 </li>
 </ol>
 <h2 id="项目学习架构-Demo"><a href="#项目学习架构-Demo" class="headerlink" title="项目学习架构 Demo"></a>项目学习架构 Demo</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">## 项目目标</span><br><span class="line"></span><br><span class="line">## 运行方式</span><br><span class="line"></span><br><span class="line">## 核心流程（系统主线）</span><br><span class="line"></span><br><span class="line">- 输出 &amp;&amp; 输出</span><br><span class="line">- 核心功能一执行链路</span><br><span class="line">- 核心功能二执行链路</span><br><span class="line"></span><br><span class="line">## 调通模块</span><br><span class="line"></span><br><span class="line">## 未调通模块</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/20/%E5%B8%B8%E8%A7%81CWE%E7%B1%BB%E5%9E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/20/%E5%B8%B8%E8%A7%81CWE%E7%B1%BB%E5%9E%8B/" class="post-title-link" itemprop="url">常见CWE类型</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-20 09:43:26 / 修改时间：09:50:46" itemprop="dateCreated datePublished" datetime="2025-12-20T09:43:26+08:00">2025-12-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>CWE（Common Weakness Enumeration，<strong>通用弱点枚举</strong>）可以理解为一份<strong>软件常见安全问题清单</strong>。</p>
-<p>它不是具体的漏洞编号（CVE），而是把各种程序和系统中<strong>容易犯的安全错误</strong>进行分类和编号，比如输入校验不严、权限控制错误、配置不当等。</p>
-<p>通过使用 CWE，开发人员可以在写代码和配置系统时提前避免这些常见问题，安全人员也可以用它来分析漏洞成因、指导加固和考试答题。在软考中，CWE 更多是用来<strong>说明漏洞属于哪一类错误和为什么会产生</strong>。</p>
-<table>
-<thead>
-<tr>
-<th><strong>CWE编号</strong></th>
-<th><strong>漏洞类型</strong></th>
-<th><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>CWE-16</td>
-<td>配置错误（常见）</td>
-<td>所有由于系统、软件、服务配置不当导致的安全问题</td>
-</tr>
-<tr>
-<td>CWE-20</td>
-<td>输入验证不当</td>
-<td>由于输入校验不足，导致不可信数据被系统错误处理，从而引发多种安全漏洞的根本原因</td>
-</tr>
-<tr>
-<td>CWE-22</td>
-<td>路径&#x2F;目录遍历</td>
-<td>攻击者通过构造包含特殊路径的输入，绕过目录限制，访问或读取本不应访问的文件</td>
-</tr>
-<tr>
-<td>CWE-78</td>
-<td>命令注入</td>
-<td>用户输入被直接用于构造操作系统命令，CWE-77 也属于命令注入</td>
-</tr>
-<tr>
-<td>CWE-79</td>
-<td>跨站脚本（XSS）</td>
-<td>未对用户输入进行充分过滤，导致恶意脚本被执行</td>
-</tr>
-<tr>
-<td>CWE-89</td>
-<td>SQL 注入</td>
-<td>构造 SQL 查询时未对用户输入进行有效处理，导致攻击者可注入恶意 SQL 语句，实现未授权的数据访问或操作</td>
-</tr>
-<tr>
-<td>CWE-119</td>
-<td>缓冲区溢出</td>
-<td>写入数据超出缓冲区边界，同样 CWE-120 也属于缓冲区溢出</td>
-</tr>
-<tr>
-<td>CWE-200</td>
-<td>信息泄露</td>
-<td>信息泄露的总类，常见的还有 CWE-215（开启 debug 模式、返回变量、配置等信息）</td>
-</tr>
-<tr>
-<td>CWE-284</td>
-<td>访问控制不当</td>
-<td>权限校验缺失或校验逻辑错误</td>
-</tr>
-<tr>
-<td>CWE-287</td>
-<td>身份认证不当</td>
-<td>认证逻辑存在缺陷</td>
-</tr>
-<tr>
-<td>CWE-552</td>
-<td>任意文件读取</td>
-<td>由于文件或目录权限、访问策略配置不当，导致未授权用户可以直接访问或读取系统敏感文件或目录</td>
-</tr>
-</tbody></table>
-
       
     </div>
 
