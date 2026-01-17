@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Hexo 默认的 Markdown 渲染引擎不支持 LaTeX 数学公式语法（即 ... 和 $$$ … $$$），或者在渲染时将公式中的特殊字符（如 _、\）错误地转义了。 VS Code 能够正常显示是因为它内置了强大的 Markdown 预览功能（通常带有 MathJax 或 KaTeX 插件支持），但 Hexo 是一个静态生成器，需要手动配置数学公式渲染插件。 要解决这个问题，可以按照以下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解决HEXO无法渲染LaTeX数学公式的问题">
+<meta property="og:url" content="https://zyufoye.github.io/2026/01/17/%E8%A7%A3%E5%86%B3HEXO%E6%97%A0%E6%B3%95%E6%B8%B2%E6%9F%93LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="Hexo 默认的 Markdown 渲染引擎不支持 LaTeX 数学公式语法（即 ... 和 $$$ … $$$），或者在渲染时将公式中的特殊字符（如 _、\）错误地转义了。 VS Code 能够正常显示是因为它内置了强大的 Markdown 预览功能（通常带有 MathJax 或 KaTeX 插件支持），但 Hexo 是一个静态生成器，需要手动配置数学公式渲染插件。 要解决这个问题，可以按照以下">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-17T14:03:42.000Z">
+<meta property="article:modified_time" content="2026-01-17T14:09:35.783Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="Config">
+<meta property="article:tag" content="Hexo">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/01/17/%E8%A7%A3%E5%86%B3HEXO%E6%97%A0%E6%B3%95%E6%B8%B2%E6%9F%93LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/01/17/%E8%A7%A3%E5%86%B3HEXO%E6%97%A0%E6%B3%95%E6%B8%B2%E6%9F%93LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E7%9A%84%E9%97%AE%E9%A2%98/","path":"2026/01/17/解决HEXO无法渲染LaTeX数学公式的问题/","title":"解决HEXO无法渲染LaTeX数学公式的问题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>解决HEXO无法渲染LaTeX数学公式的问题 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E6%9B%B4%E6%8D%A2%E6%9B%B4%E5%BC%BA%E5%A4%A7%E7%9A%84%E6%B8%B2%E6%9F%93%E5%BC%95%E6%93%8E%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">第一步：更换更强大的渲染引擎（推荐）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%AE%89%E8%A3%85%E5%85%AC%E5%BC%8F%E6%B8%B2%E6%9F%93%E6%8F%92%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">第二步：安装公式渲染插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E5%9C%A8%E5%8D%9A%E5%AE%A2%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%B8%AD%E5%90%AF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">第三步：在博客配置文件中启用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9A%E6%A3%80%E6%9F%A5%E4%B8%BB%E9%A2%98%EF%BC%88Theme%EF%BC%89%E9%85%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">第四步：检查主题（Theme）配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%98%BE%E7%A4%BA%E4%B8%8D%E6%AD%A3%E5%B8%B8%EF%BC%9F%EF%BC%88%E6%8A%80%E6%9C%AF%E5%8E%9F%E5%9B%A0%E5%88%86%E6%9E%90%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">为什么会显示不正常？（技术原因分析）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E8%83%BD%E4%BC%9A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">可能会遇到的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90%EF%BC%9A%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F%E4%BA%86%E5%90%97%EF%BC%9F"><span class="nav-number">7.</span> <span class="nav-text">1. 结果分析：安装成功了吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%EF%BC%88Vulnerabilities%EF%BC%89%E5%88%86%E6%9E%90"><span class="nav-number">8.</span> <span class="nav-text">2. 安全漏洞（Vulnerabilities）分析</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/17/%E8%A7%A3%E5%86%B3HEXO%E6%97%A0%E6%B3%95%E6%B8%B2%E6%9F%93LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="解决HEXO无法渲染LaTeX数学公式的问题 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          解决HEXO无法渲染LaTeX数学公式的问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-17 22:03:42 / 修改时间：22:09:35" itemprop="dateCreated datePublished" datetime="2026-01-17T22:03:42+08:00">2026-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><strong>Hexo 默认的 Markdown 渲染引擎不支持 LaTeX 数学公式语法（即 <script type="math/tex">...</script> 和 $$$ … $$$），或者在渲染时将公式中的特殊字符（如 <code>_</code>、<code>\</code>）错误地转义了。</strong></p>
+<p>VS Code 能够正常显示是因为它内置了强大的 Markdown 预览功能（通常带有 MathJax 或 KaTeX 插件支持），但 Hexo 是一个静态生成器，需要手动配置数学公式渲染插件。</p>
+<p>要解决这个问题，可以按照以下步骤操作：</p>
+<h3 id="第一步：更换更强大的渲染引擎（推荐）"><a href="#第一步：更换更强大的渲染引擎（推荐）" class="headerlink" title="第一步：更换更强大的渲染引擎（推荐）"></a>第一步：更换更强大的渲染引擎（推荐）</h3><p>Hexo 默认使用的 <code>hexo-renderer-marked</code> 对数学公式支持很差，经常会导致公式乱码。建议更换为 <code>hexo-renderer-kramed</code>（它是 marked 的改进版，专门优化了数学公式）。</p>
+<p>在 Hexo 博客根目录下执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 卸载默认渲染器</span></span><br><span class="line">npm un hexo-renderer-marked --save</span><br><span class="line"><span class="comment"># 安装 kramed</span></span><br><span class="line">npm i hexo-renderer-kramed --save</span><br></pre></td></tr></table></figure>
+<h3 id="第二步：安装公式渲染插件"><a href="#第二步：安装公式渲染插件" class="headerlink" title="第二步：安装公式渲染插件"></a>第二步：安装公式渲染插件</h3><p>为了让网页能解析这些数学符号，需要安装 MathJax 或 KaTeX 插件。这里推荐安装 <code>hexo-filter-mathjax</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-filter-mathjax --save</span><br></pre></td></tr></table></figure>
+<h3 id="第三步：在博客配置文件中启用"><a href="#第三步：在博客配置文件中启用" class="headerlink" title="第三步：在博客配置文件中启用"></a>第三步：在博客配置文件中启用</h3><ol>
+<li><p><strong>修改站点配置文件 <code>_config.yml</code></strong>（博客根目录下的那个）：<br>在文件末尾添加以下配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mathjax:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">per_page:</span> <span class="literal">true</span> <span class="comment"># 建议设为 true，只有在需要时才开启</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>修改你的文章 Front-matter（开头部分）</strong>：<br>在你那篇 RSA 原理的文章最上面的 <code>---</code> 区域内，手动添加一行 <code>mathjax: true</code>。例如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">RSA原理解读</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2026-01-17 17:51:43</span></span><br><span class="line"><span class="attr">tags:</span> [<span class="string">RSA</span>, <span class="string">密码学</span>]</span><br><span class="line"><span class="attr">categories:</span> <span class="string">密码学</span></span><br><span class="line"><span class="attr">mathjax:</span> <span class="literal">true</span>  <span class="comment"># 必须加上这一行</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="第四步：检查主题（Theme）配置"><a href="#第四步：检查主题（Theme）配置" class="headerlink" title="第四步：检查主题（Theme）配置"></a>第四步：检查主题（Theme）配置</h3><p>很多 Hexo 主题（如 NexT, Butterfly, Fluid）已经内置了对 MathJax 的支持。如果按上述操作还是不行，就需要去<strong>主题的配置文件</strong>（<code>themes/你的主题名/_config.yml</code>）里搜索 <code>math</code> 或 <code>mathjax</code>，将 <code>enable</code> 设置为 <code>true</code>。</p>
+<h3 id="为什么会显示不正常？（技术原因分析）"><a href="#为什么会显示不正常？（技术原因分析）" class="headerlink" title="为什么会显示不正常？（技术原因分析）"></a>为什么会显示不正常？（技术原因分析）</h3><ol>
+<li><strong>符号冲突</strong>：Markdown 中 <code>_</code> 表示斜体，而在 LaTeX 中表示下标。Hexo 默认引擎会先处理 <code>_</code>，导致 LaTeX 还没来得及解析，公式就已经被破坏了。</li>
+<li><strong>转义问题</strong>：LaTeX 中经常使用反斜杠 <code>\</code>（如 <code>\phi</code>），默认引擎可能会把它当成 Markdown 的转义字符给删掉。</li>
+<li><strong>缺少前端渲染库</strong>：即便 Markdown 引擎不破坏公式，浏览器本身也看不懂 $$$ … $$$，需要像 MathJax.js 这样的 JavaScript 脚本在页面加载时把这些代码转换成美观的数学符号。</li>
+</ol>
+<p><strong>建议：</strong> 完成上述配置后，运行 <code>hexo clean</code> 然后 <code>hexo g</code> 重新生成预览。如果公式依然有部分乱码，通常是由于 <code>_</code> 导致的冲突，此时使用 <code>hexo-renderer-kramed</code> 效果通常最好。</p>
+<h3 id="可能会遇到的问题"><a href="#可能会遇到的问题" class="headerlink" title="可能会遇到的问题"></a>可能会遇到的问题</h3><p>我遇到的终端输出结果会提示<strong>环境安装已经成功，但存在一些版本兼容性带来的“副作用”。</strong></p>
+<p>以下是详细的分析和后续操作建议：</p>
+<h3 id="1-结果分析：安装成功了吗？"><a href="#1-结果分析：安装成功了吗？" class="headerlink" title="1. 结果分析：安装成功了吗？"></a>1. 结果分析：安装成功了吗？</h3><p><strong>结论：安装已经成功，可以开始配置了。</strong></p>
+<ul>
+<li><strong>卸载成功</strong>：<code>hexo-renderer-marked</code> 已移除。</li>
+<li><strong>安装成功</strong>：<code>hexo-renderer-kramed</code> 和 <code>hexo-filter-mathjax</code> 都已经正确进入了你的 <code>node_modules</code> 文件夹。</li>
+<li><strong>警告（Warn）</strong>：你看到的 <code>deprecated</code>（弃用）警告是因为这两个插件都是社区维护的，引用的某些底层库（如 <code>highlight.js</code> 和 <code>mathjax-full</code>）版本较旧。<strong>对于 Hexo 静态博客来说，这些警告通常可以忽略，不影响使用。</strong></li>
+</ul>
+<h3 id="2-安全漏洞（Vulnerabilities）分析"><a href="#2-安全漏洞（Vulnerabilities）分析" class="headerlink" title="2. 安全漏洞（Vulnerabilities）分析"></a>2. 安全漏洞（Vulnerabilities）分析</h3><p>执行 <code>npm audit</code> 发现了 5 个漏洞（2 个中等，3 个高危）。</p>
+<ul>
+<li><strong>原因</strong>：<code>hexo-renderer-kramed</code> 是一个为了解决数学公式而停止在旧版本的渲染器，它依赖的一些组件（如 <code>cross-spawn</code>, <code>striptags</code>）确实存在已知的安全漏洞。</li>
+<li><strong>风险评估</strong>：<strong>低风险。</strong> 因为 Hexo 是在<strong>本地电脑</strong>上运行生成静态 HTML 文件的工具。这些漏洞大多数是“拒绝服务攻击 (ReDoS)”，除非从网上下载来历不明的恶意 Markdown 插件并运行，否则它们不会影响生成的博客网页，也不会威胁到访问网站的读者。</li>
+<li><strong>特别提醒</strong>：<strong>千万不要运行 <code>npm audit fix --force</code></strong>。这可能会导致 npm 强制把你刚装好的 <code>kramed</code> 降级或替换回 <code>marked</code>，让你之前的操作白费。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Config/" rel="tag"># Config</a>
+              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/01/17/CodeQL%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99-Java%E5%86%85%E9%83%A8%E6%B5%8B%E8%AF%95API%E6%8F%90%E5%8F%96/" rel="prev" title="CodeQL规则编写_Java内部测试API提取">
+                  <i class="fa fa-angle-left"></i> CodeQL规则编写_Java内部测试API提取
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
