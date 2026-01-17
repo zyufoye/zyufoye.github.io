@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="内容由 Gemini 3 Flash Preview 生成，个人认为讲解的是最好的了，比较通俗易懂。 RSA 算法之所以能够实现“加密后再解密”并回到原文，其核心秘密在于数论中的一个神奇特性：通过巧妙构造的一对密钥（公钥和私钥），我们可以利用幂运算和取模运算，在一个闭环的数学世界里绕一圈后再回到起点。 为了理解透彻，分三个层面来剖析：直观逻辑、操作步骤和数学原理。 1. 直观逻辑：神奇的“数学回力">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RSA原理解读">
+<meta property="og:url" content="https://zyufoye.github.io/2026/01/17/RSA%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="内容由 Gemini 3 Flash Preview 生成，个人认为讲解的是最好的了，比较通俗易懂。 RSA 算法之所以能够实现“加密后再解密”并回到原文，其核心秘密在于数论中的一个神奇特性：通过巧妙构造的一对密钥（公钥和私钥），我们可以利用幂运算和取模运算，在一个闭环的数学世界里绕一圈后再回到起点。 为了理解透彻，分三个层面来剖析：直观逻辑、操作步骤和数学原理。 1. 直观逻辑：神奇的“数学回力">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-17T09:51:43.000Z">
+<meta property="article:modified_time" content="2026-01-17T10:01:02.371Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="RSA">
+<meta property="article:tag" content="密码学">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/01/17/RSA%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/01/17/RSA%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB/","path":"2026/01/17/RSA原理解读/","title":"RSA原理解读"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RSA原理解读 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录学习，分享生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%9B%B4%E8%A7%82%E9%80%BB%E8%BE%91%EF%BC%9A%E7%A5%9E%E5%A5%87%E7%9A%84%E2%80%9C%E6%95%B0%E5%AD%A6%E5%9B%9E%E5%8A%9B%E6%A3%92%E2%80%9D"><span class="nav-number">1.</span> <span class="nav-text">1. 直观逻辑：神奇的“数学回力棒”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4%EF%BC%9A%E5%AF%86%E9%92%A5%E6%98%AF%E5%A6%82%E4%BD%95%E4%BA%A7%E7%94%9F%E7%9A%84%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">2. 操作步骤：密钥是如何产生的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88-M-e-d-%E8%83%BD%E5%9B%9E%E5%88%B0-M-%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">3. 数学原理：为什么 $(M^e)^d$ 能回到 $M$？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%BE%9D%E6%8D%AE%EF%BC%9A%E6%AC%A7%E6%8B%89%E5%AE%9A%E7%90%86%EF%BC%88Euler%E2%80%99s-Theorem%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">核心依据：欧拉定理（Euler’s Theorem）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E6%A0%B7%E6%98%AF%E5%AE%89%E5%85%A8%E7%9A%84%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">4. 为什么这样是安全的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/17/RSA%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RSA原理解读 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RSA原理解读
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-17 17:51:43 / 修改时间：18:01:02" itemprop="dateCreated datePublished" datetime="2026-01-17T17:51:43+08:00">2026-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>内容由 Gemini 3 Flash Preview 生成，个人认为讲解的是最好的了，比较通俗易懂。</p>
+<p>RSA 算法之所以能够实现“加密后再解密”并回到原文，其核心秘密在于<strong>数论</strong>中的一个神奇特性：<strong>通过巧妙构造的一对密钥（公钥和私钥），我们可以利用幂运算和取模运算，在一个闭环的数学世界里绕一圈后再回到起点。</strong></p>
+<p>为了理解透彻，分三个层面来剖析：<strong>直观逻辑</strong>、<strong>操作步骤</strong>和<strong>数学原理</strong>。</p>
+<h3 id="1-直观逻辑：神奇的“数学回力棒”"><a href="#1-直观逻辑：神奇的“数学回力棒”" class="headerlink" title="1. 直观逻辑：神奇的“数学回力棒”"></a>1. 直观逻辑：神奇的“数学回力棒”</h3><p>可以把 RSA 想象成一个特殊的魔术盒。</p>
+<ul>
+<li><strong>加密（投掷）：</strong> 你把数字 $M$（明文）放进去，按一下公钥按钮（求 $e$ 次方再取模），数字会变成一个面目全非的密文 $C$。</li>
+<li><strong>解密（返回）：</strong> 对方收到 $C$ 后，按一下只有他持有的私钥按钮（求 $d$ 次方再取模），这个面目全非的数字竟然会像回力棒一样，**精准地变回原来的数字 $M$**。</li>
+</ul>
+<p>这种“对称性”是由特殊的数学关系保证的。</p>
+<h3 id="2-操作步骤：密钥是如何产生的？"><a href="#2-操作步骤：密钥是如何产生的？" class="headerlink" title="2. 操作步骤：密钥是如何产生的？"></a>2. 操作步骤：密钥是如何产生的？</h3><p>要理解为什么能解密，先看公钥和私钥是怎么选出来的。</p>
+<ol>
+<li><strong>选种子：</strong> 选两个巨大的质数 $p$ 和 $q$。</li>
+<li><strong>算模数：</strong> $n &#x3D; p \times q$。这个 $n$ 会公开，是加解密的公用容器。</li>
+<li><strong>算欧拉函数：</strong> $\phi(n) &#x3D; (p-1) \times (q-1)$。这个值是生成密钥的关键，必须保密。</li>
+<li><strong>选公钥 $e$：</strong> 选一个与 $\phi(n)$ 互质的数 $e$。</li>
+<li><strong>算私钥 $d$：</strong> 这是最关键的一步，要找到一个 $d$，使得 <strong>$(e \times d)$ 除以 $\phi(n)$ 的余数等于 1</strong>。用数学公式表达就是：<br>$$e \cdot d \equiv 1 \pmod{\phi(n)}$$</li>
+</ol>
+<p><strong>结论：</strong> 公钥是 $(n, e)$，私钥是 $(n, d)$。它们通过 $\phi(n)$ 像纽扣一样紧紧扣在一起。</p>
+<h3 id="3-数学原理：为什么-M-e-d-能回到-M-？"><a href="#3-数学原理：为什么-M-e-d-能回到-M-？" class="headerlink" title="3. 数学原理：为什么 $(M^e)^d$ 能回到 $M$？"></a>3. 数学原理：为什么 $(M^e)^d$ 能回到 $M$？</h3><p>这是你最关心的部分。加密和解密的过程如下：</p>
+<ul>
+<li><strong>加密：</strong> $C &#x3D; M^e \pmod n$</li>
+<li><strong>解密：</strong> $M’ &#x3D; C^d \pmod n$</li>
+</ul>
+<p>我们要证明的是：$M’ &#x3D; (M^e)^d \pmod n$ 是否等于 $M$？也就是证明：<br>$$M^{ed} \equiv M \pmod n$$</p>
+<h4 id="核心依据：欧拉定理（Euler’s-Theorem）"><a href="#核心依据：欧拉定理（Euler’s-Theorem）" class="headerlink" title="核心依据：欧拉定理（Euler’s Theorem）"></a>核心依据：欧拉定理（Euler’s Theorem）</h4><p>数学家欧拉证明过：如果 $M$ 和 $n$ 互质，那么 $M^{\phi(n)} \equiv 1 \pmod n$。</p>
+<p>根据我们产生私钥时的规定，$e \cdot d$ 除以 $\phi(n)$ 余 1，所以可以写成：<br>$$e \cdot d &#x3D; k \cdot \phi(n) + 1 \quad (\text{其中 } k \text{ 是整数})$$</p>
+<p>现在我们代入到解密公式里：<br>$$M^{ed} &#x3D; M^{k \cdot \phi(n) + 1} &#x3D; (M^{\phi(n)})^k \cdot M^1$$</p>
+<p>根据欧拉定理，括号里的 $M^{\phi(n)}$ 在模 $n$ 的世界里等于 <strong>1</strong>。<br>所以：<br>$$(1)^k \cdot M &#x3D; 1 \cdot M &#x3D; M$$</p>
+<p><strong>这就是 RSA 能够还原原文的数学真相：</strong> 密钥 $e$ 和 $d$ 的乘积被设计成“欧拉函数的一个循环再多加 1”。在取模运算下，绕着 $\phi(n)$ 转圈最终都会回到 1，多出的那个“1”就把原始的 $M$ 给带回来了。</p>
+<h3 id="4-为什么这样是安全的？"><a href="#4-为什么这样是安全的？" class="headerlink" title="4. 为什么这样是安全的？"></a>4. 为什么这样是安全的？</h3><p>既然 $e$ 是公开的，为什么别人算不出 $d$？</p>
+<ul>
+<li>要算出 $d$，必须知道 $\phi(n)$。</li>
+<li>要算出 $\phi(n)$，必须知道 $p$ 和 $q$（即对 $n$ 进行质因数分解）。</li>
+<li><strong>现实困难：</strong> 当 $n$ 非常大时（比如 2048 位二进制），人类目前的计算机在可接受的时间内（比如几千年）根本无法分解出 $p$ 和 $q$。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>RSA 能够加解密，是因为它利用了<strong>大质数乘积的不可逆性</strong>来保护秘密，并利用了<strong>欧拉定理的周期性</strong>（模运算下的幂循环）来确保加密后的数据可以通过特定的数学钥匙精准还原。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RSA/" rel="tag"># RSA</a>
+              <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag"># 密码学</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/01/13/IRIS%EF%BC%9A%E5%9F%BA%E4%BA%8ELLM%E8%BE%85%E5%8A%A9%E7%9A%84%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%A3%80%E6%B5%8B%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/" rel="prev" title="IRIS：基于LLM辅助的静态分析检测安全漏洞">
+                  <i class="fa fa-angle-left"></i> IRIS：基于LLM辅助的静态分析检测安全漏洞
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/01/17/CodeQL%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99-Java%E5%A4%96%E9%83%A8API%E8%B0%83%E7%94%A8%E6%8F%90%E5%8F%96/" rel="next" title="CodeQL规则编写_Java外部API调用提取">
+                  CodeQL规则编写_Java外部API调用提取 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

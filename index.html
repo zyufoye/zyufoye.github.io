@@ -172,18 +172,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">37</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -208,6 +208,573 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/17/CodeQL%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99-Java%E5%86%85%E9%83%A8%E6%B5%8B%E8%AF%95API%E6%8F%90%E5%8F%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/17/CodeQL%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99-Java%E5%86%85%E9%83%A8%E6%B5%8B%E8%AF%95API%E6%8F%90%E5%8F%96/" class="post-title-link" itemprop="url">CodeQL规则编写_Java内部测试API提取</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-17 18:32:29 / 修改时间：18:43:20" itemprop="dateCreated datePublished" datetime="2026-01-17T18:32:29+08:00">2026-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SAST/" itemprop="url" rel="index"><span itemprop="name">SAST</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在 IRIS 项目中，第二步是提取全部内部测试 API ，CodeQL 规则编写如下，因为不太理解 CodeQL 规则如何编写，所以学习记录如下，内容由 GPT 5.2 生成。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">import java</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string fullSignature(Callable m) &#123;</span><br><span class="line">    if m instanceof Constructor</span><br><span class="line">    then</span><br><span class="line">        result = m.getName() + &quot;(&quot; + concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(), &quot;, &quot;  order by i asc)  + &quot;)&quot;</span><br><span class="line">    else</span><br><span class="line">        result = m.getReturnType().getName() + &quot; &quot; + m.getName() + &quot;(&quot; + concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(), &quot;, &quot;  order by i asc)  + &quot;)&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">predicate isTested(Callable m) &#123;</span><br><span class="line">    exists(Call c |</span><br><span class="line">        c.getCallee() = m and</span><br><span class="line">        c.getLocation().toString().indexOf(&quot;src/test&quot;) &gt;= 0</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">predicate isNotInvokedByInternalFunction(Callable m) &#123;</span><br><span class="line">    not exists(Call c |</span><br><span class="line">        c.getCallee() = m and</span><br><span class="line">        c.getLocation().toString().indexOf(&quot;src/test&quot;) &lt; 0</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string paramTypes(Callable m) &#123;</span><br><span class="line">    result = concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName(), &quot;;&quot; order by i asc)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string getJavadocString(Callable m) &#123;</span><br><span class="line">    if (exists(Javadoc d | m.getDoc().getJavadoc() = d))</span><br><span class="line">    then</span><br><span class="line">        result = concat(int i | i = [0 .. m.getDoc().getJavadoc().getNumChild()] | m.getDoc().getJavadoc().getChild(i).getText(), &quot; &quot; order by i asc)</span><br><span class="line">    else</span><br><span class="line">        result = &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">from</span><br><span class="line">    Callable method</span><br><span class="line">where</span><br><span class="line">    method.fromSource() and</span><br><span class="line">    method.isPublic() and</span><br><span class="line">    not method.hasNoParameters() and</span><br><span class="line">    isTested(method) and</span><br><span class="line">    isNotInvokedByInternalFunction(method)</span><br><span class="line">select</span><br><span class="line">    method.getDeclaringType().getSourceDeclaration().getPackage() as package,</span><br><span class="line">    method.getDeclaringType().getSourceDeclaration() as clazz,</span><br><span class="line">    method.getName() as func,</span><br><span class="line">    fullSignature(method) as full_signature,</span><br><span class="line">    method.getStringSignature() as internal_signature,</span><br><span class="line">    method.getLocation().toString() as location,</span><br><span class="line">    paramTypes(method) as parameter_types,</span><br><span class="line">    method.getReturnType().getName() as return_type,</span><br><span class="line">    getJavadocString(method) as doc</span><br></pre></td></tr></table></figure>
+
+
+<p>解读方式：“<strong>这条规则想解决什么问题 → 每个谓词&#x2F;函数做什么 → where 条件组合后的真实含义 → 可能的坑与改进</strong>”的顺序，带你把它吃透。</p>
+<h2 id="1）一句话概括：这条规则在找什么？"><a href="#1）一句话概括：这条规则在找什么？" class="headerlink" title="1）一句话概括：这条规则在找什么？"></a>1）一句话概括：这条规则在找什么？</h2><p>它在找：</p>
+<blockquote>
+<p><strong>“在 src&#x2F;test 里被调用过、但在非 test（业务代码）里从未被调用过”的 public 且有参数的源代码方法。</strong></p>
+</blockquote>
+<p>更口语一点：</p>
+<ul>
+<li>✅ 测试代码里在用它（isTested）</li>
+<li>❌ 业务代码里没人用它（isNotInvokedByInternalFunction）</li>
+<li>并且方法是 public、来自项目源码、且至少有一个参数</li>
+</ul>
+<p>这类方法常见场景：</p>
+<ul>
+<li>只为了测试而写的“辅助 API”（不一定是好事）</li>
+<li>public 暴露出去但实际上没人用（可能是 dead API &#x2F; 过度暴露）</li>
+<li>测试通过“直接调用内部方法”来测（可能说明设计不佳或测试方式不对）</li>
+</ul>
+<h2 id="2）fullSignature-Callable-m-：拼一个“人类可读签名”"><a href="#2）fullSignature-Callable-m-：拼一个“人类可读签名”" class="headerlink" title="2）fullSignature(Callable m)：拼一个“人类可读签名”"></a>2）<code>fullSignature(Callable m)</code>：拼一个“人类可读签名”</h2><p>你这段和上一条差不多，只是单独拿来复用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">bindingset[m]</span><br><span class="line">string fullSignature(Callable m) &#123;</span><br><span class="line">  if m instanceof Constructor</span><br><span class="line">  then</span><br><span class="line">    result = m.getName() + &quot;(&quot; + concat(...参数列表...) + &quot;)&quot;</span><br><span class="line">  else</span><br><span class="line">    result = m.getReturnType().getName() + &quot; &quot; + m.getName() + &quot;(&quot; + concat(...参数列表...) + &quot;)&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="关键点-A：Constructor-vs-普通方法"><a href="#关键点-A：Constructor-vs-普通方法" class="headerlink" title="关键点 A：Constructor vs 普通方法"></a>关键点 A：Constructor vs 普通方法</h3><ul>
+<li>构造函数没有返回值，所以输出 <code>ClassName(...)</code></li>
+<li>普通方法输出 <code>ReturnType methodName(...)</code></li>
+</ul>
+<h3 id="关键点-B：concat-遍历参数"><a href="#关键点-B：concat-遍历参数" class="headerlink" title="关键点 B：concat 遍历参数"></a>关键点 B：concat 遍历参数</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">concat(int i |</span><br><span class="line">  i = [0 .. m.getNumberOfParameters()] |</span><br><span class="line">  m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(),</span><br><span class="line">  &quot;, &quot; order by i asc)</span><br></pre></td></tr></table></figure>
+
+<p>它的意图是按参数顺序拼成：<br><code>int a, java.lang.String b</code></p>
+<p>⚠️ <strong>潜在坑：索引范围</strong></p>
+<ul>
+<li><code>m.getNumberOfParameters()</code> 返回参数个数，比如 2</li>
+<li>参数下标通常是 <code>0</code> 和 <code>1</code></li>
+<li>但你用了 <code>[0 .. m.getNumberOfParameters()]</code>（包含上界的话会多取一次）</li>
+</ul>
+<p>在很多 CodeQL 示例里会用：</p>
+<ul>
+<li><code>[0 .. m.getNumberOfParameters()-1]</code></li>
+<li>或者用 <code>Parameter p | p = m.getAParameter()</code> 这种更安全的写法</li>
+</ul>
+<p>如果你跑起来没报错，可能是 CodeQL 的区间语义&#x2F;实现把最后一个排除了，但<strong>从阅读角度这段写法很容易“越界风险”</strong>，建议改成更明确的写法。</p>
+<h2 id="3）isTested-Callable-m-：在测试目录出现过调用"><a href="#3）isTested-Callable-m-：在测试目录出现过调用" class="headerlink" title="3）isTested(Callable m)：在测试目录出现过调用"></a>3）<code>isTested(Callable m)</code>：在测试目录出现过调用</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">predicate isTested(Callable m) &#123;</span><br><span class="line">  exists(Call c |</span><br><span class="line">    c.getCallee() = m and</span><br><span class="line">    c.getLocation().toString().indexOf(&quot;src/test&quot;) &gt;= 0</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="它在做什么？"><a href="#它在做什么？" class="headerlink" title="它在做什么？"></a>它在做什么？</h3><ul>
+<li>遍历所有调用 <code>Call c</code></li>
+<li>找到被调用目标是 <code>m</code> 的调用点</li>
+<li>并且调用点的位置字符串里包含 <code>&quot;src/test&quot;</code></li>
+</ul>
+<p>✅ 这就是：<strong>至少有一次调用发生在 src&#x2F;test 目录中</strong></p>
+<h3 id="⚠️-这条判断“测试代码”的方式比较粗糙"><a href="#⚠️-这条判断“测试代码”的方式比较粗糙" class="headerlink" title="⚠️ 这条判断“测试代码”的方式比较粗糙"></a>⚠️ 这条判断“测试代码”的方式比较粗糙</h3><ul>
+<li>Maven&#x2F;Gradle 常见测试路径：<code>src/test/java</code></li>
+<li>但也可能是：<code>src/test/kotlin</code>、<code>src/integrationTest</code>、<code>test/</code>、<code>src/it</code> 等</li>
+<li>甚至 Windows 路径分隔符等问题（不过 <code>toString()</code> 一般会统一）</li>
+</ul>
+<p>更稳妥方式是用 CodeQL 自带的测试&#x2F;文件夹抽象（如果有），或者用正则匹配更完整路径。</p>
+<h2 id="4）isNotInvokedByInternalFunction-Callable-m-：业务代码里从未调用过"><a href="#4）isNotInvokedByInternalFunction-Callable-m-：业务代码里从未调用过" class="headerlink" title="4）isNotInvokedByInternalFunction(Callable m)：业务代码里从未调用过"></a>4）<code>isNotInvokedByInternalFunction(Callable m)</code>：业务代码里从未调用过</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">predicate isNotInvokedByInternalFunction(Callable m) &#123;</span><br><span class="line">  not exists(Call c |</span><br><span class="line">    c.getCallee() = m and</span><br><span class="line">    c.getLocation().toString().indexOf(&quot;src/test&quot;) &lt; 0</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="翻译成人话"><a href="#翻译成人话" class="headerlink" title="翻译成人话"></a>翻译成人话</h3><p>不存在这样的调用 <code>c</code>：</p>
+<ul>
+<li>调用了 <code>m</code></li>
+<li>并且调用位置 <strong>不在</strong> <code>src/test</code>（因为 indexOf &lt; 0 表示没找到）</li>
+</ul>
+<p>等价于：</p>
+<blockquote>
+<p><strong>m 的所有调用点都在测试目录中</strong>（或者根本没人调用）</p>
+</blockquote>
+<p>但注意：你在 where 里又加了 <code>isTested(method)</code>，所以确保至少在测试里被调用一次。<br>因此最终效果是：</p>
+<blockquote>
+<p><strong>只被测试调用过（至少一次），从不被业务代码调用。</strong></p>
+</blockquote>
+<h3 id="⚠️-命名有点误导"><a href="#⚠️-命名有点误导" class="headerlink" title="⚠️ 命名有点误导"></a>⚠️ 命名有点误导</h3><p><code>isNotInvokedByInternalFunction</code> 其实检查的是“非 test 的任何调用”。<br>并不一定是“internal function”（内部函数）调用，也可能是 main、工具脚本、样例代码等。<br>更贴切的名字可能是 <code>hasNoNonTestCallSites</code>。</p>
+<h2 id="5）paramTypes-Callable-m-：只拼参数类型"><a href="#5）paramTypes-Callable-m-：只拼参数类型" class="headerlink" title="5）paramTypes(Callable m)：只拼参数类型"></a>5）<code>paramTypes(Callable m)</code>：只拼参数类型</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">result = concat(int i | i = [0 .. m.getNumberOfParameters()] |</span><br><span class="line">  m.getParameter(i).getType().getName(), &quot;;&quot; order by i asc)</span><br></pre></td></tr></table></figure>
+
+<p>输出像：<br><code>int;java.lang.String;boolean</code></p>
+<p>用途通常是：</p>
+<ul>
+<li>比 <code>getStringSignature()</code> 更可控</li>
+<li>用于后处理（CSV 分析）做“方法重载区分”</li>
+</ul>
+<p>同样有上面提到的索引区间潜在坑。</p>
+<h2 id="6）getJavadocString-Callable-m-：把-JavaDoc-扁平化成字符串"><a href="#6）getJavadocString-Callable-m-：把-JavaDoc-扁平化成字符串" class="headerlink" title="6）getJavadocString(Callable m)：把 JavaDoc 扁平化成字符串"></a>6）<code>getJavadocString(Callable m)</code>：把 JavaDoc 扁平化成字符串</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (exists(Javadoc d | m.getDoc().getJavadoc() = d))</span><br><span class="line">then result = concat(...child text...)</span><br><span class="line">else result = &quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数最终让你的输出列里有 doc 文本，方便：</p>
+<ul>
+<li>生成报告</li>
+<li>过滤“有没有说明文档”</li>
+<li>做 NLP&#x2F;检索（比如把这些 API 建索引）</li>
+</ul>
+<h2 id="7）主查询：from-where-的组合含义"><a href="#7）主查询：from-where-的组合含义" class="headerlink" title="7）主查询：from &#x2F; where 的组合含义"></a>7）主查询：from &#x2F; where 的组合含义</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from Callable method</span><br><span class="line">where</span><br><span class="line">  method.fromSource() and</span><br><span class="line">  method.isPublic() and</span><br><span class="line">  not method.hasNoParameters() and</span><br><span class="line">  isTested(method) and</span><br><span class="line">  isNotInvokedByInternalFunction(method)</span><br><span class="line">select ...</span><br></pre></td></tr></table></figure>
+
+<p>逐个解释：</p>
+<h3 id="✅-method-fromSource"><a href="#✅-method-fromSource" class="headerlink" title="✅ method.fromSource()"></a>✅ <code>method.fromSource()</code></h3><p>只选项目源码里的方法（排除库&#x2F;依赖里解析出来的方法）</p>
+<h3 id="✅-method-isPublic"><a href="#✅-method-isPublic" class="headerlink" title="✅ method.isPublic()"></a>✅ <code>method.isPublic()</code></h3><p>只关心 public 方法<br>→ 这意味着你在找“对外暴露的 API”，但其实只被测试用。</p>
+<h3 id="✅-not-method-hasNoParameters"><a href="#✅-not-method-hasNoParameters" class="headerlink" title="✅ not method.hasNoParameters()"></a>✅ <code>not method.hasNoParameters()</code></h3><p>只关心<strong>有参数的方法</strong><br>（可能你想排除 getter &#x2F; toString 这种零参方法，让结果更有价值）</p>
+<h3 id="✅-isTested-method"><a href="#✅-isTested-method" class="headerlink" title="✅ isTested(method)"></a>✅ <code>isTested(method)</code></h3><p>必须在 <code>src/test</code> 至少出现一次调用</p>
+<h3 id="✅-isNotInvokedByInternalFunction-method"><a href="#✅-isNotInvokedByInternalFunction-method" class="headerlink" title="✅ isNotInvokedByInternalFunction(method)"></a>✅ <code>isNotInvokedByInternalFunction(method)</code></h3><p>必须在非 test 路径中 <strong>没有任何调用</strong></p>
+<h2 id="8）select-输出：你最终想拿到什么信息？"><a href="#8）select-输出：你最终想拿到什么信息？" class="headerlink" title="8）select 输出：你最终想拿到什么信息？"></a>8）select 输出：你最终想拿到什么信息？</h2><p>你输出的是一张“方法清单”表：</p>
+<ul>
+<li>package</li>
+<li>clazz</li>
+<li>func（方法名）</li>
+<li>full_signature（人类可读签名）</li>
+<li>internal_signature（CodeQL 的签名字符串，更偏机器）</li>
+<li>location（方法声明位置）</li>
+<li>parameter_types（类型列表）</li>
+<li>return_type</li>
+<li>doc（Javadoc）</li>
+</ul>
+<p>👉 这是典型的“导出 CSV &#x2F; 报告”的结构。</p>
+<h2 id="9）这条规则的典型用途（为什么有意义？）"><a href="#9）这条规则的典型用途（为什么有意义？）" class="headerlink" title="9）这条规则的典型用途（为什么有意义？）"></a>9）这条规则的典型用途（为什么有意义？）</h2><p>它可以用于发现：</p>
+<h3 id="A-只为测试写的-public-API（过度暴露）"><a href="#A-只为测试写的-public-API（过度暴露）" class="headerlink" title="A. 只为测试写的 public API（过度暴露）"></a>A. 只为测试写的 public API（过度暴露）</h3><p>如果一个 public 方法只被测试调用，那它可能本不该是 public。</p>
+<h3 id="B-“死-API”"><a href="#B-“死-API”" class="headerlink" title="B. “死 API”"></a>B. “死 API”</h3><p>对业务没有任何调用，但测试仍在测它——可能是旧功能遗留。</p>
+<h3 id="C-测试策略问题"><a href="#C-测试策略问题" class="headerlink" title="C. 测试策略问题"></a>C. 测试策略问题</h3><p>测试直接调用内部方法，而不是通过更高层接口测试行为。</p>
+<h2 id="10）重要的坑与改进建议（很实用）"><a href="#10）重要的坑与改进建议（很实用）" class="headerlink" title="10）重要的坑与改进建议（很实用）"></a>10）重要的坑与改进建议（很实用）</h2><h3 id="改进-1：测试路径判断更稳"><a href="#改进-1：测试路径判断更稳" class="headerlink" title="改进 1：测试路径判断更稳"></a>改进 1：测试路径判断更稳</h3><p>当前用 <code>&quot;src/test&quot;</code> 字符串包含判断，建议更精确：</p>
+<ul>
+<li>匹配 <code>src/test/java</code>、<code>src/test/kotlin</code></li>
+<li>或额外覆盖 <code>src/integrationTest</code> 等</li>
+</ul>
+<h3 id="改进-2：区分“被测试调用”-vs-“测试类反射-框架调用”"><a href="#改进-2：区分“被测试调用”-vs-“测试类反射-框架调用”" class="headerlink" title="改进 2：区分“被测试调用” vs “测试类反射&#x2F;框架调用”"></a>改进 2：区分“被测试调用” vs “测试类反射&#x2F;框架调用”</h3><p>如果测试是通过反射、参数化框架、Spring 容器间接触发，有时 <code>Call</code> 不会出现显式调用点。结果会漏。</p>
+<h3 id="改进-3：排除构造函数-重载-接口方法等"><a href="#改进-3：排除构造函数-重载-接口方法等" class="headerlink" title="改进 3：排除构造函数&#x2F;重载&#x2F;接口方法等"></a>改进 3：排除构造函数&#x2F;重载&#x2F;接口方法等</h3><p>你现在是 <code>Callable</code>，包含：</p>
+<ul>
+<li>方法</li>
+<li>构造器</li>
+<li>可能还包括一些特殊 callable</li>
+</ul>
+<p>如果你的目标是“public 方法”，更常用 <code>Method</code> 类型：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from Method method</span><br></pre></td></tr></table></figure>
+
+<h3 id="改进-4：把-“业务代码里没人调用”-限定为-fromSource"><a href="#改进-4：把-“业务代码里没人调用”-限定为-fromSource" class="headerlink" title="改进 4：把 “业务代码里没人调用” 限定为 fromSource"></a>改进 4：把 “业务代码里没人调用” 限定为 fromSource</h3><p>现在 <code>isNotInvokedByInternalFunction</code> 只看 location 字符串。<br>更稳的是限定调用点来源文件也是 source。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/17/CodeQL%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99-Java%E5%A4%96%E9%83%A8API%E8%B0%83%E7%94%A8%E6%8F%90%E5%8F%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/17/CodeQL%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99-Java%E5%A4%96%E9%83%A8API%E8%B0%83%E7%94%A8%E6%8F%90%E5%8F%96/" class="post-title-link" itemprop="url">CodeQL规则编写_Java外部API调用提取</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-17 18:09:20 / 修改时间：18:29:24" itemprop="dateCreated datePublished" datetime="2026-01-17T18:09:20+08:00">2026-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SAST/" itemprop="url" rel="index"><span itemprop="name">SAST</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在 IRIS 项目中，第一步就是提取全部外部 API ，CodeQL 规则编写如下，因为不太理解 CodeQL 规则如何编写，所以学习记录如下，内容由 GPT 5.2 生成。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">import java</span><br><span class="line"></span><br><span class="line">predicate isExternallCall(Call c) &#123;</span><br><span class="line">    (</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;org.junit%&quot;) and</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;org.hamcrest%&quot;) and</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;org.mockito%&quot;) and</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;junit.framework%&quot;)</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string fullSignature(Callable m) &#123;</span><br><span class="line">    if m instanceof Constructor</span><br><span class="line">    then</span><br><span class="line">        result = m.getName() + &quot;(&quot; + concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(), &quot;, &quot;  order by i asc)  + &quot;)&quot;</span><br><span class="line">    else</span><br><span class="line">        result = m.getReturnType().getName() + &quot; &quot; + m.getName() + &quot;(&quot; + concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(), &quot;, &quot;  order by i asc)  + &quot;)&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string paramTypes(Callable m) &#123;</span><br><span class="line">    result = concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName(), &quot;;&quot; order by i asc)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">string isStaticAsString(Callable m) &#123;</span><br><span class="line">    if m.isStatic()</span><br><span class="line">    then result = &quot;true&quot;</span><br><span class="line">    else result = &quot;false&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string getJavadocString(Callable m) &#123;</span><br><span class="line">    (</span><br><span class="line">        exists(Javadoc d | m.getDoc().getJavadoc() = d) and</span><br><span class="line">        result = concat(int i | i = [0 .. m.getDoc().getJavadoc().getNumChild()] | m.getDoc().getJavadoc().getChild(i).getText(), &quot; &quot; order by i asc)</span><br><span class="line">    )</span><br><span class="line">    or</span><br><span class="line">    result = &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">from</span><br><span class="line">    Call api</span><br><span class="line">where</span><br><span class="line">    isExternallCall(api) and</span><br><span class="line">    api.getCallee().getStringSignature() != &quot;()&quot; and</span><br><span class="line">    api.getCallee().getDeclaringType().getSourceDeclaration().getName() != &quot;Object&quot;</span><br><span class="line">select</span><br><span class="line">    api as callstr,</span><br><span class="line">    api.getCallee().getDeclaringType().getSourceDeclaration().getPackage() as package,</span><br><span class="line">    api.getCallee().getDeclaringType().getSourceDeclaration() as clazz,</span><br><span class="line">    fullSignature(api.getCallee()) as full_signature,</span><br><span class="line">    api.getCallee().getStringSignature() as internal_signature,</span><br><span class="line">    api.getCallee() as func,</span><br><span class="line">    isStaticAsString(api.getCallee()) as is_static,</span><br><span class="line">    api.getFile() as file,</span><br><span class="line">    api.getLocation().toString() as location,</span><br><span class="line">    paramTypes(api.getCallee()) as parameter_types,</span><br><span class="line">    api.getCallee().getReturnType().getName() as return_type,</span><br><span class="line">    getJavadocString(api.getCallee()) as doc</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="一、先用一句话说：这条-CodeQL-规则在干什么？"><a href="#一、先用一句话说：这条-CodeQL-规则在干什么？" class="headerlink" title="一、先用一句话说：这条 CodeQL 规则在干什么？"></a>一、先用一句话说：这条 CodeQL 规则在干什么？</h1><p>👉 <strong>它在做一件事：</strong></p>
+<blockquote>
+<p><strong>找出 Java 代码中所有“非测试框架”的外部方法调用，并尽可能完整地导出这些被调用方法的信息（类、包、签名、参数、返回值、是否 static、Javadoc、调用位置等）</strong></p>
+</blockquote>
+<p>换句话说：<br>📌 <strong>这是一个“API 调用收集 &#x2F; API 使用分析”的规则</strong></p>
+<h1 id="二、必须先看懂的-4-个-CodeQL-核心概念"><a href="#二、必须先看懂的-4-个-CodeQL-核心概念" class="headerlink" title="二、必须先看懂的 4 个 CodeQL 核心概念"></a>二、必须先看懂的 4 个 CodeQL 核心概念</h1><p>在看规则之前，我们先建立脑模型。</p>
+<h2 id="1️⃣-CodeQL-是什么？"><a href="#1️⃣-CodeQL-是什么？" class="headerlink" title="1️⃣ CodeQL 是什么？"></a>1️⃣ CodeQL 是什么？</h2><blockquote>
+<p><strong>CodeQL &#x3D; 用“数据库查询”的方式分析代码</strong></p>
+</blockquote>
+<ul>
+<li>代码 → 被解析成数据库（AST + 语义信息）</li>
+<li>你写的 CodeQL → 查询这个数据库</li>
+<li><code>select</code> → 查出来你要的代码元素</li>
+</ul>
+<h2 id="2️⃣-Java-里最重要的几个-CodeQL-类型"><a href="#2️⃣-Java-里最重要的几个-CodeQL-类型" class="headerlink" title="2️⃣ Java 里最重要的几个 CodeQL 类型"></a>2️⃣ Java 里最重要的几个 CodeQL 类型</h2><table>
+<thead>
+<tr>
+<th>CodeQL 类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Call</code></td>
+<td>一次方法调用（<code>foo.bar()</code>）</td>
+</tr>
+<tr>
+<td><code>Callable</code></td>
+<td>可被调用的东西（方法 &#x2F; 构造函数）</td>
+</tr>
+<tr>
+<td><code>Constructor</code></td>
+<td>构造函数</td>
+</tr>
+<tr>
+<td><code>Type</code></td>
+<td>类</td>
+</tr>
+<tr>
+<td><code>Package</code></td>
+<td>包</td>
+</tr>
+<tr>
+<td><code>Javadoc</code></td>
+<td>JavaDoc</td>
+</tr>
+</tbody></table>
+<h2 id="3️⃣-predicate-是什么？"><a href="#3️⃣-predicate-是什么？" class="headerlink" title="3️⃣ predicate 是什么？"></a>3️⃣ predicate 是什么？</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">predicate isExternallCall(Call c) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+
+<p>👉 <strong>predicate &#x3D; 布尔函数（true &#x2F; false）</strong></p>
+<p>用来判断一个条件是否成立。</p>
+<h2 id="4️⃣-bindingset-是什么？"><a href="#4️⃣-bindingset-是什么？" class="headerlink" title="4️⃣ bindingset 是什么？"></a>4️⃣ bindingset 是什么？</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bindingset[m]</span><br><span class="line">string fullSignature(Callable m) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+
+<p>👉 <strong>这是一个和 m 绑定的函数</strong></p>
+<p>你可以理解为：</p>
+<blockquote>
+<p>“给某个 Callable m，算出一个字符串结果”</p>
+</blockquote>
+<h1 id="三、逐段精讲这条规则"><a href="#三、逐段精讲这条规则" class="headerlink" title="三、逐段精讲这条规则"></a>三、逐段精讲这条规则</h1><h2 id="①-import-java"><a href="#①-import-java" class="headerlink" title="① import java"></a>① <code>import java</code></h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import java</span><br></pre></td></tr></table></figure>
+
+<p>📌 告诉 CodeQL：</p>
+<blockquote>
+<p>我要分析 <strong>Java 语言模型</strong></p>
+</blockquote>
+<p>没有这个，你就不能用 <code>Call</code>、<code>Callable</code> 等 Java 相关类型。</p>
+<h2 id="②-判断：什么是“外部调用”？"><a href="#②-判断：什么是“外部调用”？" class="headerlink" title="② 判断：什么是“外部调用”？"></a>② 判断：什么是“外部调用”？</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">predicate isExternallCall(Call c) &#123;</span><br><span class="line">    (</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;org.junit%&quot;) and</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;org.hamcrest%&quot;) and</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;org.mockito%&quot;) and</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;junit.framework%&quot;)</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="🔍-逐行翻译成人话"><a href="#🔍-逐行翻译成人话" class="headerlink" title="🔍 逐行翻译成人话"></a>🔍 逐行翻译成人话</h3><ul>
+<li><code>Call c</code>：一个方法调用</li>
+<li><code>getCallee()</code>：被调用的方法</li>
+<li><code>getDeclaringType()</code>：这个方法属于哪个类</li>
+<li><code>getPackage().getName()</code>：类所在的包名</li>
+<li><code>matches(&quot;org.junit%&quot;)</code>：是否是 JUnit 包</li>
+</ul>
+<p>📌 <strong>整体逻辑：</strong></p>
+<blockquote>
+<p>如果这个调用 <strong>不是</strong> 来自：</p>
+</blockquote>
+<ul>
+<li>JUnit</li>
+<li>Hamcrest</li>
+<li>Mockito</li>
+<li>junit.framework</li>
+</ul>
+<p>👉 那么它就是 <strong>External Call（业务 &#x2F; 第三方 API 调用）</strong></p>
+<p>💡 <strong>为什么要排除这些？</strong></p>
+<p>因为这些都是：</p>
+<ul>
+<li>测试框架</li>
+<li>不属于“真实业务 API”</li>
+</ul>
+<h2 id="③-生成“完整方法签名”"><a href="#③-生成“完整方法签名”" class="headerlink" title="③ 生成“完整方法签名”"></a>③ 生成“完整方法签名”</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bindingset[m]</span><br><span class="line">string fullSignature(Callable m) &#123;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数做的是：<br>👉 <strong>把方法拼成 Java 中“人类可读的签名”</strong></p>
+<h3 id="构造函数情况"><a href="#构造函数情况" class="headerlink" title="构造函数情况"></a>构造函数情况</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if m instanceof Constructor</span><br></pre></td></tr></table></figure>
+
+<p>生成：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassName(<span class="type">int</span> a, String b)</span><br></pre></td></tr></table></figure>
+
+<h3 id="普通方法情况"><a href="#普通方法情况" class="headerlink" title="普通方法情况"></a>普通方法情况</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String foo(int a, String b)</span><br></pre></td></tr></table></figure>
+
+<h3 id="核心技巧（你要重点学）"><a href="#核心技巧（你要重点学）" class="headerlink" title="核心技巧（你要重点学）"></a>核心技巧（你要重点学）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">concat(int i | i = [0 .. m.getNumberOfParameters()] | ... , &quot;, &quot; order by i asc)</span><br></pre></td></tr></table></figure>
+
+<p>📌 这段是 <strong>CodeQL 的“集合推导 + 拼接”</strong>：</p>
+<ul>
+<li>遍历所有参数</li>
+<li>按顺序</li>
+<li>拼成字符串</li>
+</ul>
+<h2 id="④-只取“参数类型列表”"><a href="#④-只取“参数类型列表”" class="headerlink" title="④ 只取“参数类型列表”"></a>④ 只取“参数类型列表”</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">bindingset[m]</span><br><span class="line">string paramTypes(Callable m) &#123;</span><br><span class="line">    result = concat(</span><br><span class="line">        int i |</span><br><span class="line">        i = [0 .. m.getNumberOfParameters()] |</span><br><span class="line">        m.getParameter(i).getType().getName(),</span><br><span class="line">        &quot;;&quot;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>👉 输出类似：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int;java.lang.String;boolean</span><br></pre></td></tr></table></figure>
+
+<p>📌 常用于：</p>
+<ul>
+<li>API 唯一标识</li>
+<li>调用图分析</li>
+<li>比较重载方法</li>
+</ul>
+<h2 id="⑤-是否是-static-方法（转成字符串）"><a href="#⑤-是否是-static-方法（转成字符串）" class="headerlink" title="⑤ 是否是 static 方法（转成字符串）"></a>⑤ 是否是 static 方法（转成字符串）</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">string isStaticAsString(Callable m) &#123;</span><br><span class="line">    if m.isStatic()</span><br><span class="line">    then result = &quot;true&quot;</span><br><span class="line">    else result = &quot;false&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>💡 为什么不直接返回 boolean？</p>
+<p>👉 因为 <code>select</code> 结果 <strong>通常导出为 CSV &#x2F; 表格</strong>，字符串更好用。</p>
+<h2 id="⑥-提取-JavaDoc-文本"><a href="#⑥-提取-JavaDoc-文本" class="headerlink" title="⑥ 提取 JavaDoc 文本"></a>⑥ 提取 JavaDoc 文本</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bindingset[m]</span><br><span class="line">string getJavadocString (Callable m) </span><br></pre></td></tr></table></figure>
+
+<p>逻辑：</p>
+<ol>
+<li>如果这个方法有 JavaDoc</li>
+<li>把 JavaDoc 的所有子节点拼成一个字符串</li>
+<li>否则返回空字符串</li>
+</ol>
+<p>📌 这是 <strong>文档级 API 分析</strong><br>（比如：生成 API 文档、语义搜索）</p>
+<h2 id="⑦-from-where：真正的“查询入口”"><a href="#⑦-from-where：真正的“查询入口”" class="headerlink" title="⑦ from &#x2F; where：真正的“查询入口”"></a>⑦ from &#x2F; where：真正的“查询入口”</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from Call api</span><br></pre></td></tr></table></figure>
+
+<p>👉 <strong>遍历代码中所有的方法调用</strong></p>
+<h3 id="where-条件解释"><a href="#where-条件解释" class="headerlink" title="where 条件解释"></a>where 条件解释</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">isExternallCall(api)</span><br></pre></td></tr></table></figure>
+
+<p>✔️ 只要外部调用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">api.getCallee().getStringSignature() != &quot;()&quot;</span><br></pre></td></tr></table></figure>
+
+<p>✔️ 排除无意义调用（如空签名）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">api.getCallee().getDeclaringType().getSourceDeclaration().getName() != &quot;Object&quot;</span><br></pre></td></tr></table></figure>
+
+<p>✔️ 排除 <code>java.lang.Object</code> 的方法<br>（如 <code>toString()</code>、<code>hashCode()</code>）</p>
+<h2 id="⑧-select：最终输出什么？"><a href="#⑧-select：最终输出什么？" class="headerlink" title="⑧ select：最终输出什么？"></a>⑧ select：最终输出什么？</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line">    api as callstr,</span><br></pre></td></tr></table></figure>
+
+<p>👉 这一次“调用”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">api.getCallee().getDeclaringType().getSourceDeclaration().getPackage()</span><br></pre></td></tr></table></figure>
+
+<p>👉 包名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">api.getCallee().getDeclaringType().getSourceDeclaration()</span><br></pre></td></tr></table></figure>
+
+<p>👉 类</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fullSignature(api.getCallee())</span><br></pre></td></tr></table></figure>
+
+<p>👉 完整方法签名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">paramTypes(...)</span><br><span class="line">return_type</span><br><span class="line">is_static</span><br><span class="line">doc</span><br><span class="line">location</span><br><span class="line">file</span><br></pre></td></tr></table></figure>
+
+<p>👉 <strong>这是一个“超级完整的 API 调用画像”</strong></p>
+<h1 id="四、这条规则在真实世界能做什么？"><a href="#四、这条规则在真实世界能做什么？" class="headerlink" title="四、这条规则在真实世界能做什么？"></a>四、这条规则在真实世界能做什么？</h1><p>✅ API 使用分析<br>✅ 第三方库调用统计<br>✅ 生成 API 调用清单<br>✅ 安全审计（危险 API 使用）<br>✅ 自动生成接口文档<br>✅ 构建调用图 &#x2F; 依赖分析</p>
+<h1 id="五、最后一句总结"><a href="#五、最后一句总结" class="headerlink" title="五、最后一句总结"></a>五、最后一句总结</h1><blockquote>
+<p><strong>这条 CodeQL 规则的本质是：<br>“扫描 Java 项目中所有非测试框架的方法调用，并结构化地导出被调用 API 的全部关键信息。”</strong></p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/17/RSA%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/17/RSA%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB/" class="post-title-link" itemprop="url">RSA原理解读</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-17 17:51:43 / 修改时间：18:01:02" itemprop="dateCreated datePublished" datetime="2026-01-17T17:51:43+08:00">2026-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>内容由 Gemini 3 Flash Preview 生成，个人认为讲解的是最好的了，比较通俗易懂。</p>
+<p>RSA 算法之所以能够实现“加密后再解密”并回到原文，其核心秘密在于<strong>数论</strong>中的一个神奇特性：<strong>通过巧妙构造的一对密钥（公钥和私钥），我们可以利用幂运算和取模运算，在一个闭环的数学世界里绕一圈后再回到起点。</strong></p>
+<p>为了理解透彻，分三个层面来剖析：<strong>直观逻辑</strong>、<strong>操作步骤</strong>和<strong>数学原理</strong>。</p>
+<h3 id="1-直观逻辑：神奇的“数学回力棒”"><a href="#1-直观逻辑：神奇的“数学回力棒”" class="headerlink" title="1. 直观逻辑：神奇的“数学回力棒”"></a>1. 直观逻辑：神奇的“数学回力棒”</h3><p>可以把 RSA 想象成一个特殊的魔术盒。</p>
+<ul>
+<li><strong>加密（投掷）：</strong> 你把数字 $M$（明文）放进去，按一下公钥按钮（求 $e$ 次方再取模），数字会变成一个面目全非的密文 $C$。</li>
+<li><strong>解密（返回）：</strong> 对方收到 $C$ 后，按一下只有他持有的私钥按钮（求 $d$ 次方再取模），这个面目全非的数字竟然会像回力棒一样，**精准地变回原来的数字 $M$**。</li>
+</ul>
+<p>这种“对称性”是由特殊的数学关系保证的。</p>
+<h3 id="2-操作步骤：密钥是如何产生的？"><a href="#2-操作步骤：密钥是如何产生的？" class="headerlink" title="2. 操作步骤：密钥是如何产生的？"></a>2. 操作步骤：密钥是如何产生的？</h3><p>要理解为什么能解密，先看公钥和私钥是怎么选出来的。</p>
+<ol>
+<li><strong>选种子：</strong> 选两个巨大的质数 $p$ 和 $q$。</li>
+<li><strong>算模数：</strong> $n &#x3D; p \times q$。这个 $n$ 会公开，是加解密的公用容器。</li>
+<li><strong>算欧拉函数：</strong> $\phi(n) &#x3D; (p-1) \times (q-1)$。这个值是生成密钥的关键，必须保密。</li>
+<li><strong>选公钥 $e$：</strong> 选一个与 $\phi(n)$ 互质的数 $e$。</li>
+<li><strong>算私钥 $d$：</strong> 这是最关键的一步，要找到一个 $d$，使得 <strong>$(e \times d)$ 除以 $\phi(n)$ 的余数等于 1</strong>。用数学公式表达就是：<br>$$e \cdot d \equiv 1 \pmod{\phi(n)}$$</li>
+</ol>
+<p><strong>结论：</strong> 公钥是 $(n, e)$，私钥是 $(n, d)$。它们通过 $\phi(n)$ 像纽扣一样紧紧扣在一起。</p>
+<h3 id="3-数学原理：为什么-M-e-d-能回到-M-？"><a href="#3-数学原理：为什么-M-e-d-能回到-M-？" class="headerlink" title="3. 数学原理：为什么 $(M^e)^d$ 能回到 $M$？"></a>3. 数学原理：为什么 $(M^e)^d$ 能回到 $M$？</h3><p>这是你最关心的部分。加密和解密的过程如下：</p>
+<ul>
+<li><strong>加密：</strong> $C &#x3D; M^e \pmod n$</li>
+<li><strong>解密：</strong> $M’ &#x3D; C^d \pmod n$</li>
+</ul>
+<p>我们要证明的是：$M’ &#x3D; (M^e)^d \pmod n$ 是否等于 $M$？也就是证明：<br>$$M^{ed} \equiv M \pmod n$$</p>
+<h4 id="核心依据：欧拉定理（Euler’s-Theorem）"><a href="#核心依据：欧拉定理（Euler’s-Theorem）" class="headerlink" title="核心依据：欧拉定理（Euler’s Theorem）"></a>核心依据：欧拉定理（Euler’s Theorem）</h4><p>数学家欧拉证明过：如果 $M$ 和 $n$ 互质，那么 $M^{\phi(n)} \equiv 1 \pmod n$。</p>
+<p>根据我们产生私钥时的规定，$e \cdot d$ 除以 $\phi(n)$ 余 1，所以可以写成：<br>$$e \cdot d &#x3D; k \cdot \phi(n) + 1 \quad (\text{其中 } k \text{ 是整数})$$</p>
+<p>现在我们代入到解密公式里：<br>$$M^{ed} &#x3D; M^{k \cdot \phi(n) + 1} &#x3D; (M^{\phi(n)})^k \cdot M^1$$</p>
+<p>根据欧拉定理，括号里的 $M^{\phi(n)}$ 在模 $n$ 的世界里等于 <strong>1</strong>。<br>所以：<br>$$(1)^k \cdot M &#x3D; 1 \cdot M &#x3D; M$$</p>
+<p><strong>这就是 RSA 能够还原原文的数学真相：</strong> 密钥 $e$ 和 $d$ 的乘积被设计成“欧拉函数的一个循环再多加 1”。在取模运算下，绕着 $\phi(n)$ 转圈最终都会回到 1，多出的那个“1”就把原始的 $M$ 给带回来了。</p>
+<h3 id="4-为什么这样是安全的？"><a href="#4-为什么这样是安全的？" class="headerlink" title="4. 为什么这样是安全的？"></a>4. 为什么这样是安全的？</h3><p>既然 $e$ 是公开的，为什么别人算不出 $d$？</p>
+<ul>
+<li>要算出 $d$，必须知道 $\phi(n)$。</li>
+<li>要算出 $\phi(n)$，必须知道 $p$ 和 $q$（即对 $n$ 进行质因数分解）。</li>
+<li><strong>现实困难：</strong> 当 $n$ 非常大时（比如 2048 位二进制），人类目前的计算机在可接受的时间内（比如几千年）根本无法分解出 $p$ 和 $q$。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>RSA 能够加解密，是因为它利用了<strong>大质数乘积的不可逆性</strong>来保护秘密，并利用了<strong>欧拉定理的周期性</strong>（模运算下的幂循环）来确保加密后的数据可以通过特定的数学钥匙精准还原。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1101,629 +1668,6 @@
 </ol>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>CodeQL 会准确地将 <strong>第 42 行的 <code>query</code> 参数</strong> 识别为用户输入的源头。</p>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">软考信息安全工程师考点概述</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-03 22:05:33 / 修改时间：22:10:47" itemprop="dateCreated datePublished" datetime="2026-01-03T22:05:33+08:00">2026-01-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>软考信息安全工程师涉及到的考试章节和具体考点如下，科目一考点：</p>
-<table>
-<thead>
-<tr>
-<th><strong>章节名称</strong></th>
-<th><strong>章节内容</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1. 网络信息安全概述</td>
-<td>网络发展现状、安全属性、安全管理、生命周期</td>
-</tr>
-<tr>
-<td>2. 网络攻击原理与常用方法</td>
-<td>攻击概述、常见攻击方法、黑客常用工具、攻击案例</td>
-</tr>
-<tr>
-<td>3. 密码学基本理论</td>
-<td>概况、密码学体制、常见密码算法、数字签名、安全协议</td>
-</tr>
-<tr>
-<td>4. 网络安全体系与网络安全模型</td>
-<td>概述、网络安全体系模型、建设原则、建设内容、参考案例</td>
-</tr>
-<tr>
-<td>5. 物理与环境安全技术</td>
-<td>物理安全、环境安全、机房安全、通信安全、设备安全、介质安全</td>
-</tr>
-<tr>
-<td>6. 认证技术原理与应用</td>
-<td>概述、认证类型与认证过程、认证技术、认证产品和技术指标</td>
-</tr>
-<tr>
-<td>7. 访问控制技术原理与应用</td>
-<td>访问控制原理、模型、类型、策略设计与实现、安全管理、产品</td>
-</tr>
-<tr>
-<td>8. 防火墙技术原理与应用</td>
-<td>防火墙原理、类型与实现技术、产品与技术指标、体系结构</td>
-</tr>
-<tr>
-<td>9. VPN 技术原理与应用</td>
-<td>概述、类型和实现技术、产品与技术指标、技术应用</td>
-</tr>
-<tr>
-<td>10. 入侵检测技术原理与应用</td>
-<td>概述、入侵检测技术、组成与分类、产品与技术指标、应用</td>
-</tr>
-<tr>
-<td>11. 网络物理隔离技术原理与应用</td>
-<td>网络物理隔离概述、系统与类型、机制与技术、产品与指标</td>
-</tr>
-<tr>
-<td>12. 网络安全审计技术原理与应用</td>
-<td>安全审计概述、组成与类型、机制与实现技术、产品与技术</td>
-</tr>
-<tr>
-<td>13. 网络安全漏洞防护技术原理与应用</td>
-<td>网络安全漏洞概述、分类与管理、漏洞扫描技术、处置技术、产品</td>
-</tr>
-<tr>
-<td>14. 恶意代码防范技术原理</td>
-<td>计算机病毒、特洛伊木马、网络蠕虫、僵尸网络等</td>
-</tr>
-<tr>
-<td>15. 网络安全主动防御技术与应用</td>
-<td>入侵阻断、软件白名单、网络流量清洗、可信计算、数字水印等</td>
-</tr>
-<tr>
-<td>16. 网络安全风险评估技术原理与应用</td>
-<td>风险评估概述、评估过程、评估技术、工作流程</td>
-</tr>
-<tr>
-<td>17. 网络安全应急响应技术原理与应用</td>
-<td>网络安全应急响应概述、工作机制、预案内容、应急处理</td>
-</tr>
-<tr>
-<td>18. 网络安全测评技术与标准</td>
-<td>网络安全测评概述、类型、流程与内容、技术工具、标准</td>
-</tr>
-<tr>
-<td>19. 操作系统安全保护</td>
-<td>概述、Windows &#x2F; Linux 操作系统安全、国产操作系统安全</td>
-</tr>
-<tr>
-<td>20. 数据库系统安全</td>
-<td>概述、安全机制和技术、Oracle、MS SQL、MySQL、国产数据库安全</td>
-</tr>
-<tr>
-<td>21. 网络设备安全</td>
-<td>网络设备安全概述、机制与技术、增强技术、漏洞和解决方法</td>
-</tr>
-<tr>
-<td>22. 网站安全需求分析与安全保护</td>
-<td>网络安全威胁、Apache Web 安全、IIS 安全、Web 漏洞、网站安全</td>
-</tr>
-<tr>
-<td>23. 云计算安全需求分析与安全保护</td>
-<td>云计算安全威胁、安全需求、安全保护机制与技术、案例</td>
-</tr>
-<tr>
-<td>24. 工控安全需求分析与安全保护</td>
-<td>工控系统安全威胁、安全需求、安全保护机制与技术、案例</td>
-</tr>
-<tr>
-<td>25. 移动应用安全需求分析与安全保护</td>
-<td>移动应用安全威胁、Android、iOS 安全、保护机制和技术、案例</td>
-</tr>
-<tr>
-<td>26. 大数据安全需求分析与安全保护</td>
-<td>大数据安全威胁、安全需求、安全保护机制与技术、案例</td>
-</tr>
-<tr>
-<td>专业英语</td>
-<td>专业英语</td>
-</tr>
-</tbody></table>
-<p>科目二考点：</p>
-<table>
-<thead>
-<tr>
-<th><strong>考试专题</strong></th>
-<th><strong>知识点</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>密码学</td>
-<td>1. 安全目标等基础概念。<br>2. RSA 加解密详细过程，其他加密算法概述。<br>3. 公钥私钥加解密、数字签名过程，文字表示及识图。<br>4. 密钥管理技术、安全认证协议等。</td>
-</tr>
-<tr>
-<td>网络安全</td>
-<td>1. 防火墙概念（iptables 过滤规则及配置命令）、体系结构、包过滤规则填表，Windows &#x2F; Linux 配置。<br>2. 各种网络攻击和威胁，数据敏感度、隐私分类、隐私保护等。<br>3. 网络协议数据包含义分析。<br>4. 重要网络协议如 TCP、DNS、DHCP 等。<br>5. 华为交换机、路由器等安全配置命令。</td>
-</tr>
-<tr>
-<td>信息系统安全</td>
-<td>1. 信息安全概述、目标、访问控制原理、BLP 等模型。<br>2. C 语言代码漏洞分析，变量内存图等。<br>3. Linux 重要配置文件名及内容含义、文件权限、配置命令等。<br>4. Windows 重要配置：日志、防火墙、安全策略等界面。</td>
-</tr>
-<tr>
-<td>新技术</td>
-<td>移动应用——安卓系统和 iOS 系统；<br>数据敏感度、隐私保护、隐私分类等；<br>其他可能会考察的有：云计算、工控系统、移动应用、大数据、应急响应等安全新技术内容。</td>
-</tr>
-</tbody></table>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/23/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%882024%E7%9C%9F%E9%A2%98%E9%80%89%E6%8B%A9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/23/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%882024%E7%9C%9F%E9%A2%98%E9%80%89%E6%8B%A9/" class="post-title-link" itemprop="url">软考信息安全工程师2024真题选择</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-12-23 22:40:35" itemprop="dateCreated datePublished" datetime="2025-12-23T22:40:35+08:00">2025-12-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-01-02 22:59:49" itemprop="dateModified" datetime="2026-01-02T22:59:49+08:00">2026-01-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="1-CWE-89-编号代表的漏洞类型是（-）"><a href="#1-CWE-89-编号代表的漏洞类型是（-）" class="headerlink" title="1. CWE-89 编号代表的漏洞类型是（ ）"></a>1. CWE-89 编号代表的漏洞类型是（ ）</h2><p>A. <strong>SQL 注入</strong>  B. 命令注入  C. 配置错误  D. 信息泄露</p>
-<p><strong>正确答案：A</strong></p>
-<h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>A. SQL 注入（正确）</strong><br>CWE-89 专指 SQL 注入漏洞，即用户输入未正确过滤，被拼接进 SQL 语句执行。</p>
-</li>
-<li><p>B. 命令注入<br>命令注入对应的常见编号是 <strong>CWE-78</strong>，属于操作系统命令层面的漏洞。</p>
-</li>
-<li><p>C. 配置错误<br>配置错误是一个宽泛类别，没有唯一的 CWE 编号，常见如 CWE-16、CWE-732。</p>
-</li>
-<li><p>D. 信息泄露<br>同样是大类概念，常见 CWE 包括 CWE-200、CWE-215 等。</p>
-</li>
-</ul>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><ul>
-<li>SQL 注入的核心问题是<strong>未使用参数化查询</strong></li>
-<li><strong>CWE 编号与漏洞类型的一一对应关系</strong> 参考 <a href="/2025/12/20/%E5%B8%B8%E8%A7%81CWE%E7%B1%BB%E5%9E%8B/" title="常见CWE类型">常见CWE类型</a></li>
-</ul>
-<h2 id="2-Linux-系统的内核日志是通过哪个组件管理？（-）"><a href="#2-Linux-系统的内核日志是通过哪个组件管理？（-）" class="headerlink" title="2. Linux 系统的内核日志是通过哪个组件管理？（ ）"></a>2. Linux 系统的内核日志是通过哪个组件管理？（ ）</h2><p>A. rsyslog  B. syslogd  C. <strong>klogd</strong>  D. syslog</p>
-<p><strong>正确答案：C</strong></p>
-<h3 id="解析-1"><a href="#解析-1" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>C. klogd（正确）</strong><br>klogd 专门负责读取内核通过 <code>printk</code> 输出的日志信息。</p>
-</li>
-<li><p>A. rsyslog<br>主要用于用户态日志或内核态日志的收集和转发，不直接管理内核缓冲区。</p>
-</li>
-<li><p>B. syslogd<br>是传统日志守护进程，处理系统日志，但内核日志需由 klogd 提供。</p>
-</li>
-<li><p>D. syslog<br>是日志机制或协议的统称，不是具体组件。</p>
-</li>
-</ul>
-<h3 id="扩展-1"><a href="#扩展-1" class="headerlink" title="扩展"></a>扩展</h3><p>Linux 日志分两类：内核日志和用户态日志。</p>
-<p>内核日志（Kernel Log）由内核态（kernel）输出，如 printk()，典型内容包括驱动加载、硬件识别、内核错误、OOM、panic、网络栈信息等，存储在ring buffer（环形缓冲区）中，可以使用命令 <code>dmesg</code> 查看。</p>
-<p>用户态日志的来源是用户空间程序&#x2F;服务，如 sshd、nginx、应用程序、cron 等，包含访问日志、错误日志、认证日志、系统服务日志等，一般落地到 &#x2F;var&#x2F;log&#x2F; 目录下各种文件。</p>
-<p>内核日志输出链路：内核通过 printk() 输出日志，写入 kernel ring buffer（环形缓冲区），klogd 从 ring buffer 把日志读出来，然后交给 syslogd&#x2F;rsyslogd，syslogd&#x2F;rsyslogd 按配置写入 &#x2F;var&#x2F;log&#x2F;messages 等文件。在传统体系下可以理解为：<code>klogd负责读取/接收内核日志</code>。</p>
-<p>rsyslog&#x2F;syslogd 的主要职责：它们的主要工作是处理来自用户空间应用程序（通过 syslog() API 调用）以及来自 klogd 转发过来的内核消息的系统日志。它们本身不直接读取内核环形缓冲区。</p>
-<p>但现代 Linux 多数使用 systemd，systemd-journald 扮演了 klogd + syslogd 的部分角色。</p>
-<h2 id="3-MySQL-中撤销用户权限的命令是（-）"><a href="#3-MySQL-中撤销用户权限的命令是（-）" class="headerlink" title="3. MySQL 中撤销用户权限的命令是（ ）"></a>3. MySQL 中撤销用户权限的命令是（ ）</h2><p>A. REMOVE  B. DELETE  C. <strong>REVOKE</strong>  D. DENY</p>
-<p><strong>正确答案：C</strong></p>
-<h3 id="解析-2"><a href="#解析-2" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>C. REVOKE（正确）</strong><br>标准 SQL 命令，用于撤销已经授予的权限。</p>
-</li>
-<li><p>A. REMOVE<br>非 SQL 标准命令。</p>
-</li>
-<li><p>B. DELETE<br>用于删除表中的数据记录，与权限管理无关。</p>
-</li>
-<li><p>D. DENY<br>常见于 SQL Server，在 MySQL 中不支持。</p>
-</li>
-</ul>
-<h3 id="扩展-2"><a href="#扩展-2" class="headerlink" title="扩展"></a>扩展</h3><p>增 Create 删 Delete 改 Update 查 Select 插 Insert 看 Show 选 Use 设置 Set<br>看结构 DESC 备份 mysqldump 赋予用户权限 GRANT 撤销用户权限 REVOKE</p>
-<h2 id="4-使用-25-端口传播的木马是（-）"><a href="#4-使用-25-端口传播的木马是（-）" class="headerlink" title="4. 使用 25 端口传播的木马是（ ）"></a>4. 使用 25 端口传播的木马是（ ）</h2><p>A. <strong>Doly Trojan</strong>  B. WinCrash  C. WinPC  D. FTP Trojan</p>
-<p><strong>正确答案：A</strong></p>
-<h3 id="解析-3"><a href="#解析-3" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>A. Doly Trojan（正确）</strong><br>Doly Trojan（多利木马）通常是早期中文安全资料或部分病毒库中出现过的一类“木马”名称，属于 Trojan（木马程序） 的范畴。Doly Trojan 是一个比较古老的 Windows 特洛伊木马，它的主要传播机制就是利用受害者的计算机，通过其 25 端口（SMTP）向外大量发送携带自身副本的垃圾邮件。它将自己伪装成看似无害的文件（如游戏、破解工具等），诱骗用户运行。一旦激活，它会尝试通过电子邮件附件传播给受害者通讯录中的地址或随机生成的邮件地址。</p>
-</li>
-<li><p>B. WinCrash<br>WinCrash从名字看更像是“导致 Windows 崩溃&#x2F;死机”的程序名或病毒名，可能是某类恶意程序&#x2F;病毒的名称，或者一个破坏性工具（让系统崩溃、蓝屏、拒绝服务）。</p>
-</li>
-<li><p>C. WinPC<br>WinPC这个词本身是一个泛称，字面意思就是 Windows Personal Computer（Windows 个人电脑）</p>
-</li>
-<li><p>D. FTP Trojan<br>FTP Trojan通常指“通过 FTP 相关方式传播或利用 FTP 服务的木马”，常见含义有两种：（1）通过 FTP 传播&#x2F;上传下载恶意代码的木马；（2）针对 FTP 服务的后门&#x2F;木马 注意FTP端口号是21，而25是SMTP邮件端口号。</p>
-</li>
-</ul>
-<h3 id="扩展-3"><a href="#扩展-3" class="headerlink" title="扩展"></a>扩展</h3><ul>
-<li>端口与攻击方式是<strong>固定考点</strong>，如果不知道 trojan 类型，可以根据协议和端口进行分析</li>
-<li>25 端口几乎必然与 <strong>邮件攻击 &#x2F; 蠕虫传播</strong> 关联</li>
-</ul>
-<h2 id="5-路由器配置中用于加密特权模式口令的命令是（-）"><a href="#5-路由器配置中用于加密特权模式口令的命令是（-）" class="headerlink" title="5. 路由器配置中用于加密特权模式口令的命令是（ ）"></a>5. 路由器配置中用于加密特权模式口令的命令是（ ）</h2><p>A. <strong>enable secret</strong>  B. secpwd  C. encryption  D. password-encrypt</p>
-<p><strong>正确答案：A</strong></p>
-<h3 id="解析-4"><a href="#解析-4" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>A. enable secret（正确）</strong><br>该命令用于设置进入路由器特权执行模式的密码。它使用强加密算法（如 MD5 或 SHA-256）将密码存储为不可逆的密文在配置文件中。</p>
-</li>
-<li><p>B. secpwd<br>这不是思科 IOS 或主流路由器操作系统中的有效命令。</p>
-</li>
-<li><p>C. encryption<br>这不是一个独立命令。与密码加密相关的常见命令是 service password-encryption。<br>它的作用是：<br>对配置文件中其他类型的明文口令（如控制台密码 line con 0 下的 password，VTY 线路密码 line vty 下的 password，enable 密码（如果使用较弱 的 enable password 命令设置））进行较弱的、可逆的加密（通常是 Vigenère 加密）。</p>
-</li>
-<li><p>D. password-encrypt<br>命令错误，正确的是 <code>service password-encryption</code>。</p>
-</li>
-</ul>
-<h3 id="扩展-4"><a href="#扩展-4" class="headerlink" title="扩展"></a>扩展</h3><p>思科路由器常见操作命令：</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">show running-config        查看当前运行配置</span><br><span class="line">show startup-config        查看启动配置</span><br><span class="line">show ip interface brief    查看接口 IP 与状态汇总</span><br><span class="line">show version               查看 IOS 版本、设备型号、运行时间</span><br><span class="line">show interfaces            查看接口详细信息</span><br><span class="line">show arp                   查看 ARP 表</span><br><span class="line">show ip route              查看路由表</span><br><span class="line"></span><br><span class="line">enable                     进入特权执行模式</span><br><span class="line">configure terminal         进入全局配置模式</span><br><span class="line">exit                       退出当前模式</span><br><span class="line">end                        直接返回特权执行模式</span><br><span class="line">disable                    从特权模式退回用户模式</span><br><span class="line"></span><br><span class="line">interface GigabitEthernet0/0   进入接口配置模式</span><br><span class="line">ip address 192.168.1.1 255.255.255.0   配置接口 IP 地址</span><br><span class="line">no shutdown                启用接口</span><br><span class="line">shutdown                   关闭接口</span><br><span class="line">description LAN Interface  配置接口描述</span><br><span class="line"></span><br><span class="line">enable secret cisco123         设置特权模式加密密码</span><br><span class="line">line console 0                 进入控制台线路配置</span><br><span class="line">password cisco                 设置控制台密码</span><br><span class="line">login                          启用登录验证</span><br><span class="line">line vty 0 4                   配置远程登录线路</span><br><span class="line">transport input telnet ssh     指定远程登录方式</span><br><span class="line">service password-encryption    对明文口令进行简单加密</span><br><span class="line"></span><br><span class="line">ip route 0.0.0.0 0.0.0.0 192.168.1.254   配置默认静态路由</span><br><span class="line">router rip                  启用 RIP 路由协议</span><br><span class="line">router ospf 1                启用 OSPF，进程号为 1</span><br><span class="line">network 192.168.1.0 0.0.0.255 area 0   宣告网络</span><br><span class="line"></span><br><span class="line">copy running-config startup-config   保存配置</span><br><span class="line">write memory                          保存配置（简写）</span><br><span class="line">reload                                重启路由器</span><br><span class="line"></span><br><span class="line">ping 8.8.8.8              测试网络连通性</span><br><span class="line">traceroute 8.8.8.8        路由路径跟踪</span><br><span class="line">debug ip routing          调试路由（慎用）</span><br><span class="line">undebug all               关闭所有调试</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="6-WAF-通常无法防御哪种攻击？（-）"><a href="#6-WAF-通常无法防御哪种攻击？（-）" class="headerlink" title="6. WAF 通常无法防御哪种攻击？（ ）"></a>6. WAF 通常无法防御哪种攻击？（ ）</h2><p>A. <strong>HTTP 隧道</strong>  B. WebShell  C. SQL 注入  D. CSRF</p>
-<p><strong>正确答案：A</strong></p>
-<h3 id="解析-5"><a href="#解析-5" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>A. HTTP 隧道（正确）</strong><br>HTTP 隧道的原理是攻击者将恶意流量（如 C2 通信、数据窃取、端口扫描）封装在合法的 HTTP&#x2F;HTTPS 请求中，伪装成正常 Web 流量（例如通过图片上传、评论字段、Cookie 等传输加密数据）。</p>
-<p>WAF 的盲点：WAF 主要分析 HTTP&#x2F;HTTPS 协议层的语法和语义如参数格式、SQL 关键字、XSS 脚本特征，但无法理解封装在其中的应用层私有协议。如果隧道流量符合 HTTP 规范且不包含已知攻击特征（如 SQL 注入语句），WAF 会将其视为正常流量放行。</p>
-<p>WAF 难以区分加密混淆后的隧道数据与真实业务数据。</p>
-</li>
-<li><p>B. WebShell<br>WAF 可以有效防御常见的 WebShell 上传行为。它能检测文件上传请求中的恶意特征（如 <?php system($_GET['cmd']); ?>），可疑路径（如 &#x2F;uploads&#x2F;backdoor.php）或异常 HTTP 方法（如 PUT 上传）</p>
-</li>
-<li><p>C. SQL 注入<br>这是 WAF 的核心防护场景之一，可基于关键字、语法特征进行检测。</p>
-</li>
-<li><p>D. CSRF<br>WAF 可通过 Referer 校验、Token 检测、异常跨域请求识别部分防御 CSRF。</p>
-</li>
-</ul>
-<h3 id="扩展-5"><a href="#扩展-5" class="headerlink" title="扩展"></a>扩展</h3><p>  HTTP 隧道就像把“坏东西”装进“正常快递盒子”里，WAF 只检查盒子外观，不会拆开看里面真正干了什么。</p>
-<p>  👉 HTTP 隧道把恶意行为藏在合法的 HTTP 请求里，WAF 只检查语法像不像攻击，看不懂真实内容（内容上没有明显的攻击特征，甚至还是加密的），所以容易被绕过，在 WAF 眼中这就是一个正常的请求。</p>
-<h2 id="7-Windows-通过什么子系统向内核请求服务？（-）"><a href="#7-Windows-通过什么子系统向内核请求服务？（-）" class="headerlink" title="7. Windows 通过什么子系统向内核请求服务？（ ）"></a>7. Windows 通过什么子系统向内核请求服务？（ ）</h2><p>A. <strong>Win32</strong>  B. POSIX  C. OS&#x2F;2  D. Linux</p>
-<p><strong>正确答案：A</strong></p>
-<h3 id="解析-6"><a href="#解析-6" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>A. Win32（正确）</strong><br>Win32 子系统是 Windows 操作系统的核心子系统，也是唯一强制要求运行的子系统。所有 Windows 原生应用程序（无论是基于图形界面 GUI 还是命令行 CLI）都依赖 Win32 子系统运行。<br>当用户模式下的应用程序（例如记事本、浏览器等）需要访问操作系统核心功能（如文件操作、进程管理、内存分配、硬件访问等），会调用 Win32 API。因此，<strong>Win32 子系统是应用程序与 Windows 内核交互的主要和标准通道</strong>。</p>
-</li>
-<li><p>B. POSIX<br>Windows 历史上提供过 POSIX 子系统，用于运行符合 POSIX 标准的应用程序。它允许这些应用程序通过 POSIX API 调用内核服务。但是，POSIX 子系统是可选的，并非 Windows 核心架构的必需部分。</p>
-</li>
-<li><p>C. OS&#x2F;2<br>Windows NT 早期为了兼容性曾提供过 OS&#x2F;2 子系统，允许运行 OS&#x2F;2 1.x 字符模式应用程序。该子系统早已被废弃多年，在现代 Windows 中完全不存在。</p>
-</li>
-<li><p>D. Linux<br>属于不同操作系统内核，与 Windows 无关。</p>
-</li>
-</ul>
-<h3 id="扩展-6"><a href="#扩展-6" class="headerlink" title="扩展"></a>扩展</h3><ul>
-<li>Win32 API 是 Windows 应用访问文件、进程、内存等资源的主要接口</li>
-<li>POSIX 是定义操作系统 API、命令行工具和行为规范的可移植操作系统接口标准，用于提高程序在不同系统间的可移植性。</li>
-</ul>
-<h2 id="8-数字证书中不属于主体（Subject）信息的是？（-）"><a href="#8-数字证书中不属于主体（Subject）信息的是？（-）" class="headerlink" title="8. 数字证书中不属于主体（Subject）信息的是？（ ）"></a>8. 数字证书中不属于主体（Subject）信息的是？（ ）</h2><p>A. 组织名  B. 机构名  C. 用户名  D. <strong>签发机构</strong></p>
-<p><strong>正确答案：D</strong></p>
-<h3 id="解析-7"><a href="#解析-7" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>D. 签发机构（正确）</strong><br>签发机构属于 <strong>Issuer</strong> 字段，而非 Subject。</p>
-</li>
-<li><p>A. 组织名</p>
-</li>
-<li><p>B. 机构名</p>
-</li>
-<li><p>C. 用户名</p>
-</li>
-</ul>
-<h3 id="扩展-7"><a href="#扩展-7" class="headerlink" title="扩展"></a>扩展</h3><table>
-<thead>
-<tr>
-<th>项目</th>
-<th>内容</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>版本号（version）</td>
-<td></td>
-</tr>
-<tr>
-<td>证书序列号（serialNumber）</td>
-<td></td>
-</tr>
-<tr>
-<td>签名算法标识符（signature）</td>
-<td></td>
-</tr>
-<tr>
-<td>颁发者名称（issuer）</td>
-<td></td>
-</tr>
-<tr>
-<td>有效期（validity）</td>
-<td>起始有效期 <br> 终止有效期</td>
-</tr>
-<tr>
-<td>主体名称（subject）</td>
-<td>countryName（国家）<br>  stateOrProvinceName（省份） <br> localityName（城市）<br>  organizationName（组织名称） <br> organizationalUnitName（机构名称）<br> commonName（用户名称）</td>
-</tr>
-<tr>
-<td>主体公钥信息（subjectPublicKeyInfo）</td>
-<td></td>
-</tr>
-<tr>
-<td>颁发机构的密钥标识符（authorityKeyIdentifier）</td>
-<td></td>
-</tr>
-<tr>
-<td>主体密钥标识符（subjectKeyIdentifier）</td>
-<td></td>
-</tr>
-<tr>
-<td>CRL 分发点（CRLDistributionPoints）</td>
-<td></td>
-</tr>
-</tbody></table>
-<h2 id="9-var-log-wtmp-文件记录的内容是？（-）"><a href="#9-var-log-wtmp-文件记录的内容是？（-）" class="headerlink" title="9. /var/log/wtmp 文件记录的内容是？（ ）"></a>9. <code>/var/log/wtmp</code> 文件记录的内容是？（ ）</h2><p>A. 当前用户登录信息<br>B. <strong>用户登录和注销历史</strong><br>C. 系统启动日志<br>D. 内核错误日志</p>
-<p><strong>正确答案：B</strong></p>
-<h3 id="解析-8"><a href="#解析-8" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>B. 用户登录和注销历史（正确）</strong><br><code>wtmp</code> 记录历史登录事件，可通过 <code>last</code> 命令查看。</p>
-</li>
-<li><p>A. 当前登录信息<br>当前登录信息记录在 <code>/var/run/utmp</code>。</p>
-</li>
-<li><p>C. 系统启动日志<br>通常记录在 <code>/var/log/boot.log</code> 或 journal 中。</p>
-</li>
-<li><p>D. 内核错误日志<br>内核日志在 <code>/var/log/kern.log</code> 或通过 <code>dmesg</code> 查看。</p>
-</li>
-</ul>
-<h3 id="扩展-8"><a href="#扩展-8" class="headerlink" title="扩展"></a>扩展</h3><ul>
-<li><code>utmp</code>：当前登录</li>
-<li><code>wtmp</code>：历史登录</li>
-<li><code>btmp</code>：失败登录（安全重点）</li>
-</ul>
-<h2 id="10-CNCERT-的全称是？（-）"><a href="#10-CNCERT-的全称是？（-）" class="headerlink" title="10. CNCERT 的全称是？（ ）"></a>10. CNCERT 的全称是？（ ）</h2><p>A. 国家应急相应中心<br>B. 国家网络安全中心<br>C. <strong>中国互联网应急中心</strong><br>D. 国家信息安全中心</p>
-<p><strong>正确答案：C</strong></p>
-<h3 id="解析-9"><a href="#解析-9" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p>A. 国家应急相应中心<br>“应急响应中心”可以指很多领域（灾害、公共事件、网络、政务等），不具备 CNCERT 的“互联网&#x2F;网络应急”指向性。</p>
-</li>
-<li><p>B. 国家网络安全中心<br>通常指代国家计算机网络与信息安全管理中心（NCNIPC），而非 CNCERT</p>
-</li>
-<li><p><strong>C. 中国互联网应急中心（正确）</strong><br>CNCERT在国内更常见、也更规范的中文对应叫法是：国家互联网应急中心（常用名）其机构全称常见表述为：国家计算机网络应急技术处理协调中心（CNCERT&#x2F;CC）<br>在很多教材&#x2F;考试题里，会把 CNCERT 直接对应到“中国（国家）互联网应急中心”这一类说法，所以在给定四个选项里，C 是最准确的匹配。</p>
-</li>
-<li><p>D. 国家信息安全中心<br>非标准名称，易与中国信息安全测评中心（CNITSEC）混淆</p>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/23/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%882024%E7%9C%9F%E9%A2%98%E9%80%89%E6%8B%A9/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/23/%E5%A4%A7%E5%9E%8B%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%AD%A6%E4%B9%A0%E7%BB%8F%E9%AA%8C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/23/%E5%A4%A7%E5%9E%8B%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%AD%A6%E4%B9%A0%E7%BB%8F%E9%AA%8C/" class="post-title-link" itemprop="url">大型开源项目学习经验</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-23 20:32:26 / 修改时间：20:57:12" itemprop="dateCreated datePublished" datetime="2025-12-23T20:32:26+08:00">2025-12-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>最近在学习一些体量较大的开源项目时，明显感受到和阅读中小型项目完全不同的困难：代码量庞大、模块之间耦合复杂、很难快速抓住主线流程。</p>
-<p>如果一开始就陷入细节，很容易在函数和类之间迷失方向。因此，我尝试整理了一套从“跑起来”到“抓主线”，再到“逐模块理解”的学习思路，希望能帮助自己，也给后来者提供一个参考的学习框架。</p>
-<h2 id="项目目标"><a href="#项目目标" class="headerlink" title="项目目标"></a>项目目标</h2><p>这一部分回答三个问题：这个项目是什么？解决什么问题？你为什么要学它？</p>
-<ul>
-<li>项目背景：目前存在什么问题？</li>
-<li>项目核心目标：该项目解决了什么问题？</li>
-<li>个人学习目标：我需要用这个项目实现什么？</li>
-</ul>
-<h2 id="运行方式"><a href="#运行方式" class="headerlink" title="运行方式"></a>运行方式</h2><p>这一部分回答：项目如何跑起来？最简单的运行方式和运行路径是什么？</p>
-<ul>
-<li>环境依赖配置</li>
-<li>最小可运行实例</li>
-<li>运行结果分析</li>
-</ul>
-<h2 id="核心流程（系统主线）"><a href="#核心流程（系统主线）" class="headerlink" title="核心流程（系统主线）"></a>核心流程（系统主线）</h2><p>程序从启动到结束经历了什么？需要描述出一条清晰的执行链路。</p>
-<ul>
-<li>输出 &amp;&amp; 输出</li>
-<li>核心功能一执行链路</li>
-<li>核心功能二执行链路</li>
-<li>等等</li>
-</ul>
-<h2 id="调通模块"><a href="#调通模块" class="headerlink" title="调通模块"></a>调通模块</h2><ol>
-<li>XX模块<ul>
-<li>模块功能</li>
-<li>输出 &amp;&amp; 输出</li>
-</ul>
-</li>
-</ol>
-<h2 id="未调通模块"><a href="#未调通模块" class="headerlink" title="未调通模块"></a>未调通模块</h2><ol>
-<li>XX模块<ul>
-<li>价值分析</li>
-</ul>
-</li>
-</ol>
-<h2 id="项目学习架构-Demo"><a href="#项目学习架构-Demo" class="headerlink" title="项目学习架构 Demo"></a>项目学习架构 Demo</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">## 项目目标</span><br><span class="line"></span><br><span class="line">## 运行方式</span><br><span class="line"></span><br><span class="line">## 核心流程（系统主线）</span><br><span class="line"></span><br><span class="line">- 输出 &amp;&amp; 输出</span><br><span class="line">- 核心功能一执行链路</span><br><span class="line">- 核心功能二执行链路</span><br><span class="line"></span><br><span class="line">## 调通模块</span><br><span class="line"></span><br><span class="line">## 未调通模块</span><br></pre></td></tr></table></figure>
       
     </div>
 
