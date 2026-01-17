@@ -20,12 +20,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="Linux服务器系统资源查看系统性地查看 Linux 服务器资源，也就是看CPU、内存、磁盘、网络、负载、系统等这几个层面，就能了解服务器性能以及运行情况。 uptime查看系统负载和运行时间 1234uptime10:35:15 up  1:34, 13 users,  load average: 0.41, 0.30, 0.25  10:35:15 表示当前系统时间是 10 点 35 分 15">
+    <meta name="description" content="Linux服务器系统资源查看系统性地查看 Linux 服务器资源，也就是看CPU、内存、磁盘、网络、负载、系统等这几个层面，就能了解服务器性能以及运行情况。 uptime查看系统负载和运行时间 1234uptime10:35:15 up  1:34, 13 users,  load average: 0.41, 0.30, 0.25 10:35:15 表示当前系统时间是 10 点 35 分 15">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux服务器系统资源查看">
 <meta property="og:url" content="https://zyufoye.github.io/2025/12/17/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E6%9F%A5%E7%9C%8B/index.html">
 <meta property="og:site_name" content="Aono Note">
-<meta property="og:description" content="Linux服务器系统资源查看系统性地查看 Linux 服务器资源，也就是看CPU、内存、磁盘、网络、负载、系统等这几个层面，就能了解服务器性能以及运行情况。 uptime查看系统负载和运行时间 1234uptime10:35:15 up  1:34, 13 users,  load average: 0.41, 0.30, 0.25  10:35:15 表示当前系统时间是 10 点 35 分 15">
+<meta property="og:description" content="Linux服务器系统资源查看系统性地查看 Linux 服务器资源，也就是看CPU、内存、磁盘、网络、负载、系统等这几个层面，就能了解服务器性能以及运行情况。 uptime查看系统负载和运行时间 1234uptime10:35:15 up  1:34, 13 users,  load average: 0.41, 0.30, 0.25 10:35:15 表示当前系统时间是 10 点 35 分 15">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-17T05:46:55.000Z">
 <meta property="article:modified_time" content="2025-12-17T05:49:52.833Z">
@@ -283,19 +283,17 @@
     <div class="post-body" itemprop="articleBody"><h2 id="Linux服务器系统资源查看"><a href="#Linux服务器系统资源查看" class="headerlink" title="Linux服务器系统资源查看"></a>Linux服务器系统资源查看</h2><p>系统性地查看 Linux 服务器资源，也就是看CPU、内存、磁盘、网络、负载、系统等这几个层面，就能了解服务器性能以及运行情况。</p>
 <h3 id="uptime"><a href="#uptime" class="headerlink" title="uptime"></a>uptime</h3><p>查看系统负载和运行时间</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uptime</span></span><br><span class="line"></span><br><span class="line">10:35:15 up  1:34, 13 <span class="built_in">users</span>,  load average: 0.41, 0.30, 0.25</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><code>10:35:15</code> 表示当前系统时间是 10 点 35 分 15 秒，<code>up 1:34</code> 表示系统已经连续运行了 1 小时 34 分钟，<code>13 users</code>表示当前有 13 个用户会话登录到系统中，<code>load average: 0.41, 0.30, 0.25</code> 表示系统负载均值（Load Average），表示正在运行 + 等待运行的进程数量的平均值，三个数字分别表示最近1&#x2F;5&#x2F;15 分钟的平均负载。</p>
+<p><code>10:35:15</code> 表示当前系统时间是 10 点 35 分 15 秒，<code>up 1:34</code> 表示系统已经连续运行了 1 小时 34 分钟，<code>13 users</code>表示当前有 13 个用户会话登录到系统中，<code>load average: 0.41, 0.30, 0.25</code> 表示系统负载均值（Load Average），表示正在运行 + 等待运行的进程数量的平均值，三个数字分别表示最近1/5/15 分钟的平均负载。</p>
 <blockquote>
-<p><strong>Load Average &#x3D; 在某段时间内，处于「可运行状态」和「不可中断睡眠状态」进程数量的指数加权移动平均（EWMA），统计的是想用 CPU 的进程有多少。</strong></p>
+<p><strong>Load Average = 在某段时间内，处于「可运行状态」和「不可中断睡眠状态」进程数量的指数加权移动平均（EWMA），统计的是想用 CPU 的进程有多少。</strong></p>
 </blockquote>
 <h3 id="top"><a href="#top" class="headerlink" title="top"></a>top</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">top</span><br><span class="line"></span><br><span class="line">top - 10:52:33 up  1:52, 11 <span class="built_in">users</span>,  load average: 1.14, 0.57, 0.32</span><br><span class="line">Tasks: 2645 total,   2 running, 2643 sleeping,   0 stopped,   0 zombie</span><br><span class="line">%Cpu(s):  0.1 us,  0.0 sy,  0.0 ni, 99.8 <span class="built_in">id</span>,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span><br><span class="line">MiB Mem : 10 total, 8 free,  6 used,  4 buff/cache</span><br><span class="line">MiB Swap:  3 total, 2 free,  1 used.  2 avail Mem</span><br><span class="line"></span><br><span class="line">    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND</span><br><span class="line">  77552 xrdp      20   0   50360  20344   6856 R  18.0   0.0   0:30.70 xrdp</span><br><span class="line">  77960 mark      20   0 9361988 422920 185124 S  14.1   0.1   0:59.67 gnome-shell</span><br><span class="line">  77569 mark      20   0  382544 138588  80324 S   5.6   0.0   0:11.17 Xorg</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <p>详解 top 输出命令内容：</p>
 <p>第一行表示时间、运行时长、登录用户、平均负载；</p>
-<p>第二行展示了任务数和进程状态，包含进程&#x2F;线程统计总数、正在 CPU 上运行的（或准备运行的）任务数、睡眠、进程和僵尸进程数量；</p>
-<p>第三行展示了 CPU 使用构成，us用户态、sy内核态、ni被nice调整过优先级的用户态进程、id (idle) CPU空闲率、wa CPU在等 IO（磁盘&#x2F;网络存储）导致空转等待率，hi硬中断消耗，si软中断消耗；</p>
-<p>第四行展示了内存：total总内存、free完全空闲内存、used真正被进程使用的内存、buff&#x2F;cache文件缓存块设备缓存；</p>
-<p>第五行展示了 Swap 交换分区，Swap（交换分区&#x2F;交换文件）是内存不足时的“备用空间”，当 物理内存（RAM）不够用 时，Linux 会把暂时不用的内存页交换到磁盘上的 swap 中，从而防止系统因内存耗尽而直接崩溃（OOM），让系统还能继续运行；</p>
+<p>第二行展示了任务数和进程状态，包含进程/线程统计总数、正在 CPU 上运行的（或准备运行的）任务数、睡眠、进程和僵尸进程数量；</p>
+<p>第三行展示了 CPU 使用构成，us用户态、sy内核态、ni被nice调整过优先级的用户态进程、id (idle) CPU空闲率、wa CPU在等 IO（磁盘/网络存储）导致空转等待率，hi硬中断消耗，si软中断消耗；</p>
+<p>第四行展示了内存：total总内存、free完全空闲内存、used真正被进程使用的内存、buff/cache文件缓存块设备缓存；</p>
+<p>第五行展示了 Swap 交换分区，Swap（交换分区/交换文件）是内存不足时的“备用空间”，当 物理内存（RAM）不够用 时，Linux 会把暂时不用的内存页交换到磁盘上的 swap 中，从而防止系统因内存耗尽而直接崩溃（OOM），让系统还能继续运行；</p>
 <p>下面展示了系统进程的详细信息：</p>
 <p>表头：</p>
 <p><code>PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND</code></p>
@@ -307,29 +305,24 @@
 <p>RES：常驻内存（实际占用物理内存，最值得关注）</p>
 <p>SHR：共享内存部分（共享库等）</p>
 <p>S：状态</p>
-<p>R&#x3D;运行，S&#x3D;睡眠，D&#x3D;不可中断睡眠(常见 IO 卡住)，Z&#x3D;僵尸</p>
+<p>R=运行，S=睡眠，D=不可中断睡眠(常见 IO 卡住)，Z=僵尸</p>
 <p>%CPU：CPU 占比（注意：多核时可能 &gt;100%）</p>
 <p>%MEM：内存占比</p>
 <p>TIME+：累计消耗 CPU 时间</p>
 <p>COMMAND：命令名</p>
 <h3 id="lscpu"><a href="#lscpu" class="headerlink" title="lscpu"></a>lscpu</h3><p>查看 cpu 架构，重点关注 CPU 型号、数量、解构等信息</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Architecture: x86_64</span><br><span class="line"></span><br><span class="line">Model name: AMD</span><br><span class="line"></span><br><span class="line">CPU(s):                2</span><br><span class="line">Thread(s) per core:    2</span><br><span class="line">Core(s) per socket:    1</span><br><span class="line">Socket(s):             1</span><br></pre></td></tr></table></figure>
-
 <h3 id="free-h"><a href="#free-h" class="headerlink" title="free -h"></a>free -h</h3><p>查看内存资源</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">free -h</span><br><span class="line">             total       used      free      shared  buff/cache   available</span><br><span class="line">Mem:           5Gi        1Gi       4Gi        87Mi         1Gi         3Gi</span><br><span class="line">Swap:          1Gi         0B       1Gi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <h3 id="df-h"><a href="#df-h" class="headerlink" title="df -h"></a>df -h</h3><p>查看磁盘资源</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br><span class="line"></span><br><span class="line">Filesystem      Size  Used Avail  Use%  Mounted on</span><br><span class="line">tmpfs             2G  3.9M    1G   50%  /run</span><br><span class="line">/dev/nvme        10G    5G    5G   50%  /</span><br><span class="line">......</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <h3 id="ip-s-link"><a href="#ip-s-link" class="headerlink" title="ip -s link"></a>ip -s link</h3><p>查看网络资源，这个要视情况而定，还有ss、netstat等命令。</p>
 <h3 id="uname-a"><a href="#uname-a" class="headerlink" title="uname -a"></a>uname -a</h3><p>查看系统及内核版本</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> /etc/os-release</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <h3 id="lspci"><a href="#lspci" class="headerlink" title="lspci"></a>lspci</h3><p>查看系统中安装的所有PCI设备。</p>
 <h3 id="nvidia-smi"><a href="#nvidia-smi" class="headerlink" title="nvidia-smi"></a>nvidia-smi</h3><p>查看显卡型号。</p>
 <h2 id="服务器使用规范"><a href="#服务器使用规范" class="headerlink" title="服务器使用规范"></a>服务器使用规范</h2><p>w 或 who 查看当前在线登录的用户</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 查看当前系统下的所有用户</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建用户</span></span><br><span class="line"><span class="built_in">sudo</span> useradd name</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> useradd -m -s /bin/bash name</span><br><span class="line"></span><br><span class="line"><span class="comment"># -m 自动创建家目录，-s指定shell</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为新用户指定密码</span></span><br><span class="line"><span class="built_in">sudo</span> passwd name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给新用户追加到 sudo 组</span></span><br><span class="line"><span class="built_in">sudo</span> usermod -aG <span class="built_in">sudo</span> name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 简化版，添加用户时即指定其加入sudo组</span></span><br><span class="line"><span class="built_in">sudo</span> useradd -m -s /bin/bash -G <span class="built_in">sudo</span> name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换用户环境 - 表示加载用户环境</span></span><br><span class="line">su - name </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 
     </div>
 

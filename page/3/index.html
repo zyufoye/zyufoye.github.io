@@ -270,8 +270,8 @@
     
     <div class="post-body" itemprop="articleBody">
           <h2 id="SSE-和-stdio-模式对比"><a href="#SSE-和-stdio-模式对比" class="headerlink" title="SSE 和 stdio 模式对比"></a>SSE 和 stdio 模式对比</h2><h3 id="架构差异"><a href="#架构差异" class="headerlink" title="架构差异"></a>架构差异</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">stdio 模式：</span><br><span class="line">Cursor/Claude Desktop</span><br><span class="line">    └─ 启动子进程：python server.py</span><br><span class="line">        └─ stdin/stdout 通信</span><br><span class="line">        └─ 服务器生命周期由客户端管理</span><br><span class="line"></span><br><span class="line">SSE 模式：</span><br><span class="line">独立运行：python server.py (后台持续运行)</span><br><span class="line">    ↑</span><br><span class="line">    └─ HTTP SSE 连接</span><br><span class="line">    ↑</span><br><span class="line">Cursor/Claude Desktop (通过 HTTP 连接)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="详细对比"><a href="#详细对比" class="headerlink" title="详细对比"></a>详细对比</h3><table>
+<h3 id="详细对比"><a href="#详细对比" class="headerlink" title="详细对比"></a>详细对比</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>特性</th>
@@ -279,14 +279,15 @@
 <th>SSE 模式</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><strong>启动方式</strong></td>
 <td>客户端自动启动</td>
 <td>手动启动（独立进程）</td>
 </tr>
 <tr>
 <td><strong>通信协议</strong></td>
-<td>stdin&#x2F;stdout 管道</td>
+<td>stdin/stdout 管道</td>
 <td>HTTP + Server-Sent Events</td>
 </tr>
 <tr>
@@ -319,7 +320,9 @@
 <td>低</td>
 <td>高</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h3 id="测试时为什么选择-SSE？"><a href="#测试时为什么选择-SSE？" class="headerlink" title="测试时为什么选择 SSE？"></a>测试时为什么选择 SSE？</h3><ul>
 <li><p>✅ 开发调试更方便：可以直接在终端看到所有日志，手动重启服务器，用浏览器测试连接；</p>
 </li>
@@ -413,18 +416,16 @@
 </ul>
 <p>任务：使用Python实现一个MCP Server，用来统计当前桌面上的 txt 文件数量和获取对应文件的名字。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 MCP Server</span></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;桌面 TXT 文件统计器&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">count_desktop_txt_files</span>() -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Count the number of .txt files on the desktop.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># Get the desktop path</span></span><br><span class="line">    username = os.getenv(<span class="string">&quot;USER&quot;</span>) <span class="keyword">or</span> os.getenv(<span class="string">&quot;USERNAME&quot;</span>)</span><br><span class="line">    desktop_path = Path(<span class="string">f&quot;C:\\Users\\<span class="subst">&#123;username&#125;</span>\\Desktop&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Count .txt files</span></span><br><span class="line">    txt_files = <span class="built_in">list</span>(desktop_path.glob(<span class="string">&quot;*.txt&quot;</span>))</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">len</span>(txt_files)</span><br><span class="line"></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">list_desktop_txt_files</span>() -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Get a list of all .txt filenames on the desktop.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># Get the desktop path</span></span><br><span class="line">    username = os.getenv(<span class="string">&quot;USER&quot;</span>) <span class="keyword">or</span> os.getenv(<span class="string">&quot;USERNAME&quot;</span>)</span><br><span class="line">    desktop_path = Path(<span class="string">f&quot;C:\\Users\\<span class="subst">&#123;username&#125;</span>\\Desktop&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Get all .txt files</span></span><br><span class="line">    txt_files = <span class="built_in">list</span>(desktop_path.glob(<span class="string">&quot;*.txt&quot;</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Return the filenames</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> txt_files:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;No .txt files found on desktop.&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Format the list of filenames</span></span><br><span class="line">    file_list = <span class="string">&quot;\n&quot;</span>.join([<span class="string">f&quot;- <span class="subst">&#123;file.name&#125;</span>&quot;</span> <span class="keyword">for</span> file <span class="keyword">in</span> txt_files])</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Found <span class="subst">&#123;<span class="built_in">len</span>(txt_files)&#125;</span> .txt files on desktop:\n<span class="subst">&#123;file_list&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># Initialize and run the server</span></span><br><span class="line">    mcp.run()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <h3 id="MCP-Server-测试"><a href="#MCP-Server-测试" class="headerlink" title="MCP Server 测试"></a>MCP Server 测试</h3><p>测试 MCP Server， <code>mcp dev server.py</code> ，进行服务测试。</p>
-<p><img src="/../uploads/MCP_12.png"></p>
+<p><img src="../uploads/MCP_12.png" alt=""></p>
 <p>如图所示，成功生成了对应的 Tool Result ，即为测试成功。</p>
 <h3 id="接入-Claude-Desktop"><a href="#接入-Claude-Desktop" class="headerlink" title="接入 Claude Desktop"></a>接入 Claude Desktop</h3><p>这里 Claude Desktop 注册时需要手机号绑定，目前没有外国手机号，所以找了个平替的平台 Trae。</p>
 <p>配置文件如下：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;server_txt&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C:\\Users\\77319\\.local\\bin\\uv.exe&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;--directory&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;D:\\Code\\mcp-demo&quot;</span><span class="punctuation">,</span> <span class="comment">// 你的项目路径（这里是我的）</span></span><br><span class="line">        <span class="string">&quot;run&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;server_txt.py&quot;</span> <span class="comment">// 你的 MCP Server 文件名</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
 <p>手动添加 MCP 配置：</p>
-<p><img src="/../uploads/MCP_13.png"></p>
+<p><img src="../uploads/MCP_13.png" alt=""></p>
 <p>选择 MCP ：</p>
-<p><img src="/../uploads/MCP_14.png"></p>
+<p><img src="../uploads/MCP_14.png" alt=""></p>
 <p>提出问题：帮我分析桌面txt文件的含义</p>
 <p>思考过程：</p>
 <p>用户让我推测桌面txt文件名的含义，之前已经通过MCP工具获取到桌面上有3个txt文件：</p>
@@ -450,11 +451,10 @@
 <li><p>“密码本.txt”：</p>
 <ul>
 <li>“密码本” 通常指存储密码的文档</li>
-<li>这个文件可能包含各种账户的用户名和密码信息</li>
+<li>这个文件可能包含各种账户的用户名和密码信息<br>我需要将这些分析整理成一个清晰的回应。</li>
 </ul>
 </li>
 </ol>
-<p>我需要将这些分析整理成一个清晰的回应。</p>
 <p>回复内容：</p>
 <p>基于之前获取的桌面上的txt文件名，我可以推测它们的含义。让我分析每个文件名并提供合理的解释。基于桌面txt文件名，我可以做出以下推测：</p>
 <ol>
@@ -568,13 +568,13 @@
 <p><strong>信息收集要得出一个结论：我到底能打哪些入口？哪些入口最可能实现边界突破？</strong></p>
 </blockquote>
 <h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>漏洞利用阶段不要盲目跑exp，最好是先验证控制程度，再拿shell。</p>
-<p>先确定漏洞是否真实存在，漏洞可控点在哪里，输入如何影响输出，然后再确认控制深度（能否读写文件&#x2F;命令执行&#x2F;鉴权绕过），最后在拿稳定shell。</p>
+<p>先确定漏洞是否真实存在，漏洞可控点在哪里，输入如何影响输出，然后再确认控制深度（能否读写文件/命令执行/鉴权绕过），最后在拿稳定shell。</p>
 <blockquote>
 <p><strong>先看能不能验证清楚，在考虑能否一步到位。</strong></p>
 </blockquote>
 <h2 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h2><p>提权并没有深入学习太多，但是感觉应该在于找到“权限边界被破坏”的证据，可以根据历史经验寻找线索，找到稳定可复现的思路。</p>
 <h2 id="横向移动"><a href="#横向移动" class="headerlink" title="横向移动"></a>横向移动</h2><blockquote>
-<p><strong>信任关系+凭证流向</strong>: 从以控制主机把影响力扩到更有价值的主机&#x2F;账号&#x2F;网段等。</p>
+<p><strong>信任关系+凭证流向</strong>: 从以控制主机把影响力扩到更有价值的主机/账号/网段等。</p>
 </blockquote>
 <hr>
 <p>⭐<strong>持续更新 To be continued……</strong></p>
@@ -659,7 +659,7 @@
           <h2 id="模型如何确定工具选用？"><a href="#模型如何确定工具选用？" class="headerlink" title="模型如何确定工具选用？"></a>模型如何确定工具选用？</h2><p>Anthropic 详细解释了这个问题：模型在什么时候确定使用哪些工具。</p>
 <p>当用户提出一个问题时：</p>
 <ol>
-<li>客户端（Claude Desktop &#x2F; Cursor）将问题发送给 Claude；</li>
+<li>客户端（Claude Desktop / Cursor）将问题发送给 Claude；</li>
 <li>Claude 分析可用的工具，并决定使用哪一个（或多个）；</li>
 <li>客户端通过 MCP Server 执行所选的工具；</li>
 <li>工具的执行结果被送回给 Claude；</li>
@@ -672,7 +672,7 @@
 <li>执行对应的 MCP Server 并对执行结果进行重新处理；</li>
 </ol>
 <p>MCP 流程图如下：</p>
-<p><img src="/../uploads/MCP_11.jpg"></p>
+<p><img src="../uploads/MCP_11.jpg" alt=""></p>
 <p>流程图展示了 LLM 在接收到用户输入后，根据系统提示中提供的指令与工具描述，决定是否需要调用外部工具（包括 MCP Server 提供的工具）。<br>首先，用户输入与系统 prompt（包含工具的结构化描述）一同交给模型生成 Message1。如果模型判断某个任务需要借助工具完成（Case 1），它会生成一段结构化的 Tool call JSON，并由外部执行环境或 MCP Server 负责实际执行工具逻辑。执行结果再返回给模型，模型基于这份结果生成最终回答；<br>如果模型判断不需要工具（Case 2），则直接生成最终输出。<br>整个流程体现了：LLM 负责“决定用什么工具及如何调用”，而 MCP Servers 等外部系统负责“实际执行任务并返回数据”，从而实现模型与外部能力的协作。</p>
           <!--noindex-->
             <div class="post-button">
@@ -767,7 +767,6 @@
     <div class="post-body" itemprop="articleBody">
           <p>Hexo链接站内文章方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
-
 <p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 是显示的内容，如果不写的话就默认是文章名称。</p>
 <p>参考链接：<a target="_blank" rel="noopener" href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
 
@@ -848,7 +847,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）"><a href="#Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）" class="headerlink" title="Function Call和MCP的核心区别梳理（由GPT 5.1 生成）"></a>Function Call和MCP的核心区别梳理（由GPT 5.1 生成）</h2><h2 id="🧩核心区别总结"><a href="#🧩核心区别总结" class="headerlink" title="🧩核心区别总结"></a>🧩核心区别总结</h2><table>
+          <h2 id="Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）"><a href="#Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）" class="headerlink" title="Function Call和MCP的核心区别梳理（由GPT 5.1 生成）"></a>Function Call和MCP的核心区别梳理（由GPT 5.1 生成）</h2><h2 id="🧩核心区别总结"><a href="#🧩核心区别总结" class="headerlink" title="🧩核心区别总结"></a>🧩核心区别总结</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>特性</th>
@@ -856,7 +856,8 @@
 <th>MCP（Model Context Protocol）</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><strong>定位</strong></td>
 <td>让模型按照开发者定义的结构化方式返回“调用某函数所需的参数”。</td>
 <td>让模型与外部工具、服务、数据源通过统一协议进行双向通信。</td>
@@ -876,7 +877,9 @@
 <td>调用某个特定函数、处理结构化任务。</td>
 <td>接入多个工具、多数据源、插件系统、企业级工作流。</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <hr>
           <!--noindex-->
             <div class="post-button">
@@ -968,7 +971,7 @@
 <p>在MCP出现之前，如果LLM要访问外部数据，通常使用<code>Function Call</code>的方式，<code>Function Call</code>通过给模型预设函数描述（包括函数名、参数说明、返回值格式等），让模型在合适的时候返回一个符合结构的 JSON 格式，外部系统再解析这个 JSON，调用实际的后端函数。关于 <code>Function Call</code> 和<code>MCP</code> 的具体区别在 <a href="/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/" title="Function Call和MCP的区别">Function Call和MCP的区别</a></p>
 <p>但 <code>Function Call</code> 的方式没有一个统一的开发规范，你开发的函数我不能用，我开发的函数你不能用，而且开发起来很麻烦，为了解决这个问题，MCP 出现了。MCP作为LLMs的标准化工具箱，可以通过MCP调用外界的AI工具，而AI工具在开发的时候也需要遵循MCP协议。MCP 允许应用以标准化的方式向 LLM 提供上下文，并将<strong>提供上下文的逻辑</strong>与<strong>实际的LLM交互逻辑”</strong>解耦。</p>
 <p>在没有 MCP 之前，如果我们希望让模型使用本地数据，通常需要把这些数据直接复制到对话框中，让模型从文本中获取信息。而有了 MCP 之后，我们可以为特定能力编写一个 MCP Server，例如数据库读取、GitHub 操作、文件系统访问或获取当前时间等。模型通过 MCP 与这些 Server 通信，就能在无需手动粘贴数据的情况下，实时访问这些外部资源。</p>
-<p><img src="/../uploads/MCP_1.png"></p>
+<p><img src="../uploads/MCP_1.png" alt=""></p>
 <p>MCP 服务器可以提供三种主要类型的功能:</p>
 <ol>
 <li>资源访问：客户端读取文件等数据；</li>
@@ -1069,14 +1072,13 @@
           <h2 id="SARIF-文件架构架构解读"><a href="#SARIF-文件架构架构解读" class="headerlink" title="SARIF 文件架构架构解读"></a>SARIF 文件架构架构解读</h2><p>SARIF（Static Analysis Results Interchange Format）本质是一个 JSON 日志规范，用于统一表达静态分析（SAST、Lint、CodeQL、依赖扫描等）的扫描结果，方便不同工具之间共享、聚合、展示与追踪。</p>
 <p>SARIF 简单文件结构如下：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;$schema&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;https://json.schemastore.org/sarif-2.1.0.json&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;2.1.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;runs&quot;</span> <span class="punctuation">:</span> <span class="punctuation">[</span>&#x27;tool&#x27;<span class="punctuation">,</span> &#x27;invocations&#x27;<span class="punctuation">,</span> &#x27;artifacts&#x27;<span class="punctuation">,</span> &#x27;results&#x27;<span class="punctuation">,</span> &#x27;columnKind&#x27;<span class="punctuation">,</span>&#x27;properties&#x27;<span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
 <blockquote>
-<p>SARIF &#x3D; 多次运行 runs 的集合，每次运行包含：工具信息 + 运行元数据 + 被分析对象（artifacts）+ 分析结果（results）</p>
+<p>SARIF = 多次运行 runs 的集合，每次运行包含：工具信息 + 运行元数据 + 被分析对象（artifacts）+ 分析结果（results）</p>
 </blockquote>
 <p>对各部分内容介绍如下：</p>
 <ol>
 <li>tool 工具信息：检查员身份信息和检查手册，记录了用哪个工具进行了扫描，版本号是多少，包含了 driver 驱动程序信息 和 rules 检查规则清单；</li>
-<li>invocations 调用信息：检查员的工作日志，记录了这次检查是在什么环境下进行的，以及是否顺利完成，executionSuccessful: true&#x2F;false；</li>
+<li>invocations 调用信息：检查员的工作日志，记录了这次检查是在什么环境下进行的，以及是否顺利完成，executionSuccessful: true/false；</li>
 <li>artifacts 被扫描的文件：检查了哪些地点，列出了所有被 CodeQL 扫描过的源文件（Source Code），包含文件的路径（location），有时也包含文件的具体内容或哈希值，方便后续定位；</li>
 <li><strong>results 结果</strong> ：这是问题清单，这是整份报告里最重要的部分，列出了扫描出来的所有 Bug和漏洞信息，关键单：ruleId 记录违反了哪条规则（对应 tool 里的规则），message 记录问题的具体描述，locations 记录了问题在哪个文件的第几行、第几列；</li>
 <li>columnKind 列的计算方式：用于告诉 IDE（如 VS Code）如何正确高亮代码；</li>
@@ -1172,7 +1174,6 @@
 <p>官方文档参考：<a target="_blank" rel="noopener" href="https://docs.astral.sh/uv/">https://docs.astral.sh/uv/</a></p>
 <h2 id="uv安装"><a href="#uv安装" class="headerlink" title="uv安装"></a>uv安装</h2><p>Linux &amp; MacOS 安装</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -LsSf https://astral.sh/uv/install.sh | sh</span><br></pre></td></tr></table></figure>
-
 <p>Windows powershell 安装</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell -ExecutionPolicy ByPass -c <span class="string">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></span><br></pre></td></tr></table></figure>
           <!--noindex-->

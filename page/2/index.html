@@ -270,6 +270,7 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>软考信息安全工程师涉及到的考试章节和具体考点如下，科目一考点：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -277,7 +278,8 @@
 <th><strong>章节内容</strong></th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>1. 网络信息安全概述</td>
 <td>网络发展现状、安全属性、安全管理、生命周期</td>
 </tr>
@@ -351,7 +353,7 @@
 </tr>
 <tr>
 <td>19. 操作系统安全保护</td>
-<td>概述、Windows &#x2F; Linux 操作系统安全、国产操作系统安全</td>
+<td>概述、Windows / Linux 操作系统安全、国产操作系统安全</td>
 </tr>
 <tr>
 <td>20. 数据库系统安全</td>
@@ -385,8 +387,11 @@
 <td>专业英语</td>
 <td>专业英语</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>科目二考点：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -394,13 +399,14 @@
 <th><strong>知识点</strong></th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>密码学</td>
 <td>1. 安全目标等基础概念。<br>2. RSA 加解密详细过程，其他加密算法概述。<br>3. 公钥私钥加解密、数字签名过程，文字表示及识图。<br>4. 密钥管理技术、安全认证协议等。</td>
 </tr>
 <tr>
 <td>网络安全</td>
-<td>1. 防火墙概念（iptables 过滤规则及配置命令）、体系结构、包过滤规则填表，Windows &#x2F; Linux 配置。<br>2. 各种网络攻击和威胁，数据敏感度、隐私分类、隐私保护等。<br>3. 网络协议数据包含义分析。<br>4. 重要网络协议如 TCP、DNS、DHCP 等。<br>5. 华为交换机、路由器等安全配置命令。</td>
+<td>1. 防火墙概念（iptables 过滤规则及配置命令）、体系结构、包过滤规则填表，Windows / Linux 配置。<br>2. 各种网络攻击和威胁，数据敏感度、隐私分类、隐私保护等。<br>3. 网络协议数据包含义分析。<br>4. 重要网络协议如 TCP、DNS、DHCP 等。<br>5. 华为交换机、路由器等安全配置命令。</td>
 </tr>
 <tr>
 <td>信息系统安全</td>
@@ -410,7 +416,9 @@
 <td>新技术</td>
 <td>移动应用——安卓系统和 iOS 系统；<br>数据敏感度、隐私保护、隐私分类等；<br>其他可能会考察的有：云计算、工控系统、移动应用、大数据、应急响应等安全新技术内容。</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 
       
     </div>
@@ -525,9 +533,9 @@
 </ul>
 <h3 id="扩展-1"><a href="#扩展-1" class="headerlink" title="扩展"></a>扩展</h3><p>Linux 日志分两类：内核日志和用户态日志。</p>
 <p>内核日志（Kernel Log）由内核态（kernel）输出，如 printk()，典型内容包括驱动加载、硬件识别、内核错误、OOM、panic、网络栈信息等，存储在ring buffer（环形缓冲区）中，可以使用命令 <code>dmesg</code> 查看。</p>
-<p>用户态日志的来源是用户空间程序&#x2F;服务，如 sshd、nginx、应用程序、cron 等，包含访问日志、错误日志、认证日志、系统服务日志等，一般落地到 &#x2F;var&#x2F;log&#x2F; 目录下各种文件。</p>
-<p>内核日志输出链路：内核通过 printk() 输出日志，写入 kernel ring buffer（环形缓冲区），klogd 从 ring buffer 把日志读出来，然后交给 syslogd&#x2F;rsyslogd，syslogd&#x2F;rsyslogd 按配置写入 &#x2F;var&#x2F;log&#x2F;messages 等文件。在传统体系下可以理解为：<code>klogd负责读取/接收内核日志</code>。</p>
-<p>rsyslog&#x2F;syslogd 的主要职责：它们的主要工作是处理来自用户空间应用程序（通过 syslog() API 调用）以及来自 klogd 转发过来的内核消息的系统日志。它们本身不直接读取内核环形缓冲区。</p>
+<p>用户态日志的来源是用户空间程序/服务，如 sshd、nginx、应用程序、cron 等，包含访问日志、错误日志、认证日志、系统服务日志等，一般落地到 /var/log/ 目录下各种文件。</p>
+<p>内核日志输出链路：内核通过 printk() 输出日志，写入 kernel ring buffer（环形缓冲区），klogd 从 ring buffer 把日志读出来，然后交给 syslogd/rsyslogd，syslogd/rsyslogd 按配置写入 /var/log/messages 等文件。在传统体系下可以理解为：<code>klogd负责读取/接收内核日志</code>。</p>
+<p>rsyslog/syslogd 的主要职责：它们的主要工作是处理来自用户空间应用程序（通过 syslog() API 调用）以及来自 klogd 转发过来的内核消息的系统日志。它们本身不直接读取内核环形缓冲区。</p>
 <p>但现代 Linux 多数使用 systemd，systemd-journald 扮演了 klogd + syslogd 的部分角色。</p>
 <h2 id="3-MySQL-中撤销用户权限的命令是（-）"><a href="#3-MySQL-中撤销用户权限的命令是（-）" class="headerlink" title="3. MySQL 中撤销用户权限的命令是（ ）"></a>3. MySQL 中撤销用户权限的命令是（ ）</h2><p>A. REMOVE  B. DELETE  C. <strong>REVOKE</strong>  D. DENY</p>
 <p><strong>正确答案：C</strong></p>
@@ -547,16 +555,16 @@
 <h3 id="解析-3"><a href="#解析-3" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><p><strong>A. Doly Trojan（正确）</strong><br>Doly Trojan（多利木马）通常是早期中文安全资料或部分病毒库中出现过的一类“木马”名称，属于 Trojan（木马程序） 的范畴。Doly Trojan 是一个比较古老的 Windows 特洛伊木马，它的主要传播机制就是利用受害者的计算机，通过其 25 端口（SMTP）向外大量发送携带自身副本的垃圾邮件。它将自己伪装成看似无害的文件（如游戏、破解工具等），诱骗用户运行。一旦激活，它会尝试通过电子邮件附件传播给受害者通讯录中的地址或随机生成的邮件地址。</p>
 </li>
-<li><p>B. WinCrash<br>WinCrash从名字看更像是“导致 Windows 崩溃&#x2F;死机”的程序名或病毒名，可能是某类恶意程序&#x2F;病毒的名称，或者一个破坏性工具（让系统崩溃、蓝屏、拒绝服务）。</p>
+<li><p>B. WinCrash<br>WinCrash从名字看更像是“导致 Windows 崩溃/死机”的程序名或病毒名，可能是某类恶意程序/病毒的名称，或者一个破坏性工具（让系统崩溃、蓝屏、拒绝服务）。</p>
 </li>
 <li><p>C. WinPC<br>WinPC这个词本身是一个泛称，字面意思就是 Windows Personal Computer（Windows 个人电脑）</p>
 </li>
-<li><p>D. FTP Trojan<br>FTP Trojan通常指“通过 FTP 相关方式传播或利用 FTP 服务的木马”，常见含义有两种：（1）通过 FTP 传播&#x2F;上传下载恶意代码的木马；（2）针对 FTP 服务的后门&#x2F;木马 注意FTP端口号是21，而25是SMTP邮件端口号。</p>
+<li><p>D. FTP Trojan<br>FTP Trojan通常指“通过 FTP 相关方式传播或利用 FTP 服务的木马”，常见含义有两种：（1）通过 FTP 传播/上传下载恶意代码的木马；（2）针对 FTP 服务的后门/木马 注意FTP端口号是21，而25是SMTP邮件端口号。</p>
 </li>
 </ul>
 <h3 id="扩展-3"><a href="#扩展-3" class="headerlink" title="扩展"></a>扩展</h3><ul>
 <li>端口与攻击方式是<strong>固定考点</strong>，如果不知道 trojan 类型，可以根据协议和端口进行分析</li>
-<li>25 端口几乎必然与 <strong>邮件攻击 &#x2F; 蠕虫传播</strong> 关联</li>
+<li>25 端口几乎必然与 <strong>邮件攻击 / 蠕虫传播</strong> 关联</li>
 </ul>
 <h2 id="5-路由器配置中用于加密特权模式口令的命令是（-）"><a href="#5-路由器配置中用于加密特权模式口令的命令是（-）" class="headerlink" title="5. 路由器配置中用于加密特权模式口令的命令是（ ）"></a>5. 路由器配置中用于加密特权模式口令的命令是（ ）</h2><p>A. <strong>enable secret</strong>  B. secpwd  C. encryption  D. password-encrypt</p>
 <p><strong>正确答案：A</strong></p>
@@ -572,16 +580,14 @@
 </ul>
 <h3 id="扩展-4"><a href="#扩展-4" class="headerlink" title="扩展"></a>扩展</h3><p>思科路由器常见操作命令：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">show running-config        查看当前运行配置</span><br><span class="line">show startup-config        查看启动配置</span><br><span class="line">show ip interface brief    查看接口 IP 与状态汇总</span><br><span class="line">show version               查看 IOS 版本、设备型号、运行时间</span><br><span class="line">show interfaces            查看接口详细信息</span><br><span class="line">show arp                   查看 ARP 表</span><br><span class="line">show ip route              查看路由表</span><br><span class="line"></span><br><span class="line">enable                     进入特权执行模式</span><br><span class="line">configure terminal         进入全局配置模式</span><br><span class="line">exit                       退出当前模式</span><br><span class="line">end                        直接返回特权执行模式</span><br><span class="line">disable                    从特权模式退回用户模式</span><br><span class="line"></span><br><span class="line">interface GigabitEthernet0/0   进入接口配置模式</span><br><span class="line">ip address 192.168.1.1 255.255.255.0   配置接口 IP 地址</span><br><span class="line">no shutdown                启用接口</span><br><span class="line">shutdown                   关闭接口</span><br><span class="line">description LAN Interface  配置接口描述</span><br><span class="line"></span><br><span class="line">enable secret cisco123         设置特权模式加密密码</span><br><span class="line">line console 0                 进入控制台线路配置</span><br><span class="line">password cisco                 设置控制台密码</span><br><span class="line">login                          启用登录验证</span><br><span class="line">line vty 0 4                   配置远程登录线路</span><br><span class="line">transport input telnet ssh     指定远程登录方式</span><br><span class="line">service password-encryption    对明文口令进行简单加密</span><br><span class="line"></span><br><span class="line">ip route 0.0.0.0 0.0.0.0 192.168.1.254   配置默认静态路由</span><br><span class="line">router rip                  启用 RIP 路由协议</span><br><span class="line">router ospf 1                启用 OSPF，进程号为 1</span><br><span class="line">network 192.168.1.0 0.0.0.255 area 0   宣告网络</span><br><span class="line"></span><br><span class="line">copy running-config startup-config   保存配置</span><br><span class="line">write memory                          保存配置（简写）</span><br><span class="line">reload                                重启路由器</span><br><span class="line"></span><br><span class="line">ping 8.8.8.8              测试网络连通性</span><br><span class="line">traceroute 8.8.8.8        路由路径跟踪</span><br><span class="line">debug ip routing          调试路由（慎用）</span><br><span class="line">undebug all               关闭所有调试</span><br></pre></td></tr></table></figure>
-
-
 <h2 id="6-WAF-通常无法防御哪种攻击？（-）"><a href="#6-WAF-通常无法防御哪种攻击？（-）" class="headerlink" title="6. WAF 通常无法防御哪种攻击？（ ）"></a>6. WAF 通常无法防御哪种攻击？（ ）</h2><p>A. <strong>HTTP 隧道</strong>  B. WebShell  C. SQL 注入  D. CSRF</p>
 <p><strong>正确答案：A</strong></p>
 <h3 id="解析-5"><a href="#解析-5" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>A. HTTP 隧道（正确）</strong><br>HTTP 隧道的原理是攻击者将恶意流量（如 C2 通信、数据窃取、端口扫描）封装在合法的 HTTP&#x2F;HTTPS 请求中，伪装成正常 Web 流量（例如通过图片上传、评论字段、Cookie 等传输加密数据）。</p>
-<p>WAF 的盲点：WAF 主要分析 HTTP&#x2F;HTTPS 协议层的语法和语义如参数格式、SQL 关键字、XSS 脚本特征，但无法理解封装在其中的应用层私有协议。如果隧道流量符合 HTTP 规范且不包含已知攻击特征（如 SQL 注入语句），WAF 会将其视为正常流量放行。</p>
+<li><p><strong>A. HTTP 隧道（正确）</strong><br>HTTP 隧道的原理是攻击者将恶意流量（如 C2 通信、数据窃取、端口扫描）封装在合法的 HTTP/HTTPS 请求中，伪装成正常 Web 流量（例如通过图片上传、评论字段、Cookie 等传输加密数据）。</p>
+<p>WAF 的盲点：WAF 主要分析 HTTP/HTTPS 协议层的语法和语义如参数格式、SQL 关键字、XSS 脚本特征，但无法理解封装在其中的应用层私有协议。如果隧道流量符合 HTTP 规范且不包含已知攻击特征（如 SQL 注入语句），WAF 会将其视为正常流量放行。</p>
 <p>WAF 难以区分加密混淆后的隧道数据与真实业务数据。</p>
 </li>
-<li><p>B. WebShell<br>WAF 可以有效防御常见的 WebShell 上传行为。它能检测文件上传请求中的恶意特征（如 <?php system($_GET['cmd']); ?>），可疑路径（如 &#x2F;uploads&#x2F;backdoor.php）或异常 HTTP 方法（如 PUT 上传）</p>
+<li><p>B. WebShell<br>WAF 可以有效防御常见的 WebShell 上传行为。它能检测文件上传请求中的恶意特征（如 &lt;?php system($_GET[‘cmd’]); ?&gt;），可疑路径（如 /uploads/backdoor.php）或异常 HTTP 方法（如 PUT 上传）</p>
 </li>
 <li><p>C. SQL 注入<br>这是 WAF 的核心防护场景之一，可基于关键字、语法特征进行检测。</p>
 </li>
@@ -590,14 +596,14 @@
 </ul>
 <h3 id="扩展-5"><a href="#扩展-5" class="headerlink" title="扩展"></a>扩展</h3><p>  HTTP 隧道就像把“坏东西”装进“正常快递盒子”里，WAF 只检查盒子外观，不会拆开看里面真正干了什么。</p>
 <p>  👉 HTTP 隧道把恶意行为藏在合法的 HTTP 请求里，WAF 只检查语法像不像攻击，看不懂真实内容（内容上没有明显的攻击特征，甚至还是加密的），所以容易被绕过，在 WAF 眼中这就是一个正常的请求。</p>
-<h2 id="7-Windows-通过什么子系统向内核请求服务？（-）"><a href="#7-Windows-通过什么子系统向内核请求服务？（-）" class="headerlink" title="7. Windows 通过什么子系统向内核请求服务？（ ）"></a>7. Windows 通过什么子系统向内核请求服务？（ ）</h2><p>A. <strong>Win32</strong>  B. POSIX  C. OS&#x2F;2  D. Linux</p>
+<h2 id="7-Windows-通过什么子系统向内核请求服务？（-）"><a href="#7-Windows-通过什么子系统向内核请求服务？（-）" class="headerlink" title="7. Windows 通过什么子系统向内核请求服务？（ ）"></a>7. Windows 通过什么子系统向内核请求服务？（ ）</h2><p>A. <strong>Win32</strong>  B. POSIX  C. OS/2  D. Linux</p>
 <p><strong>正确答案：A</strong></p>
 <h3 id="解析-6"><a href="#解析-6" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><p><strong>A. Win32（正确）</strong><br>Win32 子系统是 Windows 操作系统的核心子系统，也是唯一强制要求运行的子系统。所有 Windows 原生应用程序（无论是基于图形界面 GUI 还是命令行 CLI）都依赖 Win32 子系统运行。<br>当用户模式下的应用程序（例如记事本、浏览器等）需要访问操作系统核心功能（如文件操作、进程管理、内存分配、硬件访问等），会调用 Win32 API。因此，<strong>Win32 子系统是应用程序与 Windows 内核交互的主要和标准通道</strong>。</p>
 </li>
 <li><p>B. POSIX<br>Windows 历史上提供过 POSIX 子系统，用于运行符合 POSIX 标准的应用程序。它允许这些应用程序通过 POSIX API 调用内核服务。但是，POSIX 子系统是可选的，并非 Windows 核心架构的必需部分。</p>
 </li>
-<li><p>C. OS&#x2F;2<br>Windows NT 早期为了兼容性曾提供过 OS&#x2F;2 子系统，允许运行 OS&#x2F;2 1.x 字符模式应用程序。该子系统早已被废弃多年，在现代 Windows 中完全不存在。</p>
+<li><p>C. OS/2<br>Windows NT 早期为了兼容性曾提供过 OS/2 子系统，允许运行 OS/2 1.x 字符模式应用程序。该子系统早已被废弃多年，在现代 Windows 中完全不存在。</p>
 </li>
 <li><p>D. Linux<br>属于不同操作系统内核，与 Windows 无关。</p>
 </li>
@@ -618,14 +624,16 @@
 <li><p>C. 用户名</p>
 </li>
 </ul>
-<h3 id="扩展-7"><a href="#扩展-7" class="headerlink" title="扩展"></a>扩展</h3><table>
+<h3 id="扩展-7"><a href="#扩展-7" class="headerlink" title="扩展"></a>扩展</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>项目</th>
 <th>内容</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>版本号（version）</td>
 <td></td>
 </tr>
@@ -663,9 +671,10 @@
 </tr>
 <tr>
 <td>CRL 分发点（CRLDistributionPoints）</td>
-<td></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="9-var-log-wtmp-文件记录的内容是？（-）"><a href="#9-var-log-wtmp-文件记录的内容是？（-）" class="headerlink" title="9. /var/log/wtmp 文件记录的内容是？（ ）"></a>9. <code>/var/log/wtmp</code> 文件记录的内容是？（ ）</h2><p>A. 当前用户登录信息<br>B. <strong>用户登录和注销历史</strong><br>C. 系统启动日志<br>D. 内核错误日志</p>
 <p><strong>正确答案：B</strong></p>
 <h3 id="解析-8"><a href="#解析-8" class="headerlink" title="解析"></a>解析</h3><ul>
@@ -686,11 +695,11 @@
 <h2 id="10-CNCERT-的全称是？（-）"><a href="#10-CNCERT-的全称是？（-）" class="headerlink" title="10. CNCERT 的全称是？（ ）"></a>10. CNCERT 的全称是？（ ）</h2><p>A. 国家应急相应中心<br>B. 国家网络安全中心<br>C. <strong>中国互联网应急中心</strong><br>D. 国家信息安全中心</p>
 <p><strong>正确答案：C</strong></p>
 <h3 id="解析-9"><a href="#解析-9" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p>A. 国家应急相应中心<br>“应急响应中心”可以指很多领域（灾害、公共事件、网络、政务等），不具备 CNCERT 的“互联网&#x2F;网络应急”指向性。</p>
+<li><p>A. 国家应急相应中心<br>“应急响应中心”可以指很多领域（灾害、公共事件、网络、政务等），不具备 CNCERT 的“互联网/网络应急”指向性。</p>
 </li>
 <li><p>B. 国家网络安全中心<br>通常指代国家计算机网络与信息安全管理中心（NCNIPC），而非 CNCERT</p>
 </li>
-<li><p><strong>C. 中国互联网应急中心（正确）</strong><br>CNCERT在国内更常见、也更规范的中文对应叫法是：国家互联网应急中心（常用名）其机构全称常见表述为：国家计算机网络应急技术处理协调中心（CNCERT&#x2F;CC）<br>在很多教材&#x2F;考试题里，会把 CNCERT 直接对应到“中国（国家）互联网应急中心”这一类说法，所以在给定四个选项里，C 是最准确的匹配。</p>
+<li><p><strong>C. 中国互联网应急中心（正确）</strong><br>CNCERT在国内更常见、也更规范的中文对应叫法是：国家互联网应急中心（常用名）其机构全称常见表述为：国家计算机网络应急技术处理协调中心（CNCERT/CC）<br>在很多教材/考试题里，会把 CNCERT 直接对应到“中国（国家）互联网应急中心”这一类说法，所以在给定四个选项里，C 是最准确的匹配。</p>
 </li>
 <li><p>D. 国家信息安全中心<br>非标准名称，易与中国信息安全测评中心（CNITSEC）混淆</p>
 </li>
@@ -895,6 +904,7 @@
           <p>CWE（Common Weakness Enumeration，<strong>通用弱点枚举</strong>）可以理解为一份<strong>软件常见安全问题清单</strong>。</p>
 <p>它不是具体的漏洞编号（CVE），而是把各种程序和系统中<strong>容易犯的安全错误</strong>进行分类和编号，比如输入校验不严、权限控制错误、配置不当等。</p>
 <p>通过使用 CWE，开发人员可以在写代码和配置系统时提前避免这些常见问题，安全人员也可以用它来分析漏洞成因、指导加固和考试答题。在软考中，CWE 更多是用来<strong>说明漏洞属于哪一类错误和为什么会产生</strong>。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -903,7 +913,8 @@
 <th><strong>说明</strong></th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>CWE-16</td>
 <td>配置错误（常见）</td>
 <td>所有由于系统、软件、服务配置不当导致的安全问题</td>
@@ -915,7 +926,7 @@
 </tr>
 <tr>
 <td>CWE-22</td>
-<td>路径&#x2F;目录遍历</td>
+<td>路径/目录遍历</td>
 <td>攻击者通过构造包含特殊路径的输入，绕过目录限制，访问或读取本不应访问的文件</td>
 </tr>
 <tr>
@@ -958,7 +969,9 @@
 <td>任意文件读取</td>
 <td>由于文件或目录权限、访问策略配置不当，导致未授权用户可以直接访问或读取系统敏感文件或目录</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 
       
     </div>
@@ -1223,29 +1236,24 @@
     <div class="post-body" itemprop="articleBody">
           <h2 id="CodeQL-查询语句编写"><a href="#CodeQL-查询语句编写" class="headerlink" title="CodeQL 查询语句编写"></a>CodeQL 查询语句编写</h2><p>以python为例，编写一个简单的hello world codeql查询。首先需要使用 codeql 创建一个数据库，这样才能为其编写查询语句，使用如下命令创建数据库：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codeql database create test_db --language=python</span><br></pre></td></tr></table></figure>
-
 <p>此时文件中会多出一个文件夹 test_db 即为当前项目的 codeql 数据库。接下来需要编写查询语句，一个标准的 codeql 查询语句格式如下：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Query metadata</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">import <span class="comment">/* ... CodeQL libraries or modules ... */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* ... Optional, define CodeQL classes and predicates ... */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> <span class="comment">/* ... variable declarations ... */</span></span><br><span class="line"><span class="keyword">where</span> <span class="comment">/* ... logical formula ... */</span></span><br><span class="line"><span class="keyword">select</span> <span class="comment">/* ... expressions ... */</span></span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>语句可以简单理解为：<strong>通过 <code>import</code> 导入哪些库，然后<code>from</code>从哪些数据中，查找 <code>select</code>满足哪些条件<code>where</code>的结果。</strong></p>
 </blockquote>
 <p>为hello world简单编写一个查询</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> &quot;hello,world&quot;</span><br></pre></td></tr></table></figure>
-
 <p>使用 query run 子命令指定 test_db 数据库执行 helloworld.ql 查询语句</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codeql query run -d test_db/ helloworld.ql</span><br></pre></td></tr></table></figure>
-
 <p>执行成功，结果如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">codeql query run -d test_db/ helloworld.ql</span><br><span class="line"></span><br><span class="line">Compiling query plan <span class="keyword">for</span> /home/zyu/projects/python_codeql_demo/helloworld.ql.</span><br><span class="line">[1/1 comp 745ms] Compiled /home/zyu/projects/python_codeql_demo/helloworld.ql.</span><br><span class="line">helloworld.ql: Evaluation completed (45ms).</span><br><span class="line">|    col0     |</span><br><span class="line">+-------------+</span><br><span class="line">| hello,world |</span><br><span class="line">Shutting down query evaluator.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>除了这种 cli 的运行方式，codeql 还提供了另外两种运行方式，分别是 VScode插件和 CI&#x2F;CD 方式：</p>
+<p>除了这种 cli 的运行方式，codeql 还提供了另外两种运行方式，分别是 VScode插件和 CI/CD 方式：</p>
 <ul>
 <li><p>CodeQL_cli：适合对项目源码进行批量的规则扫描和检测，使用命令行进行操作；</p>
 </li>
 <li><p>VSCode插件：适合使用 CodeQL 辅助进行代码审计，使用 VSCode 进行操作；</p>
 </li>
-<li><p>CI&#x2F;CD：结合规则库将 CodeQL 添加进 CI&#x2F;CD 流程进行持续化的项目安全管理，在 CI&#x2F;CD 流程中自动执行；</p>
+<li><p>CI/CD：结合规则库将 CodeQL 添加进 CI/CD 流程进行持续化的项目安全管理，在 CI/CD 流程中自动执行；</p>
 </li>
 </ul>
           <!--noindex-->
@@ -1336,19 +1344,17 @@
           <h2 id="Linux服务器系统资源查看"><a href="#Linux服务器系统资源查看" class="headerlink" title="Linux服务器系统资源查看"></a>Linux服务器系统资源查看</h2><p>系统性地查看 Linux 服务器资源，也就是看CPU、内存、磁盘、网络、负载、系统等这几个层面，就能了解服务器性能以及运行情况。</p>
 <h3 id="uptime"><a href="#uptime" class="headerlink" title="uptime"></a>uptime</h3><p>查看系统负载和运行时间</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uptime</span></span><br><span class="line"></span><br><span class="line">10:35:15 up  1:34, 13 <span class="built_in">users</span>,  load average: 0.41, 0.30, 0.25</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><code>10:35:15</code> 表示当前系统时间是 10 点 35 分 15 秒，<code>up 1:34</code> 表示系统已经连续运行了 1 小时 34 分钟，<code>13 users</code>表示当前有 13 个用户会话登录到系统中，<code>load average: 0.41, 0.30, 0.25</code> 表示系统负载均值（Load Average），表示正在运行 + 等待运行的进程数量的平均值，三个数字分别表示最近1&#x2F;5&#x2F;15 分钟的平均负载。</p>
+<p><code>10:35:15</code> 表示当前系统时间是 10 点 35 分 15 秒，<code>up 1:34</code> 表示系统已经连续运行了 1 小时 34 分钟，<code>13 users</code>表示当前有 13 个用户会话登录到系统中，<code>load average: 0.41, 0.30, 0.25</code> 表示系统负载均值（Load Average），表示正在运行 + 等待运行的进程数量的平均值，三个数字分别表示最近1/5/15 分钟的平均负载。</p>
 <blockquote>
-<p><strong>Load Average &#x3D; 在某段时间内，处于「可运行状态」和「不可中断睡眠状态」进程数量的指数加权移动平均（EWMA），统计的是想用 CPU 的进程有多少。</strong></p>
+<p><strong>Load Average = 在某段时间内，处于「可运行状态」和「不可中断睡眠状态」进程数量的指数加权移动平均（EWMA），统计的是想用 CPU 的进程有多少。</strong></p>
 </blockquote>
 <h3 id="top"><a href="#top" class="headerlink" title="top"></a>top</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">top</span><br><span class="line"></span><br><span class="line">top - 10:52:33 up  1:52, 11 <span class="built_in">users</span>,  load average: 1.14, 0.57, 0.32</span><br><span class="line">Tasks: 2645 total,   2 running, 2643 sleeping,   0 stopped,   0 zombie</span><br><span class="line">%Cpu(s):  0.1 us,  0.0 sy,  0.0 ni, 99.8 <span class="built_in">id</span>,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span><br><span class="line">MiB Mem : 10 total, 8 free,  6 used,  4 buff/cache</span><br><span class="line">MiB Swap:  3 total, 2 free,  1 used.  2 avail Mem</span><br><span class="line"></span><br><span class="line">    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND</span><br><span class="line">  77552 xrdp      20   0   50360  20344   6856 R  18.0   0.0   0:30.70 xrdp</span><br><span class="line">  77960 mark      20   0 9361988 422920 185124 S  14.1   0.1   0:59.67 gnome-shell</span><br><span class="line">  77569 mark      20   0  382544 138588  80324 S   5.6   0.0   0:11.17 Xorg</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <p>详解 top 输出命令内容：</p>
 <p>第一行表示时间、运行时长、登录用户、平均负载；</p>
-<p>第二行展示了任务数和进程状态，包含进程&#x2F;线程统计总数、正在 CPU 上运行的（或准备运行的）任务数、睡眠、进程和僵尸进程数量；</p>
-<p>第三行展示了 CPU 使用构成，us用户态、sy内核态、ni被nice调整过优先级的用户态进程、id (idle) CPU空闲率、wa CPU在等 IO（磁盘&#x2F;网络存储）导致空转等待率，hi硬中断消耗，si软中断消耗；</p>
-<p>第四行展示了内存：total总内存、free完全空闲内存、used真正被进程使用的内存、buff&#x2F;cache文件缓存块设备缓存；</p>
-<p>第五行展示了 Swap 交换分区，Swap（交换分区&#x2F;交换文件）是内存不足时的“备用空间”，当 物理内存（RAM）不够用 时，Linux 会把暂时不用的内存页交换到磁盘上的 swap 中，从而防止系统因内存耗尽而直接崩溃（OOM），让系统还能继续运行；</p>
+<p>第二行展示了任务数和进程状态，包含进程/线程统计总数、正在 CPU 上运行的（或准备运行的）任务数、睡眠、进程和僵尸进程数量；</p>
+<p>第三行展示了 CPU 使用构成，us用户态、sy内核态、ni被nice调整过优先级的用户态进程、id (idle) CPU空闲率、wa CPU在等 IO（磁盘/网络存储）导致空转等待率，hi硬中断消耗，si软中断消耗；</p>
+<p>第四行展示了内存：total总内存、free完全空闲内存、used真正被进程使用的内存、buff/cache文件缓存块设备缓存；</p>
+<p>第五行展示了 Swap 交换分区，Swap（交换分区/交换文件）是内存不足时的“备用空间”，当 物理内存（RAM）不够用 时，Linux 会把暂时不用的内存页交换到磁盘上的 swap 中，从而防止系统因内存耗尽而直接崩溃（OOM），让系统还能继续运行；</p>
 <p>下面展示了系统进程的详细信息：</p>
 <p>表头：</p>
 <p><code>PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND</code></p>
@@ -1360,29 +1366,24 @@
 <p>RES：常驻内存（实际占用物理内存，最值得关注）</p>
 <p>SHR：共享内存部分（共享库等）</p>
 <p>S：状态</p>
-<p>R&#x3D;运行，S&#x3D;睡眠，D&#x3D;不可中断睡眠(常见 IO 卡住)，Z&#x3D;僵尸</p>
+<p>R=运行，S=睡眠，D=不可中断睡眠(常见 IO 卡住)，Z=僵尸</p>
 <p>%CPU：CPU 占比（注意：多核时可能 &gt;100%）</p>
 <p>%MEM：内存占比</p>
 <p>TIME+：累计消耗 CPU 时间</p>
 <p>COMMAND：命令名</p>
 <h3 id="lscpu"><a href="#lscpu" class="headerlink" title="lscpu"></a>lscpu</h3><p>查看 cpu 架构，重点关注 CPU 型号、数量、解构等信息</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Architecture: x86_64</span><br><span class="line"></span><br><span class="line">Model name: AMD</span><br><span class="line"></span><br><span class="line">CPU(s):                2</span><br><span class="line">Thread(s) per core:    2</span><br><span class="line">Core(s) per socket:    1</span><br><span class="line">Socket(s):             1</span><br></pre></td></tr></table></figure>
-
 <h3 id="free-h"><a href="#free-h" class="headerlink" title="free -h"></a>free -h</h3><p>查看内存资源</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">free -h</span><br><span class="line">             total       used      free      shared  buff/cache   available</span><br><span class="line">Mem:           5Gi        1Gi       4Gi        87Mi         1Gi         3Gi</span><br><span class="line">Swap:          1Gi         0B       1Gi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <h3 id="df-h"><a href="#df-h" class="headerlink" title="df -h"></a>df -h</h3><p>查看磁盘资源</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br><span class="line"></span><br><span class="line">Filesystem      Size  Used Avail  Use%  Mounted on</span><br><span class="line">tmpfs             2G  3.9M    1G   50%  /run</span><br><span class="line">/dev/nvme        10G    5G    5G   50%  /</span><br><span class="line">......</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <h3 id="ip-s-link"><a href="#ip-s-link" class="headerlink" title="ip -s link"></a>ip -s link</h3><p>查看网络资源，这个要视情况而定，还有ss、netstat等命令。</p>
 <h3 id="uname-a"><a href="#uname-a" class="headerlink" title="uname -a"></a>uname -a</h3><p>查看系统及内核版本</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> /etc/os-release</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <h3 id="lspci"><a href="#lspci" class="headerlink" title="lspci"></a>lspci</h3><p>查看系统中安装的所有PCI设备。</p>
 <h3 id="nvidia-smi"><a href="#nvidia-smi" class="headerlink" title="nvidia-smi"></a>nvidia-smi</h3><p>查看显卡型号。</p>
 <h2 id="服务器使用规范"><a href="#服务器使用规范" class="headerlink" title="服务器使用规范"></a>服务器使用规范</h2><p>w 或 who 查看当前在线登录的用户</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 查看当前系统下的所有用户</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建用户</span></span><br><span class="line"><span class="built_in">sudo</span> useradd name</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> useradd -m -s /bin/bash name</span><br><span class="line"></span><br><span class="line"><span class="comment"># -m 自动创建家目录，-s指定shell</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为新用户指定密码</span></span><br><span class="line"><span class="built_in">sudo</span> passwd name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给新用户追加到 sudo 组</span></span><br><span class="line"><span class="built_in">sudo</span> usermod -aG <span class="built_in">sudo</span> name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 简化版，添加用户时即指定其加入sudo组</span></span><br><span class="line"><span class="built_in">sudo</span> useradd -m -s /bin/bash -G <span class="built_in">sudo</span> name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换用户环境 - 表示加载用户环境</span></span><br><span class="line">su - name </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 
       
     </div>
@@ -1477,35 +1478,29 @@
 </ul>
 <p>虚拟环境配置：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conda create -n vulnhalla python=3.11</span><br><span class="line"></span><br><span class="line">conda activate vulnhalla</span><br><span class="line"></span><br><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
-
 <p>miniconda 下载可参考这篇文章：<a href="/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/" title="Miniconda安装">Miniconda安装</a>。</p>
 <p>配置文件修改 project 中以 OpenAI gpt-4o为例：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CODEQL_PATH=codeql</span><br><span class="line">GITHUB_TOKEN=ghp_your_token_here</span><br><span class="line">PROVIDER=openai</span><br><span class="line">MODEL=gpt-4o</span><br><span class="line">OPENAI_API_KEY=your-api-key-here</span><br><span class="line">LLM_TEMPERATURE=0.2</span><br><span class="line">LLM_TOP_P=0.2</span><br><span class="line"></span><br><span class="line"># Optional: Logging Configuration</span><br><span class="line">LOG_LEVEL=INFO                  # DEBUG, INFO, WARNING, ERROR</span><br><span class="line">LOG_FILE=                       # Optional: path to log file (e.g., logs/vulnhalla.log)</span><br><span class="line">LOG_FORMAT=default              # default or json</span><br><span class="line"># LOG_VERBOSE_CONSOLE=false     # If true, WARNING/ERROR use full format (timestamp - logger - level - message)</span><br></pre></td></tr></table></figure>
-
 <p>参数解析：</p>
 <ul>
 <li>CODEQL_PATH：指定 CodeQL 可执行文件的路径或命令名，用于运行代码安全分析（如漏洞扫描）。如果已加入系统 PATH，直接写 codeql 即可；</li>
 <li>GITHUB_TOKEN：GitHub 访问令牌，用于访问私有仓库、拉取代码、调用 GitHub API（如获取 PR、Issue、仓库信息等）；</li>
-<li>PROVIDER&#x2F;MODEL&#x2F;OPENAI_API_KEY：大模型相关配置，可替换为对应厂商；</li>
+<li>PROVIDER/MODEL/OPENAI_API_KEY：大模型相关配置，可替换为对应厂商；</li>
 <li>LLM_TEMPERATURE：控制模型输出的随机性，值越低输出越稳定、保守，适合分析、审计、代码检查等场景；</li>
 <li>LLM_TOP_P：控制采样范围（nucleus sampling），限制模型在高概率词汇中选择，进一步提升结果一致性和可控性；</li>
-<li>LOG_LEVEL&#x3D;INFO：日志级别，控制输出信息的详细程度，DEBUG是最详细的；</li>
+<li>LOG_LEVEL=INFO：日志级别，控制输出信息的详细程度，DEBUG是最详细的；</li>
 <li>LOG_FILE：日志文件输出路径，留空表示仅输出到控制台；</li>
-<li>LOG_FORMAT&#x2F;LOG_VERBOSE_CONSOLE：日志格式和日志记录格式；</li>
+<li>LOG_FORMAT/LOG_VERBOSE_CONSOLE：日志格式和日志记录格式；</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> .env.example .<span class="built_in">env</span></span><br><span class="line"></span><br><span class="line">python setup.py</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化CodeQL套件</span></span><br><span class="line"><span class="built_in">cd</span> data/queries/cpp/tools</span><br><span class="line">codeql pack install</span><br><span class="line"><span class="built_in">cd</span> ../issues</span><br><span class="line">codeql pack install</span><br><span class="line"><span class="built_in">cd</span> ../../../..</span><br></pre></td></tr></table></figure>
-
 <p>使用单个命令运行完整的 pipeline：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Analyze a specific repository</span></span><br><span class="line">python src/pipeline.py redis/redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># Analyze top 100 repositories</span></span><br><span class="line">python src/pipeline.py</span><br></pre></td></tr></table></figure>
-
-<p>这个 pipeline 会自动执行：获取CodeQL数据库，在所有下载的数据库上运行 CodeQL 查询，使用 LLM 分析结果并保存到 output&#x2F;results&#x2F;，打开 UI 浏览结果。</p>
+<p>这个 pipeline 会自动执行：获取CodeQL数据库，在所有下载的数据库上运行 CodeQL 查询，使用 LLM 分析结果并保存到 output/results/，打开 UI 浏览结果。</p>
 <p>Project 还提供了一个示例脚本，运行一个端到端示例：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python examples/example.py</span><br></pre></td></tr></table></figure>
-
-<p>这个 example 会获取 videolan&#x2F;vlc 和 redis&#x2F;redis 的 CodeQL 数据库，在所有下载的数据库上运行 CodeQL 查询，使用 LLM 分析结果并保存到 output&#x2F;results&#x2F;。</p>
+<p>这个 example 会获取 videolan/vlc 和 redis/redis 的 CodeQL 数据库，在所有下载的数据库上运行 CodeQL 查询，使用 LLM 分析结果并保存到 output/results/。</p>
 <p>Vulnhalla 包含一个功能齐全的用户界面，用于浏览和探索分析结果。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python src/ui/ui_app.py</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">python examples/ui_example.py</span><br></pre></td></tr></table></figure>
-
 <p>至此，Vulnhalla 环境配置完成，可运行一个完整 pipeline。</p>
 
       
@@ -1594,20 +1589,20 @@
 <li>服务器进程管理</li>
 </ol>
 <ul>
-<li>启动&#x2F;停止 ：通过 start() 和 stop() 方法管理 CodeQL 子进程</li>
-<li>进程通信 ：使用标准输入&#x2F;输出进行 JSON-RPC 通信</li>
+<li>启动/停止 ：通过 start() 和 stop() 方法管理 CodeQL 子进程</li>
+<li>进程通信 ：使用标准输入/输出进行 JSON-RPC 通信</li>
 <li>线程管理 ：<ul>
 <li>_read_loop() ：主线程，读取服务器响应；_stderr_loop() ：处理标准错误输出；异步处理：支持并发请求</li>
 </ul>
 </li>
 </ul>
-<ol start="2">
+<ol>
 <li>通信协议层</li>
 </ol>
 <ul>
-<li>JSON-RPC 2.0：定义消息格式，请求&#x2F;响应结构，支持异步调用</li>
+<li>JSON-RPC 2.0：定义消息格式，请求/响应结构，支持异步调用</li>
 </ul>
-<ol start="3">
+<ol>
 <li>功能模块</li>
 </ol>
 <ul>

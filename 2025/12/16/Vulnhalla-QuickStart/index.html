@@ -297,35 +297,29 @@
 </ul>
 <p>虚拟环境配置：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conda create -n vulnhalla python=3.11</span><br><span class="line"></span><br><span class="line">conda activate vulnhalla</span><br><span class="line"></span><br><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
-
 <p>miniconda 下载可参考这篇文章：<a href="/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/" title="Miniconda安装">Miniconda安装</a>。</p>
 <p>配置文件修改 project 中以 OpenAI gpt-4o为例：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CODEQL_PATH=codeql</span><br><span class="line">GITHUB_TOKEN=ghp_your_token_here</span><br><span class="line">PROVIDER=openai</span><br><span class="line">MODEL=gpt-4o</span><br><span class="line">OPENAI_API_KEY=your-api-key-here</span><br><span class="line">LLM_TEMPERATURE=0.2</span><br><span class="line">LLM_TOP_P=0.2</span><br><span class="line"></span><br><span class="line"># Optional: Logging Configuration</span><br><span class="line">LOG_LEVEL=INFO                  # DEBUG, INFO, WARNING, ERROR</span><br><span class="line">LOG_FILE=                       # Optional: path to log file (e.g., logs/vulnhalla.log)</span><br><span class="line">LOG_FORMAT=default              # default or json</span><br><span class="line"># LOG_VERBOSE_CONSOLE=false     # If true, WARNING/ERROR use full format (timestamp - logger - level - message)</span><br></pre></td></tr></table></figure>
-
 <p>参数解析：</p>
 <ul>
 <li>CODEQL_PATH：指定 CodeQL 可执行文件的路径或命令名，用于运行代码安全分析（如漏洞扫描）。如果已加入系统 PATH，直接写 codeql 即可；</li>
 <li>GITHUB_TOKEN：GitHub 访问令牌，用于访问私有仓库、拉取代码、调用 GitHub API（如获取 PR、Issue、仓库信息等）；</li>
-<li>PROVIDER&#x2F;MODEL&#x2F;OPENAI_API_KEY：大模型相关配置，可替换为对应厂商；</li>
+<li>PROVIDER/MODEL/OPENAI_API_KEY：大模型相关配置，可替换为对应厂商；</li>
 <li>LLM_TEMPERATURE：控制模型输出的随机性，值越低输出越稳定、保守，适合分析、审计、代码检查等场景；</li>
 <li>LLM_TOP_P：控制采样范围（nucleus sampling），限制模型在高概率词汇中选择，进一步提升结果一致性和可控性；</li>
-<li>LOG_LEVEL&#x3D;INFO：日志级别，控制输出信息的详细程度，DEBUG是最详细的；</li>
+<li>LOG_LEVEL=INFO：日志级别，控制输出信息的详细程度，DEBUG是最详细的；</li>
 <li>LOG_FILE：日志文件输出路径，留空表示仅输出到控制台；</li>
-<li>LOG_FORMAT&#x2F;LOG_VERBOSE_CONSOLE：日志格式和日志记录格式；</li>
+<li>LOG_FORMAT/LOG_VERBOSE_CONSOLE：日志格式和日志记录格式；</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> .env.example .<span class="built_in">env</span></span><br><span class="line"></span><br><span class="line">python setup.py</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化CodeQL套件</span></span><br><span class="line"><span class="built_in">cd</span> data/queries/cpp/tools</span><br><span class="line">codeql pack install</span><br><span class="line"><span class="built_in">cd</span> ../issues</span><br><span class="line">codeql pack install</span><br><span class="line"><span class="built_in">cd</span> ../../../..</span><br></pre></td></tr></table></figure>
-
 <p>使用单个命令运行完整的 pipeline：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Analyze a specific repository</span></span><br><span class="line">python src/pipeline.py redis/redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># Analyze top 100 repositories</span></span><br><span class="line">python src/pipeline.py</span><br></pre></td></tr></table></figure>
-
-<p>这个 pipeline 会自动执行：获取CodeQL数据库，在所有下载的数据库上运行 CodeQL 查询，使用 LLM 分析结果并保存到 output&#x2F;results&#x2F;，打开 UI 浏览结果。</p>
+<p>这个 pipeline 会自动执行：获取CodeQL数据库，在所有下载的数据库上运行 CodeQL 查询，使用 LLM 分析结果并保存到 output/results/，打开 UI 浏览结果。</p>
 <p>Project 还提供了一个示例脚本，运行一个端到端示例：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python examples/example.py</span><br></pre></td></tr></table></figure>
-
-<p>这个 example 会获取 videolan&#x2F;vlc 和 redis&#x2F;redis 的 CodeQL 数据库，在所有下载的数据库上运行 CodeQL 查询，使用 LLM 分析结果并保存到 output&#x2F;results&#x2F;。</p>
+<p>这个 example 会获取 videolan/vlc 和 redis/redis 的 CodeQL 数据库，在所有下载的数据库上运行 CodeQL 查询，使用 LLM 分析结果并保存到 output/results/。</p>
 <p>Vulnhalla 包含一个功能齐全的用户界面，用于浏览和探索分析结果。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python src/ui/ui_app.py</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">python examples/ui_example.py</span><br></pre></td></tr></table></figure>
-
 <p>至此，Vulnhalla 环境配置完成，可运行一个完整 pipeline。</p>
 
     </div>

@@ -315,9 +315,9 @@
 </ul>
 <h3 id="扩展-1"><a href="#扩展-1" class="headerlink" title="扩展"></a>扩展</h3><p>Linux 日志分两类：内核日志和用户态日志。</p>
 <p>内核日志（Kernel Log）由内核态（kernel）输出，如 printk()，典型内容包括驱动加载、硬件识别、内核错误、OOM、panic、网络栈信息等，存储在ring buffer（环形缓冲区）中，可以使用命令 <code>dmesg</code> 查看。</p>
-<p>用户态日志的来源是用户空间程序&#x2F;服务，如 sshd、nginx、应用程序、cron 等，包含访问日志、错误日志、认证日志、系统服务日志等，一般落地到 &#x2F;var&#x2F;log&#x2F; 目录下各种文件。</p>
-<p>内核日志输出链路：内核通过 printk() 输出日志，写入 kernel ring buffer（环形缓冲区），klogd 从 ring buffer 把日志读出来，然后交给 syslogd&#x2F;rsyslogd，syslogd&#x2F;rsyslogd 按配置写入 &#x2F;var&#x2F;log&#x2F;messages 等文件。在传统体系下可以理解为：<code>klogd负责读取/接收内核日志</code>。</p>
-<p>rsyslog&#x2F;syslogd 的主要职责：它们的主要工作是处理来自用户空间应用程序（通过 syslog() API 调用）以及来自 klogd 转发过来的内核消息的系统日志。它们本身不直接读取内核环形缓冲区。</p>
+<p>用户态日志的来源是用户空间程序/服务，如 sshd、nginx、应用程序、cron 等，包含访问日志、错误日志、认证日志、系统服务日志等，一般落地到 /var/log/ 目录下各种文件。</p>
+<p>内核日志输出链路：内核通过 printk() 输出日志，写入 kernel ring buffer（环形缓冲区），klogd 从 ring buffer 把日志读出来，然后交给 syslogd/rsyslogd，syslogd/rsyslogd 按配置写入 /var/log/messages 等文件。在传统体系下可以理解为：<code>klogd负责读取/接收内核日志</code>。</p>
+<p>rsyslog/syslogd 的主要职责：它们的主要工作是处理来自用户空间应用程序（通过 syslog() API 调用）以及来自 klogd 转发过来的内核消息的系统日志。它们本身不直接读取内核环形缓冲区。</p>
 <p>但现代 Linux 多数使用 systemd，systemd-journald 扮演了 klogd + syslogd 的部分角色。</p>
 <h2 id="3-MySQL-中撤销用户权限的命令是（-）"><a href="#3-MySQL-中撤销用户权限的命令是（-）" class="headerlink" title="3. MySQL 中撤销用户权限的命令是（ ）"></a>3. MySQL 中撤销用户权限的命令是（ ）</h2><p>A. REMOVE  B. DELETE  C. <strong>REVOKE</strong>  D. DENY</p>
 <p><strong>正确答案：C</strong></p>
@@ -337,16 +337,16 @@
 <h3 id="解析-3"><a href="#解析-3" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><p><strong>A. Doly Trojan（正确）</strong><br>Doly Trojan（多利木马）通常是早期中文安全资料或部分病毒库中出现过的一类“木马”名称，属于 Trojan（木马程序） 的范畴。Doly Trojan 是一个比较古老的 Windows 特洛伊木马，它的主要传播机制就是利用受害者的计算机，通过其 25 端口（SMTP）向外大量发送携带自身副本的垃圾邮件。它将自己伪装成看似无害的文件（如游戏、破解工具等），诱骗用户运行。一旦激活，它会尝试通过电子邮件附件传播给受害者通讯录中的地址或随机生成的邮件地址。</p>
 </li>
-<li><p>B. WinCrash<br>WinCrash从名字看更像是“导致 Windows 崩溃&#x2F;死机”的程序名或病毒名，可能是某类恶意程序&#x2F;病毒的名称，或者一个破坏性工具（让系统崩溃、蓝屏、拒绝服务）。</p>
+<li><p>B. WinCrash<br>WinCrash从名字看更像是“导致 Windows 崩溃/死机”的程序名或病毒名，可能是某类恶意程序/病毒的名称，或者一个破坏性工具（让系统崩溃、蓝屏、拒绝服务）。</p>
 </li>
 <li><p>C. WinPC<br>WinPC这个词本身是一个泛称，字面意思就是 Windows Personal Computer（Windows 个人电脑）</p>
 </li>
-<li><p>D. FTP Trojan<br>FTP Trojan通常指“通过 FTP 相关方式传播或利用 FTP 服务的木马”，常见含义有两种：（1）通过 FTP 传播&#x2F;上传下载恶意代码的木马；（2）针对 FTP 服务的后门&#x2F;木马 注意FTP端口号是21，而25是SMTP邮件端口号。</p>
+<li><p>D. FTP Trojan<br>FTP Trojan通常指“通过 FTP 相关方式传播或利用 FTP 服务的木马”，常见含义有两种：（1）通过 FTP 传播/上传下载恶意代码的木马；（2）针对 FTP 服务的后门/木马 注意FTP端口号是21，而25是SMTP邮件端口号。</p>
 </li>
 </ul>
 <h3 id="扩展-3"><a href="#扩展-3" class="headerlink" title="扩展"></a>扩展</h3><ul>
 <li>端口与攻击方式是<strong>固定考点</strong>，如果不知道 trojan 类型，可以根据协议和端口进行分析</li>
-<li>25 端口几乎必然与 <strong>邮件攻击 &#x2F; 蠕虫传播</strong> 关联</li>
+<li>25 端口几乎必然与 <strong>邮件攻击 / 蠕虫传播</strong> 关联</li>
 </ul>
 <h2 id="5-路由器配置中用于加密特权模式口令的命令是（-）"><a href="#5-路由器配置中用于加密特权模式口令的命令是（-）" class="headerlink" title="5. 路由器配置中用于加密特权模式口令的命令是（ ）"></a>5. 路由器配置中用于加密特权模式口令的命令是（ ）</h2><p>A. <strong>enable secret</strong>  B. secpwd  C. encryption  D. password-encrypt</p>
 <p><strong>正确答案：A</strong></p>
@@ -362,16 +362,14 @@
 </ul>
 <h3 id="扩展-4"><a href="#扩展-4" class="headerlink" title="扩展"></a>扩展</h3><p>思科路由器常见操作命令：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">show running-config        查看当前运行配置</span><br><span class="line">show startup-config        查看启动配置</span><br><span class="line">show ip interface brief    查看接口 IP 与状态汇总</span><br><span class="line">show version               查看 IOS 版本、设备型号、运行时间</span><br><span class="line">show interfaces            查看接口详细信息</span><br><span class="line">show arp                   查看 ARP 表</span><br><span class="line">show ip route              查看路由表</span><br><span class="line"></span><br><span class="line">enable                     进入特权执行模式</span><br><span class="line">configure terminal         进入全局配置模式</span><br><span class="line">exit                       退出当前模式</span><br><span class="line">end                        直接返回特权执行模式</span><br><span class="line">disable                    从特权模式退回用户模式</span><br><span class="line"></span><br><span class="line">interface GigabitEthernet0/0   进入接口配置模式</span><br><span class="line">ip address 192.168.1.1 255.255.255.0   配置接口 IP 地址</span><br><span class="line">no shutdown                启用接口</span><br><span class="line">shutdown                   关闭接口</span><br><span class="line">description LAN Interface  配置接口描述</span><br><span class="line"></span><br><span class="line">enable secret cisco123         设置特权模式加密密码</span><br><span class="line">line console 0                 进入控制台线路配置</span><br><span class="line">password cisco                 设置控制台密码</span><br><span class="line">login                          启用登录验证</span><br><span class="line">line vty 0 4                   配置远程登录线路</span><br><span class="line">transport input telnet ssh     指定远程登录方式</span><br><span class="line">service password-encryption    对明文口令进行简单加密</span><br><span class="line"></span><br><span class="line">ip route 0.0.0.0 0.0.0.0 192.168.1.254   配置默认静态路由</span><br><span class="line">router rip                  启用 RIP 路由协议</span><br><span class="line">router ospf 1                启用 OSPF，进程号为 1</span><br><span class="line">network 192.168.1.0 0.0.0.255 area 0   宣告网络</span><br><span class="line"></span><br><span class="line">copy running-config startup-config   保存配置</span><br><span class="line">write memory                          保存配置（简写）</span><br><span class="line">reload                                重启路由器</span><br><span class="line"></span><br><span class="line">ping 8.8.8.8              测试网络连通性</span><br><span class="line">traceroute 8.8.8.8        路由路径跟踪</span><br><span class="line">debug ip routing          调试路由（慎用）</span><br><span class="line">undebug all               关闭所有调试</span><br></pre></td></tr></table></figure>
-
-
 <h2 id="6-WAF-通常无法防御哪种攻击？（-）"><a href="#6-WAF-通常无法防御哪种攻击？（-）" class="headerlink" title="6. WAF 通常无法防御哪种攻击？（ ）"></a>6. WAF 通常无法防御哪种攻击？（ ）</h2><p>A. <strong>HTTP 隧道</strong>  B. WebShell  C. SQL 注入  D. CSRF</p>
 <p><strong>正确答案：A</strong></p>
 <h3 id="解析-5"><a href="#解析-5" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>A. HTTP 隧道（正确）</strong><br>HTTP 隧道的原理是攻击者将恶意流量（如 C2 通信、数据窃取、端口扫描）封装在合法的 HTTP&#x2F;HTTPS 请求中，伪装成正常 Web 流量（例如通过图片上传、评论字段、Cookie 等传输加密数据）。</p>
-<p>WAF 的盲点：WAF 主要分析 HTTP&#x2F;HTTPS 协议层的语法和语义如参数格式、SQL 关键字、XSS 脚本特征，但无法理解封装在其中的应用层私有协议。如果隧道流量符合 HTTP 规范且不包含已知攻击特征（如 SQL 注入语句），WAF 会将其视为正常流量放行。</p>
+<li><p><strong>A. HTTP 隧道（正确）</strong><br>HTTP 隧道的原理是攻击者将恶意流量（如 C2 通信、数据窃取、端口扫描）封装在合法的 HTTP/HTTPS 请求中，伪装成正常 Web 流量（例如通过图片上传、评论字段、Cookie 等传输加密数据）。</p>
+<p>WAF 的盲点：WAF 主要分析 HTTP/HTTPS 协议层的语法和语义如参数格式、SQL 关键字、XSS 脚本特征，但无法理解封装在其中的应用层私有协议。如果隧道流量符合 HTTP 规范且不包含已知攻击特征（如 SQL 注入语句），WAF 会将其视为正常流量放行。</p>
 <p>WAF 难以区分加密混淆后的隧道数据与真实业务数据。</p>
 </li>
-<li><p>B. WebShell<br>WAF 可以有效防御常见的 WebShell 上传行为。它能检测文件上传请求中的恶意特征（如 <?php system($_GET['cmd']); ?>），可疑路径（如 &#x2F;uploads&#x2F;backdoor.php）或异常 HTTP 方法（如 PUT 上传）</p>
+<li><p>B. WebShell<br>WAF 可以有效防御常见的 WebShell 上传行为。它能检测文件上传请求中的恶意特征（如 &lt;?php system($_GET[‘cmd’]); ?&gt;），可疑路径（如 /uploads/backdoor.php）或异常 HTTP 方法（如 PUT 上传）</p>
 </li>
 <li><p>C. SQL 注入<br>这是 WAF 的核心防护场景之一，可基于关键字、语法特征进行检测。</p>
 </li>
@@ -380,14 +378,14 @@
 </ul>
 <h3 id="扩展-5"><a href="#扩展-5" class="headerlink" title="扩展"></a>扩展</h3><p>  HTTP 隧道就像把“坏东西”装进“正常快递盒子”里，WAF 只检查盒子外观，不会拆开看里面真正干了什么。</p>
 <p>  👉 HTTP 隧道把恶意行为藏在合法的 HTTP 请求里，WAF 只检查语法像不像攻击，看不懂真实内容（内容上没有明显的攻击特征，甚至还是加密的），所以容易被绕过，在 WAF 眼中这就是一个正常的请求。</p>
-<h2 id="7-Windows-通过什么子系统向内核请求服务？（-）"><a href="#7-Windows-通过什么子系统向内核请求服务？（-）" class="headerlink" title="7. Windows 通过什么子系统向内核请求服务？（ ）"></a>7. Windows 通过什么子系统向内核请求服务？（ ）</h2><p>A. <strong>Win32</strong>  B. POSIX  C. OS&#x2F;2  D. Linux</p>
+<h2 id="7-Windows-通过什么子系统向内核请求服务？（-）"><a href="#7-Windows-通过什么子系统向内核请求服务？（-）" class="headerlink" title="7. Windows 通过什么子系统向内核请求服务？（ ）"></a>7. Windows 通过什么子系统向内核请求服务？（ ）</h2><p>A. <strong>Win32</strong>  B. POSIX  C. OS/2  D. Linux</p>
 <p><strong>正确答案：A</strong></p>
 <h3 id="解析-6"><a href="#解析-6" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><p><strong>A. Win32（正确）</strong><br>Win32 子系统是 Windows 操作系统的核心子系统，也是唯一强制要求运行的子系统。所有 Windows 原生应用程序（无论是基于图形界面 GUI 还是命令行 CLI）都依赖 Win32 子系统运行。<br>当用户模式下的应用程序（例如记事本、浏览器等）需要访问操作系统核心功能（如文件操作、进程管理、内存分配、硬件访问等），会调用 Win32 API。因此，<strong>Win32 子系统是应用程序与 Windows 内核交互的主要和标准通道</strong>。</p>
 </li>
 <li><p>B. POSIX<br>Windows 历史上提供过 POSIX 子系统，用于运行符合 POSIX 标准的应用程序。它允许这些应用程序通过 POSIX API 调用内核服务。但是，POSIX 子系统是可选的，并非 Windows 核心架构的必需部分。</p>
 </li>
-<li><p>C. OS&#x2F;2<br>Windows NT 早期为了兼容性曾提供过 OS&#x2F;2 子系统，允许运行 OS&#x2F;2 1.x 字符模式应用程序。该子系统早已被废弃多年，在现代 Windows 中完全不存在。</p>
+<li><p>C. OS/2<br>Windows NT 早期为了兼容性曾提供过 OS/2 子系统，允许运行 OS/2 1.x 字符模式应用程序。该子系统早已被废弃多年，在现代 Windows 中完全不存在。</p>
 </li>
 <li><p>D. Linux<br>属于不同操作系统内核，与 Windows 无关。</p>
 </li>
@@ -408,14 +406,16 @@
 <li><p>C. 用户名</p>
 </li>
 </ul>
-<h3 id="扩展-7"><a href="#扩展-7" class="headerlink" title="扩展"></a>扩展</h3><table>
+<h3 id="扩展-7"><a href="#扩展-7" class="headerlink" title="扩展"></a>扩展</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>项目</th>
 <th>内容</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>版本号（version）</td>
 <td></td>
 </tr>
@@ -453,9 +453,10 @@
 </tr>
 <tr>
 <td>CRL 分发点（CRLDistributionPoints）</td>
-<td></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="9-var-log-wtmp-文件记录的内容是？（-）"><a href="#9-var-log-wtmp-文件记录的内容是？（-）" class="headerlink" title="9. /var/log/wtmp 文件记录的内容是？（ ）"></a>9. <code>/var/log/wtmp</code> 文件记录的内容是？（ ）</h2><p>A. 当前用户登录信息<br>B. <strong>用户登录和注销历史</strong><br>C. 系统启动日志<br>D. 内核错误日志</p>
 <p><strong>正确答案：B</strong></p>
 <h3 id="解析-8"><a href="#解析-8" class="headerlink" title="解析"></a>解析</h3><ul>
@@ -476,17 +477,16 @@
 <h2 id="10-CNCERT-的全称是？（-）"><a href="#10-CNCERT-的全称是？（-）" class="headerlink" title="10. CNCERT 的全称是？（ ）"></a>10. CNCERT 的全称是？（ ）</h2><p>A. 国家应急相应中心<br>B. 国家网络安全中心<br>C. <strong>中国互联网应急中心</strong><br>D. 国家信息安全中心</p>
 <p><strong>正确答案：C</strong></p>
 <h3 id="解析-9"><a href="#解析-9" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p>A. 国家应急相应中心<br>“应急响应中心”可以指很多领域（灾害、公共事件、网络、政务等），不具备 CNCERT 的“互联网&#x2F;网络应急”指向性。</p>
+<li><p>A. 国家应急相应中心<br>“应急响应中心”可以指很多领域（灾害、公共事件、网络、政务等），不具备 CNCERT 的“互联网/网络应急”指向性。</p>
 </li>
 <li><p>B. 国家网络安全中心<br>通常指代国家计算机网络与信息安全管理中心（NCNIPC），而非 CNCERT</p>
 </li>
-<li><p><strong>C. 中国互联网应急中心（正确）</strong><br>CNCERT在国内更常见、也更规范的中文对应叫法是：国家互联网应急中心（常用名）其机构全称常见表述为：国家计算机网络应急技术处理协调中心（CNCERT&#x2F;CC）<br>在很多教材&#x2F;考试题里，会把 CNCERT 直接对应到“中国（国家）互联网应急中心”这一类说法，所以在给定四个选项里，C 是最准确的匹配。</p>
+<li><p><strong>C. 中国互联网应急中心（正确）</strong><br>CNCERT在国内更常见、也更规范的中文对应叫法是：国家互联网应急中心（常用名）其机构全称常见表述为：国家计算机网络应急技术处理协调中心（CNCERT/CC）<br>在很多教材/考试题里，会把 CNCERT 直接对应到“中国（国家）互联网应急中心”这一类说法，所以在给定四个选项里，C 是最准确的匹配。</p>
 </li>
 <li><p>D. 国家信息安全中心<br>非标准名称，易与中国信息安全测评中心（CNITSEC）混淆</p>
 </li>
 </ul>
 <span id="more"></span>
-
 <h2 id="11-Linux-中比较两个原始文件差异并输出具体差异内容的命令是？（-）"><a href="#11-Linux-中比较两个原始文件差异并输出具体差异内容的命令是？（-）" class="headerlink" title="11. Linux 中比较两个原始文件差异并输出具体差异内容的命令是？（ ）"></a>11. Linux 中比较两个原始文件差异并输出具体差异内容的命令是？（ ）</h2><p>A. cmp  B. scp  C. <strong>diff</strong>  D. comm</p>
 <p><strong>正确答案：C</strong></p>
 <h3 id="解析-10"><a href="#解析-10" class="headerlink" title="解析"></a>解析</h3><ul>
@@ -494,7 +494,7 @@
 </li>
 <li><p>A. cmp<br>仅检查两个文件是否完全相同，若不同则报告第一个差异的字节位置（例如 file1 file2 differ: byte 10, line 2）。不显示具体差异内容，适用于快速校验文件一致性（如二进制文件），但不符合“比较差异”的需求</p>
 </li>
-<li><p>B. scp<br>用于跨主机安全复制文件（如 scp user@host:&#x2F;path&#x2F;file .），与文件比较无关</p>
+<li><p>B. scp<br>用于跨主机安全复制文件（如 scp user@host:/path/file .），与文件比较无关</p>
 </li>
 <li><p>D. comm<br>比较两个已排序的文件，输出三列结果：仅第一个文件独有的行、仅第二个文件独有的行、两个文件共有的行。局限性：要求输入文件必须预先排序（否则结果错误），且不显示行内容变化细节（如修改），仅适合集合比较。</p>
 </li>
@@ -506,7 +506,7 @@
 <h2 id="12-SSL-VPN-密钥协商的工作模式是？（-）"><a href="#12-SSL-VPN-密钥协商的工作模式是？（-）" class="headerlink" title="12. SSL VPN 密钥协商的工作模式是？（ ）"></a>12. SSL VPN 密钥协商的工作模式是？（ ）</h2><p>A. ECB  B. <strong>Diffie-Hellman 密钥交换</strong>  C. CFB  D. CTR</p>
 <p><strong>正确答案：B</strong></p>
 <h3 id="解析-11"><a href="#解析-11" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>B. Diffie-Hellman（正确）</strong><br>SSL&#x2F;TLS 使用 DH 或 ECDH 完成会话密钥协商，DH 密钥交换协议是非对称加密，是SSL&#x2F;TLS的核心密钥交换协议。</p>
+<li><p><strong>B. Diffie-Hellman（正确）</strong><br>SSL/TLS 使用 DH 或 ECDH 完成会话密钥协商，DH 密钥交换协议是非对称加密，是SSL/TLS的核心密钥交换协议。</p>
 </li>
 <li><p>A. ECB<br>电子密码本模式，对称加密工作模式，不用于密钥协商。</p>
 </li>
@@ -528,7 +528,7 @@
 </li>
 <li><p>C. UDP 1434<br>SQL Server 浏览服务端口，用于实例发现。</p>
 </li>
-<li><p>D. TCP 3306<br>MySQL &#x2F; MariaDB 默认端口。</p>
+<li><p>D. TCP 3306<br>MySQL / MariaDB 默认端口。</p>
 </li>
 </ul>
 <h3 id="扩展-11"><a href="#扩展-11" class="headerlink" title="扩展"></a>扩展</h3><ul>
@@ -537,7 +537,7 @@
 <h2 id="14-Windows-系统安全监测工具是？（-）"><a href="#14-Windows-系统安全监测工具是？（-）" class="headerlink" title="14. Windows 系统安全监测工具是？（ ）"></a>14. Windows 系统安全监测工具是？（ ）</h2><p>A. WinDump  B. ClamAV  C. OpenSSH  D. <strong>FPort</strong></p>
 <p><strong>正确答案：D</strong></p>
 <h3 id="解析-13"><a href="#解析-13" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>D. FPort（正确）</strong><br>可列出系统所有 TCP&#x2F;UDP 端口及对应进程 PID，常用于排查后门。</p>
+<li><p><strong>D. FPort（正确）</strong><br>可列出系统所有 TCP/UDP 端口及对应进程 PID，常用于排查后门。</p>
 </li>
 <li><p>A. WinDump<br>网络抓包工具，偏向流量分析。</p>
 </li>
@@ -564,7 +564,7 @@
 <h2 id="16-传输层-VPN-协议包括？（-）"><a href="#16-传输层-VPN-协议包括？（-）" class="headerlink" title="16. 传输层 VPN 协议包括？（ ）"></a>16. 传输层 VPN 协议包括？（ ）</h2><p>A. <strong>SSL VPN</strong>  B. IPSec VPN  C. PPTP VPN  D. L2TP VPN</p>
 <p><strong>正确答案：A</strong></p>
 <h3 id="解析-15"><a href="#解析-15" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>A. SSL VPN（正确）</strong><br>基于传输层（SSL&#x2F;TLS）。</p>
+<li><p><strong>A. SSL VPN（正确）</strong><br>基于传输层（SSL/TLS）。</p>
 </li>
 <li><p>B. IPSec VPN<br>工作在网络层。</p>
 </li>
@@ -574,7 +574,7 @@
 </li>
 </ul>
 <h3 id="扩展-13"><a href="#扩展-13" class="headerlink" title="扩展"></a>扩展</h3><ul>
-<li>传输层 VPN &#x3D; SSL &#x2F; TLS</li>
+<li>传输层 VPN = SSL / TLS</li>
 </ul>
 <h2 id="17-SSH-服务认证属于哪个子协议？（-）"><a href="#17-SSH-服务认证属于哪个子协议？（-）" class="headerlink" title="17. SSH 服务认证属于哪个子协议？（ ）"></a>17. SSH 服务认证属于哪个子协议？（ ）</h2><p>A. <strong>传输层协议</strong>  B. 用户认证协议  C. 连接协议  D. 密钥交换协议</p>
 <p><strong>正确答案：A</strong></p>
@@ -589,7 +589,7 @@
 </li>
 </ul>
 <p>SSH 协议被分为三层，每层职责明确：</p>
-<p><strong>传输层协议</strong>：建立安全通道、服务器认证、加密算法协商、数据完整性保护，包括功能：<br>服务器主机认证（基于公钥指纹&#x2F;RSA&#x2F;ECDSA）密钥交换（Diffie-Hellman）协商加密算法（如 AES-GCM）</p>
+<p><strong>传输层协议</strong>：建立安全通道、服务器认证、加密算法协商、数据完整性保护，包括功能：<br>服务器主机认证（基于公钥指纹/RSA/ECDSA）密钥交换（Diffie-Hellman）协商加密算法（如 AES-GCM）</p>
 <p><strong>用户认证协议</strong>：客户端用户身份认证（密码、公钥、键盘交互等）仅处理客户端认证</p>
 <p><strong>连接协议</strong>：在安全通道上复用多个逻辑会话（如终端、SFTP、端口转发）与认证无关</p>
 <h3 id="扩展-14"><a href="#扩展-14" class="headerlink" title="扩展"></a>扩展</h3><p>这道题考的是 <strong>SSH 服务器认证属于 SSH 的哪一层（子协议）</strong>。</p>
@@ -597,21 +597,21 @@
 <p><strong>简要解读：</strong></p>
 <ul>
 <li>SSH 协议分为三层：<strong>传输层、用户认证层、连接层</strong>。</li>
-<li><strong>服务器认证</strong>（验证你连的是不是真服务器）发生在<strong>建立安全通道时</strong>，依赖服务器的<strong>主机密钥</strong>（如 RSA&#x2F;ECDSA）。</li>
+<li><strong>服务器认证</strong>（验证你连的是不是真服务器）发生在<strong>建立安全通道时</strong>，依赖服务器的<strong>主机密钥</strong>（如 RSA/ECDSA）。</li>
 <li>这一过程属于 <strong>SSH 传输层协议</strong> 的职责。</li>
 </ul>
 <p><strong>一句话记忆：</strong></p>
 <ul>
 <li><strong>服务器认证 → 传输层</strong></li>
-<li><strong>用户认证（密码&#x2F;公钥）→ 用户认证层</strong></li>
-<li><strong>多路会话&#x2F;端口转发 → 连接层</strong></li>
+<li><strong>用户认证（密码/公钥）→ 用户认证层</strong></li>
+<li><strong>多路会话/端口转发 → 连接层</strong></li>
 </ul>
 <h2 id="18-数据中心耐火等级应不低于？（-）"><a href="#18-数据中心耐火等级应不低于？（-）" class="headerlink" title="18. 数据中心耐火等级应不低于？（ ）"></a>18. 数据中心耐火等级应不低于？（ ）</h2><p>A. 一级  B. <strong>二级</strong>  C. 三级  D. 四级</p>
 <p><strong>正确答案：B</strong></p>
 <h3 id="解析-17"><a href="#解析-17" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><p><strong>B. 二级（正确）</strong><br>符合《数据中心设计规范 GB 50174-2017》。</p>
 </li>
-<li><p>A &#x2F; C &#x2F; D<br>不符合国家标准要求。</p>
+<li><p>A / C / D<br>不符合国家标准要求。</p>
 </li>
 </ul>
 <h3 id="扩展-15"><a href="#扩展-15" class="headerlink" title="扩展"></a>扩展</h3><ul>
@@ -642,7 +642,7 @@
 </li>
 </ul>
 <h3 id="扩展-17"><a href="#扩展-17" class="headerlink" title="扩展"></a>扩展</h3><ul>
-<li><strong>Word + 宏 &#x3D; 高风险组合</strong></li>
+<li><strong>Word + 宏 = 高风险组合</strong></li>
 </ul>
 <h2 id="21-改变文件属主属于哪种匿名化技术？（-）"><a href="#21-改变文件属主属于哪种匿名化技术？（-）" class="headerlink" title="21. 改变文件属主属于哪种匿名化技术？（ ）"></a>21. 改变文件属主属于哪种匿名化技术？（ ）</h2><p>A. <strong>置换</strong>  B. 抑制  C. 泛化  D. 扰动</p>
 <p><strong>正确答案：A</strong></p>
@@ -690,7 +690,7 @@
 </li>
 </ul>
 <h3 id="扩展-19"><a href="#扩展-19" class="headerlink" title="扩展"></a>扩展</h3><ul>
-<li>NULL &#x2F; FIN &#x2F; XMAS 都属于 <strong>隐蔽扫描</strong></li>
+<li>NULL / FIN / XMAS 都属于 <strong>隐蔽扫描</strong></li>
 </ul>
 <h2 id="24-通过物理特性和旁路信号检测硬件木马的手段是？（-）"><a href="#24-通过物理特性和旁路信号检测硬件木马的手段是？（-）" class="headerlink" title="24. 通过物理特性和旁路信号检测硬件木马的手段是？（ ）"></a>24. 通过物理特性和旁路信号检测硬件木马的手段是？（ ）</h2><p>A. <strong>侧信道分析</strong>  B. 逻辑测试  C. 功能分析  D. 代码审计</p>
 <p><strong>正确答案：A</strong></p>
@@ -761,6 +761,7 @@
 </li>
 </ul>
 <h3 id="扩展-23"><a href="#扩展-23" class="headerlink" title="扩展"></a>扩展</h3><p>访问控制模型层面的划分：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -768,7 +769,8 @@
 <th>含义</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><strong>主体（Subject）</strong></td>
 <td>发起访问请求的实体</td>
 </tr>
@@ -784,12 +786,14 @@
 <td><strong>控制（Control）</strong></td>
 <td>广义的访问控制机制（认证 + 授权 + 审计等）</td>
 </tr>
-</tbody></table>
-<p>邮件服务的接收既不是发邮件也不是存邮件，而是判断某个用户是否有权限读取 &#x2F; 接收这封邮件，所以属于权限判断。</p>
+</tbody>
+</table>
+</div>
+<p>邮件服务的接收既不是发邮件也不是存邮件，而是判断某个用户是否有权限读取 / 接收这封邮件，所以属于权限判断。</p>
 <h2 id="28-Snort-从哪一层抓取数据？（-）"><a href="#28-Snort-从哪一层抓取数据？（-）" class="headerlink" title="28. Snort 从哪一层抓取数据？（ ）"></a>28. Snort 从哪一层抓取数据？（ ）</h2><p>A. 网络层  B. 传输层  C. 应用层  D. <strong>数据链路层</strong></p>
 <p><strong>正确答案：D</strong></p>
 <h3 id="解析-27"><a href="#解析-27" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><strong>D. 数据链路层（正确）</strong><br>Snort 通过 libpcap（Linux 为 libpcap，Windows 为 WinPcap&#x2F;Npcap）直接从网卡驱动层捕获原始数据帧（包括以太网帧头、完整负载）。此时数据尚未被操作系统剥离链路层头部，也未传递给上层协议栈（如 IP&#x2F;TCP）。</li>
+<li><strong>D. 数据链路层（正确）</strong><br>Snort 通过 libpcap（Linux 为 libpcap，Windows 为 WinPcap/Npcap）直接从网卡驱动层捕获原始数据帧（包括以太网帧头、完整负载）。此时数据尚未被操作系统剥离链路层头部，也未传递给上层协议栈（如 IP/TCP）。</li>
 </ul>
 <h3 id="扩展-24"><a href="#扩展-24" class="headerlink" title="扩展"></a>扩展</h3><ul>
 <li>抓包位置越低，可见数据越原始</li>
@@ -799,7 +803,7 @@
 <h3 id="解析-28"><a href="#解析-28" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><p><strong>A. 规则（正确）</strong><br>Snort 是典型的基于规则的 IDS。<br>Snort 是基于规则的误用检测方法。将攻击行为或入侵模式表示成一种规则，只要符合规则就认定它是一种入侵行为。优点是检测起来比较简单，缺点是检测受到规则库限制，无法发现新的攻击，并且容易受干扰，Snort 是典型应用实例。</p>
 </li>
-<li><p>B &#x2F; C &#x2F; D<br>属于其他 IDS 类型，不是 Snort 核心机制。</p>
+<li><p>B / C / D<br>属于其他 IDS 类型，不是 Snort 核心机制。</p>
 </li>
 </ul>
 <h2 id="30-实现内网-IP-映射到公网-IP-端口号的技术是？（-）"><a href="#30-实现内网-IP-映射到公网-IP-端口号的技术是？（-）" class="headerlink" title="30. 实现内网 IP 映射到公网 IP 端口号的技术是？（ ）"></a>30. 实现内网 IP 映射到公网 IP 端口号的技术是？（ ）</h2><p>A. <strong>PAT</strong>  B. NAT  C. DNAT  D. SNAT</p>
@@ -822,23 +826,23 @@
 <h3 id="解析-30"><a href="#解析-30" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><p><strong>A. John the Ripper（正确）</strong><br>开源的密码破解工具，专门设计用于破解多种系统的密码哈希，包括 Windows 的 LM（LAN Manager）和 NTLM（NT LAN Manager）哈希。<br>工作原理：通过字典攻击、暴力破解或彩虹表等方式，破解从 SAM（Security Account Manager）文件或 Active Directory 导出的哈希。<br>适用性：跨平台（支持 Windows、Linux、macOS），是 Kali Linux 等渗透测试发行版的预装工具，广泛用于安全审计和 CTF 竞赛。<br>典型用途：破解 Windows 用户密码（如从 SAM 或 NTDS.dit 文件中提取的哈希）。</p>
 </li>
-<li><p>B. L0phtCrack<br>功能：商业密码恢复工具，专为 Windows 系统设计，支持快速破解 LM&#x2F;NTLM 哈希。<br>工作原理：通过本地或远程提取哈希（如从 SAM 或域控制器），结合字典、彩虹表和分布式破解技术。<br>适用性：曾是 Windows 密码破解的行业标准，但现已较少更新（当前版本为 LC7），部分功能被集成到其他工具中。<br>注意：虽可破解 Windows 密码，但不如 John the Ripper 通用和开源。</p>
+<li><p>B. L0phtCrack<br>功能：商业密码恢复工具，专为 Windows 系统设计，支持快速破解 LM/NTLM 哈希。<br>工作原理：通过本地或远程提取哈希（如从 SAM 或域控制器），结合字典、彩虹表和分布式破解技术。<br>适用性：曾是 Windows 密码破解的行业标准，但现已较少更新（当前版本为 LC7），部分功能被集成到其他工具中。<br>注意：虽可破解 Windows 密码，但不如 John the Ripper 通用和开源。</p>
 </li>
-<li><p>C. Wireshark<br>功能：网络协议分析工具，用于抓包和流量分析。与密码破解关系：无法直接破解密码，仅可捕获网络中的明文密码（如 HTTP&#x2F;FTP），但对 Windows 本地密码无效。</p>
+<li><p>C. Wireshark<br>功能：网络协议分析工具，用于抓包和流量分析。与密码破解关系：无法直接破解密码，仅可捕获网络中的明文密码（如 HTTP/FTP），但对 Windows 本地密码无效。</p>
 </li>
 <li><p>D. Metasploit<br>功能：渗透测试框架，用于漏洞利用和后渗透操作。与密码破解的关系：包含模块（如 hashdump）可提取 Windows 哈希，但破解需依赖外部工具（如 John the Ripper），本身不直接提供密码破解功能。</p>
 </li>
 </ul>
-<h2 id="32-Linux-中-passwd-和-shadow-文件存放的目录是？（-）"><a href="#32-Linux-中-passwd-和-shadow-文件存放的目录是？（-）" class="headerlink" title="32. Linux 中 passwd 和 shadow 文件存放的目录是？（ ）"></a>32. Linux 中 <code>passwd</code> 和 <code>shadow</code> 文件存放的目录是？（ ）</h2><p>A. <strong>&#x2F;etc</strong>  B. &#x2F;var&#x2F;log  C. &#x2F;home  D. &#x2F;usr&#x2F;bin</p>
+<h2 id="32-Linux-中-passwd-和-shadow-文件存放的目录是？（-）"><a href="#32-Linux-中-passwd-和-shadow-文件存放的目录是？（-）" class="headerlink" title="32. Linux 中 passwd 和 shadow 文件存放的目录是？（ ）"></a>32. Linux 中 <code>passwd</code> 和 <code>shadow</code> 文件存放的目录是？（ ）</h2><p>A. <strong>/etc</strong>  B. /var/log  C. /home  D. /usr/bin</p>
 <p><strong>正确答案：A</strong></p>
 <h3 id="解析-31"><a href="#解析-31" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>A. &#x2F;etc（正确）</strong><br><code>/etc/passwd</code> 和 <code>/etc/shadow</code> 都位于 <code>/etc</code> 目录。</p>
+<li><p><strong>A. /etc（正确）</strong><br><code>/etc/passwd</code> 和 <code>/etc/shadow</code> 都位于 <code>/etc</code> 目录。</p>
 </li>
-<li><p>B. &#x2F;var&#x2F;log<br>日志目录。</p>
+<li><p>B. /var/log<br>日志目录。</p>
 </li>
-<li><p>C. &#x2F;home<br>用户主目录。</p>
+<li><p>C. /home<br>用户主目录。</p>
 </li>
-<li><p>D. &#x2F;usr&#x2F;bin<br>可执行程序目录。</p>
+<li><p>D. /usr/bin<br>可执行程序目录。</p>
 </li>
 </ul>
 <h3 id="扩展-26"><a href="#扩展-26" class="headerlink" title="扩展"></a>扩展</h3><ul>
@@ -892,7 +896,7 @@
 <h2 id="37-KDC（密钥分发中心）的组成是？（-）"><a href="#37-KDC（密钥分发中心）的组成是？（-）" class="headerlink" title="37. KDC（密钥分发中心）的组成是？（ ）"></a>37. KDC（密钥分发中心）的组成是？（ ）</h2><p>A. <strong>AS 和 TGS</strong>  B. AS 和应用服务器  C. CA 和 RA  D. TGS 和 SS</p>
 <p><strong>正确答案：A</strong></p>
 <h3 id="解析-36"><a href="#解析-36" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><strong>A. AS 和 TGS（正确）</strong><br>KDC &#x3D; Authentication Server + Ticket Granting Server。</li>
+<li><strong>A. AS 和 TGS（正确）</strong><br>KDC = Authentication Server + Ticket Granting Server。</li>
 </ul>
 <h3 id="扩展-30"><a href="#扩展-30" class="headerlink" title="扩展"></a>扩展</h3><p>一个 Kerberos 系统涉及四个基本实体：<br>（1）Kerberos 客户机，用户用来访问服务器设备；<br>（2）AS（Authentication Server，认证服务器），识别用户身份并提供 TGS 会话密钥；<br>（3）TGS（Ticket Granting Server，票据发放服务器），为申请服务的用户授予票据（Ticket）；<br>（4）应用服务器（Application Server），为用户提供服务的设备或系统。</p>
 <p>其中，通常将 AS 和 TGS 统称为 KDC（Key Distribution Center）。</p>
@@ -901,12 +905,12 @@
 <h3 id="解析-37"><a href="#解析-37" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><p><strong>B. SYN Flood（正确）</strong><br>属于 DoS 攻击，不是 APT。</p>
 </li>
-<li><p>A &#x2F; C &#x2F; D<br>均是典型 APT 攻击或组织。</p>
+<li><p>A / C / D<br>均是典型 APT 攻击或组织。</p>
 </li>
 </ul>
 <h3 id="扩展-31"><a href="#扩展-31" class="headerlink" title="扩展"></a>扩展</h3><p>APT 的特点：长期、隐蔽、定向，经典 APT 攻击案例：</p>
 <ul>
-<li><strong>Operation Aurora（2009）</strong>：定向攻击多家跨国企业，窃取源代码&#x2F;邮箱等核心资产。</li>
+<li><strong>Operation Aurora（2009）</strong>：定向攻击多家跨国企业，窃取源代码/邮箱等核心资产。</li>
 <li><strong>Stuxnet（2010）</strong>：针对工控系统的定向破坏，国家级攻击代表。</li>
 <li><strong>SolarWinds（2020）</strong>：供应链投毒，通过软件更新渗透大量机构。</li>
 <li><strong>NotPetya（2017）</strong>：伪装勒索、强破坏性攻击，造成大范围业务瘫痪。</li>
@@ -914,10 +918,10 @@
 <p><strong>典型 APT 组织（常见称呼）</strong></p>
 <ul>
 <li><strong>Equation Group</strong>：顶级能力组织，长期潜伏与高隐蔽性代表。</li>
-<li><strong>APT28 &#x2F; Fancy Bear</strong>：定向窃密与信息战相关活动频繁。</li>
-<li><strong>APT29 &#x2F; Cozy Bear</strong>：擅长长期潜伏、凭证&#x2F;邮件体系渗透。</li>
+<li><strong>APT28 / Fancy Bear</strong>：定向窃密与信息战相关活动频繁。</li>
+<li><strong>APT29 / Cozy Bear</strong>：擅长长期潜伏、凭证/邮件体系渗透。</li>
 <li><strong>Sandworm</strong>：破坏性行动、关键基础设施攻击相关。</li>
-<li><strong>Lazarus Group</strong>：情报与金融&#x2F;破坏行动并行，影响广。</li>
+<li><strong>Lazarus Group</strong>：情报与金融/破坏行动并行，影响广。</li>
 </ul>
 <h2 id="39-DAC（自主访问控制）的定义是？（-）"><a href="#39-DAC（自主访问控制）的定义是？（-）" class="headerlink" title="39. DAC（自主访问控制）的定义是？（ ）"></a>39. DAC（自主访问控制）的定义是？（ ）</h2><p>A. <strong>用户按自身策略授权</strong><br>B. 系统强制分配权限<br>C. 基于角色分配权限<br>D. 基于属性动态授权</p>
 <p><strong>正确答案：A</strong></p>
@@ -964,7 +968,7 @@
 <h3 id="解析-42"><a href="#解析-42" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><p><strong>D. 可防御数字驱动型攻击（错误项，正确答案）</strong><br>数字驱动攻击（如 BadUSB）不依赖网络，网闸无法防御。数字驱动型攻击通过恶意外设（U 盘、键盘）触发操作系统漏洞，完全不依赖网络传输。网闸仅能控制网络数据的单向流动，无法防御连接在主机本地的恶意硬件设备。</p>
 </li>
-<li><p>A &#x2F; B &#x2F; C<br>均符合网闸工作特性。</p>
+<li><p>A / B / C<br>均符合网闸工作特性。</p>
 </li>
 </ul>
 <h2 id="44-采用椭圆曲线算法的国产密码是？（-）"><a href="#44-采用椭圆曲线算法的国产密码是？（-）" class="headerlink" title="44. 采用椭圆曲线算法的国产密码是？（ ）"></a>44. 采用椭圆曲线算法的国产密码是？（ ）</h2><p>A. SM1  B. <strong>SM2</strong>  C. SM3  D. SM4</p>
@@ -972,7 +976,8 @@
 <h3 id="解析-43"><a href="#解析-43" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><strong>B. SM2（正确）</strong><br>基于椭圆曲线密码体制（ECC）。</li>
 </ul>
-<h3 id="扩展-35"><a href="#扩展-35" class="headerlink" title="扩展"></a>扩展</h3><table>
+<h3 id="扩展-35"><a href="#扩展-35" class="headerlink" title="扩展"></a>扩展</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>算法名称</th>
@@ -980,7 +985,8 @@
 <th>备注</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>SM1</td>
 <td>对称加密，分组长度和密钥长度都为 128 比特</td>
 <td></td>
@@ -1003,9 +1009,10 @@
 <tr>
 <td>SM9</td>
 <td>标识密码算法</td>
-<td></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="45-Alice-向-Bob-发送数字签名时使用的密钥是？（-）"><a href="#45-Alice-向-Bob-发送数字签名时使用的密钥是？（-）" class="headerlink" title="45. Alice 向 Bob 发送数字签名时使用的密钥是？（ ）"></a>45. Alice 向 Bob 发送数字签名时使用的密钥是？（ ）</h2><p>A. <strong>Alice 的私钥</strong>  B. Alice 的公钥  C. Bob 的私钥  D. Bob 的公钥</p>
 <p><strong>正确答案：A</strong></p>
 <h3 id="解析-44"><a href="#解析-44" class="headerlink" title="解析"></a>解析</h3><ul>
@@ -1013,8 +1020,7 @@
 </ul>
 <h3 id="扩展-36"><a href="#扩展-36" class="headerlink" title="扩展"></a>扩展</h3><p>数字签名是一种基于<strong>非对称密码</strong>的技术，用来证明“<strong>是谁发的</strong>”以及“<strong>内容有没有被改</strong>”。</p>
 <ul>
-<li><p><strong>怎么做</strong>：发送方先对消息做 <strong>Hash</strong> 得到摘要，再用<strong>自己的私钥</strong>对摘要进行签名；接收方用<strong>发送方的公钥</strong>验证签名是否匹配。</p>
-</li>
+<li><strong>怎么做</strong>：发送方先对消息做 <strong>Hash</strong> 得到摘要，再用<strong>自己的私钥</strong>对摘要进行签名；接收方用<strong>发送方的公钥</strong>验证签名是否匹配。</li>
 <li><p><strong>能解决什么</strong>：</p>
 <ol>
 <li><strong>身份认证</strong>：确认签名者确实是私钥持有人；</li>
@@ -1022,8 +1028,7 @@
 <li><strong>不可否认性</strong>：签名者事后难以否认自己签过（私钥需妥善保管）。</li>
 </ol>
 </li>
-<li><p><strong>注意</strong>：数字签名不是用来保密内容的；要保密需再配合<strong>加密</strong>（如用对称加密传输内容、用公钥加密会话密钥）。</p>
-</li>
+<li><strong>注意</strong>：数字签名不是用来保密内容的；要保密需再配合<strong>加密</strong>（如用对称加密传输内容、用公钥加密会话密钥）。</li>
 </ul>
 <h2 id="46-攻击树模型的缺点是？（-）"><a href="#46-攻击树模型的缺点是？（-）" class="headerlink" title="46. 攻击树模型的缺点是？（ ）"></a>46. 攻击树模型的缺点是？（ ）</h2><p>A. <strong>无法建模循环事件</strong><br>B. 起源于故障树分析<br>C. 难以量化风险<br>D. 依赖专家经验</p>
 <p><strong>正确答案：A</strong></p>
@@ -1047,7 +1052,7 @@
 </li>
 <li><p>A<br>无明确审计要求。</p>
 </li>
-<li><p>C &#x2F; D<br>在第二级基础上增强。</p>
+<li><p>C / D<br>在第二级基础上增强。</p>
 </li>
 </ul>
 <h2 id="49-网络信息资产不包括？（-）"><a href="#49-网络信息资产不包括？（-）" class="headerlink" title="49. 网络信息资产不包括？（ ）"></a>49. 网络信息资产不包括？（ ）</h2><p>A. IP 地址  B. MAC 地址  C. 网络拓扑图  D. <strong>通信软件</strong></p>
@@ -1055,7 +1060,7 @@
 <h3 id="解析-48"><a href="#解析-48" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><p><strong>D. 通信软件（正确）</strong><br>属于软件资产，而非网络信息资产。</p>
 </li>
-<li><p>A &#x2F; B &#x2F; C<br>均属于网络信息资产范畴。</p>
+<li><p>A / B / C<br>均属于网络信息资产范畴。</p>
 </li>
 </ul>
 <h2 id="50-第二代交换机工作的-OSI-层是？（-）"><a href="#50-第二代交换机工作的-OSI-层是？（-）" class="headerlink" title="50. 第二代交换机工作的 OSI 层是？（ ）"></a>50. 第二代交换机工作的 OSI 层是？（ ）</h2><p>A. 网络层  B. <strong>数据链路层</strong>  C. 传输层  D. 应用层</p>
@@ -1065,7 +1070,7 @@
 </li>
 <li><p>A<br>属于三层交换机功能。</p>
 </li>
-<li><p>C &#x2F; D<br>不属于交换机工作层次。</p>
+<li><p>C / D<br>不属于交换机工作层次。</p>
 </li>
 </ul>
 <h2 id="51-属于主动攻击的是？（-）"><a href="#51-属于主动攻击的是？（-）" class="headerlink" title="51. 属于主动攻击的是？（ ）"></a>51. 属于主动攻击的是？（ ）</h2><p>A. 流量分析  B. 重放攻击  C. <strong>拒绝服务攻击</strong>  D. 嗅探</p>
@@ -1097,7 +1102,7 @@
 <h3 id="解析-52"><a href="#解析-52" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><p><strong>D. 信息系统（正确）</strong><br>等保的定级、备案、测评对象是信息系统整体。</p>
 </li>
-<li><p>A &#x2F; B &#x2F; C<br>都是系统中的组成要素，而非基本对象。</p>
+<li><p>A / B / C<br>都是系统中的组成要素，而非基本对象。</p>
 </li>
 </ul>
 <h2 id="54-关于对称加密算法说法正确的是？（-）"><a href="#54-关于对称加密算法说法正确的是？（-）" class="headerlink" title="54. 关于对称加密算法说法正确的是？（ ）"></a>54. 关于对称加密算法说法正确的是？（ ）</h2><p>A. 加解密使用不同密钥<br>B. <strong>加解密使用同一密钥</strong><br>C. 密钥分发容易<br>D. 安全性依赖公钥</p>
@@ -1117,15 +1122,15 @@
 <h3 id="解析-54"><a href="#解析-54" class="headerlink" title="解析"></a>解析</h3><ul>
 <li><p><strong>C. 预编译语句（正确）</strong><br>将 SQL 结构与参数分离，从根本上防御注入。</p>
 </li>
-<li><p>A &#x2F; B &#x2F; D<br>都属于绕过风险较高的防御方式。</p>
+<li><p>A / B / D<br>都属于绕过风险较高的防御方式。</p>
 </li>
 </ul>
 <h2 id="56-信息安全管理体系（ISMS）的核心是？（-）"><a href="#56-信息安全管理体系（ISMS）的核心是？（-）" class="headerlink" title="56. 信息安全管理体系（ISMS）的核心是？（ ）"></a>56. 信息安全管理体系（ISMS）的核心是？（ ）</h2><p>A. 技术措施<br>B. 管理制度<br>C. <strong>风险管理</strong><br>D. 安全产品</p>
 <p><strong>正确答案：C</strong></p>
 <h3 id="解析-55"><a href="#解析-55" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>C. 风险管理（正确）</strong><br>ISO&#x2F;IEC 27001 的核心思想。</p>
+<li><p><strong>C. 风险管理（正确）</strong><br>ISO/IEC 27001 的核心思想。</p>
 </li>
-<li><p>A &#x2F; B &#x2F; D<br>都是风险管理的支撑手段。</p>
+<li><p>A / B / D<br>都是风险管理的支撑手段。</p>
 </li>
 </ul>
 <h2 id="57-以下哪项属于完整性保护技术？（-）"><a href="#57-以下哪项属于完整性保护技术？（-）" class="headerlink" title="57. 以下哪项属于完整性保护技术？（ ）"></a>57. 以下哪项属于完整性保护技术？（ ）</h2><p>A. 加密  B. 访问控制  C. <strong>数字签名</strong>  D. 身份认证</p>
@@ -1208,11 +1213,11 @@
 <h2 id="64-Web-登录网站常用的认证协议是？（-）"><a href="#64-Web-登录网站常用的认证协议是？（-）" class="headerlink" title="64. Web 登录网站常用的认证协议是？（ ）"></a>64. Web 登录网站常用的认证协议是？（ ）</h2><p>A. BAA  B. Windows Live ID  C. <strong>OAuth</strong>  D. SAML</p>
 <p><strong>正确答案：C</strong></p>
 <h3 id="解析-63"><a href="#解析-63" class="headerlink" title="解析"></a>解析</h3><ul>
-<li><p><strong>C. OAuth（正确）</strong><br>Web 与移动应用中最常用的授权&#x2F;认证框架，常结合 OIDC。</p>
+<li><p><strong>C. OAuth（正确）</strong><br>Web 与移动应用中最常用的授权/认证框架，常结合 OIDC。</p>
 </li>
 <li><p>A. BAA<br>不属于 Web 认证协议。</p>
 </li>
-<li><p>B. Windows Live ID<br>已演进为 Microsoft Account，底层仍是 OAuth&#x2F;OIDC。</p>
+<li><p>B. Windows Live ID<br>已演进为 Microsoft Account，底层仍是 OAuth/OIDC。</p>
 </li>
 <li><p>D. SAML<br>多用于企业级单点登录。</p>
 </li>
@@ -1220,8 +1225,8 @@
 <h3 id="扩展-39"><a href="#扩展-39" class="headerlink" title="扩展"></a>扩展</h3><p>OAuth 2.0 + OpenID Connect（OIDC）</p>
 <p>OAuth 2.0：授权框架（如允许用户用微信登录第三方 App），但本身不直接认证身份。</p>
 <p>OpenID Connect：基于 OAuth 2.0 的身份认证层，通过 ID Token（JWT 格式）传递用户身份信息（如姓名、邮箱），实现标准化登录。</p>
-<p>普及度：支持主流平台（微信&#x2F;支付宝&#x2F;Google&#x2F;Facebook 登录均基于 OIDC）。占现代 Web 认证方案的 80% 以上（Okta 报告）。</p>
-<p>Windows Live ID 微软旧版身份系统（已升级为 Microsoft Account，底层用 OAuth&#x2F;OIDC）</p>
+<p>普及度：支持主流平台（微信/支付宝/Google/Facebook 登录均基于 OIDC）。占现代 Web 认证方案的 80% 以上（Okta 报告）。</p>
+<p>Windows Live ID 微软旧版身份系统（已升级为 Microsoft Account，底层用 OAuth/OIDC）</p>
 <p>SAML 企业级单点登录（SSO）协议（如用公司账号登录内部系统）</p>
 <h2 id="65-SSH-审计中对管理员输入命令的审计属于？（-）"><a href="#65-SSH-审计中对管理员输入命令的审计属于？（-）" class="headerlink" title="65. SSH 审计中对管理员输入命令的审计属于？（ ）"></a>65. SSH 审计中对管理员输入命令的审计属于？（ ）</h2><p>A. 字符审计  B. 图形化审计  C. 会话审计  D. <strong>命令审计</strong></p>
 <p><strong>正确答案：D</strong></p>
@@ -1242,7 +1247,7 @@
 <h3 id="解析-65"><a href="#解析-65" class="headerlink" title="解析"></a>解析</h3><ul>
 <li>A. 冲击波（Blaster）：随机扫描，生成随机 IP，攻击 TCP 135 端口（RPC 漏洞）。</li>
 <li>B. 震荡波（Sasser）：随机扫描，攻击 TCP 445 端口（LSASS 漏洞）。</li>
-<li><strong>C. 红色代码（Code Red）：顺序扫描</strong>，从随机起点开始，按顺序扫描连续 IP（如扫描 &#x2F;16 子网），攻击 IIS 服务器的 80 端口。</li>
+<li><strong>C. 红色代码（Code Red）：顺序扫描</strong>，从随机起点开始，按顺序扫描连续 IP（如扫描 /16 子网），攻击 IIS 服务器的 80 端口。</li>
 <li>D. SQL Slammer：完全随机扫描，通过 UDP 1434 端口高速发送探测包，无顺序逻辑。</li>
 </ul>
 <h2 id="67-利用-DCOM-RPC-漏洞传播的恶意软件是？（-）"><a href="#67-利用-DCOM-RPC-漏洞传播的恶意软件是？（-）" class="headerlink" title="67. 利用 DCOM RPC 漏洞传播的恶意软件是？（ ）"></a>67. 利用 DCOM RPC 漏洞传播的恶意软件是？（ ）</h2><p>A. 冲击波（Blaster）<br>B. 震网（Stuxnet）<br>C. 红色代码（Code Red）<br>D. Conficker</p>
@@ -1266,12 +1271,9 @@
 <li>提供行为追溯与威胁分析能力</li>
 </ul>
 </li>
-<li><p>A. 访问控制：终端安全的基础防护能力，非专属功能指标，由白名单控制方式实现</p>
-</li>
-<li><p>B. 不可旁路：安全系统设计原则</p>
-</li>
-<li><p>C. 客体重用：操作系统存储安全要求</p>
-</li>
+<li>A. 访问控制：终端安全的基础防护能力，非专属功能指标，由白名单控制方式实现</li>
+<li>B. 不可旁路：安全系统设计原则</li>
+<li>C. 客体重用：操作系统存储安全要求</li>
 </ul>
 <hr>
 <h2 id="70-防火墙弱性评定属于？（-）"><a href="#70-防火墙弱性评定属于？（-）" class="headerlink" title="70. 防火墙弱性评定属于？（ ）"></a>70. 防火墙弱性评定属于？（ ）</h2><p>A. 安全保障指标<br>B. 安全功能指标<br>C. 安全性能指标<br>D. 环境适应性指标</p>

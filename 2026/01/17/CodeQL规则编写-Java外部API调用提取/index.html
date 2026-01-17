@@ -285,35 +285,34 @@
 <blockquote>
 <p><strong>找出 Java 代码中所有“非测试框架”的外部方法调用，并尽可能完整地导出这些被调用方法的信息（类、包、签名、参数、返回值、是否 static、Javadoc、调用位置等）</strong></p>
 </blockquote>
-<p>换句话说：<br>📌 <strong>这是一个“API 调用收集 &#x2F; API 使用分析”的规则</strong></p>
+<p>换句话说：<br>📌 <strong>这是一个“API 调用收集 / API 使用分析”的规则</strong></p>
 <span id="more"></span>
-
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">import java</span><br><span class="line"></span><br><span class="line">predicate isExternallCall(Call c) &#123;</span><br><span class="line">    (</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;org.junit%&quot;) and</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;org.hamcrest%&quot;) and</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;org.mockito%&quot;) and</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;junit.framework%&quot;)</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string fullSignature(Callable m) &#123;</span><br><span class="line">    if m instanceof Constructor</span><br><span class="line">    then</span><br><span class="line">        result = m.getName() + &quot;(&quot; + concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(), &quot;, &quot;  order by i asc)  + &quot;)&quot;</span><br><span class="line">    else</span><br><span class="line">        result = m.getReturnType().getName() + &quot; &quot; + m.getName() + &quot;(&quot; + concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(), &quot;, &quot;  order by i asc)  + &quot;)&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string paramTypes(Callable m) &#123;</span><br><span class="line">    result = concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName(), &quot;;&quot; order by i asc)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">string isStaticAsString(Callable m) &#123;</span><br><span class="line">    if m.isStatic()</span><br><span class="line">    then result = &quot;true&quot;</span><br><span class="line">    else result = &quot;false&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string getJavadocString(Callable m) &#123;</span><br><span class="line">    (</span><br><span class="line">        exists(Javadoc d | m.getDoc().getJavadoc() = d) and</span><br><span class="line">        result = concat(int i | i = [0 .. m.getDoc().getJavadoc().getNumChild()] | m.getDoc().getJavadoc().getChild(i).getText(), &quot; &quot; order by i asc)</span><br><span class="line">    )</span><br><span class="line">    or</span><br><span class="line">    result = &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">from</span><br><span class="line">    Call api</span><br><span class="line">where</span><br><span class="line">    isExternallCall(api) and</span><br><span class="line">    api.getCallee().getStringSignature() != &quot;()&quot; and</span><br><span class="line">    api.getCallee().getDeclaringType().getSourceDeclaration().getName() != &quot;Object&quot;</span><br><span class="line">select</span><br><span class="line">    api as callstr,</span><br><span class="line">    api.getCallee().getDeclaringType().getSourceDeclaration().getPackage() as package,</span><br><span class="line">    api.getCallee().getDeclaringType().getSourceDeclaration() as clazz,</span><br><span class="line">    fullSignature(api.getCallee()) as full_signature,</span><br><span class="line">    api.getCallee().getStringSignature() as internal_signature,</span><br><span class="line">    api.getCallee() as func,</span><br><span class="line">    isStaticAsString(api.getCallee()) as is_static,</span><br><span class="line">    api.getFile() as file,</span><br><span class="line">    api.getLocation().toString() as location,</span><br><span class="line">    paramTypes(api.getCallee()) as parameter_types,</span><br><span class="line">    api.getCallee().getReturnType().getName() as return_type,</span><br><span class="line">    getJavadocString(api.getCallee()) as doc</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
 <h1 id="二、必须先看懂的-4-个-CodeQL-核心概念"><a href="#二、必须先看懂的-4-个-CodeQL-核心概念" class="headerlink" title="二、必须先看懂的 4 个 CodeQL 核心概念"></a>二、必须先看懂的 4 个 CodeQL 核心概念</h1><p>在看规则之前，我们先建立脑模型。</p>
 <h2 id="1️⃣-CodeQL-是什么？"><a href="#1️⃣-CodeQL-是什么？" class="headerlink" title="1️⃣ CodeQL 是什么？"></a>1️⃣ CodeQL 是什么？</h2><blockquote>
-<p><strong>CodeQL &#x3D; 用“数据库查询”的方式分析代码</strong></p>
+<p><strong>CodeQL = 用“数据库查询”的方式分析代码</strong></p>
 </blockquote>
 <ul>
 <li>代码 → 被解析成数据库（AST + 语义信息）</li>
 <li>你写的 CodeQL → 查询这个数据库</li>
 <li><code>select</code> → 查出来你要的代码元素</li>
 </ul>
-<h2 id="2️⃣-Java-里最重要的几个-CodeQL-类型"><a href="#2️⃣-Java-里最重要的几个-CodeQL-类型" class="headerlink" title="2️⃣ Java 里最重要的几个 CodeQL 类型"></a>2️⃣ Java 里最重要的几个 CodeQL 类型</h2><table>
+<h2 id="2️⃣-Java-里最重要的几个-CodeQL-类型"><a href="#2️⃣-Java-里最重要的几个-CodeQL-类型" class="headerlink" title="2️⃣ Java 里最重要的几个 CodeQL 类型"></a>2️⃣ Java 里最重要的几个 CodeQL 类型</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>CodeQL 类型</th>
 <th>含义</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>Call</code></td>
 <td>一次方法调用（<code>foo.bar()</code>）</td>
 </tr>
 <tr>
 <td><code>Callable</code></td>
-<td>可被调用的东西（方法 &#x2F; 构造函数）</td>
+<td>可被调用的东西（方法 / 构造函数）</td>
 </tr>
 <tr>
 <td><code>Constructor</code></td>
@@ -331,27 +330,25 @@
 <td><code>Javadoc</code></td>
 <td>JavaDoc</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="3️⃣-predicate-是什么？"><a href="#3️⃣-predicate-是什么？" class="headerlink" title="3️⃣ predicate 是什么？"></a>3️⃣ predicate 是什么？</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">predicate isExternallCall(Call c) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
-
-<p>👉 <strong>predicate &#x3D; 布尔函数（true &#x2F; false）</strong></p>
+<p>👉 <strong>predicate = 布尔函数（true / false）</strong></p>
 <p>用来判断一个条件是否成立。</p>
 <h2 id="4️⃣-bindingset-是什么？"><a href="#4️⃣-bindingset-是什么？" class="headerlink" title="4️⃣ bindingset 是什么？"></a>4️⃣ bindingset 是什么？</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bindingset[m]</span><br><span class="line">string fullSignature(Callable m) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
-
 <p>👉 <strong>这是一个和 m 绑定的函数</strong></p>
 <p>你可以理解为：</p>
 <blockquote>
 <p>“给某个 Callable m，算出一个字符串结果”</p>
 </blockquote>
 <h1 id="三、逐段精讲这条规则"><a href="#三、逐段精讲这条规则" class="headerlink" title="三、逐段精讲这条规则"></a>三、逐段精讲这条规则</h1><h2 id="①-import-java"><a href="#①-import-java" class="headerlink" title="① import java"></a>① <code>import java</code></h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import java</span><br></pre></td></tr></table></figure>
-
 <p>📌 告诉 CodeQL：</p>
 <blockquote>
 <p>我要分析 <strong>Java 语言模型</strong></p>
 </blockquote>
 <p>没有这个，你就不能用 <code>Call</code>、<code>Callable</code> 等 Java 相关类型。</p>
 <h2 id="②-判断：什么是“外部调用”？"><a href="#②-判断：什么是“外部调用”？" class="headerlink" title="② 判断：什么是“外部调用”？"></a>② 判断：什么是“外部调用”？</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">predicate isExternallCall(Call c) &#123;</span><br><span class="line">    (</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;org.junit%&quot;) and</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;org.hamcrest%&quot;) and</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;org.mockito%&quot;) and</span><br><span class="line">        not c.getCallee().getDeclaringType().getPackage().getName().matches(&quot;junit.framework%&quot;)</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="🔍-逐行翻译成人话"><a href="#🔍-逐行翻译成人话" class="headerlink" title="🔍 逐行翻译成人话"></a>🔍 逐行翻译成人话</h3><ul>
 <li><code>Call c</code>：一个方法调用</li>
 <li><code>getCallee()</code>：被调用的方法</li>
@@ -369,7 +366,7 @@
 <li>Mockito</li>
 <li>junit.framework</li>
 </ul>
-<p>👉 那么它就是 <strong>External Call（业务 &#x2F; 第三方 API 调用）</strong></p>
+<p>👉 那么它就是 <strong>External Call（业务 / 第三方 API 调用）</strong></p>
 <p>💡 <strong>为什么要排除这些？</strong></p>
 <p>因为这些都是：</p>
 <ul>
@@ -377,17 +374,12 @@
 <li>不属于“真实业务 API”</li>
 </ul>
 <h2 id="③-生成“完整方法签名”"><a href="#③-生成“完整方法签名”" class="headerlink" title="③ 生成“完整方法签名”"></a>③ 生成“完整方法签名”</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bindingset[m]</span><br><span class="line">string fullSignature(Callable m) &#123;</span><br></pre></td></tr></table></figure>
-
 <p>这个函数做的是：<br>👉 <strong>把方法拼成 Java 中“人类可读的签名”</strong></p>
 <h3 id="构造函数情况"><a href="#构造函数情况" class="headerlink" title="构造函数情况"></a>构造函数情况</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if m instanceof Constructor</span><br></pre></td></tr></table></figure>
-
 <p>生成：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassName(<span class="type">int</span> a, String b)</span><br></pre></td></tr></table></figure>
-
 <h3 id="普通方法情况"><a href="#普通方法情况" class="headerlink" title="普通方法情况"></a>普通方法情况</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String foo(int a, String b)</span><br></pre></td></tr></table></figure>
-
 <h3 id="核心技巧（你要重点学）"><a href="#核心技巧（你要重点学）" class="headerlink" title="核心技巧（你要重点学）"></a>核心技巧（你要重点学）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">concat(int i | i = [0 .. m.getNumberOfParameters()] | ... , &quot;, &quot; order by i asc)</span><br></pre></td></tr></table></figure>
-
 <p>📌 这段是 <strong>CodeQL 的“集合推导 + 拼接”</strong>：</p>
 <ul>
 <li>遍历所有参数</li>
@@ -395,10 +387,8 @@
 <li>拼成字符串</li>
 </ul>
 <h2 id="④-只取“参数类型列表”"><a href="#④-只取“参数类型列表”" class="headerlink" title="④ 只取“参数类型列表”"></a>④ 只取“参数类型列表”</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">bindingset[m]</span><br><span class="line">string paramTypes(Callable m) &#123;</span><br><span class="line">    result = concat(</span><br><span class="line">        int i |</span><br><span class="line">        i = [0 .. m.getNumberOfParameters()] |</span><br><span class="line">        m.getParameter(i).getType().getName(),</span><br><span class="line">        &quot;;&quot;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>👉 输出类似：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int;java.lang.String;boolean</span><br></pre></td></tr></table></figure>
-
 <p>📌 常用于：</p>
 <ul>
 <li>API 唯一标识</li>
@@ -406,11 +396,9 @@
 <li>比较重载方法</li>
 </ul>
 <h2 id="⑤-是否是-static-方法（转成字符串）"><a href="#⑤-是否是-static-方法（转成字符串）" class="headerlink" title="⑤ 是否是 static 方法（转成字符串）"></a>⑤ 是否是 static 方法（转成字符串）</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">string isStaticAsString(Callable m) &#123;</span><br><span class="line">    if m.isStatic()</span><br><span class="line">    then result = &quot;true&quot;</span><br><span class="line">    else result = &quot;false&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>💡 为什么不直接返回 boolean？</p>
-<p>👉 因为 <code>select</code> 结果 <strong>通常导出为 CSV &#x2F; 表格</strong>，字符串更好用。</p>
+<p>👉 因为 <code>select</code> 结果 <strong>通常导出为 CSV / 表格</strong>，字符串更好用。</p>
 <h2 id="⑥-提取-JavaDoc-文本"><a href="#⑥-提取-JavaDoc-文本" class="headerlink" title="⑥ 提取 JavaDoc 文本"></a>⑥ 提取 JavaDoc 文本</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bindingset[m]</span><br><span class="line">string getJavadocString (Callable m) </span><br></pre></td></tr></table></figure>
-
 <p>逻辑：</p>
 <ol>
 <li>如果这个方法有 JavaDoc</li>
@@ -418,34 +406,25 @@
 <li>否则返回空字符串</li>
 </ol>
 <p>📌 这是 <strong>文档级 API 分析</strong><br>（比如：生成 API 文档、语义搜索）</p>
-<h2 id="⑦-from-where：真正的“查询入口”"><a href="#⑦-from-where：真正的“查询入口”" class="headerlink" title="⑦ from &#x2F; where：真正的“查询入口”"></a>⑦ from &#x2F; where：真正的“查询入口”</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from Call api</span><br></pre></td></tr></table></figure>
-
+<h2 id="⑦-from-where：真正的“查询入口”"><a href="#⑦-from-where：真正的“查询入口”" class="headerlink" title="⑦ from / where：真正的“查询入口”"></a>⑦ from / where：真正的“查询入口”</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from Call api</span><br></pre></td></tr></table></figure>
 <p>👉 <strong>遍历代码中所有的方法调用</strong></p>
 <h3 id="where-条件解释"><a href="#where-条件解释" class="headerlink" title="where 条件解释"></a>where 条件解释</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">isExternallCall(api)</span><br></pre></td></tr></table></figure>
-
 <p>✔️ 只要外部调用</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">api.getCallee().getStringSignature() != &quot;()&quot;</span><br></pre></td></tr></table></figure>
-
 <p>✔️ 排除无意义调用（如空签名）</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">api.getCallee().getDeclaringType().getSourceDeclaration().getName() != &quot;Object&quot;</span><br></pre></td></tr></table></figure>
-
 <p>✔️ 排除 <code>java.lang.Object</code> 的方法<br>（如 <code>toString()</code>、<code>hashCode()</code>）</p>
 <h2 id="⑧-select：最终输出什么？"><a href="#⑧-select：最终输出什么？" class="headerlink" title="⑧ select：最终输出什么？"></a>⑧ select：最终输出什么？</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line">    api as callstr,</span><br></pre></td></tr></table></figure>
-
 <p>👉 这一次“调用”</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">api.getCallee().getDeclaringType().getSourceDeclaration().getPackage()</span><br></pre></td></tr></table></figure>
-
 <p>👉 包名</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">api.getCallee().getDeclaringType().getSourceDeclaration()</span><br></pre></td></tr></table></figure>
-
 <p>👉 类</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fullSignature(api.getCallee())</span><br></pre></td></tr></table></figure>
-
 <p>👉 完整方法签名</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">paramTypes(...)</span><br><span class="line">return_type</span><br><span class="line">is_static</span><br><span class="line">doc</span><br><span class="line">location</span><br><span class="line">file</span><br></pre></td></tr></table></figure>
-
 <p>👉 <strong>这是一个“超级完整的 API 调用画像”</strong></p>
-<h1 id="四、这条规则在真实世界能做什么？"><a href="#四、这条规则在真实世界能做什么？" class="headerlink" title="四、这条规则在真实世界能做什么？"></a>四、这条规则在真实世界能做什么？</h1><p>✅ API 使用分析<br>✅ 第三方库调用统计<br>✅ 生成 API 调用清单<br>✅ 安全审计（危险 API 使用）<br>✅ 自动生成接口文档<br>✅ 构建调用图 &#x2F; 依赖分析</p>
+<h1 id="四、这条规则在真实世界能做什么？"><a href="#四、这条规则在真实世界能做什么？" class="headerlink" title="四、这条规则在真实世界能做什么？"></a>四、这条规则在真实世界能做什么？</h1><p>✅ API 使用分析<br>✅ 第三方库调用统计<br>✅ 生成 API 调用清单<br>✅ 安全审计（危险 API 使用）<br>✅ 自动生成接口文档<br>✅ 构建调用图 / 依赖分析</p>
 <h1 id="五、最后一句总结"><a href="#五、最后一句总结" class="headerlink" title="五、最后一句总结"></a>五、最后一句总结</h1><blockquote>
 <p><strong>这条 CodeQL 规则的本质是：<br>“扫描 Java 项目中所有非测试框架的方法调用，并结构化地导出被调用 API 的全部关键信息。”</strong></p>
 </blockquote>

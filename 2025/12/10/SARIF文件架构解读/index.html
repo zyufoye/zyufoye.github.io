@@ -290,14 +290,13 @@
     <div class="post-body" itemprop="articleBody"><h2 id="SARIF-文件架构架构解读"><a href="#SARIF-文件架构架构解读" class="headerlink" title="SARIF 文件架构架构解读"></a>SARIF 文件架构架构解读</h2><p>SARIF（Static Analysis Results Interchange Format）本质是一个 JSON 日志规范，用于统一表达静态分析（SAST、Lint、CodeQL、依赖扫描等）的扫描结果，方便不同工具之间共享、聚合、展示与追踪。</p>
 <p>SARIF 简单文件结构如下：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;$schema&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;https://json.schemastore.org/sarif-2.1.0.json&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;2.1.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;runs&quot;</span> <span class="punctuation">:</span> <span class="punctuation">[</span>&#x27;tool&#x27;<span class="punctuation">,</span> &#x27;invocations&#x27;<span class="punctuation">,</span> &#x27;artifacts&#x27;<span class="punctuation">,</span> &#x27;results&#x27;<span class="punctuation">,</span> &#x27;columnKind&#x27;<span class="punctuation">,</span>&#x27;properties&#x27;<span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
 <blockquote>
-<p>SARIF &#x3D; 多次运行 runs 的集合，每次运行包含：工具信息 + 运行元数据 + 被分析对象（artifacts）+ 分析结果（results）</p>
+<p>SARIF = 多次运行 runs 的集合，每次运行包含：工具信息 + 运行元数据 + 被分析对象（artifacts）+ 分析结果（results）</p>
 </blockquote>
 <p>对各部分内容介绍如下：</p>
 <ol>
 <li>tool 工具信息：检查员身份信息和检查手册，记录了用哪个工具进行了扫描，版本号是多少，包含了 driver 驱动程序信息 和 rules 检查规则清单；</li>
-<li>invocations 调用信息：检查员的工作日志，记录了这次检查是在什么环境下进行的，以及是否顺利完成，executionSuccessful: true&#x2F;false；</li>
+<li>invocations 调用信息：检查员的工作日志，记录了这次检查是在什么环境下进行的，以及是否顺利完成，executionSuccessful: true/false；</li>
 <li>artifacts 被扫描的文件：检查了哪些地点，列出了所有被 CodeQL 扫描过的源文件（Source Code），包含文件的路径（location），有时也包含文件的具体内容或哈希值，方便后续定位；</li>
 <li><strong>results 结果</strong> ：这是问题清单，这是整份报告里最重要的部分，列出了扫描出来的所有 Bug和漏洞信息，关键单：ruleId 记录违反了哪条规则（对应 tool 里的规则），message 记录问题的具体描述，locations 记录了问题在哪个文件的第几行、第几列；</li>
 <li>columnKind 列的计算方式：用于告诉 IDE（如 VS Code）如何正确高亮代码；</li>
@@ -305,14 +304,13 @@
 </ol>
 <p>通俗的讲，就是这一次扫描 (run)，是由名为 CodeQL 的 (tool) 进行的。它在一个特定的时间以特定的参数运行 (invocations)，按照特定的刻度标准 (columnKind)，扫描了这一堆文件 (artifacts)，最后发现了这些漏洞 (results)，并在最后贴了一些标签 (properties)。</p>
 <span id="more"></span>
-
 <h2 id="关键信息提取"><a href="#关键信息提取" class="headerlink" title="关键信息提取"></a>关键信息提取</h2><p>要在 CodeQL 生成的 SARIF 报告中提取<strong>漏洞点（Sink）</strong>、<strong>漏洞位置</strong>、<strong>数据流（Source 到 Sink）以及控制流</strong>信息，需要研究 <code>runs</code> -&gt; <code>results</code> 数组中的对象。</p>
 <p>SARIF 将这些复杂的逻辑封装在了一个层级分明的结构中。以下是提取这些关键信息所对应的具体字段和解析逻辑：</p>
 <hr>
 <h3 id="提取核心模块：results-数组"><a href="#提取核心模块：results-数组" class="headerlink" title="提取核心模块：results 数组"></a>提取核心模块：<code>results</code> 数组</h3><p>所有的漏洞信息都在 <code>runs[0].results</code> 列表里，需要遍历这个列表，列表中的每一个对象代表一个具体的漏洞实例。</p>
 <h3 id="详细提取指南"><a href="#详细提取指南" class="headerlink" title="详细提取指南"></a>详细提取指南</h3><p>需要关注 <code>results</code> 对象下的以下字段：</p>
 <h4 id="A-漏洞的基本信息"><a href="#A-漏洞的基本信息" class="headerlink" title="A. 漏洞的基本信息"></a>A. 漏洞的基本信息</h4><ul>
-<li><strong>漏洞名称&#x2F;类型</strong>：<code>ruleId</code><ul>
+<li><strong>漏洞名称/类型</strong>：<code>ruleId</code><ul>
 <li>例如：<code>java/sql-injection</code></li>
 </ul>
 </li>
@@ -321,7 +319,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="B-漏洞位置-爆发点-Sink"><a href="#B-漏洞位置-爆发点-Sink" class="headerlink" title="B. 漏洞位置 &#x2F; 爆发点 &#x2F; Sink"></a>B. 漏洞位置 &#x2F; 爆发点 &#x2F; Sink</h4><p>这是 CodeQL 认为漏洞最终发生的地方（例如执行 SQL 查询的那一行）。</p>
+<h4 id="B-漏洞位置-爆发点-Sink"><a href="#B-漏洞位置-爆发点-Sink" class="headerlink" title="B. 漏洞位置 / 爆发点 / Sink"></a>B. 漏洞位置 / 爆发点 / Sink</h4><p>这是 CodeQL 认为漏洞最终发生的地方（例如执行 SQL 查询的那一行）。</p>
 <ul>
 <li><strong>提取字段</strong>：<code>locations</code> 数组</li>
 <li><strong>关键逻辑</strong>：通常取 <code>locations[0]</code>（数组的第一个元素）作为主要位置。</li>
@@ -344,19 +342,19 @@
 </ul>
 <p><strong>如何解析这个路径链条：</strong></p>
 <ul>
-<li><strong>Source（污点源头&#x2F;用户输入）</strong>：<ul>
+<li><strong>Source（污点源头/用户输入）</strong>：<ul>
 <li>通常是 <code>threadFlows[0].locations</code> 数组的<strong>第一个元素</strong>。</li>
 <li>提取：<code>...locations[0].location.physicalLocation</code> (文件和行号)</li>
 <li>含义：例如 <code>request.getParameter(&quot;id&quot;)</code>，这是数据进入系统的位置。</li>
 </ul>
 </li>
-<li><strong>Flow Path（传播路径&#x2F;控制流）</strong>：<ul>
+<li><strong>Flow Path（传播路径/控制流）</strong>：<ul>
 <li>是 <code>threadFlows[0].locations</code> 数组的<strong>中间元素</strong>。</li>
 <li>这些步骤展示了数据经过了哪些函数调用、赋值操作或判断逻辑。</li>
 <li><strong>关键提取</strong>：<code>location.message.text</code> —— 这里通常会说明“数据被传递给参数 x”或“数据通过函数返回值传播”。</li>
 </ul>
 </li>
-<li><strong>Sink（爆发点&#x2F;最终位置）</strong>：<ul>
+<li><strong>Sink（爆发点/最终位置）</strong>：<ul>
 <li>通常是 <code>threadFlows[0].locations</code> 数组的<strong>最后一个元素</strong>。</li>
 <li>这应该与上面提到的 <strong>B. 漏洞位置</strong> 重合。</li>
 </ul>
@@ -364,58 +362,61 @@
 </ul>
 <hr>
 <h3 id="总结：需要提取的-JSON-路径映射表"><a href="#总结：需要提取的-JSON-路径映射表" class="headerlink" title="总结：需要提取的 JSON 路径映射表"></a>总结：需要提取的 JSON 路径映射表</h3><p>为了方便编写脚本（如 Python）提取，这是一个速查表：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="left">信息类型</th>
-<th align="left">SARIF JSON 路径 (假设当前在 results[i] 对象下)</th>
-<th align="left">解释</th>
+<th style="text-align:left">信息类型</th>
+<th style="text-align:left">SARIF JSON 路径 (假设当前在 results[i] 对象下)</th>
+<th style="text-align:left">解释</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="left"><strong>漏洞类型</strong></td>
-<td align="left"><code>ruleId</code></td>
-<td align="left">漏洞的 ID，如 SQL 注入</td>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>漏洞类型</strong></td>
+<td style="text-align:left"><code>ruleId</code></td>
+<td style="text-align:left">漏洞的 ID，如 SQL 注入</td>
 </tr>
 <tr>
-<td align="left"><strong>漏洞描述</strong></td>
-<td align="left"><code>message.text</code></td>
-<td align="left">人类可读的解释</td>
+<td style="text-align:left"><strong>漏洞描述</strong></td>
+<td style="text-align:left"><code>message.text</code></td>
+<td style="text-align:left">人类可读的解释</td>
 </tr>
 <tr>
-<td align="left"><strong>漏洞文件</strong></td>
-<td align="left"><code>locations[0].physicalLocation.artifactLocation.uri</code></td>
-<td align="left">发生漏洞的文件名</td>
+<td style="text-align:left"><strong>漏洞文件</strong></td>
+<td style="text-align:left"><code>locations[0].physicalLocation.artifactLocation.uri</code></td>
+<td style="text-align:left">发生漏洞的文件名</td>
 </tr>
 <tr>
-<td align="left"><strong>漏洞行号</strong></td>
-<td align="left"><code>locations[0].physicalLocation.region.startLine</code></td>
-<td align="left">发生漏洞的行号</td>
+<td style="text-align:left"><strong>漏洞行号</strong></td>
+<td style="text-align:left"><code>locations[0].physicalLocation.region.startLine</code></td>
+<td style="text-align:left">发生漏洞的行号</td>
 </tr>
 <tr>
-<td align="left"><strong>数据流路径</strong></td>
-<td align="left"><code>codeFlows[0].threadFlows[0].locations</code></td>
-<td align="left">这是一个列表，包含完整路径</td>
+<td style="text-align:left"><strong>数据流路径</strong></td>
+<td style="text-align:left"><code>codeFlows[0].threadFlows[0].locations</code></td>
+<td style="text-align:left">这是一个列表，包含完整路径</td>
 </tr>
 <tr>
-<td align="left"><strong>数据源 (Source)</strong></td>
-<td align="left"><code>codeFlows[0].threadFlows[0].locations[0]</code></td>
-<td align="left">路径的第一步</td>
+<td style="text-align:left"><strong>数据源 (Source)</strong></td>
+<td style="text-align:left"><code>codeFlows[0].threadFlows[0].locations[0]</code></td>
+<td style="text-align:left">路径的第一步</td>
 </tr>
 <tr>
-<td align="left"><strong>传播过程</strong></td>
-<td align="left"><code>codeFlows[0].threadFlows[0].locations[1:-1]</code></td>
-<td align="left">路径的中间步骤</td>
+<td style="text-align:left"><strong>传播过程</strong></td>
+<td style="text-align:left"><code>codeFlows[0].threadFlows[0].locations[1:-1]</code></td>
+<td style="text-align:left">路径的中间步骤</td>
 </tr>
 <tr>
-<td align="left"><strong>爆发点 (Sink)</strong></td>
-<td align="left"><code>codeFlows[0].threadFlows[0].locations[-1]</code></td>
-<td align="left">路径的最后一步</td>
+<td style="text-align:left"><strong>爆发点 (Sink)</strong></td>
+<td style="text-align:left"><code>codeFlows[0].threadFlows[0].locations[-1]</code></td>
+<td style="text-align:left">路径的最后一步</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h3 id="4-举例说明"><a href="#4-举例说明" class="headerlink" title="4. 举例说明"></a>4. 举例说明</h3><p>假设这是一个 SQL 注入的 <code>result</code> 片段：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;ruleId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java/sql-injection&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Query depends on user input.&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;locations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>  <span class="comment">// ---&gt; 这里是 B: 漏洞最终爆发的位置 (Sink)</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;physicalLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;artifactLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/DB.java&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;startLine&quot;</span><span class="punctuation">:</span> <span class="number">42</span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;codeFlows&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="comment">// ---&gt; 这里是 C: 完整的数据流/控制流路径</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;threadFlows&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;locations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="comment">// 步骤 1: Source (数据源)</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;location&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;physicalLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/Controller.java&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;startLine&quot;</span><span class="punctuation">:</span> <span class="number">15</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;User input source...&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">              <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="comment">// 步骤 2: 中间传播</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;location&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;physicalLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/Service.java&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;startLine&quot;</span><span class="punctuation">:</span> <span class="number">20</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Data passed to function...&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">              <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="comment">// 步骤 3: Sink (通常与 locations[0] 一致)</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;location&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;physicalLocation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/DB.java&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;region&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;startLine&quot;</span><span class="punctuation">:</span> <span class="number">42</span> <span class="punctuation">&#125;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Data used in SQL query...&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">              <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><ol>
 <li><strong>判空处理</strong>：不是所有的 <code>results</code> 都有 <code>codeFlows</code>。简单的代码质量检查（比如“变量未使用”）通常只有 <code>locations</code>，没有数据流路径。只有安全类漏洞（如注入、XSS）通常会有 <code>codeFlows</code>。</li>
 <li><strong>路径简繁</strong>：CodeQL 生成的 <code>codeFlows</code> 有时非常详细，如果只关注关键跳板，关注 <code>location.message</code> 比较有帮助。</li>

@@ -27,14 +27,14 @@
 <meta property="og:site_name" content="Aono Note">
 <meta property="og:description" content="环境准备Ubuntu 24.04python 3.12.3ollama 0.13.4git 2.43.0 换源 123456789101112131415161718192021# 备份sudo cp &#x2F;etc&#x2F;apt&#x2F;sources.list.d&#x2F;ubuntu.sources &#x2F;etc&#x2F;apt&#x2F;sources.list.d&#x2F;ubuntu.sources.bak# 编辑文件sudo vim &#x2F;et">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://zyufoye.github.io/uploads/ollama_1.png">
+<meta property="og:image" content="https://zyufoye.github.io/2025/12/18/uploads/ollama_1.png">
 <meta property="article:published_time" content="2025-12-18T14:16:48.000Z">
 <meta property="article:modified_time" content="2025-12-18T14:19:43.871Z">
 <meta property="article:author" content="Aono">
 <meta property="article:tag" content="Config">
 <meta property="article:tag" content="LLM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://zyufoye.github.io/uploads/ollama_1.png">
+<meta name="twitter:image" content="https://zyufoye.github.io/2025/12/18/uploads/ollama_1.png">
 
 
 <link rel="canonical" href="https://zyufoye.github.io/2025/12/18/Ubuntu%E9%80%9A%E8%BF%87Ollama%E9%83%A8%E7%BD%B2LLM/">
@@ -285,20 +285,19 @@
     <div class="post-body" itemprop="articleBody"><h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>Ubuntu 24.04<br>python 3.12.3<br>ollama 0.13.4<br>git 2.43.0</p>
 <p>换源</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 备份</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">cp</span> /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources.bak</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑文件</span></span><br><span class="line"><span class="built_in">sudo</span> vim /etc/apt/sources.list.d/ubuntu.sources</span><br><span class="line"></span><br><span class="line">Types: deb</span><br><span class="line">URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu/</span><br><span class="line">Suites: noble noble-updates noble-backports</span><br><span class="line">Components: main restricted universe multiverse</span><br><span class="line">Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg</span><br><span class="line"></span><br><span class="line">Types: deb</span><br><span class="line">URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu/</span><br><span class="line">Suites: noble-security</span><br><span class="line">Components: main restricted universe multiverse</span><br><span class="line">Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt upgrade -y</span><br></pre></td></tr></table></figure>
-
 <span id="more"></span>
-
 <h2 id="Ollama-安装"><a href="#Ollama-安装" class="headerlink" title="Ollama 安装"></a>Ollama 安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://ollama.com/install.sh | sh</span><br><span class="line"></span><br><span class="line">ollama --version</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl start ollama</span><br><span class="line"></span><br><span class="line">systemctl status ollama</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> ollama</span><br></pre></td></tr></table></figure>
-
-<h2 id="Ollama-命令一览表"><a href="#Ollama-命令一览表" class="headerlink" title="Ollama 命令一览表"></a>Ollama 命令一览表</h2><table>
+<h2 id="Ollama-命令一览表"><a href="#Ollama-命令一览表" class="headerlink" title="Ollama 命令一览表"></a>Ollama 命令一览表</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>命令</th>
 <th>功能说明</th>
-<th>常见使用场景 &#x2F; 示例</th>
+<th>常见使用场景 / 示例</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>ollama serve</code></td>
 <td>启动 Ollama 后台服务</td>
 <td>作为 daemon 运行（一般系统已自动启动）<br><code>ollama serve</code></td>
@@ -321,7 +320,7 @@
 <tr>
 <td><code>ollama stop</code></td>
 <td>停止正在运行的模型</td>
-<td>释放内存 &#x2F; CPU<br><code>ollama stop llama3</code></td>
+<td>释放内存 / CPU<br><code>ollama stop llama3</code></td>
 </tr>
 <tr>
 <td><code>ollama pull</code></td>
@@ -336,7 +335,7 @@
 <tr>
 <td><code>ollama signin</code></td>
 <td>登录 ollama.com</td>
-<td>用于 push &#x2F; 私有模型<br><code>ollama signin</code></td>
+<td>用于 push / 私有模型<br><code>ollama signin</code></td>
 </tr>
 <tr>
 <td><code>ollama signout</code></td>
@@ -368,11 +367,13 @@
 <td>查看帮助</td>
 <td>查看全局或子命令帮助<br><code>ollama help run</code></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="Ollama-模型支持"><a href="#Ollama-模型支持" class="headerlink" title="Ollama 模型支持"></a>Ollama 模型支持</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看本地模型列表</span></span><br><span class="line">ollama list</span><br></pre></td></tr></table></figure>
-
 <p>查看 ollama 中能下载哪些模型：<a target="_blank" rel="noopener" href="https://ollama.com/library">https://ollama.com/library</a></p>
 <p>开源模型按照综合排序简单列出 10 个</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -382,7 +383,8 @@
 <th><strong>Update</strong></th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>deepseek-r1</td>
 <td>DeepSeek-R1 是一系列开放式推理模型，其性能接近领先的模型，例如 O3 和 Gemini 2.5 Pro</td>
 <td><code>tools</code> <code>thinking</code> <code>70b</code> <code>671b</code></td>
@@ -442,17 +444,17 @@
 <td><code>tools</code> <code>thinking</code> <code>cloud</code> <code>20b</code> <code>120b</code></td>
 <td>2025-10</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="模型下载部署"><a href="#模型下载部署" class="headerlink" title="模型下载部署"></a>模型下载部署</h2><p>以 deepseek-r1:latest 为例，记录部署流程。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载模型</span></span><br><span class="line">ollama pull deepseek-r1:latest</span><br><span class="line"></span><br><span class="line">ollama run deepseek-r1:latest</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在 Web 用户界面中运行 DeepSeek</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建虚拟环境</span></span><br><span class="line"><span class="built_in">sudo</span> apt install python3-venv</span><br><span class="line">python3 -m venv ~/open-webui-venv</span><br><span class="line"><span class="built_in">source</span> ~/open-webui-venv/bin/activate</span><br><span class="line"></span><br><span class="line">pip install open-webui -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line"></span><br><span class="line">open-webui serve</span><br><span class="line"></span><br><span class="line"><span class="comment"># 访问 http://localhost:8080</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> systemctl status open-webui</span><br></pre></td></tr></table></figure>
-
-<p>注意在初次启动时，我们本地只有“大脑”（DeepSeek），Open WebUI 还会试图下载一个“图书管理员”（Embedding 模型）。虽然已经成功部署了 DeepSeek，但 Open WebUI 是一个功能完整的界面系统，它默认开启了<strong>RAG（检索增强生成）</strong>功能（即知识库&#x2F;文档上传功能）。</p>
+<p>注意在初次启动时，我们本地只有“大脑”（DeepSeek），Open WebUI 还会试图下载一个“图书管理员”（Embedding 模型）。虽然已经成功部署了 DeepSeek，但 Open WebUI 是一个功能完整的界面系统，它默认开启了<strong>RAG（检索增强生成）</strong>功能（即知识库/文档上传功能）。</p>
 <p>所以默认还会下载一个 all-MiniLM-L6-v2 模型，它不负责对话。它的唯一作用是将你上传的文档、文字转换成计算机能理解的“向量（数字列表）”。当你问 DeepSeek 关于你上传文档的问题时，Open WebUI 先用这个小模型去搜索文档中的相关段落，然后把段落喂给 DeepSeek。它是“图书管理员”。</p>
 <p>如果他发现本地没有默认的 Embedding 模型（all-MiniLM-L6-v2），就会自动去 Hugging Face 下载。也就是说会卡在这里，需要配置国内的镜像源。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> HF_ENDPOINT=https://hf-mirror.com</span><br></pre></td></tr></table></figure>
-
 <p>成功运行如下图所示：</p>
-<p><img src="/../uploads/ollama_1.png"></p>
+<p><img src="../uploads/ollama_1.png" alt=""></p>
 
     </div>
 
