@@ -284,7 +284,7 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-count">41</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -320,6 +320,160 @@ mjx-container[display="true"] + br {
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/18/SSH%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/18/SSH%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="url">SSH安全协议</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-18 16:07:34 / 修改时间：16:20:56" itemprop="dateCreated datePublished" datetime="2026-01-18T16:07:34+08:00">2026-01-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="基础理论：Diffie-Hellman-DH-密钥交换协议"><a href="#基础理论：Diffie-Hellman-DH-密钥交换协议" class="headerlink" title="基础理论：Diffie-Hellman (DH) 密钥交换协议"></a>基础理论：Diffie-Hellman (DH) 密钥交换协议</h3><p>在介绍SSH之前，首先了解DH协议，因为它是SSH能够安全协商密钥的基石。</p>
+<ul>
+<li><strong>核心难题</strong>：如何在不安全的网络上，让两个人协商出一个只有他们知道的“密码”（会话密钥），而不用担心被旁人窃听？</li>
+<li><strong>数学原理</strong>：基于<strong>离散对数问题</strong>的困难性。<ul>
+<li>公式：<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex;" xmlns="http://www.w3.org/2000/svg" width="17.244ex" height="2.117ex" role="img" focusable="false" viewBox="0 -853.7 7621.8 935.7"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mi"><path data-c="1D436" d="M50 252Q50 367 117 473T286 641T490 704Q580 704 633 653Q642 643 648 636T656 626L657 623Q660 623 684 649Q691 655 699 663T715 679T725 690L740 705H746Q760 705 760 698Q760 694 728 561Q692 422 692 421Q690 416 687 415T669 413H653Q647 419 647 422Q647 423 648 429T650 449T651 481Q651 552 619 605T510 659Q484 659 454 652T382 628T299 572T226 479Q194 422 175 346T156 222Q156 108 232 58Q280 24 350 24Q441 24 512 92T606 240Q610 253 612 255T628 257Q648 257 648 248Q648 243 647 239Q618 132 523 55T319 -22Q206 -22 128 53T50 252Z"></path></g><g data-mml-node="mi" transform="translate(845.3,363) scale(0.707)"><path data-c="1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g></g><g data-mml-node="mo" transform="translate(1540.7,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mi" transform="translate(2596.5,0)"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g><g data-mml-node="mspace" transform="translate(3647.5,0)"></g><g data-mml-node="mi" transform="translate(4481.2,0)"><path data-c="6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(833,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1333,0)"></path></g><g data-mml-node="mstyle" transform="translate(6370.2,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mstyle" transform="translate(6537.2,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mi" transform="translate(6870.8,0)"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path></g></g></g></svg></mjx-container></li>
+<li><strong>正向计算容易</strong>：已知 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="6.607ex" height="2.034ex" role="img" focusable="false" viewBox="0 -705 2920.3 899"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D436" d="M50 252Q50 367 117 473T286 641T490 704Q580 704 633 653Q642 643 648 636T656 626L657 623Q660 623 684 649Q691 655 699 663T715 679T725 690L740 705H746Q760 705 760 698Q760 694 728 561Q692 422 692 421Q690 416 687 415T669 413H653Q647 419 647 422Q647 423 648 429T650 449T651 481Q651 552 619 605T510 659Q484 659 454 652T382 628T299 572T226 479Q194 422 175 346T156 222Q156 108 232 58Q280 24 350 24Q441 24 512 92T606 240Q610 253 612 255T628 257Q648 257 648 248Q648 243 647 239Q618 132 523 55T319 -22Q206 -22 128 53T50 252Z"></path></g><g data-mml-node="mo" transform="translate(760,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(1204.7,0)"><path data-c="1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g><g data-mml-node="mo" transform="translate(1724.7,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(2169.3,0)"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path></g></g></g></svg></mjx-container>，算出 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="2.378ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 1051 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g></g></g></svg></mjx-container> 很快。</li>
+<li><strong>反向计算极难</strong>：已知 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="7.808ex" height="2.034ex" role="img" focusable="false" viewBox="0 -705 3451.3 899"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g><g data-mml-node="mo" transform="translate(1051,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(1495.7,0)"><path data-c="1D436" d="M50 252Q50 367 117 473T286 641T490 704Q580 704 633 653Q642 643 648 636T656 626L657 623Q660 623 684 649Q691 655 699 663T715 679T725 690L740 705H746Q760 705 760 698Q760 694 728 561Q692 422 692 421Q690 416 687 415T669 413H653Q647 419 647 422Q647 423 648 429T650 449T651 481Q651 552 619 605T510 659Q484 659 454 652T382 628T299 572T226 479Q194 422 175 346T156 222Q156 108 232 58Q280 24 350 24Q441 24 512 92T606 240Q610 253 612 255T628 257Q648 257 648 248Q648 243 647 239Q618 132 523 55T319 -22Q206 -22 128 53T50 252Z"></path></g><g data-mml-node="mo" transform="translate(2255.7,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(2700.3,0)"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path></g></g></g></svg></mjx-container>，想要算出指数 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.023ex;" xmlns="http://www.w3.org/2000/svg" width="1.176ex" height="1.593ex" role="img" focusable="false" viewBox="0 -694 520 704"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g></g></g></svg></mjx-container>（私钥），在 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.699ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 751 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path></g></g></g></svg></mjx-container> 足够大时，计算量是指数级的，现代计算机无法在有效时间内破解。</li>
+</ul>
+</li>
+<li><strong>作用</strong>：SSH利用DH算法，在客户端和服务器之间安全地生成一个<strong>对称密钥</strong>，用于后续的数据加密传输。</li>
+</ul>
+<h3 id="核心重点：SSH协议详解-Secure-Shell"><a href="#核心重点：SSH协议详解-Secure-Shell" class="headerlink" title="核心重点：SSH协议详解 (Secure Shell)"></a>核心重点：SSH协议详解 (Secure Shell)</h3><h4 id="1-什么是SSH？"><a href="#1-什么是SSH？" class="headerlink" title="1. 什么是SSH？"></a>1. 什么是SSH？</h4><p>SSH（Secure Shell）即“安全外壳”。它是基于<strong>公钥密码体系</strong>的安全应用协议，专为<strong>远程登录会话</strong>和其他网络服务提供安全性。</p>
+<ul>
+<li><strong>主要目的</strong>：替代Telnet、rsh等不安全的明文传输协议。</li>
+<li><strong>核心功能</strong>：加密（防窃听）、认证（防伪装）、完整性检查（防篡改）。</li>
+</ul>
+<h4 id="2-SSH的内部架构（三大子协议）"><a href="#2-SSH的内部架构（三大子协议）" class="headerlink" title="2. SSH的内部架构（三大子协议）"></a>2. SSH的内部架构（三大子协议）</h4><p>SSH不是一个单一的协议，而是由三个分工明确的协议组成的“协议栈”：</p>
+<ol>
+<li><strong>SSH传输层协议 (Transport Layer Protocol)</strong><ul>
+<li><em>职责</em>：负责最底层的脏活累活。包括<strong>算法协商</strong>（商量用什么加密）、<strong>密钥交换</strong>（DH算法）、<strong>服务器认证</strong>（确认服务器是真的）。</li>
+<li><em>结果</em>：建立一个加密的、压缩的、保证完整性的安全通道。</li>
+</ul>
+</li>
+<li><strong>SSH用户认证协议 (User Authentication Protocol)</strong><ul>
+<li><em>职责</em>：运行在传输层之上，负责鉴别<strong>客户端（用户）</strong>是谁。</li>
+<li><em>方式</em>：支持口令认证（输入密码）、公钥认证（免密登录）等。</li>
+</ul>
+</li>
+<li><strong>SSH连接协议 (Connection Protocol)</strong><ul>
+<li><em>职责</em>：在加密和认证都完成后，负责把加密隧道<strong>多路复用</strong>。</li>
+<li><em>功能</em>：将一个物理连接逻辑上分为多个逻辑通道（Channel），分别处理终端会话、文件传输、端口转发等。</li>
+</ul>
+</li>
+</ol>
+<h4 id="3-SSH的工作流程（7个步骤）"><a href="#3-SSH的工作流程（7个步骤）" class="headerlink" title="3. SSH的工作流程（7个步骤）"></a>3. SSH的工作流程（7个步骤）</h4><p><img src="../uploads/ssh_2.png" alt=""></p>
+<ol>
+<li><strong>获取证书</strong>：客户端获取服务器的公钥证书（或已经存有服务器公钥）。</li>
+<li><strong>连接请求</strong>：客户端发起TCP连接（握手）。</li>
+<li><strong>服务器身份通告</strong>：服务器把自己的公钥发给客户端。</li>
+<li><strong>验证服务器</strong>：客户端验证这个公钥是不是真的服务器（防止中间人冒充）。</li>
+<li><strong>建立密钥 (DH)</strong>：双方通过Diffie-Hellman算法，协商出一个<strong>会话密钥</strong>（对称密钥）。</li>
+<li><strong>认证用户</strong>：建立加密隧道后，服务器验证客户端的身份（如输入密码）。</li>
+<li><strong>会话开始</strong>：使用SSH Tunnel进行加密通信。</li>
+</ol>
+<h4 id="4-关键环节：如何验证服务器公钥的真实性？"><a href="#4-关键环节：如何验证服务器公钥的真实性？" class="headerlink" title="4. 关键环节：如何验证服务器公钥的真实性？"></a>4. 关键环节：如何验证服务器公钥的真实性？</h4><p>客户端如何确认“发给我公钥的服务器真的是由于我要连接的那台服务器？”（防止中间人攻击）。主要有三种方法：</p>
+<ul>
+<li><strong>方法一：物理拷贝 (最原始)</strong><ul>
+<li>用户直接带个U盘把服务器的公钥拷到客户端电脑里。安全但麻烦，不适合大规模使用。</li>
+</ul>
+</li>
+<li><strong>方法二：指纹核对 (最常用)</strong><ul>
+<li><strong>流程</strong>：<ol>
+<li>首次连接时，客户端下载服务器公钥。</li>
+<li>屏幕显示公钥的<strong>指纹 (Hash值)</strong>。</li>
+<li>用户通过电话或其他渠道联系管理员核对指纹。</li>
+<li>若指纹一致，用户输入“yes”信任该主机，公钥被保存到 <code>known_hosts</code> 文件中。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>方法三：PKI 认证 (最规范)</strong><ul>
+<li>通过权威的 CA 机构（PKI体系）来验证服务器证书的合法性。</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-SSH-的实际应用与风险"><a href="#5-SSH-的实际应用与风险" class="headerlink" title="5. SSH 的实际应用与风险"></a>5. SSH 的实际应用与风险</h4><ul>
+<li><strong>默认端口</strong>：Linux系统中默认是 TCP <strong>22</strong> 端口。</li>
+<li><strong>功能扩展</strong>：不仅是远程黑窗口（Shell），还支持 <code>scp/sftp</code>（文件传输）、端口转发（跳板机/代理）。</li>
+<li><strong>安全隐患</strong>：<ul>
+<li><strong>中间人攻击 (MITM)</strong>：如果在首次连接（TOFU, Trust On First Use）时没有仔细核对指纹，攻击者可能拦截连接并伪造公钥。</li>
+<li><strong>拒绝服务攻击 (DoS)</strong>：因为SSH握手涉及复杂的加密计算（DH交换），消耗CPU资源大，攻击者可利用这一点耗尽服务器资源。</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结</strong></p>
+<p>SSH 是一个<strong>分层</strong>的协议，利用 <strong>DH算法</strong> 协商密钥，通过 <strong>三种方式</strong> 验证服务器身份，最终建立加密隧道替代 Telnet，保障 <strong>22端口</strong> 的远程管理安全。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -476,7 +630,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2026-01-18 09:59:28 / 修改时间：12:39:32" itemprop="dateCreated datePublished" datetime="2026-01-18T09:59:28+08:00">2026-01-18</time>
+      <time title="创建时间：2026-01-18 09:59:28 / 修改时间：16:22:31" itemprop="dateCreated datePublished" datetime="2026-01-18T09:59:28+08:00">2026-01-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -691,332 +845,14 @@ mjx-container[display="true"] + br {
 <li><strong>SM3 (哈希)</strong> <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0.124ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="0.968ex" role="img" focusable="false" viewBox="0 -483 778 428"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2248" d="M55 319Q55 360 72 393T114 444T163 472T205 482Q207 482 213 482T223 483Q262 483 296 468T393 413L443 381Q502 346 553 346Q609 346 649 375T694 454Q694 465 698 474T708 483Q722 483 722 452Q722 386 675 338T555 289Q514 289 468 310T388 357T308 404T224 426Q164 426 125 393T83 318Q81 289 69 289Q55 289 55 319ZM55 85Q55 126 72 159T114 210T163 238T205 248Q207 248 213 248T223 249Q262 249 296 234T393 179L443 147Q502 112 553 112Q609 112 649 141T694 220Q694 249 708 249T722 217Q722 153 675 104T555 55Q514 55 468 76T388 123T308 170T224 192Q164 192 125 159T83 84Q80 55 69 55Q55 55 55 85Z"></path></g></g></g></svg></mjx-container> <strong>SHA-256</strong> (输出长度相同)</li>
 </ul>
 <h4 id="6-习题"><a href="#6-习题" class="headerlink" title="6.习题"></a>6.习题</h4><p>利用公开密钥算法进行数据加密时，采用方式是：<strong>发送方用公开密钥加密，接收方用私有密钥解密</strong>。</p>
-<h3 id="五、数字信封技术"><a href="#五、数字信封技术" class="headerlink" title="五、数字信封技术"></a>五、数字信封技术</h3><h4 id="核心概念：什么是“数字信封”？"><a href="#核心概念：什么是“数字信封”？" class="headerlink" title="核心概念：什么是“数字信封”？"></a>核心概念：什么是“数字信封”？</h4><p>在之前的混合密码体制中我们提到过：</p>
-<ul>
-<li><strong>数字信封（Digital Envelope）</strong> 是一种结合了<strong>对称加密</strong>和<strong>非对称加密（公钥加密）</strong>优点的技术。</li>
-<li><strong>工作原理</strong>：<ol>
-<li>发送方生成一个随机的<strong>对称密钥</strong>（比如DES或AES密钥），用它来加密<strong>明文数据</strong>（因为对称加密速度快）。</li>
-<li>发送方再用接收方的<strong>公钥</strong>，对刚才那个<strong>对称密钥</strong>进行加密（这就形成了“数字信封”）。</li>
-<li>接收方收到后，先用自己的<strong>私钥</strong>解开信封（得到对称密钥），再用对称密钥解密数据。</li>
-</ol>
-</li>
-</ul>
-<h4 id="选项深度解析"><a href="#选项深度解析" class="headerlink" title="选项深度解析"></a>选项深度解析</h4><ul>
-<li><p><strong>A. 对发送者和接收者的身份进行认证</strong> —— <strong>错误</strong></p>
-<ul>
-<li><strong>原因</strong>：数字信封使用的是<strong>接收方的公钥</strong>进行加密。因为公钥是公开的，<strong>任何人</strong>都可以获取接收方的公钥并发送数字信封。因此，接收方收到信封后，无法确定是谁发的（无法认证发送者身份）。</li>
-<li><strong>补充</strong>：要实现身份认证，通常需要使用<strong>数字签名</strong>技术（使用发送方的私钥加密）。</li>
-</ul>
-</li>
-<li><p><strong>B. 保证数据在传输过程中的安全性</strong> —— <strong>正确</strong></p>
-<ul>
-<li><strong>原因</strong>：这里的“安全性”具体指的是<strong>机密性（Confidentiality）</strong>。</li>
-<li>数据本身被高强度的对称算法加密了，而解密数据的钥匙（对称密钥）又被非对称算法加密保护在“信封”里。只有拥有对应<strong>私钥</strong>的接收者才能解开信封拿到钥匙，进而看到数据。这就保证了数据在传输过程中即使被截获，黑客也无法看到明文。</li>
-</ul>
-</li>
-<li><p><strong>C. 防止交易中的抵赖发生</strong> —— <strong>错误</strong></p>
-<ul>
-<li><strong>原因</strong>：“抵赖”是指发送方事后否认自己发过该消息。防止抵赖（抗抵赖性）同样需要<strong>数字签名</strong>。因为数字信封不包含发送方的特征信息（私钥签名），所以发送方完全可以不承认这东西是他发的。</li>
-</ul>
-</li>
-<li><p><strong>D. 隐藏发送者的身份</strong> —— <strong>错误</strong></p>
-<ul>
-<li><strong>原因</strong>：虽然数字信封不验证身份，但它的设计目的并不是为了“匿名”或隐藏身份，而是为了保护<strong>内容（密钥和数据）</strong>不被泄露。</li>
-</ul>
-</li>
-</ul>
-<h4 id="知识点总结（考试必记）"><a href="#知识点总结（考试必记）" class="headerlink" title="知识点总结（考试必记）"></a>知识点总结（考试必记）</h4><p>为了防止混淆，请记住这组对比：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:left">技术名称</th>
-<th style="text-align:left">使用的密钥</th>
-<th style="text-align:left">主要功能</th>
-<th style="text-align:left">对应安全目标</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><strong>数字信封</strong></td>
-<td style="text-align:left"><strong>接收方</strong>的<strong>公钥</strong></td>
-<td style="text-align:left">加密传输密钥</td>
-<td style="text-align:left"><strong>机密性</strong> (Confidentiality)</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>数字签名</strong></td>
-<td style="text-align:left"><strong>发送方</strong>的<strong>私钥</strong></td>
-<td style="text-align:left">签名摘要</td>
-<td style="text-align:left"><strong>完整性、认证、抗抵赖</strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>结论：</strong><br>题目问的是数字信封的功能，它是用来“装秘密”的，所以选 <strong>B（保证传输安全性/机密性）</strong>。</p>
-<h3 id="六、数字签名技术"><a href="#六、数字签名技术" class="headerlink" title="六、数字签名技术"></a>六、数字签名技术</h3><p>数字签名比作现实生活中的<strong>“手写签名+防伪印章”</strong>，相关技术和原理总结如下：</p>
-<h4 id="什么是数字签名？"><a href="#什么是数字签名？" class="headerlink" title="什么是数字签名？"></a>什么是数字签名？</h4><p>简单来说，数字签名就是电子世界里的“亲笔签名”。</p>
-<ul>
-<li><strong>定义</strong>：签名者使用自己的<strong>私钥</strong>，对数据的<strong>杂凑值（Hash值/摘要）</strong>进行加密处理，得到的这一串数据就是数字签名。</li>
-<li><strong>核心规则</strong>：<ul>
-<li><strong>私钥签名</strong>：只有签名者自己有私钥，所以只有他能生成这个签名（代表身份真实性）。</li>
-<li><strong>公钥验证</strong>：签名者的公钥是公开的，任何人都可以用它来解密签名，验证是不是他签的。</li>
-</ul>
-</li>
-</ul>
-<h4 id="数字签名有什么用？（三大核心功能）"><a href="#数字签名有什么用？（三大核心功能）" class="headerlink" title="数字签名有什么用？（三大核心功能）"></a>数字签名有什么用？（三大核心功能）</h4><ol>
-<li><strong>完整性 (Integrity)</strong>：证明文件在传输过程中<strong>没有被篡改</strong>。如果文件被改了一个标点符号，签名验证就会失败。</li>
-<li><strong>真实性/身份认证 (Authentication)</strong>：证明文件<strong>确实是发送方发的</strong>，而不是别人冒充的（因为只有发送方有私钥）。</li>
-<li><strong>不可抵赖性/非否认 (Non-repudiation)</strong>：发送方事后<strong>不能不承认</strong>自己发过这份文件。如果有争议，可以通过公正的仲裁者利用公钥来验证。</li>
-</ol>
-<h4 id="数字签名是怎么工作的？"><a href="#数字签名是怎么工作的？" class="headerlink" title="数字签名是怎么工作的？"></a>数字签名是怎么工作的？</h4><p><strong>“数字签名 + 信息摘要（Hash）”</strong> 联合使用的标准过程。为什么不直接对原文件签名？因为原文件可能很大，计算太慢，所以通常只对文件的“指纹”（摘要）进行签名。</p>
-<p><strong>发送方（签名过程）：</strong></p>
-<ol>
-<li><strong>生成摘要</strong>：先把原文（如电子合同）通过 <strong>Hash函数</strong>（杂凑算法），生成一个短小且唯一的<strong>消息摘要</strong>（相当于文件的指纹）。</li>
-<li><strong>生成签名</strong>：用发送方的<strong>私钥</strong>，对这个<strong>消息摘要</strong>进行加密。生成的这段乱码就是<strong>“数字签名”</strong>。</li>
-<li><strong>发送</strong>：将<strong>原文</strong>和<strong>数字签名</strong>一起打包发给接收方。</li>
-</ol>
-<p><strong>接收方（验证过程）：</strong></p>
-<ol>
-<li><strong>还原摘要</strong>：收到签名后，用发送方的<strong>公钥</strong>对签名进行解密。如果能解开，说明确实是用发送方私钥签的。解密后得到<strong>摘要A</strong>。</li>
-<li><strong>计算摘要</strong>：收到原文后，用<strong>同样的Hash函数</strong>对原文重新计算一遍，得到<strong>摘要B</strong>。</li>
-<li><strong>比对</strong>：将<strong>摘要A</strong>和<strong>摘要B</strong>进行比较。<ul>
-<li>如果 <strong>A = B</strong>：说明文件没被改过，且确实是这个人发的（验证成功）。</li>
-<li>如果 <strong>A ≠ B</strong>：说明文件被篡改了，或者签名是伪造的（验证失败）。</li>
-</ul>
-</li>
-</ol>
-<p><strong>关键辨析：签名 vs 加密</strong></p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:left">维度</th>
-<th style="text-align:left"><strong>加密 (Encryption)</strong></th>
-<th style="text-align:left"><strong>数字签名 (Digital Signature)</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><strong>使用的密钥</strong></td>
-<td style="text-align:left">公钥加密，私钥解密</td>
-<td style="text-align:left"><strong>私钥加密</strong>（签名），<strong>公钥解密</strong>（验证）</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>核心目的</strong></td>
-<td style="text-align:left">保证<strong>机密性</strong>（不让人看）</td>
-<td style="text-align:left">保证<strong>完整性、真实性、不可抵赖性</strong>（不怕人看，只怕人改）</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>操作对象</strong></td>
-<td style="text-align:left">针对整个明文数据</td>
-<td style="text-align:left">通常针对数据的<strong>杂凑值（摘要）</strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>常见算法</strong></p>
-<ul>
-<li><strong>RSA</strong></li>
-<li><strong>Rabin</strong></li>
-<li><strong>ElGamal</strong></li>
-<li><strong>DSS</strong> (Digital Signature Standard，数字签名标准)</li>
-<li><em>(国产算法 <strong>SM2</strong> 也常用于数字签名)</em></li>
-</ul>
-<h3 id="七、数字证书"><a href="#七、数字证书" class="headerlink" title="七、数字证书"></a>七、数字证书</h3><p><strong>数字证书（Digital Certificate）</strong>包含定义、结构、分类以及管理体系。它是公钥密码体制（PKI）中至关重要的一环，解决了“公钥归属性”的问题，数字证书可以比作网络世界的<strong>“身份证”</strong>来进行解读。</p>
-<h4 id="什么是数字证书？（定义）"><a href="#什么是数字证书？（定义）" class="headerlink" title="什么是数字证书？（定义）"></a>什么是数字证书？（定义）</h4><ul>
-<li><strong>核心概念</strong>：数字证书（也叫公钥证书）是一种数据结构。</li>
-<li><strong>作用</strong>：它相当于网络世界的“身份证”。它的核心作用是<strong>证明某个公钥确实属于某个人、机构或设备</strong>。</li>
-<li><strong>信任关系</strong>：这张“身份证”不是自己画的，而是由权威的<strong>证书认证机构（CA, Certificate Authority）</strong> 签发并签名的。</li>
-</ul>
-<h4 id="证书里都有什么？（基本信息域）"><a href="#证书里都有什么？（基本信息域）" class="headerlink" title="证书里都有什么？（基本信息域）"></a>证书里都有什么？（基本信息域）</h4><p>就像身份证上印有姓名、身份证号、有效期一样，数字证书包含以下关键信息：</p>
-<ul>
-<li><strong>主体信息 (Subject)</strong>：证书持有者的身份（是谁的证书）。</li>
-<li><strong>公开密钥 (Public Key)</strong>：<strong>这是最核心的部分</strong>。证书把这个公钥和上面的主体身份绑定在一起。</li>
-<li><strong>颁发者 (Issuer)</strong>：是谁发的这张证书（通常是CA机构）。</li>
-<li><strong>有效期</strong>：证书从什么时候到什么时候有效。</li>
-<li><strong>序列号 &amp; 版本号</strong>：证书的唯一编号和格式版本。</li>
-<li><strong>签名算法</strong>：CA用来签署这张证书的算法。</li>
-<li><strong>扩展项</strong>：其他补充信息。</li>
-</ul>
-<h4 id="证书怎么分类？"><a href="#证书怎么分类？" class="headerlink" title="证书怎么分类？"></a>证书怎么分类？</h4><ul>
-<li><p><strong>按“谁在用”分（类别）</strong>：</p>
-<ul>
-<li><strong>个人证书</strong>：发给自然人。</li>
-<li><strong>机构证书</strong>：发给企业或组织（比如网站的SSL证书）。</li>
-<li><strong>设备证书</strong>：发给路由器、服务器等硬件设备。</li>
-</ul>
-</li>
-<li><p><strong>按“干什么用”分（用途）</strong>：</p>
-<ul>
-<li><strong>签名证书</strong>：包含<strong>签名公钥</strong>。主要用于身份认证和抗抵赖（验证签名）。</li>
-<li><strong>加密证书</strong>：包含<strong>加密公钥</strong>。主要用于数据加密传输（发送密文）。</li>
-<li><em>注：在某些高安全标准（如中国SM2国密体系）中，签名和加密通常使用两对不同的密钥，所以会对应两张不同的证书（双证书机制）。</em></li>
-</ul>
-</li>
-</ul>
-<h4 id="谁来管理证书？（CA与PKI）"><a href="#谁来管理证书？（CA与PKI）" class="headerlink" title="谁来管理证书？（CA与PKI）"></a>谁来管理证书？（CA与PKI）</h4><p>数字证书不是凭空产生的，它依赖于<strong>PKI（公钥基础设施）</strong>技术，并由 <strong>CA（证书认证系统）</strong> 进行全生命周期管理。</p>
-<ul>
-<li><p><strong>CA的职能</strong>：贯穿证书的“一生”，包括：</p>
-<ul>
-<li><strong>申请 &amp; 审核</strong>：检查你是不是合法的申请人。</li>
-<li><strong>签发</strong>：给你发证书。</li>
-<li><strong>查询 &amp; 发布</strong>：让别人能查到你的证书。</li>
-<li><strong>吊销</strong>：如果你的私钥丢了，或者不想用了，CA会注销这张证书（相当于挂失）。</li>
-</ul>
-</li>
-<li><p><strong>系统的构成</strong>：</p>
-<ul>
-<li><strong>注册服务器</strong>：负责登记信息。</li>
-<li><strong>签发服务器</strong>：负责核心的加密签发。</li>
-<li><strong>目录服务器</strong>：用于存储和发布证书。</li>
-<li><strong>OCSP服务器</strong>：<strong>在线证书状态协议</strong>，用于实时查询证书是不是被吊销了（查询证书是否有效）。</li>
-</ul>
-</li>
-</ul>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><strong>数字证书</strong>就是权威机构（<strong>CA</strong>）用自己的私钥对你的<strong>公钥</strong>和<strong>身份信息</strong>进行打包签名后生成的一张电子凭证，用来防止有人冒充你的身份发公钥。</p>
-<h3 id="八、哈希函数-杂凑函数-散列函数"><a href="#八、哈希函数-杂凑函数-散列函数" class="headerlink" title="八、哈希函数(杂凑函数/散列函数)"></a>八、哈希函数(杂凑函数/散列函数)</h3><h4 id="定义与特性"><a href="#定义与特性" class="headerlink" title="定义与特性"></a>定义与特性</h4><ul>
-<li><strong>定义</strong>：一种能将<strong>任意长度</strong>的信息转换为<strong>固定长度</strong>哈希值（数字摘要/信息摘要）的函数。</li>
-<li><strong>核心特性</strong>：<ul>
-<li><strong>唯一性对应</strong>：任意不同的消息或文件，其生成的哈希值是不一样的（抗碰撞）。</li>
-<li><strong>输入</strong>：可以是任意长度的消息 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="2.378ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 1051 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g></g></g></svg></mjx-container>。</li>
-<li><strong>输出</strong>：长度是固定的。</li>
-<li><strong>计算简便性</strong>：给定 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="2.378ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 1051 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g></g></g></svg></mjx-container>，计算 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="5.441ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2405 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="210E" d="M137 683Q138 683 209 688T282 694Q294 694 294 685Q294 674 258 534Q220 386 220 383Q220 381 227 388Q288 442 357 442Q411 442 444 415T478 336Q478 285 440 178T402 50Q403 36 407 31T422 26Q450 26 474 56T513 138Q516 149 519 151T535 153Q555 153 555 145Q555 144 551 130Q535 71 500 33Q466 -10 419 -10H414Q367 -10 346 17T325 74Q325 90 361 192T398 345Q398 404 354 404H349Q266 404 205 306L198 293L164 158Q132 28 127 16Q114 -11 83 -11Q69 -11 59 -2T48 16Q48 30 121 320L195 616Q195 629 188 632T149 637H128Q122 643 122 645T124 664Q129 683 137 683Z"></path></g><g data-mml-node="mo" transform="translate(576,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(965,0)"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g><g data-mml-node="mo" transform="translate(2016,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container> 很容易。</li>
-<li><strong>单向性/抗碰撞性</strong>：给定算法 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.303ex" height="1.595ex" role="img" focusable="false" viewBox="0 -694 576 705"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="210E" d="M137 683Q138 683 209 688T282 694Q294 694 294 685Q294 674 258 534Q220 386 220 383Q220 381 227 388Q288 442 357 442Q411 442 444 415T478 336Q478 285 440 178T402 50Q403 36 407 31T422 26Q450 26 474 56T513 138Q516 149 519 151T535 153Q555 153 555 145Q555 144 551 130Q535 71 500 33Q466 -10 419 -10H414Q367 -10 346 17T325 74Q325 90 361 192T398 345Q398 404 354 404H349Q266 404 205 306L198 293L164 158Q132 28 127 16Q114 -11 83 -11Q69 -11 59 -2T48 16Q48 30 121 320L195 616Q195 629 188 632T149 637H128Q122 643 122 645T124 664Q129 683 137 683Z"></path></g></g></g></svg></mjx-container>，想要找到两个不同的消息 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="3.509ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 1551 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g><g data-mml-node="mn" transform="translate(1051,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g></svg></mjx-container> 和 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="3.509ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 1551 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g><g data-mml-node="mn" transform="translate(1051,0)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g></g></svg></mjx-container> 使得它们哈希值相同（<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="16.162ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 7143.6 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="210E" d="M137 683Q138 683 209 688T282 694Q294 694 294 685Q294 674 258 534Q220 386 220 383Q220 381 227 388Q288 442 357 442Q411 442 444 415T478 336Q478 285 440 178T402 50Q403 36 407 31T422 26Q450 26 474 56T513 138Q516 149 519 151T535 153Q555 153 555 145Q555 144 551 130Q535 71 500 33Q466 -10 419 -10H414Q367 -10 346 17T325 74Q325 90 361 192T398 345Q398 404 354 404H349Q266 404 205 306L198 293L164 158Q132 28 127 16Q114 -11 83 -11Q69 -11 59 -2T48 16Q48 30 121 320L195 616Q195 629 188 632T149 637H128Q122 643 122 645T124 664Q129 683 137 683Z"></path></g><g data-mml-node="mo" transform="translate(576,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(965,0)"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g><g data-mml-node="mn" transform="translate(2016,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g><g data-mml-node="mo" transform="translate(2516,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g><g data-mml-node="mo" transform="translate(3182.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mi" transform="translate(4238.6,0)"><path data-c="210E" d="M137 683Q138 683 209 688T282 694Q294 694 294 685Q294 674 258 534Q220 386 220 383Q220 381 227 388Q288 442 357 442Q411 442 444 415T478 336Q478 285 440 178T402 50Q403 36 407 31T422 26Q450 26 474 56T513 138Q516 149 519 151T535 153Q555 153 555 145Q555 144 551 130Q535 71 500 33Q466 -10 419 -10H414Q367 -10 346 17T325 74Q325 90 361 192T398 345Q398 404 354 404H349Q266 404 205 306L198 293L164 158Q132 28 127 16Q114 -11 83 -11Q69 -11 59 -2T48 16Q48 30 121 320L195 616Q195 629 188 632T149 637H128Q122 643 122 645T124 664Q129 683 137 683Z"></path></g><g data-mml-node="mo" transform="translate(4814.6,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(5203.6,0)"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g><g data-mml-node="mn" transform="translate(6254.6,0)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><g data-mml-node="mo" transform="translate(6754.6,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container>），在计算上是不可行的。</li>
-</ul>
-</li>
-</ul>
-<h4 id="常见Hash算法对比"><a href="#常见Hash算法对比" class="headerlink" title="常见Hash算法对比"></a>常见Hash算法对比</h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:left">算法名称</th>
-<th style="text-align:left">处理分组长度</th>
-<th style="text-align:left">输出摘要长度</th>
-<th style="text-align:left">特点/备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><strong>MD5</strong></td>
-<td style="text-align:left">512比特</td>
-<td style="text-align:left"><strong>128比特</strong></td>
-<td style="text-align:left">经典算法，但现在安全性相对较低。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>SHA</strong></td>
-<td style="text-align:left">512比特</td>
-<td style="text-align:left"><strong>160比特</strong></td>
-<td style="text-align:left">比MD5具有更强的安全性。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>SM3</strong></td>
-<td style="text-align:left">512比特</td>
-<td style="text-align:left"><strong>256比特</strong></td>
-<td style="text-align:left"><strong>国产密码算法</strong> (2010年公布)。采用 Merkle-Damgard (M-D) 结构，安全性高。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="九、-密钥管理体系"><a href="#九、-密钥管理体系" class="headerlink" title="九、 密钥管理体系"></a>九、 密钥管理体系</h3><p>密码系统的安全性主要依赖于密钥管理。主要包含三个维度的内容：</p>
-<h4 id="1-密钥管理-全生命周期"><a href="#1-密钥管理-全生命周期" class="headerlink" title="1. 密钥管理 (全生命周期)"></a>1. 密钥管理 (全生命周期)</h4><p>围绕密钥的整个“一生”进行管理，包括以下环节：</p>
-<ul>
-<li>生成 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="2.262ex" height="1.181ex" role="img" focusable="false" viewBox="0 -511 1000 522"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2192" d="M56 237T56 250T70 270H835Q719 357 692 493Q692 494 692 496T691 499Q691 511 708 511H711Q720 511 723 510T729 506T732 497T735 481T743 456Q765 389 816 336T935 261Q944 258 944 250Q944 244 939 241T915 231T877 212Q836 186 806 152T761 85T740 35T732 4Q730 -6 727 -8T711 -11Q691 -11 691 0Q691 7 696 25Q728 151 835 230H70Q56 237 56 250Z"></path></g></g></g></svg></mjx-container> 存储 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="2.262ex" height="1.181ex" role="img" focusable="false" viewBox="0 -511 1000 522"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2192" d="M56 237T56 250T70 270H835Q719 357 692 493Q692 494 692 496T691 499Q691 511 708 511H711Q720 511 723 510T729 506T732 497T735 481T743 456Q765 389 816 336T935 261Q944 258 944 250Q944 244 939 241T915 231T877 212Q836 186 806 152T761 85T740 35T732 4Q730 -6 727 -8T711 -11Q691 -11 691 0Q691 7 696 25Q728 151 835 230H70Q56 237 56 250Z"></path></g></g></g></svg></mjx-container> 分发 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="2.262ex" height="1.181ex" role="img" focusable="false" viewBox="0 -511 1000 522"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2192" d="M56 237T56 250T70 270H835Q719 357 692 493Q692 494 692 496T691 499Q691 511 708 511H711Q720 511 723 510T729 506T732 497T735 481T743 456Q765 389 816 336T935 261Q944 258 944 250Q944 244 939 241T915 231T877 212Q836 186 806 152T761 85T740 35T732 4Q730 -6 727 -8T711 -11Q691 -11 691 0Q691 7 696 25Q728 151 835 230H70Q56 237 56 250Z"></path></g></g></g></svg></mjx-container> 使用 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="2.262ex" height="1.181ex" role="img" focusable="false" viewBox="0 -511 1000 522"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2192" d="M56 237T56 250T70 270H835Q719 357 692 493Q692 494 692 496T691 499Q691 511 708 511H711Q720 511 723 510T729 506T732 497T735 481T743 456Q765 389 816 336T935 261Q944 258 944 250Q944 244 939 241T915 231T877 212Q836 186 806 152T761 85T740 35T732 4Q730 -6 727 -8T711 -11Q691 -11 691 0Q691 7 696 25Q728 151 835 230H70Q56 237 56 250Z"></path></g></g></g></svg></mjx-container> 更新 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="2.262ex" height="1.181ex" role="img" focusable="false" viewBox="0 -511 1000 522"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2192" d="M56 237T56 250T70 270H835Q719 357 692 493Q692 494 692 496T691 499Q691 511 708 511H711Q720 511 723 510T729 506T732 497T735 481T743 456Q765 389 816 336T935 261Q944 258 944 250Q944 244 939 241T915 231T877 212Q836 186 806 152T761 85T740 35T732 4Q730 -6 727 -8T711 -11Q691 -11 691 0Q691 7 696 25Q728 151 835 230H70Q56 237 56 250Z"></path></g></g></g></svg></mjx-container> 撤销 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="2.262ex" height="1.181ex" role="img" focusable="false" viewBox="0 -511 1000 522"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2192" d="M56 237T56 250T70 270H835Q719 357 692 493Q692 494 692 496T691 499Q691 511 708 511H711Q720 511 723 510T729 506T732 497T735 481T743 456Q765 389 816 336T935 261Q944 258 944 250Q944 244 939 241T915 231T877 212Q836 186 806 152T761 85T740 35T732 4Q730 -6 727 -8T711 -11Q691 -11 691 0Q691 7 696 25Q728 151 835 230H70Q56 237 56 250Z"></path></g></g></g></svg></mjx-container> 备份 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="2.262ex" height="1.181ex" role="img" focusable="false" viewBox="0 -511 1000 522"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2192" d="M56 237T56 250T70 270H835Q719 357 692 493Q692 494 692 496T691 499Q691 511 708 511H711Q720 511 723 510T729 506T732 497T735 481T743 456Q765 389 816 336T935 261Q944 258 944 250Q944 244 939 241T915 231T877 212Q836 186 806 152T761 85T740 35T732 4Q730 -6 727 -8T711 -11Q691 -11 691 0Q691 7 696 25Q728 151 835 230H70Q56 237 56 250Z"></path></g></g></g></svg></mjx-container> 恢复 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="2.262ex" height="1.181ex" role="img" focusable="false" viewBox="0 -511 1000 522"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2192" d="M56 237T56 250T70 270H835Q719 357 692 493Q692 494 692 496T691 499Q691 511 708 511H711Q720 511 723 510T729 506T732 497T735 481T743 456Q765 389 816 336T935 261Q944 258 944 250Q944 244 939 241T915 231T877 212Q836 186 806 152T761 85T740 35T732 4Q730 -6 727 -8T711 -11Q691 -11 691 0Q691 7 696 25Q728 151 835 230H70Q56 237 56 250Z"></path></g></g></g></svg></mjx-container> 销毁 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="2.262ex" height="1.181ex" role="img" focusable="false" viewBox="0 -511 1000 522"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2192" d="M56 237T56 250T70 270H835Q719 357 692 493Q692 494 692 496T691 499Q691 511 708 511H711Q720 511 723 510T729 506T732 497T735 481T743 456Q765 389 816 336T935 261Q944 258 944 250Q944 244 939 241T915 231T877 212Q836 186 806 152T761 85T740 35T732 4Q730 -6 727 -8T711 -11Q691 -11 691 0Q691 7 696 25Q728 151 835 230H70Q56 237 56 250Z"></path></g></g></g></svg></mjx-container> 审计。</li>
-</ul>
-<h4 id="2-密钥管理政策-法律法规"><a href="#2-密钥管理政策-法律法规" class="headerlink" title="2. 密钥管理政策 (法律法规)"></a>2. 密钥管理政策 (法律法规)</h4><p>依据《密码法》和《商用密码管理条例》，我国对密码实行<strong>分类管理</strong>：</p>
-<ul>
-<li><strong>核心密码 &amp; 普通密码</strong>：<ul>
-<li><strong>保护对象</strong>：<strong>国家秘密</strong>信息。</li>
-<li><strong>属性</strong>：本身属于国家秘密。</li>
-<li><strong>管理方式</strong>：由密码管理部门依法实行严格统一管理。</li>
-</ul>
-</li>
-<li><strong>商用密码</strong>：<ul>
-<li><strong>保护对象</strong>：<strong>不属于国家秘密</strong>的信息。</li>
-<li><strong>适用范围</strong>：公民、法人和其他组织均可依法使用，用于保护网络与信息安全。</li>
-<li><strong>管理内容</strong>：涉及科研生产、销售、使用、安全保密等环节。</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-密码测评"><a href="#3-密码测评" class="headerlink" title="3. 密码测评"></a>3. 密码测评</h4><ul>
-<li><strong>定义</strong>：对密码产品及系统进行<strong>安全性</strong>和<strong>合规性</strong>评估。</li>
-<li><strong>机构</strong>：国家设立了<strong>商用密码检测中心</strong>来负责此项工作。</li>
-</ul>
-<h3 id="十、-密码技术的六大通用应用场景"><a href="#十、-密码技术的六大通用应用场景" class="headerlink" title="十、 密码技术的六大通用应用场景"></a>十、 密码技术的六大通用应用场景</h3><p>（涵盖从物理层到业务层的全方位保护）</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:left">场景分类</th>
-<th style="text-align:left">主要安全措施/涉及技术</th>
-<th style="text-align:left">保护目标</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><strong>1. 网络用户安全</strong></td>
-<td style="text-align:left"><strong>公钥技术/数字证书</strong>：身份鉴别<br><strong>加密技术</strong>：保护个人敏感信息</td>
-<td style="text-align:left">确认“你是谁”，保护隐私数据。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>2. 物理和环境安全</strong></td>
-<td style="text-align:left"><strong>身份鉴别</strong>：确认访客身份<br><strong>完整性/机密性保护</strong>：保护门禁记录、视频监控记录</td>
-<td style="text-align:left">防止物理入侵记录被篡改或偷看。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>3. 网络和通信安全</strong></td>
-<td style="text-align:left"><strong>双向身份鉴别</strong>：通信实体认证<br><strong>数字签名</strong>：数据完整性<br><strong>加密</strong>：敏感字段/报文加密<br><strong>认证协议</strong>：设备接入认证</td>
-<td style="text-align:left">保证数据在传输“路上”的安全。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>4. 设备和计算安全</strong></td>
-<td style="text-align:left"><strong>认证协议</strong>：登录鉴别<br><strong>Hash/签名</strong>：构建可信环境、验证程序来源（防篡改）<br><strong>SSH/SSL</strong>：远程管理通道安全</td>
-<td style="text-align:left">保护服务器、主机等计算设备本身。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>5. 应用和数据安全</strong></td>
-<td style="text-align:left"><strong>数字证书</strong>：用户登录鉴别<br><strong>加密</strong>：访问控制信息、数据存储<br><strong>SSH/SSL</strong>：数据传输安全</td>
-<td style="text-align:left">保护具体的应用系统和数据库。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>6. 业务应用创新</strong></td>
-<td style="text-align:left"><strong>数字证书/签名</strong>：网络发票<br><strong>Hash</strong>：区块链技术<br><strong>密码技术</strong>：电子证照</td>
-<td style="text-align:left">利用密码学推动新业务形态。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<hr>
-<h3 id="十一、-具体场景的技术实现细节"><a href="#十一、-具体场景的技术实现细节" class="headerlink" title="十一、 具体场景的技术实现细节"></a>十一、 具体场景的技术实现细节</h3><h4 id="1-路由器安全-Router-Security"><a href="#1-路由器安全-Router-Security" class="headerlink" title="1. 路由器安全 (Router Security)"></a>1. 路由器安全 (Router Security)</h4><ul>
-<li><strong>口令管理</strong>：<strong>切忌明文存储</strong>。路由器使用 <strong>MD5</strong> 对管理员口令进行 Hash 计算后存储。</li>
-<li><strong>远程管理</strong>：<ul>
-<li><strong>放弃 Telnet</strong>：因为它是明文传输，易泄露口令。</li>
-<li><strong>使用 SSH</strong>：替代 Telnet 进行加密的远程管理。</li>
-</ul>
-</li>
-<li><strong>路由信息交换</strong>：<ul>
-<li><strong>防欺诈</strong>：使用 <strong>MD5-HMAC</strong> 机制。</li>
-<li><strong>原理</strong>：发送方和接收方分别计算路由更新包的Hash值并对比。如果Hash值不同，说明数据包被篡改，直接拒绝更新。</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-Web-网站安全-Web-Security"><a href="#2-Web-网站安全-Web-Security" class="headerlink" title="2. Web 网站安全 (Web Security)"></a>2. Web 网站安全 (Web Security)</h4><ul>
-<li><strong>核心威胁</strong>：信息泄露、非授权访问、假冒网站。</li>
-<li><strong>核心方案</strong>：<strong>数字证书 + SSL 协议</strong> (即 HTTPS)。</li>
-<li><strong>作用</strong>：防止浏览器和服务器之间的通信被窃听（机密性）或篡改（完整性），并验证网站身份（真实性）。</li>
-</ul>
-<h4 id="3-电子邮件安全-Email-Security"><a href="#3-电子邮件安全-Email-Security" class="headerlink" title="3. 电子邮件安全 (Email Security)"></a>3. 电子邮件安全 (Email Security)</h4><ul>
-<li><strong>现状</strong>：普通 Email 是<strong>明文传递</strong>的，极不安全。</li>
-<li><strong>解决方案</strong>：使用 <strong>PGP (Pretty Good Privacy)</strong> 软件。</li>
-<li><strong>PGP 的技术架构</strong>（考试常考点）：<ul>
-<li><strong>混合加密体系</strong>：有机集成了对称和非对称算法。</li>
-<li><strong>密钥管理</strong>：使用 <strong>RSA</strong> 算法。</li>
-<li><strong>数据加密</strong>：使用 <strong>IDEA</strong> 算法（对称加密，速度快）。</li>
-<li><strong>完整性与签名</strong>：使用 <strong>MD5</strong> + <strong>RSA</strong> + 随机数生成器。</li>
-</ul>
-</li>
-<li><strong>功能</strong>：实现邮件的防窃听（加密）、发信人身份确认（签名）及防篡改。</li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/18/%E8%BD%AF%E8%80%83%E5%AF%86%E7%A0%81%E5%AD%A6%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1889,90 +1725,8 @@ mjx-container[display="true"] + br {
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/07/Windows%E6%BF%80%E6%B4%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/07/Windows%E6%BF%80%E6%B4%BB/" class="post-title-link" itemprop="url">Windows激活</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-07 20:56:27 / 修改时间：22:19:57" itemprop="dateCreated datePublished" datetime="2026-01-07T20:56:27+08:00">2026-01-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>参考链接：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/6823352707">https://zhuanlan.zhihu.com/p/6823352707</a></p>
-<h2 id="PowerShell激活"><a href="#PowerShell激活" class="headerlink" title="PowerShell激活"></a>PowerShell激活</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irm https://get.activated.win | iex</span><br></pre></td></tr></table></figure>
-<p>看到激活选项，选择[1] HWID 用于 Windows 激活，选择[2] Ohook 用于 Office 激活。</p>
-<p>Windows 激活需要联网，属于在线激活方式，office激活无需联网。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
