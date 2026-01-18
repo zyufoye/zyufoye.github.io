@@ -20,28 +20,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="找到JDK的路径，在系统环境变量中新建变量名和变量值： 12JAVA_HOMEC:\Program Files\Java\jdk1.8.0_202 然后在系统变量path中，新建两条： 12%JAVA_HOME%\bin%JAVA_HOME%\jre\bin">
+    <meta name="description" content="私钥和公钥在数学逻辑上是可以“反过来”使用的（特别是在最经典的 RSA 算法中）。 但这两种“方向”所达到的安全目标是完全相反的，我们可以把这对密钥想象成一对神奇的数学钥匙： 数学原理：互为逆运算在 RSA 这种经典的公钥密码体制中，公钥和私钥在数学上是成对生成的。  规则：用A钥匙锁上的东西，只能用B钥匙打开；反之，用B钥匙锁上的东西，只能用A钥匙打开。  数学上没有规定谁必须叫“公钥”，谁必须">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Win11 Java环境变量配置">
-<meta property="og:url" content="https://zyufoye.github.io/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:title" content="加密与签名的区别">
+<meta property="og:url" content="https://zyufoye.github.io/2026/01/18/%E5%8A%A0%E5%AF%86%E4%B8%8E%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8C%BA%E5%88%AB/index.html">
 <meta property="og:site_name" content="Aono Note">
-<meta property="og:description" content="找到JDK的路径，在系统环境变量中新建变量名和变量值： 12JAVA_HOMEC:\Program Files\Java\jdk1.8.0_202 然后在系统变量path中，新建两条： 12%JAVA_HOME%\bin%JAVA_HOME%\jre\bin">
+<meta property="og:description" content="私钥和公钥在数学逻辑上是可以“反过来”使用的（特别是在最经典的 RSA 算法中）。 但这两种“方向”所达到的安全目标是完全相反的，我们可以把这对密钥想象成一对神奇的数学钥匙： 数学原理：互为逆运算在 RSA 这种经典的公钥密码体制中，公钥和私钥在数学上是成对生成的。  规则：用A钥匙锁上的东西，只能用B钥匙打开；反之，用B钥匙锁上的东西，只能用A钥匙打开。  数学上没有规定谁必须叫“公钥”，谁必须">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-04T02:57:42.000Z">
-<meta property="article:modified_time" content="2025-12-04T02:59:19.837Z">
+<meta property="article:published_time" content="2026-01-18T03:03:48.000Z">
+<meta property="article:modified_time" content="2026-01-18T03:09:41.863Z">
 <meta property="article:author" content="Aono">
-<meta property="article:tag" content="Config">
-<meta property="article:tag" content="Java">
+<meta property="article:tag" content="RSA">
+<meta property="article:tag" content="密码学">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://zyufoye.github.io/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/">
+<link rel="canonical" href="https://zyufoye.github.io/2026/01/18/%E5%8A%A0%E5%AF%86%E4%B8%8E%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8C%BA%E5%88%AB/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/","path":"2025/12/04/Win11-Java环境变量配置/","title":"Win11 Java环境变量配置"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/01/18/%E5%8A%A0%E5%AF%86%E4%B8%8E%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8C%BA%E5%88%AB/","path":"2026/01/18/加密与签名的区别/","title":"加密与签名的区别"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Win11 Java环境变量配置 | Aono Note</title>
+<title>加密与签名的区别 | Aono Note</title>
   
 
 
@@ -148,7 +148,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -161,6 +161,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86%EF%BC%9A%E4%BA%92%E4%B8%BA%E9%80%86%E8%BF%90%E7%AE%97"><span class="nav-number">1.</span> <span class="nav-text">数学原理：互为逆运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%90%91%EF%BC%8C%E4%B8%A4%E7%A7%8D%E7%94%A8%E9%80%94"><span class="nav-number">2.</span> <span class="nav-text">2. 两种方向，两种用途</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%83%85%E5%86%B5-A%EF%BC%9A%E5%85%AC%E9%92%A5%E5%8A%A0%E5%AF%86%EF%BC%8C%E7%A7%81%E9%92%A5%E8%A7%A3%E5%AF%86%EF%BC%88%E6%AD%A3%E5%B8%B8%E5%8A%A0%E5%AF%86%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">情况 A：公钥加密，私钥解密（正常加密）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%83%85%E5%86%B5-B%EF%BC%9A%E7%A7%81%E9%92%A5%E2%80%9C%E5%8A%A0%E5%AF%86%E2%80%9D%EF%BC%8C%E5%85%AC%E9%92%A5%E2%80%9C%E8%A7%A3%E5%AF%86%E2%80%9D%EF%BC%88%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">情况 B：私钥“加密”，公钥“解密”（数字签名）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B0%8F%E7%9A%84%E4%B8%93%E4%B8%9A%E4%BF%AE%E6%AD%A3"><span class="nav-number">3.</span> <span class="nav-text">3. 一个小小的专业修正</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -221,7 +222,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/04/Win11-Java%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE/">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/18/%E5%8A%A0%E5%AF%86%E4%B8%8E%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8C%BA%E5%88%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/kehan.jpg">
@@ -234,12 +235,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Win11 Java环境变量配置 | Aono Note">
+      <meta itemprop="name" content="加密与签名的区别 | Aono Note">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Win11 Java环境变量配置
+          加密与签名的区别
         </h1>
 
         <div class="post-meta-container">
@@ -251,7 +252,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-12-04 10:57:42 / 修改时间：10:59:19" itemprop="dateCreated datePublished" datetime="2025-12-04T10:57:42+08:00">2025-12-04</time>
+      <time title="创建时间：2026-01-18 11:03:48 / 修改时间：11:09:41" itemprop="dateCreated datePublished" datetime="2026-01-18T11:03:48+08:00">2026-01-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -259,7 +260,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
+          <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
         </span>
     </span>
 
@@ -279,13 +280,46 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>找到JDK的路径，在系统环境变量中新建变量名和变量值：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">JAVA_HOME</span><br><span class="line">C:\Program Files\Java\jdk1.8.0_202</span><br></pre></td></tr></table></figure>
-<p>然后在系统变量path中，新建两条：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">%JAVA_HOME%\bin</span><br><span class="line">%JAVA_HOME%\jre\bin</span><br></pre></td></tr></table></figure>
-<span id="more"></span>
-<p>验证配置是否成功：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\77319&gt;java -version</span><br><span class="line">java version <span class="string">&quot;1.8.0_202&quot;</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_202-b08)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)</span><br><span class="line"></span><br><span class="line">C:\Users\77319&gt;javac -version</span><br><span class="line">javac 1.8.0_202</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    <div class="post-body" itemprop="articleBody"><p><strong>私钥和公钥在数学逻辑上是可以“反过来”使用的</strong>（特别是在最经典的 RSA 算法中）。</p>
+<p>但这两种“方向”所达到的<strong>安全目标</strong>是完全相反的，我们可以把这对密钥想象成一对<strong>神奇的数学钥匙</strong>：</p>
+<h3 id="数学原理：互为逆运算"><a href="#数学原理：互为逆运算" class="headerlink" title="数学原理：互为逆运算"></a>数学原理：互为逆运算</h3><p>在 RSA 这种经典的公钥密码体制中，公钥和私钥在数学上是<strong>成对生成</strong>的。</p>
+<ul>
+<li><strong>规则</strong>：用A钥匙锁上的东西，<strong>只能</strong>用B钥匙打开；反之，用B钥匙锁上的东西，<strong>只能</strong>用A钥匙打开。</li>
+</ul>
+<p>数学上没有规定谁必须叫“公钥”，谁必须叫“私钥”。只是在产生密钥后，我们人为地规定：</p>
+<ul>
+<li><strong>公开</strong>给所有人的那把叫<strong>公钥</strong>。</li>
+<li><strong>自己留着</strong>保密的那把叫<strong>私钥</strong>。</li>
+</ul>
+<h3 id="2-两种方向，两种用途"><a href="#2-两种方向，两种用途" class="headerlink" title="2. 两种方向，两种用途"></a>2. 两种方向，两种用途</h3><p>正是因为它们可以“反过来”用，才衍生出了密码学的两大支柱功能：<strong>加密</strong>和<strong>签名</strong>。</p>
+<h4 id="情况-A：公钥加密，私钥解密（正常加密）"><a href="#情况-A：公钥加密，私钥解密（正常加密）" class="headerlink" title="情况 A：公钥加密，私钥解密（正常加密）"></a>情况 A：公钥加密，私钥解密（正常加密）</h4><ul>
+<li><strong>操作</strong>：别人用你的<strong>公钥</strong>把数据锁起来。</li>
+<li><strong>结果</strong>：因为只有你才有<strong>私钥</strong>，所以全世界只有你一个人能打开看。</li>
+<li><strong>目的</strong>：<strong>机密性 (Confidentiality)</strong> —— 保护隐私，不让别人偷看。</li>
+<li><em>比喻</em>：别人把信扔进你的信箱（公钥），只有你有钥匙（私钥）能打开信箱取信。</li>
+</ul>
+<h4 id="情况-B：私钥“加密”，公钥“解密”（数字签名）"><a href="#情况-B：私钥“加密”，公钥“解密”（数字签名）" class="headerlink" title="情况 B：私钥“加密”，公钥“解密”（数字签名）"></a>情况 B：私钥“加密”，公钥“解密”（数字签名）</h4><ul>
+<li><strong>操作</strong>：你用你的<strong>私钥</strong>把一段数据（通常是摘要）锁起来（处理一下）。</li>
+<li><strong>结果</strong>：因为<strong>公钥</strong>是公开的，全世界所有人都能用你的公钥打开它。<ul>
+<li>你可能会问：<em>“所有人都能打开，那还有什么保密性可言？”</em></li>
+<li><strong>没错！这里根本不是为了保密！</strong></li>
+<li>既然所有人都能用你的公钥解开，这就证明了——<strong>这段密文一定是用你的私钥锁上的</strong>。因为除了你的私钥，别人的私钥锁出来的东西，你的公钥是打不开的。</li>
+</ul>
+</li>
+<li><strong>目的</strong>：<strong>认证/防抵赖 (Authentication)</strong> —— 证明“这确实是我发的”。</li>
+<li><em>比喻</em>：这就好比古代皇帝的“玉玺”（私钥）。皇帝在诏书上盖了章，全天下人（拿着公钥）一看印章纹路，就知道这是皇帝亲笔，不是别人伪造的。</li>
+</ul>
+<h3 id="3-一个小小的专业修正"><a href="#3-一个小小的专业修正" class="headerlink" title="3. 一个小小的专业修正"></a>3. 一个小小的专业修正</h3><p>虽然我们为了理解方便，常说“数字签名就是用私钥加密”。但在严格的学术定义中：</p>
+<ul>
+<li><strong>对于 RSA 算法</strong>：确实就是“私钥加密，公钥解密”的数学过程。</li>
+<li><strong>对于其他算法（如 ECC、SM2、DSA）</strong>：虽然逻辑上是“私钥处理，公钥验证”，但数学过程并不是简单的加密反运算，而是专门设计的<strong>签名算法</strong>和<strong>验证算法</strong>。</li>
+</ul>
+<p><strong>总结：</strong></p>
+<ul>
+<li><strong>公钥 -&gt; 私钥</strong> = 为了<strong>秘密</strong>（只有你能看）。</li>
+<li><strong>私钥 -&gt; 公钥</strong> = 为了<strong>证明</strong>（只有你能签）。</li>
+</ul>
+
     </div>
 
     
@@ -294,22 +328,19 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Config/" rel="tag"># Config</a>
-              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/RSA/" rel="tag"># RSA</a>
+              <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag"># 密码学</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" rel="prev" title="HEXO使用记录">
-                  <i class="fa fa-angle-left"></i> HEXO使用记录
+                <a href="/2026/01/18/%E8%BD%AF%E8%80%83%E5%AF%86%E7%A0%81%E5%AD%A6%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/" rel="prev" title="软考密码学考点概述">
+                  <i class="fa fa-angle-left"></i> 软考密码学考点概述
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/" rel="next" title="Miniconda安装">
-                  Miniconda安装 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
