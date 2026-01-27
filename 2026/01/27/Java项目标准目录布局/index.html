@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Java 生态系统中（特别是基于 Maven 和 Gradle 构建工具）通用的标准目录布局（Standard Directory Layout）是通用的，这里简单记录一下。 这种“约定优于配置”（Convention over Configuration）的设计，使得任何接手项目的 Java 程序员都能第一时间知道代码在哪里，配置文件在哪里。 1. main 和 test 的核心区别简单来说：m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java项目标准目录布局">
+<meta property="og:url" content="https://zyufoye.github.io/2026/01/27/Java%E9%A1%B9%E7%9B%AE%E6%A0%87%E5%87%86%E7%9B%AE%E5%BD%95%E5%B8%83%E5%B1%80/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="Java 生态系统中（特别是基于 Maven 和 Gradle 构建工具）通用的标准目录布局（Standard Directory Layout）是通用的，这里简单记录一下。 这种“约定优于配置”（Convention over Configuration）的设计，使得任何接手项目的 Java 程序员都能第一时间知道代码在哪里，配置文件在哪里。 1. main 和 test 的核心区别简单来说：m">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-27T14:19:53.000Z">
+<meta property="article:modified_time" content="2026-01-27T14:20:37.977Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/01/27/Java%E9%A1%B9%E7%9B%AE%E6%A0%87%E5%87%86%E7%9B%AE%E5%BD%95%E5%B8%83%E5%B1%80/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/01/27/Java%E9%A1%B9%E7%9B%AE%E6%A0%87%E5%87%86%E7%9B%AE%E5%BD%95%E5%B8%83%E5%B1%80/","path":"2026/01/27/Java项目标准目录布局/","title":"Java项目标准目录布局"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Java项目标准目录布局 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-main-%E5%92%8C-test-%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%88%AB"><span class="nav-number">1.</span> <span class="nav-text">1. main 和 test 的核心区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%93%82-src-main-%E4%B8%BB%E7%A8%8B%E5%BA%8F%E7%9B%AE%E5%BD%95"><span class="nav-number">1.1.</span> <span class="nav-text">📂 src&#x2F;main (主程序目录)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%93%82-src-test-%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F%E7%9B%AE%E5%BD%95"><span class="nav-number">1.2.</span> <span class="nav-text">📂 src&#x2F;test (测试程序目录)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%A0%87%E5%87%86-Maven-%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%E5%9B%BE"><span class="nav-number">2.</span> <span class="nav-text">2. 标准 Maven 项目结构图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%AF%A6%E7%BB%86%E7%9B%AE%E5%BD%95%E8%A7%A3%E8%AF%BB"><span class="nav-number">3.</span> <span class="nav-text">3. 详细目录解读</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-src-main-java"><span class="nav-number">3.1.</span> <span class="nav-text">A. src&#x2F;main&#x2F;java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-src-main-resources"><span class="nav-number">3.2.</span> <span class="nav-text">B. src&#x2F;main&#x2F;resources</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C-src-test-java"><span class="nav-number">3.3.</span> <span class="nav-text">C. src&#x2F;test&#x2F;java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#D-src-test-resources"><span class="nav-number">3.4.</span> <span class="nav-text">D. src&#x2F;test&#x2F;resources</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#E-pom-xml-Project-Object-Model"><span class="nav-number">3.5.</span> <span class="nav-text">E. pom.xml (Project Object Model)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#F-target"><span class="nav-number">3.6.</span> <span class="nav-text">F. target&#x2F;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/27/Java%E9%A1%B9%E7%9B%AE%E6%A0%87%E5%87%86%E7%9B%AE%E5%BD%95%E5%B8%83%E5%B1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java项目标准目录布局 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java项目标准目录布局
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-27 22:19:53 / 修改时间：22:20:37" itemprop="dateCreated datePublished" datetime="2026-01-27T22:19:53+08:00">2026-01-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Java 生态系统中（特别是基于 <strong>Maven</strong> 和 <strong>Gradle</strong> 构建工具）通用的<strong>标准目录布局（Standard Directory Layout）</strong>是通用的，这里简单记录一下。</p>
+<p>这种“约定优于配置”（Convention over Configuration）的设计，使得任何接手项目的 Java 程序员都能第一时间知道代码在哪里，配置文件在哪里。</p>
+<h3 id="1-main-和-test-的核心区别"><a href="#1-main-和-test-的核心区别" class="headerlink" title="1. main 和 test 的核心区别"></a>1. <code>main</code> 和 <code>test</code> 的核心区别</h3><p>简单来说：<strong><code>main</code> 是给用户用的（生产环境），<code>test</code> 是给你自己用的（开发验证环境）。</strong></p>
+<h4 id="📂-src-main-主程序目录"><a href="#📂-src-main-主程序目录" class="headerlink" title="📂 src/main (主程序目录)"></a>📂 <code>src/main</code> (主程序目录)</h4><p>这是项目的<strong>核心</strong>。这里的代码和资源最终会被编译、打包（成 JAR 或 WAR 包），并部署到服务器或交付给客户。</p>
+<ul>
+<li><strong>作用</strong>：存放业务逻辑、应用程序配置、网页静态资源等。</li>
+<li><strong>后果</strong>：如果你在这里写了 bug，用户就会遇到 bug。</li>
+</ul>
+<h4 id="📂-src-test-测试程序目录"><a href="#📂-src-test-测试程序目录" class="headerlink" title="📂 src/test (测试程序目录)"></a>📂 <code>src/test</code> (测试程序目录)</h4><p>这是项目的<strong>质检部门</strong>。这里的代码是用来验证 <code>main</code> 里面的代码是否正确的。</p>
+<ul>
+<li><strong>作用</strong>：存放单元测试（Unit Tests）、集成测试、测试用的模拟数据等。</li>
+<li><strong>后果</strong>：这里的代码<strong>不会</strong>被打包到最终的发布版本中。它只在构建（Build）阶段运行。如果测试失败，项目通常会打包失败，从而防止 bug 上线。</li>
+</ul>
+<h3 id="2-标准-Maven-项目结构图"><a href="#2-标准-Maven-项目结构图" class="headerlink" title="2. 标准 Maven 项目结构图"></a>2. 标准 Maven 项目结构图</h3><p>一个标准的 Maven 项目结构通常如下所示：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">MyJavaProject/  (项目根目录)</span><br><span class="line">├── pom.xml                   &lt;-- 项目的身份证 (依赖管理、构建配置)</span><br><span class="line">├── src/</span><br><span class="line">│   ├── main/                 &lt;-- 【生产代码】</span><br><span class="line">│   │   ├── java/             &lt;-- 存放 .java 源代码</span><br><span class="line">│   │   │   └── com/</span><br><span class="line">│   │   │       └── example/</span><br><span class="line">│   │   │           └── MyApp.java</span><br><span class="line">│   │   │</span><br><span class="line">│   │   ├── resources/        &lt;-- 存放配置文件、静态资源</span><br><span class="line">│   │   │   ├── application.properties</span><br><span class="line">│   │   │   ├── my-config.xml</span><br><span class="line">│   │   │   └── static/       (如果是Web项目，可能放图片/js)</span><br><span class="line">│   │   │</span><br><span class="line">│   │   └── webapp/           &lt;-- (可选) 传统Web项目存放JSP/HTML的地方</span><br><span class="line">│   │</span><br><span class="line">│   └── test/                 &lt;-- 【测试代码】</span><br><span class="line">│       ├── java/             &lt;-- 存放测试用的 .java 代码</span><br><span class="line">│       │   └── com/</span><br><span class="line">│       │       └── example/</span><br><span class="line">│       │           └── MyAppTest.java</span><br><span class="line">│       │</span><br><span class="line">│       └── resources/        &lt;-- 存放测试专用的配置文件</span><br><span class="line">│           └── test-config.properties</span><br><span class="line">│</span><br><span class="line">└── target/                   &lt;-- 【自动生成】 构建输出目录</span><br><span class="line">    ├── classes/              (编译后的 main .class 文件)</span><br><span class="line">    ├── test-classes/         (编译后的 test .class 文件)</span><br><span class="line">    └── MyJavaProject.jar     (最终打包好的文件)</span><br></pre></td></tr></table></figure>
+<h3 id="3-详细目录解读"><a href="#3-详细目录解读" class="headerlink" title="3. 详细目录解读"></a>3. 详细目录解读</h3><h4 id="A-src-main-java"><a href="#A-src-main-java" class="headerlink" title="A. src/main/java"></a>A. <code>src/main/java</code></h4><ul>
+<li>这是你写 Java 业务代码的地方。</li>
+<li>通常需要按照包名（Package）建立文件夹结构，例如 <code>com.company.project</code>。</li>
+</ul>
+<h4 id="B-src-main-resources"><a href="#B-src-main-resources" class="headerlink" title="B. src/main/resources"></a>B. <code>src/main/resources</code></h4><ul>
+<li>存放<strong>非 Java 代码</strong>的文件。</li>
+<li><strong>常见内容</strong>：<ul>
+<li><code>application.properties</code> 或 <code>application.yml</code> (Spring Boot 配置文件)。</li>
+<li><code>log4j2.xml</code> / <code>logback.xml</code> (日志配置)。</li>
+<li>MyBatis 的 Mapper XML 文件。</li>
+<li>SSL 证书、国际化文件等。</li>
+</ul>
+</li>
+<li><strong>打包后</strong>：这些文件会被直接复制到 CLASSPATH 的根目录下。</li>
+</ul>
+<h4 id="C-src-test-java"><a href="#C-src-test-java" class="headerlink" title="C. src/test/java"></a>C. <code>src/test/java</code></h4><ul>
+<li>存放 JUnit 或 TestNG 的测试类。</li>
+<li><strong>最佳实践</strong>：这里的包路径通常与 <code>src/main/java</code> <strong>保持一致</strong>。<ul>
+<li>例如：主代码在 <code>com.example.service.UserService</code></li>
+<li>测试代码在 <code>com.example.service.UserServiceTest</code></li>
+<li>这样测试类可以直接访问主类中 <code>protected</code> 修饰的方法（包级私有）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="D-src-test-resources"><a href="#D-src-test-resources" class="headerlink" title="D. src/test/resources"></a>D. <code>src/test/resources</code></h4><ul>
+<li>存放<strong>只在测试时生效</strong>的配置。</li>
+<li><strong>场景</strong>：<ul>
+<li>生产环境（<code>main/resources</code>）用的是 Oracle 数据库配置。</li>
+<li>测试环境（<code>test/resources</code>）为了速度，配置一个 H2 内存数据库。</li>
+</ul>
+</li>
+<li>测试运行时，这里的配置优先级通常会覆盖 main 里的配置，或者专门用于测试环境读取。</li>
+</ul>
+<h4 id="E-pom-xml-Project-Object-Model"><a href="#E-pom-xml-Project-Object-Model" class="headerlink" title="E. pom.xml (Project Object Model)"></a>E. <code>pom.xml</code> (Project Object Model)</h4><ul>
+<li>这是 Maven 项目的核心配置文件。</li>
+<li>它定义了：<ul>
+<li>项目的基本信息（groupId, artifactId, version）。</li>
+<li><strong>依赖（Dependencies）</strong>：你需要用到的第三方库（如 Spring, MySQL Driver, JUnit）。</li>
+<li><strong>插件（Plugins）</strong>：如何编译、如何打包、如何运行测试。</li>
+</ul>
+</li>
+</ul>
+<h4 id="F-target"><a href="#F-target" class="headerlink" title="F. target/"></a>F. <code>target/</code></h4><ul>
+<li>这是 Maven 自动生成的目录，<strong>不要手动去改里面的文件</strong>，也<strong>不要</strong>提交到 Git 仓库（应该在 <code>.gitignore</code> 中忽略它）。</li>
+<li>当你运行 <code>mvn clean</code> 时，这个文件夹会被删除。</li>
+<li>当你运行 <code>mvn package</code> 时，编译好的 <code>.class</code> 文件和最终的 <code>.jar</code> 包会出现在这里。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><strong><code>main</code></strong> 是为了<strong>“跑起来”</strong></li>
+<li><strong><code>test</code></strong> 是为了<strong>“跑得稳”</strong></li>
+<li><strong>Maven 结构</strong> 是一种全行业通用的“收纳整理术”，遵守这个结构，你的项目在任何 IDE（IntelliJ IDEA, Eclipse, VS Code）里都能被自动识别并正确运行。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/01/27/Ubuntu%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/" rel="prev" title="Ubuntu下的压缩和解压缩">
+                  <i class="fa fa-angle-left"></i> Ubuntu下的压缩和解压缩
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/01/27/Java%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" rel="next" title="Java单元测试">
+                  Java单元测试 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
