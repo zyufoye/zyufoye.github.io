@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="为什么服务器会将 ..%2Fadmin 视为一个名为 “…&#x2F;admin” 的普通用户名，找不到该用户，返回 404？ 这是一个非常深刻且核心的计算机安全问题，涉及到 URL 编码（Percent-encoding）的本质机制。 简单来说，区别在于：&#x2F; 是指令（分隔符），而 %2F 是数据（纯文本）。 我们可以通过“信封与地址”或者“文件系统”的逻辑来拆解这个问题： 1. 核心原理：控制字符 vs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用URL编码机制防御路径遍历漏洞">
+<meta property="og:url" content="https://zyufoye.github.io/2026/01/28/%E7%94%A8URL%E7%BC%96%E7%A0%81%E6%9C%BA%E5%88%B6%E9%98%B2%E5%BE%A1%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="为什么服务器会将 ..%2Fadmin 视为一个名为 “…&#x2F;admin” 的普通用户名，找不到该用户，返回 404？ 这是一个非常深刻且核心的计算机安全问题，涉及到 URL 编码（Percent-encoding）的本质机制。 简单来说，区别在于：&#x2F; 是指令（分隔符），而 %2F 是数据（纯文本）。 我们可以通过“信封与地址”或者“文件系统”的逻辑来拆解这个问题： 1. 核心原理：控制字符 vs">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-28T14:22:23.000Z">
+<meta property="article:modified_time" content="2026-01-28T14:22:59.612Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="Java Security">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="漏洞研究">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/01/28/%E7%94%A8URL%E7%BC%96%E7%A0%81%E6%9C%BA%E5%88%B6%E9%98%B2%E5%BE%A1%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/01/28/%E7%94%A8URL%E7%BC%96%E7%A0%81%E6%9C%BA%E5%88%B6%E9%98%B2%E5%BE%A1%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E/","path":"2026/01/28/用URL编码机制防御路径遍历漏洞/","title":"用URL编码机制防御路径遍历漏洞"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>用URL编码机制防御路径遍历漏洞 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%EF%BC%9A%E6%8E%A7%E5%88%B6%E5%AD%97%E7%AC%A6-vs-%E6%95%B0%E6%8D%AE%E5%AD%97%E7%AC%A6"><span class="nav-number">1.</span> <span class="nav-text">1. 核心原理：控制字符 vs 数据字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%86%E8%A7%92%E7%9A%84%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B%E5%AF%B9%E6%AF%94"><span class="nav-number">2.</span> <span class="nav-text">2. 服务器视角的解析过程对比</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF-A%EF%BC%9A%E6%94%BB%E5%87%BB%E6%88%90%E5%8A%9F%EF%BC%88%E6%9C%AA%E7%BC%96%E7%A0%81%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">场景 A：攻击成功（未编码）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF-B%EF%BC%9A%E9%98%B2%E5%BE%A1%E6%88%90%E5%8A%9F%EF%BC%88%E5%B7%B2%E7%BC%96%E7%A0%81%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">场景 B：防御成功（已编码）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF-404%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">3. 为什么是 404？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%80%BB%E7%BB%93%EF%BC%9A%E4%B9%B0%E7%81%AB%E8%BD%A6%E7%A5%A8%E7%9A%84%E9%9A%90%E5%96%BB"><span class="nav-number">4.</span> <span class="nav-text">4. 总结：买火车票的隐喻</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/%E7%94%A8URL%E7%BC%96%E7%A0%81%E6%9C%BA%E5%88%B6%E9%98%B2%E5%BE%A1%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="用URL编码机制防御路径遍历漏洞 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          用URL编码机制防御路径遍历漏洞
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-28 22:22:23 / 修改时间：22:22:59" itemprop="dateCreated datePublished" datetime="2026-01-28T22:22:23+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>为什么服务器会将 ..%2Fadmin 视为一个名为 “…/admin” 的普通用户名，找不到该用户，返回 404？</p>
+<p>这是一个非常深刻且核心的计算机安全问题，涉及到 <strong>URL 编码（Percent-encoding）的本质机制</strong>。</p>
+<p>简单来说，区别在于：<strong><code>/</code> 是指令（分隔符），而 <code>%2F</code> 是数据（纯文本）。</strong></p>
+<p>我们可以通过“<strong>信封与地址</strong>”或者“<strong>文件系统</strong>”的逻辑来拆解这个问题：</p>
+<h3 id="1-核心原理：控制字符-vs-数据字符"><a href="#1-核心原理：控制字符-vs-数据字符" class="headerlink" title="1. 核心原理：控制字符 vs 数据字符"></a>1. 核心原理：控制字符 vs 数据字符</h3><p>在 HTTP 协议和 URL 标准（RFC 3986）中，某些字符具有特殊的“结构化含义”，被称为保留字符（Reserved Characters）。</p>
+<ul>
+<li><strong><code>/</code> (斜杠)</strong>：这是一个<strong>控制字符</strong>。它的作用是告诉服务器：“当前的目录结束了，进入下一级目录”。</li>
+<li><strong><code>..</code> (双点)</strong>：配合斜杠使用时，也是<strong>控制指令</strong>。它的作用是告诉服务器：“返回上一级目录”。</li>
+</ul>
+<p>当 Retrofit（默认为 <code>encoded=false</code>）将 <code>/</code> 转义为 <code>%2F</code> 时，它实际上是在做一件最重要的事情：<strong>“去功能化”</strong>。</p>
+<h3 id="2-服务器视角的解析过程对比"><a href="#2-服务器视角的解析过程对比" class="headerlink" title="2. 服务器视角的解析过程对比"></a>2. 服务器视角的解析过程对比</h3><p>假设服务器收到请求，Web 服务器（如 Nginx、Tomcat）会按照 <code>/</code> 来切割路径，决定把请求路由到哪里。</p>
+<h4 id="场景-A：攻击成功（未编码）"><a href="#场景-A：攻击成功（未编码）" class="headerlink" title="场景 A：攻击成功（未编码）"></a>场景 A：攻击成功（未编码）</h4><p><strong>URL</strong>: <code>http://example.com/users/../admin/profile</code></p>
+<ol>
+<li>服务器看到第一个 <code>/</code>：进入 <code>users</code> 目录。</li>
+<li>服务器看到第二个 <code>/</code>：发现前面是 <code>..</code>。<ul>
+<li><strong>指令生效</strong>：服务器执行“回退”操作，跳出了 <code>users</code> 目录，回到了根目录。</li>
+</ul>
+</li>
+<li>服务器继续解析：进入 <code>admin</code> 目录。</li>
+<li><strong>结果</strong>：最终访问的是 <code>/admin/profile</code>。</li>
+</ol>
+<hr>
+<h4 id="场景-B：防御成功（已编码）"><a href="#场景-B：防御成功（已编码）" class="headerlink" title="场景 B：防御成功（已编码）"></a>场景 B：防御成功（已编码）</h4><p><strong>URL</strong>: <code>http://example.com/users/..%2Fadmin/profile</code></p>
+<ol>
+<li>服务器扫描 URL，寻找分隔符 <code>/</code>。</li>
+<li><strong>关键点</strong>：服务器<strong>不认识</strong> <code>%2F</code> 是分隔符。对服务器来说，<code>%2F</code> 只是三个普通的字符：<code>%</code>、<code>2</code>、<code>F</code>。它们和 <code>a</code>、<code>b</code>、<code>c</code> 没有任何区别。</li>
+<li>服务器的解析逻辑如下：<ul>
+<li><strong>第一段</strong>：<code>users</code>（进入该层级）。</li>
+<li><strong>第二段</strong>：读取下一个 <code>/</code> 之前的所有内容。这块内容是：<code>..%2Fadmin</code>。</li>
+</ul>
+</li>
+<li><strong>路由决策</strong>：<ul>
+<li>服务器会在 <code>users</code> 的上下文里，寻找一个名字叫 <code>..%2Fadmin</code> 的资源。</li>
+<li>注意：它<strong>不是</strong>寻找一个叫 <code>..</code> 的文件夹，也不是寻找一个叫 <code>admin</code> 的文件夹。</li>
+<li>它是在找<strong>单个</strong>文件/资源，这个资源的完整名字就叫 <code>..%2Fadmin</code>（或者解码后叫 <code>../admin</code>）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-为什么是-404？"><a href="#3-为什么是-404？" class="headerlink" title="3. 为什么是 404？"></a>3. 为什么是 404？</h3><p>因为在数据库或业务逻辑中，肯定不存在一个用户的名字叫 <code>../admin</code>。</p>
+<ul>
+<li>你的后端逻辑大概是这样的：<code>SELECT * FROM users WHERE username = ?</code></li>
+<li>传入的参数是：<code>&quot;../admin&quot;</code></li>
+<li>数据库查询结果：空。</li>
+<li>服务器返回：<strong>404 Not Found</strong>（用户不存在）。</li>
+</ul>
+<p><strong>最重要的是：请求依然是被路由到了 <code>getUser</code> 这个接口，而没有跳转到 <code>getAdmin</code> 接口。</strong></p>
+<h3 id="4-总结：买火车票的隐喻"><a href="#4-总结：买火车票的隐喻" class="headerlink" title="4. 总结：买火车票的隐喻"></a>4. 总结：买火车票的隐喻</h3><p>想象去火车站买票：</p>
+<ul>
+<li><p><strong>未编码（漏洞）</strong>：你递给售票员一张纸条，上面写着：“我要去<strong>上海/..</strong>”。</p>
+<ul>
+<li>售票员（服务器）看到 <code>/</code>，理解为分隔。</li>
+<li>先定位到“上海”，然后看到“..”，于是退回上一级。</li>
+<li>结果：可能卖给了你一张起步站的票，或者把你送到了错误的地方。</li>
+</ul>
+</li>
+<li><p><strong>已编码（安全）</strong>：你把 <code>/</code> 进行了打包（编码），装进一个盒子里。纸条写着：“我要去【<strong>上海%2F..</strong>】”。</p>
+<ul>
+<li>售票员看到这只是<strong>一个地名</strong>。</li>
+<li>他在系统里搜索名为“上海/..”的城市。</li>
+<li>系统提示：查无此地（404）。</li>
+<li><strong>安全</strong>：因为他没有执行“退回”这个动作，只是在傻傻地找一个名字很奇怪的城市。</li>
+</ul>
+</li>
+</ul>
+<p>这就是为什么 <code>%2F</code> 能够防御路径遍历的根本原因。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java-Security/" rel="tag"># Java Security</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" rel="tag"># 漏洞研究</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/01/28/Zip-Slip%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E/" rel="prev" title="Zip Slip目录遍历漏洞">
+                  <i class="fa fa-angle-left"></i> Zip Slip目录遍历漏洞
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/01/28/Java%E6%BC%8F%E6%B4%9E%E8%B0%83%E8%AF%95-%E4%BB%A5Retrofit%E4%B8%BA%E4%BE%8B/" rel="next" title="Java漏洞调试-以Retrofit为例">
+                  Java漏洞调试-以Retrofit为例 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

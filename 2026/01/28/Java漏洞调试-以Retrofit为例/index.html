@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Java漏洞分析时，如果能够对程序进行动态调试，那就可以完整的追踪数据流的控制流，这样就可以知道漏洞的触发过程，对于漏洞原理的理解也会更加清晰。 以 Retrofit 项目为例，简单记录一下漏洞的调试过程。 打断点一般在程序的三个位置打断点：入口点、核心漏洞点、编码决策点，在该项目中： 入口点 PathTraversalTest.java:23测试用例发起的请求，这里是数据流的起点，参数 ..&#x2F;a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java漏洞调试-以Retrofit为例">
+<meta property="og:url" content="https://zyufoye.github.io/2026/01/28/Java%E6%BC%8F%E6%B4%9E%E8%B0%83%E8%AF%95-%E4%BB%A5Retrofit%E4%B8%BA%E4%BE%8B/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="Java漏洞分析时，如果能够对程序进行动态调试，那就可以完整的追踪数据流的控制流，这样就可以知道漏洞的触发过程，对于漏洞原理的理解也会更加清晰。 以 Retrofit 项目为例，简单记录一下漏洞的调试过程。 打断点一般在程序的三个位置打断点：入口点、核心漏洞点、编码决策点，在该项目中： 入口点 PathTraversalTest.java:23测试用例发起的请求，这里是数据流的起点，参数 ..&#x2F;a">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-28T14:23:16.000Z">
+<meta property="article:modified_time" content="2026-01-28T14:24:22.534Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="Java Security">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="漏洞研究">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/01/28/Java%E6%BC%8F%E6%B4%9E%E8%B0%83%E8%AF%95-%E4%BB%A5Retrofit%E4%B8%BA%E4%BE%8B/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/01/28/Java%E6%BC%8F%E6%B4%9E%E8%B0%83%E8%AF%95-%E4%BB%A5Retrofit%E4%B8%BA%E4%BE%8B/","path":"2026/01/28/Java漏洞调试-以Retrofit为例/","title":"Java漏洞调试-以Retrofit为例"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Java漏洞调试-以Retrofit为例 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E6%96%AD%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">打断点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%A5%E5%8F%A3%E7%82%B9-PathTraversalTest-java-23"><span class="nav-number">1.1.</span> <span class="nav-text">入口点 PathTraversalTest.java:23</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%BC%8F%E6%B4%9E%E7%82%B9-RequestBuilder-java-94"><span class="nav-number">1.2.</span> <span class="nav-text">核心漏洞点 RequestBuilder.java:94</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%86%B3%E7%AD%96%E9%80%BB%E8%BE%91-RequestBuilder-java-103"><span class="nav-number">1.3.</span> <span class="nav-text">编码决策逻辑 RequestBuilder.java:103</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E8%B0%83%E8%AF%95"><span class="nav-number">2.</span> <span class="nav-text">开始调试</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Java%E6%BC%8F%E6%B4%9E%E8%B0%83%E8%AF%95-%E4%BB%A5Retrofit%E4%B8%BA%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java漏洞调试-以Retrofit为例 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java漏洞调试-以Retrofit为例
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-28 22:23:16 / 修改时间：22:24:22" itemprop="dateCreated datePublished" datetime="2026-01-28T22:23:16+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Java漏洞分析时，如果能够对程序进行动态调试，那就可以完整的追踪数据流的控制流，这样就可以知道漏洞的触发过程，对于漏洞原理的理解也会更加清晰。</p>
+<p>以 Retrofit 项目为例，简单记录一下漏洞的调试过程。</p>
+<h3 id="打断点"><a href="#打断点" class="headerlink" title="打断点"></a>打断点</h3><p>一般在程序的三个位置打断点：入口点、核心漏洞点、编码决策点，在该项目中：</p>
+<h4 id="入口点-PathTraversalTest-java-23"><a href="#入口点-PathTraversalTest-java-23" class="headerlink" title="入口点 PathTraversalTest.java:23"></a>入口点 PathTraversalTest.java:23</h4><p>测试用例发起的请求，这里是数据流的起点，参数 ../attacker 传入系统。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">PathTraversalTest</span> &#123;</span><br><span class="line">  <span class="meta">@Test</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pathTraversalWithEncodedTrue</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Example</span> &#123;</span><br><span class="line">      <span class="meta">@GET(&quot;users/&#123;user&#125;/profile&quot;)</span></span><br><span class="line">      Call&lt;ResponseBody&gt; <span class="title function_">getUser</span><span class="params">(<span class="meta">@Path(value = &quot;user&quot;, encoded = true)</span> String user)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Inputting a path traversal sequence</span></span><br><span class="line">    <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> buildRequest(Example.class, <span class="string">&quot;../attacker&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// If vulnerable, the URL will be resolved as http://example.com/attacker/profile</span></span><br><span class="line">    <span class="comment">// effectively escaping the &quot;users&quot; path segment.</span></span><br><span class="line">    System.out.println(<span class="string">&quot;Resolved URL: &quot;</span> + request.url().toString());</span><br><span class="line">    assertThat(request.url().toString()).isEqualTo(<span class="string">&quot;http://example.com/attacker/profile&quot;</span>);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="核心漏洞点-RequestBuilder-java-94"><a href="#核心漏洞点-RequestBuilder-java-94" class="headerlink" title="核心漏洞点 RequestBuilder.java:94"></a>核心漏洞点 RequestBuilder.java:94</h4><p>观察 relativeUrl 在替换前后的变化。这里会调用 canonicalizeForPath ，可以单步跟进这个函数，查看为什么 encoded=true 时 ../ 没有被编码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">addPathParam</span><span class="params">(String name, String value, <span class="type">boolean</span> encoded)</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (relativeUrl == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// The relative URL is cleared when the first query parameter is set.</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AssertionError</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  relativeUrl = relativeUrl.replace(<span class="string">&quot;&#123;&quot;</span> + name + <span class="string">&quot;&#125;&quot;</span>, canonicalizeForPath(value, encoded));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="编码决策逻辑-RequestBuilder-java-103"><a href="#编码决策逻辑-RequestBuilder-java-103" class="headerlink" title="编码决策逻辑 RequestBuilder.java:103"></a>编码决策逻辑 RequestBuilder.java:103</h4><p>这是判断是否需要编码的核心逻辑。如果 alreadyEncoded 为 true （来自 @Path(encoded=true) ），这里的判断会直接跳过 / 的编码，导致路径遍历字符被保留。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title function_">canonicalizeForPath</span><span class="params">(String input, <span class="type">boolean</span> alreadyEncoded)</span> &#123;</span><br><span class="line">    <span class="type">int</span> codePoint;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>, limit = input.length(); i &lt; limit; i += Character.charCount(codePoint)) &#123;</span><br><span class="line">      codePoint = input.codePointAt(i);</span><br><span class="line">      <span class="keyword">if</span> (codePoint &lt; <span class="number">0x20</span> || codePoint &gt;= <span class="number">0x7f</span></span><br><span class="line">          || PATH_SEGMENT_ALWAYS_ENCODE_SET.indexOf(codePoint) != -<span class="number">1</span></span><br><span class="line">          || (!alreadyEncoded &amp;&amp; (codePoint == <span class="string">&#x27;/&#x27;</span> || codePoint == <span class="string">&#x27;%&#x27;</span>))) &#123;</span><br><span class="line">        <span class="comment">// Slow path: the character at i requires encoding!</span></span><br><span class="line">        <span class="type">Buffer</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Buffer</span>();</span><br><span class="line">        out.writeUtf8(input, <span class="number">0</span>, i);</span><br><span class="line">        canonicalizeForPath(out, input, i, limit, alreadyEncoded);</span><br><span class="line">        <span class="keyword">return</span> out.readUtf8();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn -pl retrofit <span class="built_in">test</span> -Dtest=PathTraversalTest -Dmaven.surefire.debug</span><br></pre></td></tr></table></figure>
+<p>等待终端显示 Listening for transport dt_socket at address: 5005</p>
+<p>在 IDE 中使用 Attach to Remote JVM (端口 5005) 连接调试器，一般位置都在IDE的右上角，选择调试那个虫子按钮</p>
+<p>程序会在第一个断点停下，然后可以使用 Step Over (F10) 和 Step Into (F11) 逐步跟踪数据流向</p>
+<p>在 launch.json 中添加配置内容：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Attach to Remote JVM&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="string">&quot;attach&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hostName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;localhost&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">5005</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        ...</span><br><span class="line">    <span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p>路径便利漏洞测试类编写如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> retrofit2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicReference;</span><br><span class="line"><span class="keyword">import</span> okhttp3.Request;</span><br><span class="line"><span class="keyword">import</span> okhttp3.ResponseBody;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> retrofit2.helpers.ToStringConverterFactory;</span><br><span class="line"><span class="keyword">import</span> retrofit2.http.GET;</span><br><span class="line"><span class="keyword">import</span> retrofit2.http.Path;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.assertj.core.api.Assertions.assertThat;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * CVE-2018-1000850 路径遍历漏洞验证测试类</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 这个类演示了 Retrofit 2.4.0 中由于 <span class="doctag">@Path</span>(encoded = true) 处理不当导致的路径遍历风险。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">PathTraversalTest</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 测试场景 1：不安全的用法（漏洞复现）</span></span><br><span class="line"><span class="comment">   * </span></span><br><span class="line"><span class="comment">   * 当开发者将 <span class="doctag">@Path</span> 的 encoded 属性设置为 true 时，意味着告诉 Retrofit：</span></span><br><span class="line"><span class="comment">   * &quot;这个参数值已经被我编码过了，你不要再动它，直接拼接到 URL 里。&quot;</span></span><br><span class="line"><span class="comment">   * </span></span><br><span class="line"><span class="comment">   * 漏洞点：Retrofit 在这种情况下不会检查参数中是否包含 &quot;../&quot; 或 &quot;/&quot;。</span></span><br><span class="line"><span class="comment">   * 如果攻击者能控制这个参数，就可以传入 &quot;../&quot; 来改变 URL 的目录结构。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Test</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pathTraversalWithEncodedTrue</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// 定义一个临时的接口类，模拟实际业务中的 API 定义</span></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Example</span> &#123;</span><br><span class="line">      <span class="comment">// 定义一个 GET 请求，路径模板是 &quot;users/&#123;user&#125;/profile&quot;</span></span><br><span class="line">      <span class="comment">// 关键点：@Path(value = &quot;user&quot;, encoded = true)</span></span><br><span class="line">      <span class="comment">// encoded = true 关闭了自动 URL 编码保护</span></span><br><span class="line">      <span class="meta">@GET(&quot;users/&#123;user&#125;/profile&quot;)</span></span><br><span class="line">      Call&lt;ResponseBody&gt; <span class="title function_">getUser</span><span class="params">(<span class="meta">@Path(value = &quot;user&quot;, encoded = true)</span> String user)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>; <span class="comment">// 这里只是定义接口，不需要实现</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 模拟攻击：传入 &quot;../attacker&quot; 作为用户名</span></span><br><span class="line">    <span class="comment">// 意图是利用 &quot;..&quot; 回退到上一级目录，跳出 &quot;/users/&quot; 限制</span></span><br><span class="line">    <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> buildRequest(Example.class, <span class="string">&quot;../attacker&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 验证结果：</span></span><br><span class="line">    <span class="comment">// 预期（漏洞触发）：http://example.com/attacker/profile</span></span><br><span class="line">    <span class="comment">// 解释：URL 从 http://example.com/users/../attacker/profile 解析成了 http://example.com/attacker/profile</span></span><br><span class="line">    <span class="comment">// &quot;/users/&quot; 目录被成功绕过（逃逸）了。</span></span><br><span class="line">    System.out.println(<span class="string">&quot;Resolved URL: &quot;</span> + request.url().toString());</span><br><span class="line">    assertThat(request.url().toString()).isEqualTo(<span class="string">&quot;http://example.com/attacker/profile&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 测试场景 2：安全的用法（默认行为）</span></span><br><span class="line"><span class="comment">   * </span></span><br><span class="line"><span class="comment">   * 默认情况下，<span class="doctag">@Path</span> 的 encoded 属性为 false。</span></span><br><span class="line"><span class="comment">   * Retrofit 会自动对参数值进行 URL 编码（Percent-encoding）。</span></span><br><span class="line"><span class="comment">   * 所有的特殊字符（如 &quot;/&quot;）都会被转义（如变成 &quot;%2F&quot;）。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Test</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pathTraversalWithEncodedFalse</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Example</span> &#123;</span><br><span class="line">      <span class="comment">// 关键点：encoded = false (这是默认值，也可以不写)</span></span><br><span class="line">      <span class="comment">// 这告诉 Retrofit：&quot;请帮我把这个参数里的特殊字符转义掉&quot;</span></span><br><span class="line">      <span class="meta">@GET(&quot;users/&#123;user&#125;/profile&quot;)</span></span><br><span class="line">      Call&lt;ResponseBody&gt; <span class="title function_">getUser</span><span class="params">(<span class="meta">@Path(value = &quot;user&quot;, encoded = false)</span> String user)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 模拟攻击：同样的输入 &quot;../attacker&quot;</span></span><br><span class="line">    <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> buildRequest(Example.class, <span class="string">&quot;../attacker&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 验证结果：</span></span><br><span class="line">    <span class="comment">// 预期（安全）：http://example.com/users/..%2Fattacker/profile</span></span><br><span class="line">    <span class="comment">// 解释：</span></span><br><span class="line">    <span class="comment">// 1. &quot;/&quot; 被转义成了 &quot;%2F&quot;</span></span><br><span class="line">    <span class="comment">// 2. 服务器收到的是 &quot;users&quot; 目录下的一个文件名叫 &quot;..%2Fattacker&quot; 的资源</span></span><br><span class="line">    <span class="comment">// 3. 路径没有发生跳转，攻击失败。</span></span><br><span class="line">    System.out.println(<span class="string">&quot;Resolved URL (Safe): &quot;</span> + request.url().toString());</span><br><span class="line">    assertThat(request.url().toString()).isEqualTo(<span class="string">&quot;http://example.com/users/..%2Fattacker/profile&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// --- 下面是测试辅助代码，不需要太关注细节 ---</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 辅助方法：构建并拦截请求</span></span><br><span class="line"><span class="comment">   * </span></span><br><span class="line"><span class="comment">   * 这个方法的作用是模拟 Retrofit 的运行过程，但不是真的发出网络请求，</span></span><br><span class="line"><span class="comment">   * 而是把生成的 Request 对象拦截下来，方便我们检查它的 URL 长什么样。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">static</span> &lt;T&gt; Request <span class="title function_">buildRequest</span><span class="params">(Class&lt;T&gt; cls, Object... args)</span> &#123;</span><br><span class="line">    <span class="comment">// 1. 配置 Retrofit</span></span><br><span class="line">    Retrofit.<span class="type">Builder</span> <span class="variable">retrofitBuilder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">        .baseUrl(<span class="string">&quot;http://example.com/&quot;</span>) <span class="comment">// 设置基础 URL</span></span><br><span class="line">        .addConverterFactory(<span class="keyword">new</span> <span class="title class_">ToStringConverterFactory</span>()); <span class="comment">// 添加转换器</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 创建一个&quot;假&quot;的 CallFactory</span></span><br><span class="line">    <span class="comment">// 它的作用是当 Retrofit 准备发请求时，直接把请求对象 (Request) 存起来，然后抛出异常停止</span></span><br><span class="line">    <span class="keyword">final</span> AtomicReference&lt;Request&gt; requestRef = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;();</span><br><span class="line">    okhttp3.Call.<span class="type">Factory</span> <span class="variable">callFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">okhttp3</span>.Call.Factory() &#123;</span><br><span class="line">      <span class="meta">@Override</span> <span class="keyword">public</span> okhttp3.Call <span class="title function_">newCall</span><span class="params">(Request request)</span> &#123;</span><br><span class="line">        requestRef.set(request); <span class="comment">// 捕获请求对象</span></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">UnsupportedOperationException</span>(<span class="string">&quot;Not implemented&quot;</span>); <span class="comment">// 故意抛出异常，阻止真实网络请求</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 构建 Retrofit 实例</span></span><br><span class="line">    <span class="type">Retrofit</span> <span class="variable">retrofit</span> <span class="operator">=</span> retrofitBuilder.callFactory(callFactory).build();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 加载我们定义的接口 (Example)</span></span><br><span class="line">    <span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> TestingUtils.onlyMethod(cls);</span><br><span class="line">    <span class="comment">//noinspection unchecked</span></span><br><span class="line">    ServiceMethod&lt;T, Call&lt;T&gt;&gt; serviceMethod =</span><br><span class="line">        (ServiceMethod&lt;T, Call&lt;T&gt;&gt;) retrofit.loadServiceMethod(method);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 5. 触发请求构建流程</span></span><br><span class="line">    Call&lt;T&gt; okHttpCall = <span class="keyword">new</span> <span class="title class_">OkHttpCall</span>&lt;&gt;(serviceMethod, args);</span><br><span class="line">    Call&lt;T&gt; call = serviceMethod.adapt(okHttpCall);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      call.execute(); <span class="comment">// 执行调用</span></span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AssertionError</span>(); <span class="comment">// 如果没抛异常，说明哪里不对劲</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (UnsupportedOperationException ignored) &#123;</span><br><span class="line">      <span class="keyword">return</span> requestRef.get(); <span class="comment">// 返回捕获到的 Request 对象</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> e;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java-Security/" rel="tag"># Java Security</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" rel="tag"># 漏洞研究</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/01/28/%E7%94%A8URL%E7%BC%96%E7%A0%81%E6%9C%BA%E5%88%B6%E9%98%B2%E5%BE%A1%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E/" rel="prev" title="用URL编码机制防御路径遍历漏洞">
+                  <i class="fa fa-angle-left"></i> 用URL编码机制防御路径遍历漏洞
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
