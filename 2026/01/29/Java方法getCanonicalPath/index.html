@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="基本定义getCanonicalPath() 是 Java File 类的方法，返回文件的规范化绝对路径。 123File file &#x3D; new File(&quot;&#x2F;home&#x2F;user&#x2F;..&#x2F;admin&#x2F;.&#x2F;file.txt&quot;);String canonical &#x3D; file.getCanonicalPath();&#x2F;&#x2F; 返回: &quot;&#x2F;home&#x2F;admin&#x2F;file.txt&amp;q">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java方法getCanonicalPath()">
+<meta property="og:url" content="https://zyufoye.github.io/2026/01/29/Java%E6%96%B9%E6%B3%95getCanonicalPath/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="基本定义getCanonicalPath() 是 Java File 类的方法，返回文件的规范化绝对路径。 123File file &#x3D; new File(&quot;&#x2F;home&#x2F;user&#x2F;..&#x2F;admin&#x2F;.&#x2F;file.txt&quot;);String canonical &#x3D; file.getCanonicalPath();&#x2F;&#x2F; 返回: &quot;&#x2F;home&#x2F;admin&#x2F;file.txt&amp;q">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-29T14:19:32.000Z">
+<meta property="article:modified_time" content="2026-01-29T14:20:17.275Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/01/29/Java%E6%96%B9%E6%B3%95getCanonicalPath/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/01/29/Java%E6%96%B9%E6%B3%95getCanonicalPath/","path":"2026/01/29/Java方法getCanonicalPath/","title":"Java方法getCanonicalPath()"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Java方法getCanonicalPath() | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">基本定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD"><span class="nav-number">2.</span> <span class="nav-text">核心功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%A7%A3%E6%9E%90%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84%E7%AC%A6%E5%8F%B7"><span class="nav-number">2.1.</span> <span class="nav-text">1. 解析相对路径符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84"><span class="nav-number">2.2.</span> <span class="nav-text">2. 转换为绝对路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%A7%A3%E6%9E%90%E7%AC%A6%E5%8F%B7%E9%93%BE%E6%8E%A5%EF%BC%88%E8%BD%AF%E9%93%BE%E6%8E%A5%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">3. 解析符号链接（软链接）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E8%A7%84%E8%8C%83%E5%8C%96%E8%B7%AF%E5%BE%84%E5%88%86%E9%9A%94%E7%AC%A6"><span class="nav-number">2.4.</span> <span class="nav-text">4. 规范化路径分隔符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95%E5%AF%B9%E6%AF%94"><span class="nav-number">3.</span> <span class="nav-text">与其他方法对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">在安全中的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%98%B2%E6%AD%A2%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%E6%94%BB%E5%87%BB%EF%BC%88Path-Traversal%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">1. 防止路径遍历攻击（Path Traversal）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%9E%E9%99%85%E6%BC%8F%E6%B4%9E%E4%BF%AE%E5%A4%8D%E7%A4%BA%E4%BE%8B"><span class="nav-number">4.2.</span> <span class="nav-text">2. 实际漏洞修复示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%A6%E5%8F%B7%E9%93%BE%E6%8E%A5%E6%94%BB%E5%87%BB%E7%A4%BA%E4%BE%8B"><span class="nav-number">5.</span> <span class="nav-text">符号链接攻击示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%80%83%E8%99%91"><span class="nav-number">6.</span> <span class="nav-text">性能考虑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="nav-number">7.</span> <span class="nav-text">异常处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%A8%E5%B9%B3%E5%8F%B0%E5%B7%AE%E5%BC%82"><span class="nav-number">8.</span> <span class="nav-text">跨平台差异</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3-Java-%E6%9B%BF%E4%BB%A3%E6%96%B9%E6%A1%88%EF%BC%88Java-7-%EF%BC%89"><span class="nav-number">9.</span> <span class="nav-text">现代 Java 替代方案（Java 7+）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E5%AE%89%E5%85%A8%E7%A4%BA%E4%BE%8B"><span class="nav-number">10.</span> <span class="nav-text">完整安全示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">11.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/29/Java%E6%96%B9%E6%B3%95getCanonicalPath/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java方法getCanonicalPath() | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java方法getCanonicalPath()
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-29 22:19:32 / 修改时间：22:20:17" itemprop="dateCreated datePublished" datetime="2026-01-29T22:19:32+08:00">2026-01-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="基本定义"><a href="#基本定义" class="headerlink" title="基本定义"></a>基本定义</h2><p><code>getCanonicalPath()</code> 是 Java <code>File</code> 类的方法，返回文件的<strong>规范化绝对路径</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">File</span> <span class="variable">file</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/home/user/../admin/./file.txt&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">canonical</span> <span class="operator">=</span> file.getCanonicalPath();</span><br><span class="line"><span class="comment">// 返回: &quot;/home/admin/file.txt&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h2><h3 id="1-解析相对路径符号"><a href="#1-解析相对路径符号" class="headerlink" title="1. 解析相对路径符号"></a>1. <strong>解析相对路径符号</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 示例 1: 解析 ..（父目录）</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/www/uploads/../config/db.conf&quot;</span>);</span><br><span class="line">System.out.println(f1.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /var/www/config/db.conf</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例 2: 解析 .（当前目录）</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/home/./user/./docs&quot;</span>);</span><br><span class="line">System.out.println(f2.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /home/user/docs</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例 3: 混合使用</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/a/b/../c/./d/../e&quot;</span>);</span><br><span class="line">System.out.println(f3.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /a/c/e</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-转换为绝对路径"><a href="#2-转换为绝对路径" class="headerlink" title="2. 转换为绝对路径"></a>2. <strong>转换为绝对路径</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 相对路径 → 绝对路径</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;data/logs/app.log&quot;</span>);</span><br><span class="line">System.out.println(f.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /home/user/project/data/logs/app.log (基于当前工作目录)</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-解析符号链接（软链接）"><a href="#3-解析符号链接（软链接）" class="headerlink" title="3. 解析符号链接（软链接）"></a>3. <strong>解析符号链接（软链接）</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Linux 示例</span></span><br><span class="line"><span class="comment">// /var/log -&gt; /mnt/storage/logs （符号链接）</span></span><br><span class="line"></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/log/app.log&quot;</span>);</span><br><span class="line">System.out.println(f.getAbsolutePath());   <span class="comment">// /var/log/app.log</span></span><br><span class="line">System.out.println(f.getCanonicalPath());  <span class="comment">// /mnt/storage/logs/app.log</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-规范化路径分隔符"><a href="#4-规范化路径分隔符" class="headerlink" title="4. 规范化路径分隔符"></a>4. <strong>规范化路径分隔符</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Windows 示例</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;C:\\Users\\..\\Windows\\System32&quot;</span>);</span><br><span class="line">System.out.println(f.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: C:\Windows\System32</span></span><br></pre></td></tr></table></figure>
+<h2 id="与其他方法对比"><a href="#与其他方法对比" class="headerlink" title="与其他方法对比"></a>与其他方法对比</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">File</span> <span class="variable">file</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;../admin/./docs/../secret.txt&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. getPath() - 返回构造时的字符串（不做处理）</span></span><br><span class="line">System.out.println(file.getPath());</span><br><span class="line"><span class="comment">// 输出: ../admin/./docs/../secret.txt</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. getAbsolutePath() - 转为绝对路径，但不解析 . 和 ..</span></span><br><span class="line">System.out.println(file.getAbsolutePath());</span><br><span class="line"><span class="comment">// 输出: /home/user/project/../admin/./docs/../secret.txt</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. getCanonicalPath() - 完全规范化</span></span><br><span class="line">System.out.println(file.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /home/admin/secret.txt</span></span><br></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>解析 <code>.</code></th>
+<th>解析 <code>..</code></th>
+<th>解析符号链接</th>
+<th>转绝对路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getPath()</code></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>getAbsolutePath()</code></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>getCanonicalPath()</code></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="在安全中的应用"><a href="#在安全中的应用" class="headerlink" title="在安全中的应用"></a>在安全中的应用</h2><h3 id="1-防止路径遍历攻击（Path-Traversal）"><a href="#1-防止路径遍历攻击（Path-Traversal）" class="headerlink" title="1. 防止路径遍历攻击（Path Traversal）"></a>1. <strong>防止路径遍历攻击（Path Traversal）</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 不安全的代码</span></span><br><span class="line"><span class="keyword">public</span> File <span class="title function_">getFile</span><span class="params">(String userInput)</span> &#123;</span><br><span class="line">    <span class="type">File</span> <span class="variable">baseDir</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/www/uploads/&quot;</span>);</span><br><span class="line">    <span class="type">File</span> <span class="variable">userFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(baseDir, userInput);</span><br><span class="line">    <span class="keyword">return</span> userFile;  <span class="comment">// 危险！</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 攻击示例</span></span><br><span class="line">getFile(<span class="string">&quot;../../../etc/passwd&quot;</span>);</span><br><span class="line"><span class="comment">// 实际路径: /var/www/uploads/../../../etc/passwd</span></span><br><span class="line"><span class="comment">// 最终访问: /etc/passwd</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 安全的代码</span></span><br><span class="line"><span class="keyword">public</span> File <span class="title function_">getFile</span><span class="params">(String userInput)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="type">File</span> <span class="variable">baseDir</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/www/uploads/&quot;</span>);</span><br><span class="line">    <span class="type">File</span> <span class="variable">userFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(baseDir, userInput);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 规范化路径</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">canonicalBase</span> <span class="operator">=</span> baseDir.getCanonicalPath();</span><br><span class="line">    <span class="type">String</span> <span class="variable">canonicalUser</span> <span class="operator">=</span> userFile.getCanonicalPath();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 检查是否在允许的目录内</span></span><br><span class="line">    <span class="keyword">if</span> (!canonicalUser.startsWith(canonicalBase)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Path traversal detected!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> userFile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试</span></span><br><span class="line">getFile(<span class="string">&quot;../../../etc/passwd&quot;</span>);</span><br><span class="line"><span class="comment">// canonicalBase: /var/www/uploads</span></span><br><span class="line"><span class="comment">// canonicalUser:  /etc/passwd</span></span><br><span class="line"><span class="comment">// 检查失败，抛出异常 ✅</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-实际漏洞修复示例"><a href="#2-实际漏洞修复示例" class="headerlink" title="2. 实际漏洞修复示例"></a>2. <strong>实际漏洞修复示例</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CVE-XXXX-XXXX 风格的修复</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SecureFileHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">UPLOAD_DIR</span> <span class="operator">=</span> <span class="string">&quot;/var/www/uploads/&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> File <span class="title function_">validateAndGetFile</span><span class="params">(String fileName)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">// Step 1: 基础验证</span></span><br><span class="line">        <span class="keyword">if</span> (fileName == <span class="literal">null</span> || fileName.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;Invalid filename&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Step 2: 黑名单过滤（可选，双重防护）</span></span><br><span class="line">        <span class="keyword">if</span> (fileName.contains(<span class="string">&quot;..&quot;</span>) || fileName.startsWith(<span class="string">&quot;/&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Invalid path characters&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Step 3: 构造文件对象</span></span><br><span class="line">        <span class="type">File</span> <span class="variable">baseDir</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(UPLOAD_DIR);</span><br><span class="line">        <span class="type">File</span> <span class="variable">targetFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(baseDir, fileName);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Step 4: 规范化检查（核心防护）</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">canonicalBase</span> <span class="operator">=</span> baseDir.getCanonicalPath();</span><br><span class="line">        <span class="type">String</span> <span class="variable">canonicalTarget</span> <span class="operator">=</span> targetFile.getCanonicalPath();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!canonicalTarget.startsWith(canonicalBase + File.separator)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(</span><br><span class="line">                <span class="string">&quot;Path traversal attempt detected: &quot;</span> + fileName</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> targetFile;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试用例</span></span><br><span class="line"><span class="type">SecureFileHandler</span> <span class="variable">handler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SecureFileHandler</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 合法路径</span></span><br><span class="line">handler.validateAndGetFile(<span class="string">&quot;user123/avatar.jpg&quot;</span>);</span><br><span class="line"><span class="comment">// 返回: /var/www/uploads/user123/avatar.jpg</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 攻击尝试 1</span></span><br><span class="line">handler.validateAndGetFile(<span class="string">&quot;../../etc/passwd&quot;</span>);</span><br><span class="line"><span class="comment">// 抛出: SecurityException: Path traversal attempt detected</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 攻击尝试 2</span></span><br><span class="line">handler.validateAndGetFile(<span class="string">&quot;../config/database.yml&quot;</span>);</span><br><span class="line"><span class="comment">// 抛出: SecurityException: Invalid path characters</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 攻击尝试 3（符号链接攻击）</span></span><br><span class="line"><span class="comment">// 假设 /var/www/uploads/link -&gt; /etc</span></span><br><span class="line">handler.validateAndGetFile(<span class="string">&quot;link/passwd&quot;</span>);</span><br><span class="line"><span class="comment">// canonicalTarget 会解析为 /etc/passwd</span></span><br><span class="line"><span class="comment">// 检查失败，抛出异常 ✅</span></span><br></pre></td></tr></table></figure>
+<h2 id="符号链接攻击示例"><a href="#符号链接攻击示例" class="headerlink" title="符号链接攻击示例"></a>符号链接攻击示例</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 攻击场景设置</span></span><br><span class="line"><span class="built_in">cd</span> /var/www/uploads/</span><br><span class="line"><span class="built_in">ln</span> -s /etc secret_link  <span class="comment"># 创建指向 /etc 的符号链接</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不使用 getCanonicalPath()</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/www/uploads/secret_link/passwd&quot;</span>);</span><br><span class="line">System.out.println(f.getAbsolutePath());</span><br><span class="line"><span class="comment">// 输出: /var/www/uploads/secret_link/passwd</span></span><br><span class="line"><span class="comment">// 看起来在允许目录内！❌</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 getCanonicalPath()</span></span><br><span class="line">System.out.println(f.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /etc/passwd</span></span><br><span class="line"><span class="comment">// 暴露真实路径！✅ 可以检测到攻击</span></span><br></pre></td></tr></table></figure>
+<h2 id="性能考虑"><a href="#性能考虑" class="headerlink" title="性能考虑"></a>性能考虑</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// getCanonicalPath() 会进行系统调用，相对较慢</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/www/uploads/file.txt&quot;</span>).getCanonicalPath();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">long</span> <span class="variable">end</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">    System.out.println(<span class="string">&quot;Time: &quot;</span> + (end - start) / <span class="number">1000000</span> + <span class="string">&quot;ms&quot;</span>);</span><br><span class="line">    <span class="comment">// 可能输出: Time: 50-100ms</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 优化建议：缓存结果</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> String CANONICAL_BASE;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="title function_">SecureFileHandler</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    CANONICAL_BASE = <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/www/uploads/&quot;</span>).getCanonicalPath();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> File <span class="title function_">validateFile</span><span class="params">(String name)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="type">File</span> <span class="variable">target</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(CANONICAL_BASE, name);</span><br><span class="line">    <span class="type">String</span> <span class="variable">canonical</span> <span class="operator">=</span> target.getCanonicalPath();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!canonical.startsWith(CANONICAL_BASE)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Invalid path&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// getCanonicalPath() 抛出 IOException</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/nonexistent/../path&quot;</span>);</span><br><span class="line">    <span class="type">String</span> <span class="variable">path</span> <span class="operator">=</span> f.getCanonicalPath();  <span class="comment">// 可能抛出异常</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    <span class="comment">// 处理 IO 错误（如权限不足、路径不存在等）</span></span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="跨平台差异"><a href="#跨平台差异" class="headerlink" title="跨平台差异"></a>跨平台差异</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Windows</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;C:\\Users\\..\\Windows\\System32&quot;</span>);</span><br><span class="line">System.out.println(f.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: C:\Windows\System32</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Linux/Unix</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/home/../etc/passwd&quot;</span>);</span><br><span class="line">System.out.println(f.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /etc/passwd</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Windows UNC 路径</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;\\\\server\\share\\..\\file.txt&quot;</span>);</span><br><span class="line">System.out.println(f.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: \\server\file.txt</span></span><br></pre></td></tr></table></figure>
+<h2 id="现代-Java-替代方案（Java-7-）"><a href="#现代-Java-替代方案（Java-7-）" class="headerlink" title="现代 Java 替代方案（Java 7+）"></a>现代 Java 替代方案（Java 7+）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.nio.file.*;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 Path API（推荐）</span></span><br><span class="line"><span class="type">Path</span> <span class="variable">basePath</span> <span class="operator">=</span> Paths.get(<span class="string">&quot;/var/www/uploads/&quot;</span>).toRealPath();</span><br><span class="line"><span class="type">Path</span> <span class="variable">userPath</span> <span class="operator">=</span> basePath.resolve(userInput).normalize();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 检查路径</span></span><br><span class="line"><span class="keyword">if</span> (!userPath.startsWith(basePath)) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Path traversal detected&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// toRealPath() 类似 getCanonicalPath()</span></span><br><span class="line"><span class="comment">// - 解析符号链接</span></span><br><span class="line"><span class="comment">// - 规范化路径</span></span><br><span class="line"><span class="comment">// - 需要文件实际存在（可选参数控制）</span></span><br></pre></td></tr></table></figure>
+<h2 id="完整安全示例"><a href="#完整安全示例" class="headerlink" title="完整安全示例"></a>完整安全示例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.nio.file.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SecureFileAccess</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Path baseDirectory;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SecureFileAccess</span><span class="params">(String baseDir)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="built_in">this</span>.baseDirectory = Paths.get(baseDir).toRealPath();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> File <span class="title function_">getSecureFile</span><span class="params">(String userInput)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">// 1. 参数验证</span></span><br><span class="line">        <span class="keyword">if</span> (userInput == <span class="literal">null</span> || userInput.trim().isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;Filename cannot be empty&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2. 黑名单检查</span></span><br><span class="line">        <span class="keyword">if</span> (userInput.contains(<span class="string">&quot;\0&quot;</span>) || userInput.contains(<span class="string">&quot;../&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Invalid characters in filename&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 3. 构造路径</span></span><br><span class="line">        <span class="type">Path</span> <span class="variable">targetPath</span> <span class="operator">=</span> baseDirectory.resolve(userInput).normalize();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 4. 边界检查（方法1：使用 Path）</span></span><br><span class="line">        <span class="keyword">if</span> (!targetPath.startsWith(baseDirectory)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Path traversal attempt&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 5. 符号链接检查（方法2：使用 getCanonicalPath）</span></span><br><span class="line">        <span class="type">File</span> <span class="variable">targetFile</span> <span class="operator">=</span> targetPath.toFile();</span><br><span class="line">        <span class="type">String</span> <span class="variable">canonicalTarget</span> <span class="operator">=</span> targetFile.getCanonicalPath();</span><br><span class="line">        <span class="type">String</span> <span class="variable">canonicalBase</span> <span class="operator">=</span> baseDirectory.toFile().getCanonicalPath();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!canonicalTarget.startsWith(canonicalBase + File.separator)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Symlink attack detected&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> targetFile;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>主要用途</strong></td>
+<td>获取文件的唯一、规范化绝对路径</td>
+</tr>
+<tr>
+<td><strong>核心功能</strong></td>
+<td>解析 <code>.</code>、<code>..</code>、符号链接</td>
+</tr>
+<tr>
+<td><strong>安全作用</strong></td>
+<td>防止路径遍历攻击</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>较慢（涉及系统调用），建议缓存</td>
+</tr>
+<tr>
+<td><strong>异常</strong></td>
+<td>抛出 <code>IOException</code></td>
+</tr>
+<tr>
+<td><strong>现代替代</strong></td>
+<td><code>Path.toRealPath()</code> (Java 7+)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>安全关键点</strong>：在处理用户提供的文件路径时，<strong>必须</strong>使用 <code>getCanonicalPath()</code> 或 <code>toRealPath()</code> 进行边界检查！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/01/29/Java%E6%96%B9%E6%B3%95trim/" rel="prev" title="Java方法trim()">
+                  <i class="fa fa-angle-left"></i> Java方法trim()
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

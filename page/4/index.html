@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -208,6 +208,373 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/05/WebGoat%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/05/WebGoat%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA/" class="post-title-link" itemprop="url">WebGoat靶场搭建</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-05 22:42:51 / 修改时间：22:45:00" itemprop="dateCreated datePublished" datetime="2026-01-05T22:42:51+08:00">2026-01-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 SAST 和 CodeQL 的学习过程中，需要找到一个比较有价值的测试目标，目前考虑到的关键点是代码不能过于简单，否则不具备测试深度，提出的方法不具备应用价值，这里选择 WebGoat 作为初步测试目标，结合 CodeQL-Community-Packs 进行学习、分析和测试。</p>
+<p>靶场地址下载地址：<a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat/releases">https://github.com/WebGoat/WebGoat/releases</a></p>
+<p>也可以直接下载 jar 包：<a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat/releases/download/v2025.3/webgoat-2025.3.jar">https://github.com/WebGoat/WebGoat/releases/download/v2025.3/webgoat-2025.3.jar</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export TZ=Asia/Shanghai # or your timezone</span><br><span class="line">java -Dfile.encoding=UTF-8 -jar webgoat-2025.3.jar</span><br></pre></td></tr></table></figure>
+<p>export TZ 用来设置时区，java 启动WebGoat应用程序，-Dfile.encoding=UTF-8 设置Java虚拟机的文件编码为UTF-8，-jar webgoat-2023.8.jar 运行名为webgoat-2023.8.jar的可执行JAR文件。</p>
+<h2 id="漏洞代码分析"><a href="#漏洞代码分析" class="headerlink" title="漏洞代码分析"></a>漏洞代码分析</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/SqlInjection/attack2&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> AttackResult <span class="title function_">completed</span><span class="params">(<span class="meta">@RequestParam</span> String query)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> injectableQuery(query);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码定义了一个<strong>Spring MVC 控制器方法（Controller Method）</strong>，它是后端处理前端请求的入口点。</p>
+<h3 id="代码逐行详细解读"><a href="#代码逐行详细解读" class="headerlink" title="代码逐行详细解读"></a>代码逐行详细解读</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/SqlInjection/attack2&quot;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>功能</strong>：这是一个<strong>路由映射</strong>注解。</li>
+<li><strong>含义</strong>：它告诉 Spring 框架，当服务器收到一个 <strong>HTTP POST</strong> 请求，且请求的路径（URL）是 <strong>/SqlInjection/attack2</strong> 时，请把这个请求交给下面定义的 <code>completed</code> 方法来处理。</li>
+<li><strong>对应前端行为</strong>：用户在浏览器点击“提交”按钮时，浏览器会向这个地址发送数据。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>功能</strong>：这是一个<strong>响应处理</strong>注解。</li>
+<li><strong>含义</strong>：它告诉 Spring，这个方法的<strong>返回值</strong>（<code>AttackResult</code> 对象）应该直接被序列化（通常转为 JSON 格式）并写入 HTTP 响应体（Body）中返回给浏览器，而不是被解析为 JSP 或 HTML 页面模板。</li>
+<li><strong>对应前端行为</strong>：浏览器收到的不是一个新网页，而是一段 JSON 数据（如 <code>&#123;&quot;lessonCompleted&quot;: true, &quot;feedback&quot;: &quot;...&quot;&#125;</code>），前端 JS 脚本会读取这个 JSON 并弹窗提示结果。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> AttackResult <span class="title function_">completed</span><span class="params">(<span class="meta">@RequestParam</span> String query)</span> &#123;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>方法签名</strong>：定义了一个名为 <code>completed</code> 的公共方法。</li>
+<li><strong><code>@RequestParam String query</code></strong>：<ul>
+<li>这是<strong>参数绑定</strong>。它告诉 Spring 从 HTTP 请求的参数中提取名为 <strong>“query”</strong> 的值，并将其赋值给方法参数 <code>query</code>。</li>
+<li>如果请求是 <code>POST /SqlInjection/attack2?query=SELECT...</code> 或者表单数据中包含 <code>query=SELECT...</code>，那么这里的 <code>String query</code> 就会得到那个 SQL 字符串。</li>
+</ul>
+</li>
+<li><strong>返回值类型 <code>AttackResult</code></strong>：这是 WebGoat 自定义的一个类，用来封装“练习结果”，包含是否通关、反馈信息等。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">return</span> injectableQuery(query);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>逻辑</strong>：它没有自己处理业务逻辑，而是直接调用了同一个类中的辅助方法 <code>injectableQuery(query)</code>，并将结果直接返回。</li>
+<li><strong>作用</strong>：这是一个简单的<strong>入口转发</strong>。真正执行 SQL 查询和判定是否通关的逻辑都在 <code>injectableQuery</code> 方法里（也就是下面那段有漏洞的代码）。</li>
+</ul>
+<h3 id="总结功能"><a href="#总结功能" class="headerlink" title="总结功能"></a>总结功能</h3><p>这段代码的作用是在服务器上开放了一个名为 <code>/SqlInjection/attack2</code> 的接口，专门接收用户 POST 过来的 <code>query</code> 参数，然后把这个参数扔给内部逻辑去执行，最后把执行结果（成功或失败的消息）以 JSON 格式扔回给用户。</p>
+<h2 id="CodeQL-分析"><a href="#CodeQL-分析" class="headerlink" title="CodeQL 分析"></a>CodeQL 分析</h2><p>如果使用 CodeQL 进行静态分析，它识别到的<strong>Source（污染源/用户输入点）</strong> 就是：</p>
+<p><strong><code>@RequestParam String query</code></strong></p>
+<p>具体来说，CodeQL 的污点跟踪（Taint Tracking）分析会标记以下位置为 Source：</p>
+<ol>
+<li><strong>位置</strong>：第 42 行的参数声明 <code>String query</code>。</li>
+<li><strong>原因</strong>：<ul>
+<li>该方法被注解 <code>@PostMapping</code> 标记，表明这是一个处理 HTTP 请求的 Handler 方法。</li>
+<li>参数被注解 <code>@RequestParam</code> 标记（即使没有显式标记，Spring Boot 中默认非简单类型或特定配置下也会被视为输入）。</li>
+<li>CodeQL 的 <code>RemoteFlowSource</code> 库（尤其是针对 Spring MVC 的建模）明确定义了被 <code>@RequestParam</code>、<code>@RequestBody</code>、<code>@PathVariable</code> 等注解修饰的控制器方法参数均视为不可信的外部输入（Untrusted User Input）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="CodeQL-视角的污点路径（Data-Flow-Path）"><a href="#CodeQL-视角的污点路径（Data-Flow-Path）" class="headerlink" title="CodeQL 视角的污点路径（Data Flow Path）"></a>CodeQL 视角的污点路径（Data Flow Path）</h3><p>CodeQL 会追踪数据流，构建如下的路径：</p>
+<ol>
+<li><strong>Source (源头)</strong>: 第 42 行 <code>completed(@RequestParam String query)</code> 中的 <strong><code>query</code></strong> 变量。<ul>
+<li><em>标记：Remote user input source</em></li>
+</ul>
+</li>
+<li><strong>Flow (传递)</strong>: 第 43 行 <code>return injectableQuery(query);</code>，<code>query</code> 被传递给 <code>injectableQuery</code> 方法。</li>
+<li><strong>Flow (传递)</strong>: 第 46 行 <code>protected AttackResult injectableQuery(String query)</code>，参数 <code>query</code> 接收了污点。</li>
+<li><strong>Sink (汇聚点/漏洞点)</strong>: 第 49 行 <code>statement.executeQuery(query);</code>。<ul>
+<li><em>标记：SQL Injection Sink (java.sql.Statement.executeQuery)</em></li>
+</ul>
+</li>
+</ol>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>CodeQL 会准确地将 <strong>第 42 行的 <code>query</code> 参数</strong> 识别为用户输入的源头。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">软考信息安全工程师考点概述</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-03 22:05:33 / 修改时间：22:10:47" itemprop="dateCreated datePublished" datetime="2026-01-03T22:05:33+08:00">2026-01-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>软考信息安全工程师涉及到的考试章节和具体考点如下，科目一考点：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>章节名称</strong></th>
+<th><strong>章节内容</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. 网络信息安全概述</td>
+<td>网络发展现状、安全属性、安全管理、生命周期</td>
+</tr>
+<tr>
+<td>2. 网络攻击原理与常用方法</td>
+<td>攻击概述、常见攻击方法、黑客常用工具、攻击案例</td>
+</tr>
+<tr>
+<td>3. 密码学基本理论</td>
+<td>概况、密码学体制、常见密码算法、数字签名、安全协议</td>
+</tr>
+<tr>
+<td>4. 网络安全体系与网络安全模型</td>
+<td>概述、网络安全体系模型、建设原则、建设内容、参考案例</td>
+</tr>
+<tr>
+<td>5. 物理与环境安全技术</td>
+<td>物理安全、环境安全、机房安全、通信安全、设备安全、介质安全</td>
+</tr>
+<tr>
+<td>6. 认证技术原理与应用</td>
+<td>概述、认证类型与认证过程、认证技术、认证产品和技术指标</td>
+</tr>
+<tr>
+<td>7. 访问控制技术原理与应用</td>
+<td>访问控制原理、模型、类型、策略设计与实现、安全管理、产品</td>
+</tr>
+<tr>
+<td>8. 防火墙技术原理与应用</td>
+<td>防火墙原理、类型与实现技术、产品与技术指标、体系结构</td>
+</tr>
+<tr>
+<td>9. VPN 技术原理与应用</td>
+<td>概述、类型和实现技术、产品与技术指标、技术应用</td>
+</tr>
+<tr>
+<td>10. 入侵检测技术原理与应用</td>
+<td>概述、入侵检测技术、组成与分类、产品与技术指标、应用</td>
+</tr>
+<tr>
+<td>11. 网络物理隔离技术原理与应用</td>
+<td>网络物理隔离概述、系统与类型、机制与技术、产品与指标</td>
+</tr>
+<tr>
+<td>12. 网络安全审计技术原理与应用</td>
+<td>安全审计概述、组成与类型、机制与实现技术、产品与技术</td>
+</tr>
+<tr>
+<td>13. 网络安全漏洞防护技术原理与应用</td>
+<td>网络安全漏洞概述、分类与管理、漏洞扫描技术、处置技术、产品</td>
+</tr>
+<tr>
+<td>14. 恶意代码防范技术原理</td>
+<td>计算机病毒、特洛伊木马、网络蠕虫、僵尸网络等</td>
+</tr>
+<tr>
+<td>15. 网络安全主动防御技术与应用</td>
+<td>入侵阻断、软件白名单、网络流量清洗、可信计算、数字水印等</td>
+</tr>
+<tr>
+<td>16. 网络安全风险评估技术原理与应用</td>
+<td>风险评估概述、评估过程、评估技术、工作流程</td>
+</tr>
+<tr>
+<td>17. 网络安全应急响应技术原理与应用</td>
+<td>网络安全应急响应概述、工作机制、预案内容、应急处理</td>
+</tr>
+<tr>
+<td>18. 网络安全测评技术与标准</td>
+<td>网络安全测评概述、类型、流程与内容、技术工具、标准</td>
+</tr>
+<tr>
+<td>19. 操作系统安全保护</td>
+<td>概述、Windows / Linux 操作系统安全、国产操作系统安全</td>
+</tr>
+<tr>
+<td>20. 数据库系统安全</td>
+<td>概述、安全机制和技术、Oracle、MS SQL、MySQL、国产数据库安全</td>
+</tr>
+<tr>
+<td>21. 网络设备安全</td>
+<td>网络设备安全概述、机制与技术、增强技术、漏洞和解决方法</td>
+</tr>
+<tr>
+<td>22. 网站安全需求分析与安全保护</td>
+<td>网络安全威胁、Apache Web 安全、IIS 安全、Web 漏洞、网站安全</td>
+</tr>
+<tr>
+<td>23. 云计算安全需求分析与安全保护</td>
+<td>云计算安全威胁、安全需求、安全保护机制与技术、案例</td>
+</tr>
+<tr>
+<td>24. 工控安全需求分析与安全保护</td>
+<td>工控系统安全威胁、安全需求、安全保护机制与技术、案例</td>
+</tr>
+<tr>
+<td>25. 移动应用安全需求分析与安全保护</td>
+<td>移动应用安全威胁、Android、iOS 安全、保护机制和技术、案例</td>
+</tr>
+<tr>
+<td>26. 大数据安全需求分析与安全保护</td>
+<td>大数据安全威胁、安全需求、安全保护机制与技术、案例</td>
+</tr>
+<tr>
+<td>专业英语</td>
+<td>专业英语</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>科目二考点：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>考试专题</strong></th>
+<th><strong>知识点</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>密码学</td>
+<td>1. 安全目标等基础概念。<br>2. RSA 加解密详细过程，其他加密算法概述。<br>3. 公钥私钥加解密、数字签名过程，文字表示及识图。<br>4. 密钥管理技术、安全认证协议等。</td>
+</tr>
+<tr>
+<td>网络安全</td>
+<td>1. 防火墙概念（iptables 过滤规则及配置命令）、体系结构、包过滤规则填表，Windows / Linux 配置。<br>2. 各种网络攻击和威胁，数据敏感度、隐私分类、隐私保护等。<br>3. 网络协议数据包含义分析。<br>4. 重要网络协议如 TCP、DNS、DHCP 等。<br>5. 华为交换机、路由器等安全配置命令。</td>
+</tr>
+<tr>
+<td>信息系统安全</td>
+<td>1. 信息安全概述、目标、访问控制原理、BLP 等模型。<br>2. C 语言代码漏洞分析，变量内存图等。<br>3. Linux 重要配置文件名及内容含义、文件权限、配置命令等。<br>4. Windows 重要配置：日志、防火墙、安全策略等界面。</td>
+</tr>
+<tr>
+<td>新技术</td>
+<td>移动应用——安卓系统和 iOS 系统；<br>数据敏感度、隐私保护、隐私分类等；<br>其他可能会考察的有：云计算、工控系统、移动应用、大数据、应急响应等安全新技术内容。</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1274,292 +1641,6 @@
 <p>Vulnhalla 包含一个功能齐全的用户界面，用于浏览和探索分析结果。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python src/ui/ui_app.py</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">python examples/ui_example.py</span><br></pre></td></tr></table></figure>
 <p>至此，Vulnhalla 环境配置完成，可运行一个完整 pipeline。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/" class="post-title-link" itemprop="url">CodeQL-MCP架构解读</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-15 21:55:38 / 修改时间：22:04:55" itemprop="dateCreated datePublished" datetime="2025-12-15T21:55:38+08:00">2025-12-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>本片内容以 <a target="_blank" rel="noopener" href="https://github.com/JordyZomer/codeql-mcp">https://github.com/JordyZomer/codeql-mcp</a> 为基础，进行 CodeQL MCP 的开发学习。</p>
-<h2 id="CodeQL-MCP-整体架构分析"><a href="#CodeQL-MCP-整体架构分析" class="headerlink" title="CodeQL-MCP 整体架构分析"></a>CodeQL-MCP 整体架构分析</h2><p>项目中包含了两个核心文件 <code>codeqlclient.py</code> 和  <code>server.py</code> ：</p>
-<p><strong><code>codeqlclient.py</code></strong> 是一个底层通信客户端，负责与 CodeQL 查询服务器建立并管理 JSON-RPC 连接。它封装了进程启动、请求发送、响应解析、异步任务跟踪等复杂逻辑，提供了数据库注册、查询执行、结果解码等核心操作的原始接口。该文件不依赖任何高层框架，专注于可靠、高效地与 CodeQL 引擎交互，可作为独立库在不同上下文中复用。</p>
-<p><strong><code>server.py</code></strong> 是一个基于 Model Context Protocol（MCP）的服务层实现，利用 FastMCP 框架将 <code>codeqlclient.py</code> 提供的底层能力包装为用户友好的异步 API 工具。它定义了清晰的 HTTP 可调用接口，处理参数验证、错误反馈和结果格式化，使外部系统能通过标准 MCP 协议便捷地使用 CodeQL 功能，而无需关心底层通信细节。</p>
-<p>在 <code>codeqlclient.py</code> 中包含了一个核心类结构 CodeQLQueryServer 主要模块如下：</p>
-<ol>
-<li>服务器进程管理</li>
-</ol>
-<ul>
-<li>启动/停止 ：通过 start() 和 stop() 方法管理 CodeQL 子进程</li>
-<li>进程通信 ：使用标准输入/输出进行 JSON-RPC 通信</li>
-<li>线程管理 ：<ul>
-<li>_read_loop() ：主线程，读取服务器响应；_stderr_loop() ：处理标准错误输出；异步处理：支持并发请求</li>
-</ul>
-</li>
-</ul>
-<ol>
-<li>通信协议层</li>
-</ol>
-<ul>
-<li>JSON-RPC 2.0：定义消息格式，请求/响应结构，支持异步调用</li>
-</ul>
-<ol>
-<li>功能模块</li>
-</ol>
-<ul>
-<li><p>数据库管理</p>
-<ul>
-<li>register_databases() ：注册数据库</li>
-<li>deregister_databases() ：注销数据库</li>
-</ul>
-</li>
-<li><p>查询执行</p>
-<ul>
-<li>evaluate_queries() ：执行完整查询</li>
-<li>quick_evaluate() ：快速评估（针对特定代码位置）</li>
-<li>evaluate_and_wait() ：同步执行查询</li>
-<li>quick_evaluate_and_wait() ：同步快速评估</li>
-</ul>
-</li>
-<li><p>结果处理</p>
-<ul>
-<li>decode_bqrs() ：解码 BQRS 结果文件</li>
-</ul>
-</li>
-<li><p>代码分析辅助</p>
-<ul>
-<li>find_class_identifier_position() ：查找类标识符位置</li>
-<li>find_predicate_identifier_position() ：查找谓词标识符位置</li>
-</ul>
-</li>
-<li><p>进度回调机制（支持实时进度更新）</p>
-<ul>
-<li>wait_for_progress_done() ：等待进度完成</li>
-<li>wait_for_completion_callback() ：等待异步操作完成</li>
-<li>wait_for_progress_done() 创建进度跟踪器</li>
-<li>wait_for_completion_callback() 创建完成处理器</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>数据流：用户请求 -&gt; send_request()-&gt;JSON-RPC 消息-&gt;CodeQL 服务器-&gt;CodeQL 引擎-&gt;服务器响应-&gt;_read_loop()-&gt;_handle_message()-&gt;回调函数</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">MCP stdio与sse模式的区别</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-15 21:54:35 / 修改时间：21:55:10" itemprop="dateCreated datePublished" datetime="2025-12-15T21:54:35+08:00">2025-12-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="SSE-和-stdio-模式对比"><a href="#SSE-和-stdio-模式对比" class="headerlink" title="SSE 和 stdio 模式对比"></a>SSE 和 stdio 模式对比</h2><h3 id="架构差异"><a href="#架构差异" class="headerlink" title="架构差异"></a>架构差异</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">stdio 模式：</span><br><span class="line">Cursor/Claude Desktop</span><br><span class="line">    └─ 启动子进程：python server.py</span><br><span class="line">        └─ stdin/stdout 通信</span><br><span class="line">        └─ 服务器生命周期由客户端管理</span><br><span class="line"></span><br><span class="line">SSE 模式：</span><br><span class="line">独立运行：python server.py (后台持续运行)</span><br><span class="line">    ↑</span><br><span class="line">    └─ HTTP SSE 连接</span><br><span class="line">    ↑</span><br><span class="line">Cursor/Claude Desktop (通过 HTTP 连接)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="详细对比"><a href="#详细对比" class="headerlink" title="详细对比"></a>详细对比</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>特性</th>
-<th>stdio 模式</th>
-<th>SSE 模式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>启动方式</strong></td>
-<td>客户端自动启动</td>
-<td>手动启动（独立进程）</td>
-</tr>
-<tr>
-<td><strong>通信协议</strong></td>
-<td>stdin/stdout 管道</td>
-<td>HTTP + Server-Sent Events</td>
-</tr>
-<tr>
-<td><strong>连接方式</strong></td>
-<td>单一客户端</td>
-<td>多客户端支持</td>
-</tr>
-<tr>
-<td><strong>调试难度</strong></td>
-<td>难（日志混在一起）</td>
-<td>易（可直接查看终端）</td>
-</tr>
-<tr>
-<td><strong>适用场景</strong></td>
-<td>生产环境</td>
-<td>开发调试</td>
-</tr>
-<tr>
-<td><strong>进程管理</strong></td>
-<td>自动（随客户端）</td>
-<td>手动（需要单独管理）</td>
-</tr>
-<tr>
-<td><strong>网络要求</strong></td>
-<td>无</td>
-<td>需要监听端口</td>
-</tr>
-<tr>
-<td><strong>日志可见性</strong></td>
-<td>低</td>
-<td>高</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="测试时为什么选择-SSE？"><a href="#测试时为什么选择-SSE？" class="headerlink" title="测试时为什么选择 SSE？"></a>测试时为什么选择 SSE？</h3><ul>
-<li><p>✅ 开发调试更方便：可以直接在终端看到所有日志，手动重启服务器，用浏览器测试连接；</p>
-</li>
-<li><p>✅ 多客户端支持：多个 IDE 可以同时连接，可以同时在 Cursor 和 Claude Desktop 中使用；</p>
-</li>
-</ul>
 
       
     </div>
