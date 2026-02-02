@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="网络安全体系特征：整体、协同、过程、全面、适应性； 网络安全体系相关安全模型包含了BLP机密性模型、Biba完整性模型、信息流模型等。 BLP完整性模型在文章中 BLP机密性模型 ，BLP 关注“保密”（不让人看），而 Biba 关注“完整”（不让人改）。 一、 Biba 完整性模型 (Biba Integrity Model)如果说 BLP 模型是为了防止“泄密”，那么 Biba 模型就是为了防">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络安全体系相关安全模型">
+<meta property="og:url" content="https://zyufoye.github.io/2026/02/02/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E7%9B%B8%E5%85%B3%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="网络安全体系特征：整体、协同、过程、全面、适应性； 网络安全体系相关安全模型包含了BLP机密性模型、Biba完整性模型、信息流模型等。 BLP完整性模型在文章中 BLP机密性模型 ，BLP 关注“保密”（不让人看），而 Biba 关注“完整”（不让人改）。 一、 Biba 完整性模型 (Biba Integrity Model)如果说 BLP 模型是为了防止“泄密”，那么 Biba 模型就是为了防">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-02T13:58:30.000Z">
+<meta property="article:modified_time" content="2026-02-02T14:06:58.929Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="软考">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/02/02/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E7%9B%B8%E5%85%B3%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/02/02/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E7%9B%B8%E5%85%B3%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B/","path":"2026/02/02/网络安全体系相关安全模型/","title":"网络安全体系相关安全模型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>网络安全体系相关安全模型 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81-Biba-%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A8%A1%E5%9E%8B-Biba-Integrity-Model"><span class="nav-number">1.</span> <span class="nav-text">一、 Biba 完整性模型 (Biba Integrity Model)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E5%AE%89%E5%85%A8%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">三个安全特性解读：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E4%BF%A1%E6%81%AF%E6%B5%81%E6%A8%A1%E5%9E%8B-Information-Flow-Model-FM"><span class="nav-number">2.</span> <span class="nav-text">二、 信息流模型 (Information Flow Model &#x2F; FM)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/02/02/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E7%9B%B8%E5%85%B3%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="网络安全体系相关安全模型 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网络安全体系相关安全模型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-02-02 21:58:30 / 修改时间：22:06:58" itemprop="dateCreated datePublished" datetime="2026-02-02T21:58:30+08:00">2026-02-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>网络安全体系特征：整体、协同、过程、全面、适应性；</p>
+<p>网络安全体系相关安全模型包含了BLP机密性模型、Biba完整性模型、信息流模型等。</p>
+<p>BLP完整性模型在文章中 <a href="/2026/02/02/BLP%E6%9C%BA%E5%AF%86%E6%80%A7%E6%A8%A1%E5%9E%8B/" title="BLP机密性模型">BLP机密性模型</a> ，BLP 关注“保密”（不让人看），而 Biba 关注“完整”（不让人改）。</p>
+<h3 id="一、-Biba-完整性模型-Biba-Integrity-Model"><a href="#一、-Biba-完整性模型-Biba-Integrity-Model" class="headerlink" title="一、 Biba 完整性模型 (Biba Integrity Model)"></a>一、 Biba 完整性模型 (Biba Integrity Model)</h3><p>如果说 BLP 模型是为了防止“泄密”，那么 Biba 模型就是为了防止“篡改”。它的核心目的是<strong>保护系统信息的完整性</strong>。</p>
+<p><strong>核心逻辑</strong>：你可以把“完整性级别”想象成<strong>“纯净度”</strong>或<strong>“可信度”</strong>。</p>
+<ul>
+<li>级别高 = 非常纯净、可信（如：操作系统核心文件）。</li>
+<li>级别低 = 脏、不可信（如：从互联网下载的未知文件）。</li>
+</ul>
+<h4 id="三个安全特性解读："><a href="#三个安全特性解读：" class="headerlink" title="三个安全特性解读："></a>三个安全特性解读：</h4><ol>
+<li><p><strong>简单安全特性 (Simple Integrity Axiom) —— 核心是“防污染”</strong></p>
+<ul>
+<li><strong>规则</strong>：主体（用户）的完整性级别必须 ≤ 客体（数据）的完整性级别，才能读取。</li>
+<li><strong>口诀</strong>：<strong>“不可向下读” (No Read Down)</strong></li>
+<li><strong>通俗解释</strong>：一个“干净”的高级别用户，不应该去读取“脏”的低级别数据。因为一旦读了不可信的数据，用户自己也被污染了，完整性就降低了。</li>
+<li><em>(注：图片中第一点文字描述稍显混乱，提到“修改”却结论为“不可向下读”。但在标准 Biba 理论中，简单安全性主要约束“读取”行为，防止主体被低级信息污染)</em>。</li>
+</ul>
+</li>
+<li><p><strong><em>特性 (\</em>-Property) —— 核心是“防破坏”</strong></p>
+<ul>
+<li><strong>规则</strong>：主体（用户）的完整性级别必须 ≥ 客体（数据）的完整性级别，才能修改（写入）。</li>
+<li><strong>口诀</strong>：<strong>“不可向上写” (No Write Up)</strong></li>
+<li><strong>通俗解释</strong>：一个“不可信”的低级别用户，不能去修改“可信”的高级别文件。比如，普通用户不能修改系统内核文件，否则会破坏系统的完整性。</li>
+</ul>
+</li>
+<li><p><strong>调用特性 (Invocation Property)</strong></p>
+<ul>
+<li><strong>规则</strong>：完整性级别低的主体，不能调用（激活）完整性级别高的主体。</li>
+<li><strong>解释</strong>：这是为了防止低权限的恶意程序去操控高权限的程序来执行破坏操作。</li>
+</ul>
+</li>
+</ol>
+<p><strong>⚡️ Biba 与 BLP 的对比记忆（考试常考点）：</strong></p>
+<ul>
+<li><strong>BLP (保密)</strong>：不可向上读，不可向下写。（目的是把秘密锁在上面）</li>
+<li><strong>Biba (完整)</strong>：不可向下读，不可向上写。（目的是防止下面的脏数据污染上面）</li>
+<li><strong>两者方向完全相反。</strong></li>
+</ul>
+<h3 id="二、-信息流模型-Information-Flow-Model-FM"><a href="#二、-信息流模型-Information-Flow-Model-FM" class="headerlink" title="二、 信息流模型 (Information Flow Model / FM)"></a>二、 信息流模型 (Information Flow Model / FM)</h3><p>这是一个更抽象的模型，它不仅仅关注“谁访问了谁”，而是关注<strong>数据流动的方向</strong>。</p>
+<ol>
+<li><p><strong>核心概念</strong>：</p>
+<ul>
+<li>它不仅检查简单的读写权限，而是检查信息是否通过各种操作从一个客体<strong>流向</strong>了另一个客体。</li>
+<li><strong>基本原则</strong>：基于安全属性（安全级），控制信息从客体 A 到客体 B 的传输。如果这种流动违反了安全策略（例如秘密信息流向了公开区域），就被禁止。</li>
+</ul>
+</li>
+<li><p><strong>数学表示</strong>（图中公式部分）：</p>
+<ul>
+<li>模型通过集合论来描述：包括客体集、进程集、安全类型集以及流关系（Flow Relation）。</li>
+<li>一个安全的系统，要求所有的操作序列执行后，都不会产生与规定的“流关系”相冲突的结果。</li>
+</ul>
+</li>
+<li><p><strong>关键应用：隐蔽通道 (Covert Channels) 分析</strong></p>
+<ul>
+<li>这是信息流模型最著名的应用场景。</li>
+<li><strong>什么是隐蔽通道？</strong><br>图片中解释得很清楚：<strong>“低安全等级主体对高安全等级主体所产生信息的间接读取”</strong>。</li>
+<li><strong>通俗例子</strong>：<br>假设 BLP 模型禁止 User A（低级）读取 File B（高级）。<br>但如果 File B 的持有者通过“占用 CPU 100%”表示“1”，“占用 CPU 0%”表示“0”来发送摩斯密码，User A 虽然读不到文件，但可以通过观察 CPU 占用率来推测出信息。<br>这就是<strong>隐蔽通道</strong>。信息流模型就是用来分析和阻断这种非正常的泄密路径的。</li>
+</ul>
+</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><strong>Biba 模型</strong>：保护数据不被篡改（不可向下读，不可向上写）。</li>
+<li><strong>信息流模型</strong>：关注数据的整体流动方向，专门用于发现那些绕过常规访问控制的“隐蔽通道”。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E8%80%83/" rel="tag"># 软考</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/02/02/BLP%E6%9C%BA%E5%AF%86%E6%80%A7%E6%A8%A1%E5%9E%8B/" rel="prev" title="BLP机密性模型">
+                  <i class="fa fa-angle-left"></i> BLP机密性模型
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/02/02/%E4%BF%A1%E6%81%AF%E4%BF%9D%E9%9A%9C%E6%A8%A1%E5%9E%8B/" rel="next" title="信息保障模型">
+                  信息保障模型 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

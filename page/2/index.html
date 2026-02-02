@@ -71,119 +71,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<style>mjx-container[jax="SVG"] {
-  direction: ltr;
-}
-
-mjx-container[jax="SVG"] > svg {
-  overflow: visible;
-}
-
-mjx-container[jax="SVG"][display="true"] {
-  display: block;
-  text-align: center;
-  margin: 1em 0;
-}
-
-mjx-container[jax="SVG"][justify="left"] {
-  text-align: left;
-}
-
-mjx-container[jax="SVG"][justify="right"] {
-  text-align: right;
-}
-
-g[data-mml-node="merror"] > g {
-  fill: red;
-  stroke: red;
-}
-
-g[data-mml-node="merror"] > rect[data-background] {
-  fill: yellow;
-  stroke: none;
-}
-
-g[data-mml-node="mtable"] > line[data-line] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > rect[data-frame] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > .mjx-dashed {
-  stroke-dasharray: 140;
-}
-
-g[data-mml-node="mtable"] > .mjx-dotted {
-  stroke-linecap: round;
-  stroke-dasharray: 0,140;
-}
-
-g[data-mml-node="mtable"] > svg {
-  overflow: visible;
-}
-
-[jax="SVG"] mjx-tool {
-  display: inline-block;
-  position: relative;
-  width: 0;
-  height: 0;
-}
-
-[jax="SVG"] mjx-tool > mjx-tip {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-mjx-tool > mjx-tip {
-  display: inline-block;
-  padding: .2em;
-  border: 1px solid #888;
-  font-size: 70%;
-  background-color: #F8F8F8;
-  color: black;
-  box-shadow: 2px 2px 5px #AAAAAA;
-}
-
-g[data-mml-node="maction"][data-toggle] {
-  cursor: pointer;
-}
-
-mjx-status {
-  display: block;
-  position: fixed;
-  left: 1em;
-  bottom: 1em;
-  min-width: 25%;
-  padding: .2em .4em;
-  border: 1px solid #888;
-  font-size: 90%;
-  background-color: #F8F8F8;
-  color: black;
-}
-
-foreignObject[data-mjx-xml] {
-  font-family: initial;
-  line-height: normal;
-  overflow: visible;
-}
-
-.MathJax path {
-  stroke-width: 3;
-}
-
-mjx-container[display="true"] {
-  overflow: auto hidden;
-}
-
-mjx-container[display="true"] + br {
-  display: none;
-}
-</style></head>
+</head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
   <div class="headband"></div>
@@ -284,7 +172,7 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">64</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -320,6 +208,819 @@ mjx-container[display="true"] + br {
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Zip-Slip%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/28/Zip-Slip%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">Zip Slip目录遍历漏洞</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-28 22:21:27 / 修改时间：22:21:48" itemprop="dateCreated datePublished" datetime="2026-01-28T22:21:27+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>Zip Slip</strong> 是一个广泛存在且危害极大的<strong>目录遍历（Directory Traversal）漏洞</strong>。它主要发生在应用程序解压压缩文件（如 ZIP, TAR, JAR, WAR, APK 等）的过程中。</p>
+<p>如果应用程序没有对压缩包内文件的名称进行严格的合法性校验，攻击者就可以通过构造恶意的压缩包，让解压程序将文件写入到<strong>意料之外的位置</strong>（例如覆盖系统关键文件或代码文件），从而导致<strong>远程代码执行（RCE）</strong>。</p>
+<p>下面记录一下这个漏洞的原理、攻击方式、代码示例以及修复方案。</p>
+<h3 id="1-核心原理：目录遍历"><a href="#1-核心原理：目录遍历" class="headerlink" title="1. 核心原理：目录遍历"></a>1. 核心原理：目录遍历</h3><p>Zip Slip 的核心在于利用文件路径中的特殊字符 <code>../</code>（点点斜杠）。</p>
+<p>在操作系统中，<code>../</code> 代表“上一级目录”。</p>
+<ul>
+<li>正常的文件名：<code>photo.jpg</code></li>
+<li>恶意的文件名：<code>../../../../var/www/html/evil.php</code></li>
+</ul>
+<p><strong>攻击流程如下：</strong></p>
+<ol>
+<li><strong>构造恶意包</strong>：攻击者创建一个压缩包，在其中包含一个文件名被修改为包含大量 <code>../</code> 的文件（例如 <code>../../evil.sh</code>）。</li>
+<li><strong>上传/传输</strong>：攻击者将这个压缩包上传到受害者的服务器（例如头像上传、文档导入功能）。</li>
+<li><strong>解压过程（漏洞触发点）</strong>：<ul>
+<li>服务器接收到文件，准备解压到指定目录（例如 <code>/app/uploads/</code>）。</li>
+<li>程序读取压缩包内的文件名 <code>../../evil.sh</code>。</li>
+<li>程序将“目标目录”与“文件名”拼接：<code>/app/uploads/</code> + <code>../../evil.sh</code>。</li>
+<li><strong>结果</strong>：操作系统解析这个路径后，实际指向的是 <code>/app/evil.sh</code>（跳出了 <code>uploads</code> 目录）。</li>
+</ul>
+</li>
+<li><strong>文件覆盖</strong>：如果程序没有检查路径，它就会将恶意文件写入 <code>/app/evil.sh</code>，可能会覆盖掉该位置原有的关键文件，或者写入一个恶意的 Web Shell。</li>
+</ol>
+<h3 id="2-为什么会发生？（代码层面的原因）"><a href="#2-为什么会发生？（代码层面的原因）" class="headerlink" title="2. 为什么会发生？（代码层面的原因）"></a>2. 为什么会发生？（代码层面的原因）</h3><p>很多开发者在使用编程语言（Java, Python, JavaScript, Go 等）的标准库进行解压操作时，往往只关注“拼接路径”和“写入文件”，而忽略了验证文件名的安全性。</p>
+<p>以 <strong>Java</strong> 为例（Zip Slip 重灾区），一段典型的<strong>漏洞代码</strong>如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// --- 这是一个不安全的代码示例 ---</span></span><br><span class="line"></span><br><span class="line"><span class="type">File</span> <span class="variable">destinationDir</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/app/uploads&quot;</span>); <span class="comment">// 预期的解压目录</span></span><br><span class="line"></span><br><span class="line"><span class="type">ZipInputStream</span> <span class="variable">zis</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ZipInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(zipFile));</span><br><span class="line"><span class="type">ZipEntry</span> <span class="variable">zipEntry</span> <span class="operator">=</span> zis.getNextEntry();</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (zipEntry != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 1. 直接获取压缩包里的文件名 (攻击者可控，例如 &quot;../../etc/passwd&quot;)</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">fileName</span> <span class="operator">=</span> zipEntry.getName(); </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 2. 直接拼接路径</span></span><br><span class="line">    <span class="type">File</span> <span class="variable">newFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(destinationDir, fileName); </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 3. 写入文件 (漏洞触发：这里可能写到了 /etc/passwd)</span></span><br><span class="line">    <span class="type">FileOutputStream</span> <span class="variable">fos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(newFile); </span><br><span class="line">    <span class="comment">// ...写入数据的代码...</span></span><br><span class="line">    </span><br><span class="line">    zipEntry = zis.getNextEntry();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，程序盲目信任了 <code>zipEntry.getName()</code>，没有检查 <code>newFile</code> 是否真的还在 <code>destinationDir</code> 内部。</p>
+<h3 id="3-漏洞危害"><a href="#3-漏洞危害" class="headerlink" title="3. 漏洞危害"></a>3. 漏洞危害</h3><p>Zip Slip 的危害取决于受害者服务器的权限和被覆盖文件的位置：</p>
+<ol>
+<li><strong>远程代码执行 (RCE)</strong>：<ul>
+<li>这是最严重的后果。攻击者可以覆盖网站的可执行脚本（如 <code>.php</code>, <code>.jsp</code>, <code>.asp</code>），或者覆盖系统二进制文件。当服务器下次运行这些文件时，就会执行攻击者的恶意代码。</li>
+</ul>
+</li>
+<li><strong>配置文件覆盖</strong>：<ul>
+<li>攻击者可以覆盖数据库配置文件、系统设置文件，导致服务瘫痪或接管系统权限。</li>
+</ul>
+</li>
+<li><strong>拒绝服务 (DoS)</strong>：<ul>
+<li>通过覆盖关键的系统库文件导致系统崩溃或无法启动。</li>
+</ul>
+</li>
+</ol>
+<h3 id="4-影响范围"><a href="#4-影响范围" class="headerlink" title="4. 影响范围"></a>4. 影响范围</h3><p>Zip Slip 并不是某一个特定软件的漏洞，而是一种<strong>由于编码习惯不良导致的设计模式漏洞</strong>。</p>
+<p>它由安全公司 Snyk 在 2018 年大规模披露，当时发现影响了数千个开源项目，包括：</p>
+<ul>
+<li><strong>Java 生态</strong>：Spring, Hadoop, Spark, ElasticSearch 等。</li>
+<li><strong>JavaScript 生态</strong>：npm 上的多个解压库。</li>
+<li><strong>Python, .NET, Go</strong> 等语言的解压库或应用。</li>
+</ul>
+<p>凡是允许用户上传压缩包并在服务端解压的应用，如果使用了未加固的解压代码，都可能受到影响。</p>
+<h3 id="5-修复与防御方案"><a href="#5-修复与防御方案" class="headerlink" title="5. 修复与防御方案"></a>5. 修复与防御方案</h3><p>要修复 Zip Slip，核心逻辑是：<strong>在写入文件之前，必须校验最终的绝对路径是否以预期的目标目录开头。</strong></p>
+<h4 id="修复后的代码示例-Java-："><a href="#修复后的代码示例-Java-：" class="headerlink" title="修复后的代码示例 (Java)："></a>修复后的代码示例 (Java)：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">File</span> <span class="variable">destinationDir</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/app/uploads&quot;</span>); <span class="comment">// 目标目录</span></span><br><span class="line"><span class="type">String</span> <span class="variable">destDirPath</span> <span class="operator">=</span> destinationDir.getCanonicalPath(); <span class="comment">// 获取目标目录的标准绝对路径</span></span><br><span class="line"></span><br><span class="line"><span class="type">ZipEntry</span> <span class="variable">zipEntry</span> <span class="operator">=</span> zis.getNextEntry();</span><br><span class="line"><span class="keyword">while</span> (zipEntry != <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">fileName</span> <span class="operator">=</span> zipEntry.getName();</span><br><span class="line">    <span class="type">File</span> <span class="variable">newFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(destinationDir, fileName);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// --- 关键修复逻辑开始 ---</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">destFilePath</span> <span class="operator">=</span> newFile.getCanonicalPath(); <span class="comment">// 获取拼接后文件的标准绝对路径</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 检查：该文件的路径是否以目标目录路径开头？</span></span><br><span class="line">    <span class="keyword">if</span> (!destFilePath.startsWith(destDirPath + File.separator)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IOException</span>(<span class="string">&quot;Zip Slip 攻击检测: &quot;</span> + fileName);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// --- 关键修复逻辑结束 ---</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 只有检查通过，才执行写入操作</span></span><br><span class="line">    <span class="type">FileOutputStream</span> <span class="variable">fos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(newFile);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>防御总结：</strong></p>
+<ol>
+<li><strong>输入验证</strong>：不要信任压缩包内的文件名，在代码层面强制进行“规范路径（Canonical Path）”检查。</li>
+<li><strong>最小权限原则</strong>：运行解压服务的用户不应拥有覆盖系统敏感文件（如 <code>/etc/</code>, <code>/bin/</code>）或 Web 根目录代码的权限。</li>
+<li><strong>使用安全的库</strong>：现在许多现代的解压库（如 Java 的 <code>commons-compress</code> 更新版）可能已经内置了防护，或者提供了更安全的 API。使用经过审计的第三方库通常比自己手写解压循环要安全。</li>
+<li><strong>文件类型限制</strong>：如果业务不需要，禁止用户上传压缩包文件。</li>
+</ol>
+<h3 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h3><p><strong>Zip Slip</strong> 就是攻击者把<strong>带有“穿越路径”文件名</strong>的文件藏在压缩包里，当你解压时，这个文件会“滑（Slip）”出你设定的文件夹，跑去覆盖系统的关键文件，从而让攻击者控制你的服务器。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Wildfly-CVE-2018-1047-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/28/Wildfly-CVE-2018-1047-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="post-title-link" itemprop="url">Wildfly CVE-2018-1047 漏洞研究</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-28 22:17:01 / 修改时间：22:21:01" itemprop="dateCreated datePublished" datetime="2026-01-28T22:17:01+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>CVE-2018-1047</strong> 是一个存在于 <strong>WildFly</strong>（JBoss EAP 的上游项目）中关于 <strong>Undertow</strong> 子系统的路径遍历漏洞。</p>
+<p>WildFly（前身是著名的 JBoss AS）是由 Red Hat 领导开发的开源、轻量级且高性能的 Java EE / Jakarta EE 应用服务器；它是商业级产品 JBoss EAP（Enterprise Application Platform）的上游社区版本，以模块化架构、极速启动和低内存占用著称，广泛用于开发和部署企业级 Java 应用程序。<br>针对 <strong>CVE-2018-1047</strong> 的详细复盘与代码分析：</p>
+<h3 id="1-漏洞基本信息"><a href="#1-漏洞基本信息" class="headerlink" title="1. 漏洞基本信息"></a>1. 漏洞基本信息</h3><ul>
+<li><strong>漏洞编号</strong>：CVE-2018-1047</li>
+<li><strong>漏洞组件</strong>：JBoss EAP / WildFly (具体位于 <code>undertow</code> 扩展模块)</li>
+<li><strong>漏洞类型</strong>：Path Traversal (路径遍历)</li>
+<li><strong>漏洞场景</strong>：涉及 <strong>Deployment Overlays (部署覆盖)</strong> 功能时触发。</li>
+<li><strong>漏洞版本</strong>：9.x 和 11.0.0.Final</li>
+</ul>
+<h3 id="2-什么是-Deployment-Overlays？"><a href="#2-什么是-Deployment-Overlays？" class="headerlink" title="2. 什么是 Deployment Overlays？"></a>2. 什么是 Deployment Overlays？</h3><p>在分析代码前，需要理解这个业务背景。WildFly 允许管理员配置“Overlay”，即用服务器上的外部文件覆盖 WAR 包内的静态资源，而无需重新打包 WAR。</p>
+<ul>
+<li><strong>正常逻辑</strong>：用户请求 <code>/images/logo.png</code> -&gt; WildFly 发现有 Overlay -&gt; 读取 <code>/opt/wildfly/overlays/custom-logo.png</code> 返回。</li>
+<li>应用里原本有 logo.png。</li>
+<li>管理员配置一个 Overlay，指向 /etc/wildfly/custom-logo.png。</li>
+<li>当用户访问 logo.png 时，服务器会读取 Overlay 指定的文件。</li>
+<li><strong>漏洞逻辑</strong>：用户请求 <code>/images/../../etc/passwd</code> -&gt; WildFly 未经检查直接拼接路径 -&gt; 读取 <code>/etc/passwd</code> 返回。</li>
+</ul>
+<h3 id="3-代码分析"><a href="#3-代码分析" class="headerlink" title="3. 代码分析"></a>3. 代码分析</h3><p>我们对照补丁代码（Diff）进行详细解读：</p>
+<h4 id="3-1-漏洞成因"><a href="#3-1-漏洞成因" class="headerlink" title="3.1. 漏洞成因"></a>3.1. 漏洞成因</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// p 是用户请求的 URL 路径（例如 &quot;/../../etc/passwd&quot;）</span></span><br><span class="line">p = p.substring(<span class="number">1</span>); </span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">for</span> (VirtualFile overlay : overlays) &#123;</span><br><span class="line">    <span class="comment">// 【致命错误】直接使用原始路径 p 去获取文件对象</span></span><br><span class="line">    <span class="type">VirtualFile</span> <span class="variable">child</span> <span class="operator">=</span> overlay.getChild(p);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 仅仅检查文件是否存在</span></span><br><span class="line">    <span class="keyword">if</span> (child.exists()) &#123;</span><br><span class="line">        <span class="comment">// 如果存在，就认为是合法资源并返回</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ServletResource</span>(..., child, path);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>问题核心</strong>：代码完全信任了变量 <code>p</code>。</li>
+<li><strong>JBoss VFS 的行为</strong>：<code>overlay.getChild(p)</code> 在处理包含 <code>../</code> 的路径时，会忠实地解析为父级目录。</li>
+<li><strong>缺失的检查</strong>：代码只问了“文件存在吗？(<code>exists()</code>)”，而没有问“文件还在 Overlay 目录下吗？”。这导致攻击者可以逃逸出 Overlay 定义的文件夹。</li>
+</ul>
+<h4 id="3-2-修复逻辑"><a href="#3-2-修复逻辑" class="headerlink" title="3.2. 修复逻辑"></a>3.2. 修复逻辑</h4><p>修复方案采用了非常标准的<strong>“净化 + 验证”</strong>双重防御机制：</p>
+<p><strong>第一层防御：路径规范化 (Canonicalization)</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 CanonicalPathUtils 工具类，消除路径中的 &quot;.&quot; 和 &quot;..&quot;</span></span><br><span class="line"><span class="type">String</span> <span class="variable">canonical</span> <span class="operator">=</span> CanonicalPathUtils.canonicalize(p);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：将 <code>/images/../secure/file</code> 转换为 <code>/secure/file</code>。这能防御简单的字符串拼接攻击，确保后续处理的是纯净路径。</li>
+</ul>
+<p><strong>第二层防御：边界逃逸检测 (Boundary Check) —— 这是修复的关键！</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用规范化后的路径获取文件对象</span></span><br><span class="line"><span class="type">VirtualFile</span> <span class="variable">child</span> <span class="operator">=</span> overlay.getChild(canonical);</span><br><span class="line"><span class="keyword">if</span> (child.exists()) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 【核心防御】尝试获取 child 相对于 overlay 的路径</span></span><br><span class="line">        child.getPathNameRelativeTo(overlay);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 只有当上述代码不报错，才说明 child 确实在 overlay 内部，允许返回</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ServletResource</span>(..., child, canonical);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IllegalArgumentException ignore) &#123;</span><br><span class="line">        <span class="comment">// 如果抛出异常，说明 child 不在 overlay 目录下（发生了路径逃逸）</span></span><br><span class="line">        <span class="comment">// 这里捕获异常并忽略，即拒绝提供该文件</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>原理</strong>：<code>getPathNameRelativeTo(parent)</code> 方法的逻辑通常是：检查 <code>parent</code> 的路径是否是 <code>child</code> 路径的前缀。</li>
+<li><strong>效果</strong>：<ul>
+<li>如果是正常请求：<code>child</code> 为 <code>/opt/overlay/img.png</code>，<code>overlay</code> 为 <code>/opt/overlay</code>。前缀匹配成功。</li>
+<li>如果是攻击请求：<code>child</code> 解析后变成 <code>/etc/passwd</code>，<code>overlay</code> 为 <code>/opt/overlay</code>。<code>/etc/passwd</code> 不以 <code>/opt/overlay</code> 开头，<strong>方法抛出异常</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-攻击复现推演"><a href="#4-攻击复现推演" class="headerlink" title="4. 攻击复现推演"></a>4. 攻击复现推演</h3><p>假设服务器上配置了一个 Overlay 目录指向 <code>/var/www/html/overlay</code>。</p>
+<ol>
+<li><p><strong>攻击者发送请求</strong>：<br><code>GET /context-path/..%2F..%2F..%2F..%2Fetc%2Fpasswd</code></p>
+</li>
+<li><p><strong>修复前 (Vulnerable)</strong>：</p>
+<ul>
+<li><code>p</code> = <code>../../../../etc/passwd</code></li>
+<li><code>overlay.getChild(p)</code> 解析指向 <code>/etc/passwd</code>。</li>
+<li><code>child.exists()</code> 返回 <code>true</code>。</li>
+<li><strong>结果</strong>：服务器读取并输出 <code>/etc/passwd</code> 的内容。</li>
+</ul>
+</li>
+<li><p><strong>修复后 (Patched)</strong>：</p>
+<ul>
+<li><code>canonical</code> = <code>../../../../etc/passwd</code> (或者被工具类处理得更干净，但这不重要)。</li>
+<li><code>child</code> 依然指向 <code>/etc/passwd</code>。</li>
+<li>执行 <code>child.getPathNameRelativeTo(overlay)</code>。</li>
+<li>系统判断：<code>/etc/passwd</code> 不是 <code>/var/www/html/overlay</code> 的子文件。</li>
+<li>抛出 <code>IllegalArgumentException</code>。</li>
+<li><strong>结果</strong>：Catch 块捕获异常，循环继续或结束，用户收到 404 或 403，<strong>攻击失败</strong>。</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Apache-JSPWiki-CVE-2019-0225-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/28/Apache-JSPWiki-CVE-2019-0225-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="post-title-link" itemprop="url">Apache JSPWiki CVE-2019-0225 漏洞研究</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-28 22:16:43 / 修改时间：22:20:39" itemprop="dateCreated datePublished" datetime="2026-01-28T22:16:43+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>Apache JSPWiki 路径遍历漏洞 (CVE-2019-0225)</strong> 分析</p>
+<h3 id="1-漏洞背景"><a href="#1-漏洞背景" class="headerlink" title="1. 漏洞背景"></a>1. 漏洞背景</h3><ul>
+<li><strong>漏洞组件</strong>：Apache JSPWiki (一个基于 Java 的开源 Wiki 引擎)</li>
+<li><strong>漏洞编号</strong>：CVE-2019-0225</li>
+<li><strong>漏洞类型</strong>：路径遍历 (Path Traversal) / 访问控制绕过</li>
+<li><strong>漏洞位置</strong>：<code>org.apache.wiki.url.DefaultURLConstructor.java</code> 类中的 <code>getForwardPage</code> 方法。</li>
+<li><strong>漏洞版本</strong>：2.9.0 ~ 2.11.0.M2</li>
+</ul>
+<h3 id="2-漏洞成因分析"><a href="#2-漏洞成因分析" class="headerlink" title="2. 漏洞成因分析"></a>2. 漏洞成因分析</h3><h4 id="2-1-漏洞代码（修复前）"><a href="#2-1-漏洞代码（修复前）" class="headerlink" title="2.1. 漏洞代码（修复前）"></a>2.1. 漏洞代码（修复前）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">getForwardPage</span><span class="params">( HttpServletRequest request )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 漏洞点：直接返回用户请求路径中的 PathInfo</span></span><br><span class="line">    <span class="keyword">return</span> request.getPathInfo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里调用了 <code>request.getPathInfo()</code>。在 Java Servlet 中，这个方法返回的是请求 URL 中 Servlet 路径之后、查询字符串之前的部分。</p>
+<p><strong>场景假设</strong>：<br>假设 JSPWiki 的 Servlet 映射配置为 <code>/wiki/*</code>。</p>
+<ul>
+<li><p><strong>正常请求</strong>：用户访问 <code>http://site.com/wiki/Main</code></p>
+<ul>
+<li><code>getPathInfo()</code> 返回 <code>/Main</code>。</li>
+<li>系统内部可能将请求转发给 <code>/Main</code> 对应的处理逻辑。</li>
+</ul>
+</li>
+<li><p><strong>攻击请求</strong>：用户访问 <code>http://site.com/wiki/../../WEB-INF/web.xml</code></p>
+<ul>
+<li><code>getPathInfo()</code> 返回 <code>/../../WEB-INF/web.xml</code>。</li>
+<li><strong>关键点</strong>：<code>getForwardPage</code> 方法的返回值通常会被用于 <code>RequestDispatcher.forward(path)</code>。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-为什么会有危害？"><a href="#2-2-为什么会有危害？" class="headerlink" title="2.2. 为什么会有危害？"></a>2.2. 为什么会有危害？</h4><p>当应用程序接收到 <code>/../../WEB-INF/web.xml</code> 并将其传入 <code>request.getRequestDispatcher(...).forward(...)</code> 时，由于没有对路径进行清洗或校验，Servlet 容器（如 Tomcat）会尝试解析这个路径。</p>
+<ol>
+<li><strong>目录穿越</strong>：<code>../</code> 会导致路径向上层跳转。</li>
+<li><strong>访问受保护资源</strong>：攻击者可以跳出 Wiki 的页面目录，直接访问 <code>WEB-INF</code> 目录下的敏感文件（如 <code>web.xml</code> 配置文件、<code>classes</code> 里的类文件等）。在 Java Web 规范中，<code>WEB-INF</code> 目录下的文件是禁止通过浏览器直接访问的，但<strong>内部转发 (Forward)</strong> 不受此限制，因此可以通过这种方式绕过安全检查。</li>
+<li><strong>执行意料之外的 JSP</strong>：攻击者甚至可能利用此漏洞去包含或执行某些不应该被直接访问的 JSP 文件。</li>
+</ol>
+<h3 id="3-修复方案分析"><a href="#3-修复方案分析" class="headerlink" title="3. 修复方案分析"></a>3. 修复方案分析</h3><h4 id="3-1-修复代码（修复后）"><a href="#3-1-修复代码（修复后）" class="headerlink" title="3.1. 修复代码（修复后）"></a>3.1. 修复代码（修复后）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">getForwardPage</span><span class="params">( HttpServletRequest request )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 修复方案：硬编码返回固定的页面，完全忽略用户的 PathInfo</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Wiki.jsp&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-修复逻辑解读"><a href="#3-2-修复逻辑解读" class="headerlink" title="3.2. 修复逻辑解读"></a>3.2. 修复逻辑解读</h4><p>开发者采取了<strong>最彻底的防御措施</strong>：</p>
+<ol>
+<li><strong>切断输入源</strong>：不再读取 <code>request.getPathInfo()</code>。无论用户在 URL 里输入什么花哨的 <code>../</code> 或恶意路径，这个方法现在只返回字符串 <code>&quot;Wiki.jsp&quot;</code>。</li>
+<li><strong>强制路由</strong>：这意味着该 URL 构造器现在强制所有相关的请求都由 <code>Wiki.jsp</code> 这个主入口文件来处理。</li>
+</ol>
+<p>这个修复表明，原本在这里使用 <code>getPathInfo()</code> 可能是一个设计上的疏忽或者过度灵活的设计。对于 <code>DefaultURLConstructor</code> 来说，将请求转发给统一的入口 <code>Wiki.jsp</code> 才是符合预期的行为，而不需要动态地根据 URL 路径去决定转发目标。</p>
+<h3 id="4-总结与启示"><a href="#4-总结与启示" class="headerlink" title="4. 总结与启示"></a>4. 总结与启示</h3><p>这个漏洞修复案例给开发者提供了两条重要的安全经验：</p>
+<ol>
+<li><p><strong>Input Validation (输入验证) vs. Hardcoding (硬编码)</strong>：<br>通常我们说要对输入做清洗（比如过滤 <code>..</code>），但在这个案例中，开发者发现<strong>根本不需要这个输入</strong>。<br><strong>启示</strong>：在修复漏洞时，首先思考“我们真的需要这个用户输入吗？”。如果可以用硬编码的白名单值（如 <code>&quot;Wiki.jsp&quot;</code>）代替动态输入，安全性得到保障。</p>
+</li>
+<li><p><strong><code>getPathInfo()</code> 的陷阱</strong>：<br>在 Java Web 开发中，<code>request.getRequestURI()</code> 和 <code>request.getPathInfo()</code> 都是攻击者可控的“污染源”。如果将它们直接传递给文件操作或 <code>RequestDispatcher</code>，极大概率会导致路径遍历或服务端请求伪造（SSRF）漏洞。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Vertx-Web-CVE-2018-12542-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/28/Vertx-Web-CVE-2018-12542-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="post-title-link" itemprop="url">Vertx-Web CVE-2018-12542 漏洞研究</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-28 22:16:29 / 修改时间：22:24:27" itemprop="dateCreated datePublished" datetime="2026-01-28T22:16:29+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>【漏洞分析】当 Linux 思维遇上 Windows：Vert.x Web 路径遍历漏洞 (CVE-2018-12542)</p>
+<p>在跨平台开发中，文件路径分隔符的差异往往会被开发者忽略，而这正是大量产生安全漏洞的地方，blog 基于 CVE-2018-12542 的修复代码，分析 Vert.x Web 框架在 Windows 环境下是如何因为处理路径分隔符不当，导致目录遍历漏洞的。</p>
+<h2 id="1-漏洞背景"><a href="#1-漏洞背景" class="headerlink" title="1. 漏洞背景"></a>1. 漏洞背景</h2><p><strong>Vert.x Web</strong> 是 Eclipse Vert.x 生态系统中用于构建现代 Web 应用的组件。其中的 <code>StaticHandler</code> 用于处理静态资源的访问（如 HTML、JS、图片等）。</p>
+<p>2018 年，安全研究人员发现 Vert.x Web 的 <code>StaticHandler</code> 存在一个<strong>路径遍历（Directory Traversal）漏洞</strong>，CVE 编号为 <strong>CVE-2018-12542</strong>。</p>
+<p><strong>影响范围</strong>：</p>
+<ul>
+<li>版本 3.0.0 到 3.5.3 </li>
+<li>使用 <code>StaticHandler</code> 处理静态文件。</li>
+<li>服务器运行在 <strong>Windows 操作系统</strong>上。</li>
+<li>攻击者可以读取 Web 根目录之外的任意文件（如 <code>C:\Windows\win.ini</code>）。</li>
+</ul>
+<h2 id="2-核心成因：操作系统的“方言”差异"><a href="#2-核心成因：操作系统的“方言”差异" class="headerlink" title="2. 核心成因：操作系统的“方言”差异"></a>2. 核心成因：操作系统的“方言”差异</h2><p>在分析代码之前，需要理解两个前置知识点：</p>
+<ol>
+<li><p><strong>路径分隔符</strong>：</p>
+<ul>
+<li><strong>Linux/Unix</strong>：只识别正斜杠 <code>/</code> 作为目录分隔符。</li>
+<li><strong>Windows</strong>：虽然官方推荐反斜杠 <code>\</code>，但同时也兼容正斜杠 <code>/</code>。也就是说，在 Windows API 中，<code>..\</code> 和 <code>../</code> 都代表“上一级目录”。</li>
+</ul>
+</li>
+<li><p><strong>防御机制的疏漏</strong>：<br>Web 服务器通常会使用一个工具方法（如 <code>removeDots</code>）来清洗路径中的 <code>../</code>，防止用户跳出目录。但是，<strong>如果这个工具方法是按 Linux 思维写的，只过滤了 <code>/</code>，却忽略了 <code>\</code>，那么在 Windows 上就会出事。</strong></p>
+</li>
+</ol>
+<h2 id="3-代码修复分析-Code-Review"><a href="#3-代码修复分析-Code-Review" class="headerlink" title="3. 代码修复分析 (Code Review)"></a>3. 代码修复分析 (Code Review)</h2><p>仔细观察官方的修复补丁（Commit Diff）：</p>
+<p><strong>文件</strong>：<code>vertx-web/src/main/java/io/vertx/ext/web/handler/impl/StaticHandlerImpl.java</code></p>
+<h3 id="修复前的代码（存在漏洞）"><a href="#修复前的代码（存在漏洞）" class="headerlink" title="修复前的代码（存在漏洞）"></a>修复前的代码（存在漏洞）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 旧逻辑：一行流处理</span></span><br><span class="line"><span class="type">String</span> <span class="variable">path</span> <span class="operator">=</span> Utils.removeDots(Utils.urlDecode(context.normalisedPath(), <span class="literal">false</span>));</span><br></pre></td></tr></table></figure>
+<p><strong>逻辑流</strong>：</p>
+<ol>
+<li>获取请求路径。</li>
+<li><code>urlDecode</code>：进行 URL 解码（例如将 <code>%2e</code> 变为 <code>.</code>，<code>%5c</code> 变为 <code>\</code>）。</li>
+<li><code>removeDots</code>：清洗路径中的点号。</li>
+</ol>
+<p><strong>问题在哪里？</strong><br>假设攻击者发送请求：<code>GET /static/..%5c..%5cwindows/win.ini</code></p>
+<ol>
+<li>URL 解码后变成：<code>/static/..\..\windows/win.ini</code>。</li>
+<li>传入 <code>removeDots</code>。此时，如果 <code>removeDots</code> 的实现逻辑<strong>只认</strong> <code>../</code>（正斜杠），那么它会认为 <code>..\</code> 只是普通字符，<strong>不会将其移除</strong>。</li>
+<li>最终 <code>path</code> 保留了 <code>..\</code>。</li>
+<li>当这个 <code>path</code> 传递给 Windows 的文件系统 API 时，Windows 认为 <code>..\</code> 有效，于是成功跳转到上层目录，读取敏感文件。</li>
+</ol>
+<h3 id="修复后的代码（安全）"><a href="#修复后的代码（安全）" class="headerlink" title="修复后的代码（安全）"></a>修复后的代码（安全）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 先进行 URL 解码</span></span><br><span class="line"><span class="type">String</span> <span class="variable">path</span> <span class="operator">=</span> Utils.urlDecode(context.normalisedPath(), <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ... 省略判空逻辑 ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2.【关键修复】针对 Windows 环境的特殊处理</span></span><br><span class="line"><span class="comment">// File.separatorChar 在 Windows 上是 &#x27;\&#x27;，在 Linux 上是 &#x27;/&#x27;</span></span><br><span class="line"><span class="keyword">if</span> (File.separatorChar != <span class="string">&#x27;/&#x27;</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果当前系统不是使用 &#x27;/&#x27; 作为分隔符（暗示是 Windows）</span></span><br><span class="line">    <span class="comment">// 强制将所有的系统分隔符（\）替换为 Web 标准分隔符（/）</span></span><br><span class="line">    path = path.replace(File.separatorChar, <span class="string">&#x27;/&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 最后再执行去点操作</span></span><br><span class="line">path = Utils.removeDots(path);</span><br></pre></td></tr></table></figure>
+<h3 id="修复逻辑详解"><a href="#修复逻辑详解" class="headerlink" title="修复逻辑详解"></a>修复逻辑详解</h3><p>修复的核心在于<strong>“归一化”（Normalization）</strong>。</p>
+<ol>
+<li><p><strong>环境检测</strong>：<br><code>if (File.separatorChar != &#39;/&#39;)</code><br>这行代码巧妙地判断了当前运行环境。如果是 Windows，<code>File.separatorChar</code> 是 <code>\</code>，条件成立。</p>
+</li>
+<li><p><strong>统一格式</strong>：<br><code>path = path.replace(File.separatorChar, &#39;/&#39;)</code><br>这一步非常关键。它强制将路径中所有的反斜杠 <code>\</code> 转换成正斜杠 <code>/</code>。</p>
+<ul>
+<li>攻击输入：<code>..\..\windows\win.ini</code></li>
+<li>转换结果：<code>../../windows/win.ini</code></li>
+</ul>
+</li>
+<li><p><strong>安全清洗</strong>：<br><code>path = Utils.removeDots(path)</code><br>现在，路径中的 <code>..\</code> 变成了 <code>../</code>。此时再调用通用的 <code>removeDots</code> 方法，它就能准确识别出这是“上级目录跳转”，并将其安全地移除或拒绝。</p>
+</li>
+</ol>
+<h2 id="4-攻击复现推演"><a href="#4-攻击复现推演" class="headerlink" title="4. 攻击复现推演"></a>4. 攻击复现推演</h2><p><strong>场景</strong>：服务器运行在 Windows 上，Web 根目录为 <code>C:\app\webroot\</code>。</p>
+<ol>
+<li><strong>攻击者请求</strong>：<code>http://target.com/static/..%5c..%5cWindows\System32\drivers\etc\hosts</code></li>
+<li><strong>URL 解码</strong>：得到字符串 <code>..\..\Windows\System32\drivers\etc\hosts</code>。</li>
+<li><strong>漏洞版本处理</strong>：<ul>
+<li><code>removeDots</code> 看不懂 <code>\</code>，认为无需过滤。</li>
+<li>最终读取文件：<code>C:\app\webroot\..\..\Windows\System32\drivers\etc\hosts</code>。</li>
+<li>操作系统解析后实际指向：<code>C:\Windows\System32\drivers\etc\hosts</code> -&gt; <strong>读取成功！</strong></li>
+</ul>
+</li>
+<li><strong>修复版本处理</strong>：<ul>
+<li>检测到 Windows 环境，将 <code>\</code> 替换为 <code>/</code>。</li>
+<li>字符串变为：<code>../../Windows/System32/drivers/etc/hosts</code>。</li>
+<li><code>removeDots</code> 识别出 <code>../</code>，将其消除。</li>
+<li>最终路径变为（取决于 removeDots 的具体实现，可能是空或根）：<code>/Windows/System32/drivers/etc/hosts</code>（但在受限的 webroot 下找不到该文件）或者直接报错 -&gt; <strong>攻击失败！</strong></li>
+</ul>
+</li>
+</ol>
+<h2 id="5-总结与启示"><a href="#5-总结与启示" class="headerlink" title="5. 总结与启示"></a>5. 总结与启示</h2><p>CVE-2018-12542 漏洞总结：</p>
+<ol>
+<li><strong>跨平台兼容性不仅仅是功能问题，更是安全问题</strong>。在处理文件路径时，必须考虑不同操作系统对分隔符定义的差异。</li>
+<li><strong>防御顺序很重要</strong>：<strong>解码 -&gt; 归一化 -&gt; 过滤/校验</strong>。<ul>
+<li>必须先解开 URL 编码。</li>
+<li>必须先将各种奇形怪状的分隔符（<code>\</code>）统一成标准格式（<code>/</code>）。</li>
+<li>最后才进行危险字符（<code>..</code>）的过滤。</li>
+</ul>
+</li>
+<li><strong>不要假设标准库能处理所有情况</strong>：这里的 <code>Utils.removeDots</code> 可能是一个通用的跨平台库，但它如果没有考虑到 Windows 的 <code>\</code> 混淆绕过，就需要调用方在传入之前手动进行归一化处理。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Hutool-CVE-2018-17297-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/28/Hutool-CVE-2018-17297-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="post-title-link" itemprop="url">Hutool CVE-2018-17297 漏洞研究</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-28 22:16:13 / 修改时间：22:19:52" itemprop="dateCreated datePublished" datetime="2026-01-28T22:16:13+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Hutool CVE-2018-17297 目录遍历漏洞研究</p>
+<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><p><strong>Hutool</strong> 是一个在 Java 开发中非常流行的工具库，它提供了大量静态方法来简化开发步骤。然而，在其 4.1.12 版本及之前，<code>ZipUtil</code> 工具类在处理压缩文件解压时，未对文件名进行严格的路径清洗，导致了 <strong>Zip Slip（压缩包路径遍历）</strong> 漏洞。</p>
+<p>该漏洞的 CVE 编号为 <strong>CVE-2018-17297</strong>。攻击者可以通过构造恶意的压缩包，在解压时覆盖服务器上的任意文件，严重时可导致远程代码执行。</p>
+<h2 id="2-漏洞原理：什么是-Zip-Slip？"><a href="#2-漏洞原理：什么是-Zip-Slip？" class="headerlink" title="2. 漏洞原理：什么是 Zip Slip？"></a>2. 漏洞原理：什么是 Zip Slip？</h2><p>Zip Slip 是一种利用压缩文件提取过程的目录遍历漏洞。</p>
+<h3 id="正常流程"><a href="#正常流程" class="headerlink" title="正常流程"></a>正常流程</h3><p>通常，当我们解压一个文件时，预期的逻辑是将文件写入到指定的目标目录下：</p>
+<ul>
+<li>目标目录：<code>/app/data/</code></li>
+<li>压缩包内文件：<code>image.png</code></li>
+<li><strong>最终路径</strong>：<code>/app/data/image.png</code></li>
+</ul>
+<h3 id="攻击流程"><a href="#攻击流程" class="headerlink" title="攻击流程"></a>攻击流程</h3><p>Zip 协议允许文件名中包含路径字符。攻击者可以构造一个文件名包含大量 <code>../</code>（上级目录跳转符）的恶意压缩包：</p>
+<ul>
+<li>目标目录：<code>/app/data/</code></li>
+<li>恶意文件名：<code>../../../../etc/passwd</code></li>
+<li><strong>拼接路径</strong>：<code>/app/data/../../../../etc/passwd</code></li>
+</ul>
+<p>如果在代码层面直接使用 <code>TargetDir + FileName</code> 进行拼接并写入，操作系统会自动解析路径中的 <code>../</code>，最终文件会被写入到 <code>/etc/passwd</code>，从而跳出了原本限制的 <code>/app/data/</code> 目录。</p>
+<h2 id="3-代码修复分析-Fix-Code-Analysis"><a href="#3-代码修复分析-Fix-Code-Analysis" class="headerlink" title="3. 代码修复分析 (Fix Code Analysis)"></a>3. 代码修复分析 (Fix Code Analysis)</h2><p>通过查看 Hutool 官方针对该漏洞的提交记录 <a target="_blank" rel="noopener" href="https://github.com/chinabugotech/hutool/commit/8d7d0b7fb5ea4f7447b40131bffc1ec506a6528e">https://github.com/chinabugotech/hutool/commit/8d7d0b7fb5ea4f7447b40131bffc1ec506a6528e</a> ，我们可以清晰地看到修复逻辑。</p>
+<p><strong>修复位置</strong>：<code>cn.hutool.core.io.FileUtil.java</code><br><strong>新增方法</strong>：<code>checkSlip</code></p>
+<p>开发者在 <code>FileUtil</code> 中增加了一个检测方法，并在解压逻辑中调用它：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 检查</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * 见http://blog.nsfocus.net/zip-slip-2/</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> parentFile 父文件或目录（解压的目标目录）</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> file       子文件或目录（解压后的文件对象）</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalArgumentException 检查创建的子文件不在父目录中抛出异常</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">checkSlip</span><span class="params">(File parentFile, File file)</span> <span class="keyword">throws</span> IllegalArgumentException &#123;</span><br><span class="line">    String parentCanonicalPath;</span><br><span class="line">    String canonicalPath;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 1. 获取目标目录的“规范路径”</span></span><br><span class="line">        parentCanonicalPath = parentFile.getCanonicalPath();</span><br><span class="line">        <span class="comment">// 2. 获取解压文件的“规范路径”</span></span><br><span class="line">        canonicalPath = file.getCanonicalPath();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IORuntimeException</span>(e);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 3. 核心判断：解压后的文件路径，必须以目标目录路径开头</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">false</span> == canonicalPath.startsWith(parentCanonicalPath)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;New file is outside of the parent dir: &quot;</span> + file.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="关键点解析：为什么是-getCanonicalPath？"><a href="#关键点解析：为什么是-getCanonicalPath？" class="headerlink" title="关键点解析：为什么是 getCanonicalPath？"></a>关键点解析：为什么是 <code>getCanonicalPath</code>？</h3><p>在 Java 中，处理文件路径通常有两个方法：</p>
+<ul>
+<li><code>getAbsolutePath()</code>: 获取绝对路径。它只是简单的路径拼接，<strong>不会</strong>解析 <code>../</code>。<ul>
+<li>例如：<code>/app/data/../../etc/passwd</code></li>
+</ul>
+</li>
+<li><strong><code>getCanonicalPath()</code></strong>: 获取规范路径。它会解析所有的 <code>.</code> 和 <code>..</code> 以及符号链接，返回物理文件系统上的真实唯一路径。<ul>
+<li>例如：<code>/etc/passwd</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>修复逻辑详解：</strong></p>
+<ol>
+<li>代码分别获取了“预期的父目录”和“实际的子文件”的<strong>规范路径</strong>。</li>
+<li>假设父目录是 <code>/app/data</code>。</li>
+<li>假设攻击者传入的文件名是 <code>../../etc/passwd</code>，拼接后通过 <code>getCanonicalPath()</code> 解析，得到的路径是 <code>/etc/passwd</code>。</li>
+<li>代码检查：<code>/etc/passwd</code> 是否以 <code>/app/data</code> 开头？</li>
+<li><strong>结果</strong>：显然不是。于是抛出 <code>IllegalArgumentException</code>，中断解压过程，从而拦截了攻击。</li>
+</ol>
+<h2 id="4-总结与思考"><a href="#4-总结与思考" class="headerlink" title="4. 总结与思考"></a>4. 总结与思考</h2><p>CVE-2018-17297 是一个非常教科书式的输入验证漏洞。它提醒我们在开发过程中：</p>
+<ol>
+<li><strong>永远不要信任用户的输入</strong>：不仅是 Web 表单的参数，<strong>文件内容（包括文件名）</strong>也是外部输入的一部分，必须进行校验。</li>
+<li><strong>文件操作的安全性</strong>：在进行文件读写（特别是解压、文件上传）时，必须严格限制操作范围，防止路径逃逸。</li>
+<li><strong>正确使用 API</strong>：在 Java 中防御此类攻击，<code>getCanonicalPath()</code> 配合 <code>startsWith()</code> 是标准的防御范式。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Retrofit-CVE-2018-1000850-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/28/Retrofit-CVE-2018-1000850-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="post-title-link" itemprop="url">Retrofit CVE-2018-1000850 漏洞研究</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-01-28 22:15:59" itemprop="dateCreated datePublished" datetime="2026-01-28T22:15:59+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-01-29 22:17:54" itemprop="dateModified" datetime="2026-01-29T22:17:54+08:00">2026-01-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-漏洞简介"><a href="#1-漏洞简介" class="headerlink" title="1. 漏洞简介"></a>1. 漏洞简介</h2><p><strong>CVE-2018-1000850</strong> 是 Retrofit 2.4.0 及以下版本中存在的一个高危路径遍历 (Path Traversal) 漏洞。</p>
+<p>Retrofit 是 Android 和 Java 开发中广泛使用的 HTTP 客户端库。当开发者在使用 <code>@Path</code> 注解定义 URL 参数时，如果错误地将 <code>encoded</code> 属性设置为 <code>true</code>，且参数值包含不可信的用户输入，攻击者可以通过传入包含 <code>../</code> 的 payload 来“逃逸”出预期的 URL 路径结构，从而访问未授权的 API 端点，甚至导致敏感数据泄露。</p>
+<h2 id="2-漏洞原理分析"><a href="#2-漏洞原理分析" class="headerlink" title="2. 漏洞原理分析"></a>2. 漏洞原理分析</h2><h3 id="核心成因：信任导致的失控"><a href="#核心成因：信任导致的失控" class="headerlink" title="核心成因：信任导致的失控"></a>核心成因：信任导致的失控</h3><p>Retrofit 在构建请求 URL 时，通过 <code>RequestBuilder</code> 类处理 <code>@Path</code> 注解的参数替换。</p>
+<ul>
+<li><strong>默认安全模式 (<code>encoded = false</code>)</strong>：Retrofit 会对参数值进行标准的 URL 编码（Percent-encoding）。例如，<code>/</code> 会被转义为 <code>%2F</code>，<code>..</code> 虽然保留，但因为没有斜杠配合，它只是一个普通的路径片段文件名，不会触发路径跳转。</li>
+<li><strong>高危模式 (<code>encoded = true</code>)</strong>：这个设置告诉 Retrofit：“开发者已经处理好编码了，请原样拼接”。此时，Retrofit <strong>完全信任</strong>输入内容，不会对 <code>/</code> 等特殊字符进行转义。</li>
+</ul>
+<p><strong>漏洞链条：</strong></p>
+<ol>
+<li>攻击者输入 <code>../secret</code>。</li>
+<li>因为 <code>encoded = true</code>，Retrofit 将其原样拼接到 URL 中。</li>
+<li>最终生成的 URL 变成了 <code>http://api.com/user/../secret</code>。</li>
+<li>当下层 HTTP 客户端（如 OkHttp）或服务端收到请求时，会遵循 URL 规范解析路径，<code>..</code> 抵消了上一级目录，导致实际请求指向了 <code>/secret</code>。</li>
+</ol>
+<h3 id="代码审计-Vulnerable-Code"><a href="#代码审计-Vulnerable-Code" class="headerlink" title="代码审计 (Vulnerable Code)"></a>代码审计 (Vulnerable Code)</h3><p>漏洞点位于 <code>retrofit2.RequestBuilder</code> 类（2.4.0 版本）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// retrofit2/RequestBuilder.java</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">addPathParam</span><span class="params">(String name, String value, <span class="type">boolean</span> encoded)</span> &#123;</span><br><span class="line">  <span class="comment">// ... 省略判空逻辑</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 关键漏洞点：</span></span><br><span class="line">  <span class="comment">// 仅仅是将 &quot;&#123;name&#125;&quot; 替换为 value，缺乏对 value 内容的安全检查。</span></span><br><span class="line">  <span class="comment">// 虽然调用了 canonicalizeForPath，但当 encoded=true 时，该方法几乎“不做为”。</span></span><br><span class="line">  <span class="type">String</span> <span class="variable">replacement</span> <span class="operator">=</span> canonicalizeForPath(value, encoded);</span><br><span class="line">  relativeUrl = relativeUrl.replace(<span class="string">&quot;&#123;&quot;</span> + name + <span class="string">&quot;&#125;&quot;</span>, replacement);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-漏洞复现"><a href="#3-漏洞复现" class="headerlink" title="3. 漏洞复现"></a>3. 漏洞复现</h2><p>编写了一个 JUnit 测试用例来模拟攻击场景。</p>
+<h3 id="场景一：漏洞触发（encoded-true）"><a href="#场景一：漏洞触发（encoded-true）" class="headerlink" title="场景一：漏洞触发（encoded = true）"></a>场景一：漏洞触发（encoded = true）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 易受攻击的接口定义</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">VulnerableService</span> &#123;</span><br><span class="line">    <span class="meta">@GET(&quot;users/&#123;name&#125;/profile&quot;)</span></span><br><span class="line">    <span class="comment">// 开发者误以为需要手动控制编码，或者为了某些特殊需求开启了 encoded=true</span></span><br><span class="line">    Call&lt;ResponseBody&gt; <span class="title function_">getUserProfile</span><span class="params">(<span class="meta">@Path(value = &quot;name&quot;, encoded = true)</span> String name)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 攻击者输入</span></span><br><span class="line"><span class="type">String</span> <span class="variable">maliciousPayload</span> <span class="operator">=</span> <span class="string">&quot;../admin&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 实际发生的请求</span></span><br><span class="line"><span class="comment">// Retrofit 拼接结果: https://api.example.com/users/../admin/profile</span></span><br><span class="line"><span class="comment">// 浏览器/客户端解析后: https://api.example.com/admin/profile</span></span><br></pre></td></tr></table></figure>
+<p><strong>结果</strong>：请求成功逃逸出 <code>/users/</code> 目录，越权访问了 <code>/admin/profile</code>。</p>
+<h3 id="场景二：安全防御（默认行为-encoded-false）"><a href="#场景二：安全防御（默认行为-encoded-false）" class="headerlink" title="场景二：安全防御（默认行为 encoded = false）"></a>场景二：安全防御（默认行为 encoded = false）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 安全的接口定义</span></span><br><span class="line"><span class="meta">@GET(&quot;users/&#123;name&#125;/profile&quot;)</span></span><br><span class="line">Call&lt;ResponseBody&gt; <span class="title function_">getUserProfile</span><span class="params">(<span class="meta">@Path(&quot;name&quot;)</span> String name)</span>; <span class="comment">// 默认为 false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 攻击者输入同上</span></span><br><span class="line"><span class="type">String</span> <span class="variable">maliciousPayload</span> <span class="operator">=</span> <span class="string">&quot;../admin&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 实际发生的请求</span></span><br><span class="line"><span class="comment">// Retrofit 编码结果: https://api.example.com/users/..%2Fadmin/profile</span></span><br></pre></td></tr></table></figure>
+<p><strong>结果</strong>：服务器会将 <code>..%2Fadmin</code> 视为一个名为 “../admin” 的普通用户名，找不到该用户，返回 404，<strong>路径未发生跳转</strong>。</p>
+<h2 id="4-数据流追踪-Trace"><a href="#4-数据流追踪-Trace" class="headerlink" title="4. 数据流追踪 (Trace)"></a>4. 数据流追踪 (Trace)</h2><p>通过调试器（Debugger）追踪该漏洞的完整生命周期：</p>
+<ol>
+<li><strong>Source (污点入口)</strong>:<br>应用层调用 <code>service.getUserProfile(&quot;../admin&quot;)</code>，恶意字符串进入系统。</li>
+<li><strong>Propagation (传播)</strong>:<ul>
+<li><strong>Proxy</strong>: 动态代理拦截调用，进入 <code>ServiceMethod</code>。</li>
+<li><strong>ParameterHandler</strong>: 识别到参数被标记为 <code>@Path(encoded=true)</code>。</li>
+<li><strong>RequestBuilder</strong>: <code>addPathParam</code> 方法被调用。由于 <code>encoded=true</code>，<code>canonicalizeForPath</code> 方法<strong>跳过</strong>了对斜杠 <code>/</code> 的转义处理。</li>
+<li><strong>String.replace</strong>: 恶意字符串 <code>../admin</code> 被直接嵌入 URL 模板。</li>
+</ul>
+</li>
+<li><strong>Sink (爆发点)</strong>:<ul>
+<li>Retrofit 将构建好的 URL 字符串传递给 <strong>OkHttp</strong>。</li>
+<li>OkHttp 的 <code>HttpUrl</code> 解析器在处理请求时，标准化路径（Path Normalization），执行 <code>..</code> 的语义，导致路径发生实质性改变。</li>
+</ul>
+</li>
+</ol>
+<h2 id="5-修复与防御"><a href="#5-修复与防御" class="headerlink" title="5. 修复与防御"></a>5. 修复与防御</h2><h3 id="官方修复方案-Retrofit-2-5-0"><a href="#官方修复方案-Retrofit-2-5-0" class="headerlink" title="官方修复方案 (Retrofit 2.5.0+)"></a>官方修复方案 (Retrofit 2.5.0+)</h3><p>Retrofit 官方在 2.5.0 版本中修复了此漏洞。<br><strong>修复逻辑并非“加强编码”，而是采用了“Fail Fast（快速失败）”策略。</strong></p>
+<p>官方引入了一个正则表达式 <code>PATH_TRAVERSAL</code>，在参数替换发生前，<strong>强制检查</strong>替换内容。如果发现内容中包含 <code>.</code> 或 <code>..</code> 这种尝试作为路径段的字符，<strong>直接抛出异常，阻断请求</strong>。</p>
+<p><strong>修复代码片段：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 修复后的 RequestBuilder.java</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义检测正则：匹配单独的 &quot;.&quot; 或 &quot;..&quot; (包括 URL 编码形式 %2e)</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Pattern</span> <span class="variable">PATH_TRAVERSAL</span> <span class="operator">=</span> Pattern.compile(<span class="string">&quot;(.*/)?(\\.|%2e|%2E)&#123;1,2&#125;(/.*)?&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">addPathParam</span><span class="params">(String name, String value, <span class="type">boolean</span> encoded)</span> &#123;</span><br><span class="line">  <span class="type">String</span> <span class="variable">replacement</span> <span class="operator">=</span> canonicalizeForPath(value, encoded);</span><br><span class="line">  <span class="type">String</span> <span class="variable">newRelativeUrl</span> <span class="operator">=</span> relativeUrl.replace(<span class="string">&quot;&#123;&quot;</span> + name + <span class="string">&quot;&#125;&quot;</span>, replacement);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 新增的安全检查：如果匹配到路径遍历特征，直接崩溃</span></span><br><span class="line">  <span class="keyword">if</span> (PATH_TRAVERSAL.matcher(newRelativeUrl).matches()) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(</span><br><span class="line">        <span class="string">&quot;@Path parameters shouldn&#x27;t perform path traversal (&#x27;.&#x27; or &#x27;..&#x27;): &quot;</span> + value);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  relativeUrl = newRelativeUrl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="开发者建议"><a href="#开发者建议" class="headerlink" title="开发者建议"></a>开发者建议</h3><ol>
+<li><strong>升级版本</strong>：尽快将 Retrofit 升级至 <strong>2.5.0</strong> 或更高版本。</li>
+<li><strong>慎用 <code>encoded = true</code></strong>：除非你非常清楚自己在做什么，并且确定输入源绝对安全（例如来自内部配置而非用户输入），否则永远使用默认值（<code>false</code>）。</li>
+<li><strong>输入校验</strong>：在调用网络库之前，对用户输入的敏感字符（如 <code>/</code>, <code>\</code>, <code>.</code>）进行过滤或校验。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -790,935 +1491,8 @@ mjx-container[display="true"] + br {
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/27/Java%E9%A1%B9%E7%9B%AE%E6%A0%87%E5%87%86%E7%9B%AE%E5%BD%95%E5%B8%83%E5%B1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/27/Java%E9%A1%B9%E7%9B%AE%E6%A0%87%E5%87%86%E7%9B%AE%E5%BD%95%E5%B8%83%E5%B1%80/" class="post-title-link" itemprop="url">Java项目标准目录布局</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-27 22:19:53 / 修改时间：22:20:37" itemprop="dateCreated datePublished" datetime="2026-01-27T22:19:53+08:00">2026-01-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Java 生态系统中（特别是基于 <strong>Maven</strong> 和 <strong>Gradle</strong> 构建工具）通用的<strong>标准目录布局（Standard Directory Layout）</strong>是通用的，这里简单记录一下。</p>
-<p>这种“约定优于配置”（Convention over Configuration）的设计，使得任何接手项目的 Java 程序员都能第一时间知道代码在哪里，配置文件在哪里。</p>
-<h3 id="1-main-和-test-的核心区别"><a href="#1-main-和-test-的核心区别" class="headerlink" title="1. main 和 test 的核心区别"></a>1. <code>main</code> 和 <code>test</code> 的核心区别</h3><p>简单来说：<strong><code>main</code> 是给用户用的（生产环境），<code>test</code> 是给你自己用的（开发验证环境）。</strong></p>
-<h4 id="📂-src-main-主程序目录"><a href="#📂-src-main-主程序目录" class="headerlink" title="📂 src/main (主程序目录)"></a>📂 <code>src/main</code> (主程序目录)</h4><p>这是项目的<strong>核心</strong>。这里的代码和资源最终会被编译、打包（成 JAR 或 WAR 包），并部署到服务器或交付给客户。</p>
-<ul>
-<li><strong>作用</strong>：存放业务逻辑、应用程序配置、网页静态资源等。</li>
-<li><strong>后果</strong>：如果你在这里写了 bug，用户就会遇到 bug。</li>
-</ul>
-<h4 id="📂-src-test-测试程序目录"><a href="#📂-src-test-测试程序目录" class="headerlink" title="📂 src/test (测试程序目录)"></a>📂 <code>src/test</code> (测试程序目录)</h4><p>这是项目的<strong>质检部门</strong>。这里的代码是用来验证 <code>main</code> 里面的代码是否正确的。</p>
-<ul>
-<li><strong>作用</strong>：存放单元测试（Unit Tests）、集成测试、测试用的模拟数据等。</li>
-<li><strong>后果</strong>：这里的代码<strong>不会</strong>被打包到最终的发布版本中。它只在构建（Build）阶段运行。如果测试失败，项目通常会打包失败，从而防止 bug 上线。</li>
-</ul>
-<h3 id="2-标准-Maven-项目结构图"><a href="#2-标准-Maven-项目结构图" class="headerlink" title="2. 标准 Maven 项目结构图"></a>2. 标准 Maven 项目结构图</h3><p>一个标准的 Maven 项目结构通常如下所示：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">MyJavaProject/  (项目根目录)</span><br><span class="line">├── pom.xml                   &lt;-- 项目的身份证 (依赖管理、构建配置)</span><br><span class="line">├── src/</span><br><span class="line">│   ├── main/                 &lt;-- 【生产代码】</span><br><span class="line">│   │   ├── java/             &lt;-- 存放 .java 源代码</span><br><span class="line">│   │   │   └── com/</span><br><span class="line">│   │   │       └── example/</span><br><span class="line">│   │   │           └── MyApp.java</span><br><span class="line">│   │   │</span><br><span class="line">│   │   ├── resources/        &lt;-- 存放配置文件、静态资源</span><br><span class="line">│   │   │   ├── application.properties</span><br><span class="line">│   │   │   ├── my-config.xml</span><br><span class="line">│   │   │   └── static/       (如果是Web项目，可能放图片/js)</span><br><span class="line">│   │   │</span><br><span class="line">│   │   └── webapp/           &lt;-- (可选) 传统Web项目存放JSP/HTML的地方</span><br><span class="line">│   │</span><br><span class="line">│   └── test/                 &lt;-- 【测试代码】</span><br><span class="line">│       ├── java/             &lt;-- 存放测试用的 .java 代码</span><br><span class="line">│       │   └── com/</span><br><span class="line">│       │       └── example/</span><br><span class="line">│       │           └── MyAppTest.java</span><br><span class="line">│       │</span><br><span class="line">│       └── resources/        &lt;-- 存放测试专用的配置文件</span><br><span class="line">│           └── test-config.properties</span><br><span class="line">│</span><br><span class="line">└── target/                   &lt;-- 【自动生成】 构建输出目录</span><br><span class="line">    ├── classes/              (编译后的 main .class 文件)</span><br><span class="line">    ├── test-classes/         (编译后的 test .class 文件)</span><br><span class="line">    └── MyJavaProject.jar     (最终打包好的文件)</span><br></pre></td></tr></table></figure>
-<h3 id="3-详细目录解读"><a href="#3-详细目录解读" class="headerlink" title="3. 详细目录解读"></a>3. 详细目录解读</h3><h4 id="A-src-main-java"><a href="#A-src-main-java" class="headerlink" title="A. src/main/java"></a>A. <code>src/main/java</code></h4><ul>
-<li>这是你写 Java 业务代码的地方。</li>
-<li>通常需要按照包名（Package）建立文件夹结构，例如 <code>com.company.project</code>。</li>
-</ul>
-<h4 id="B-src-main-resources"><a href="#B-src-main-resources" class="headerlink" title="B. src/main/resources"></a>B. <code>src/main/resources</code></h4><ul>
-<li>存放<strong>非 Java 代码</strong>的文件。</li>
-<li><strong>常见内容</strong>：<ul>
-<li><code>application.properties</code> 或 <code>application.yml</code> (Spring Boot 配置文件)。</li>
-<li><code>log4j2.xml</code> / <code>logback.xml</code> (日志配置)。</li>
-<li>MyBatis 的 Mapper XML 文件。</li>
-<li>SSL 证书、国际化文件等。</li>
-</ul>
-</li>
-<li><strong>打包后</strong>：这些文件会被直接复制到 CLASSPATH 的根目录下。</li>
-</ul>
-<h4 id="C-src-test-java"><a href="#C-src-test-java" class="headerlink" title="C. src/test/java"></a>C. <code>src/test/java</code></h4><ul>
-<li>存放 JUnit 或 TestNG 的测试类。</li>
-<li><strong>最佳实践</strong>：这里的包路径通常与 <code>src/main/java</code> <strong>保持一致</strong>。<ul>
-<li>例如：主代码在 <code>com.example.service.UserService</code></li>
-<li>测试代码在 <code>com.example.service.UserServiceTest</code></li>
-<li>这样测试类可以直接访问主类中 <code>protected</code> 修饰的方法（包级私有）。</li>
-</ul>
-</li>
-</ul>
-<h4 id="D-src-test-resources"><a href="#D-src-test-resources" class="headerlink" title="D. src/test/resources"></a>D. <code>src/test/resources</code></h4><ul>
-<li>存放<strong>只在测试时生效</strong>的配置。</li>
-<li><strong>场景</strong>：<ul>
-<li>生产环境（<code>main/resources</code>）用的是 Oracle 数据库配置。</li>
-<li>测试环境（<code>test/resources</code>）为了速度，配置一个 H2 内存数据库。</li>
-</ul>
-</li>
-<li>测试运行时，这里的配置优先级通常会覆盖 main 里的配置，或者专门用于测试环境读取。</li>
-</ul>
-<h4 id="E-pom-xml-Project-Object-Model"><a href="#E-pom-xml-Project-Object-Model" class="headerlink" title="E. pom.xml (Project Object Model)"></a>E. <code>pom.xml</code> (Project Object Model)</h4><ul>
-<li>这是 Maven 项目的核心配置文件。</li>
-<li>它定义了：<ul>
-<li>项目的基本信息（groupId, artifactId, version）。</li>
-<li><strong>依赖（Dependencies）</strong>：你需要用到的第三方库（如 Spring, MySQL Driver, JUnit）。</li>
-<li><strong>插件（Plugins）</strong>：如何编译、如何打包、如何运行测试。</li>
-</ul>
-</li>
-</ul>
-<h4 id="F-target"><a href="#F-target" class="headerlink" title="F. target/"></a>F. <code>target/</code></h4><ul>
-<li>这是 Maven 自动生成的目录，<strong>不要手动去改里面的文件</strong>，也<strong>不要</strong>提交到 Git 仓库（应该在 <code>.gitignore</code> 中忽略它）。</li>
-<li>当你运行 <code>mvn clean</code> 时，这个文件夹会被删除。</li>
-<li>当你运行 <code>mvn package</code> 时，编译好的 <code>.class</code> 文件和最终的 <code>.jar</code> 包会出现在这里。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li><strong><code>main</code></strong> 是为了<strong>“跑起来”</strong></li>
-<li><strong><code>test</code></strong> 是为了<strong>“跑得稳”</strong></li>
-<li><strong>Maven 结构</strong> 是一种全行业通用的“收纳整理术”，遵守这个结构，你的项目在任何 IDE（IntelliJ IDEA, Eclipse, VS Code）里都能被自动识别并正确运行。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/27/Ubuntu%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/27/Ubuntu%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/" class="post-title-link" itemprop="url">Ubuntu下的压缩和解压缩</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-27 22:18:05 / 修改时间：22:35:25" itemprop="dateCreated datePublished" datetime="2026-01-27T22:18:05+08:00">2026-01-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Ubuntu 下使用 <code>zip</code> 和 <code>unzip</code> 的实用指南：</p>
-<h3 id="0-确保已安装"><a href="#0-确保已安装" class="headerlink" title="0. 确保已安装"></a>0. 确保已安装</h3><p>如果命令不存在，先安装：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install zip unzip</span><br></pre></td></tr></table></figure></p>
-<h3 id="1-压缩-zip"><a href="#1-压缩-zip" class="headerlink" title="1. 压缩 (zip)"></a>1. 压缩 (zip)</h3><p><strong>语法：</strong> <code>zip [参数] [生成的压缩包名] [要压缩的文件/目录]</code></p>
-<ul>
-<li><p><strong>压缩单个文件</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip output.zip file.txt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>压缩目录（最常用，必须加 <code>-r</code>）</strong>：<br><code>-r</code> 代表递归，如果不加，只会打包空文件夹。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip -r website.zip /var/www/html</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>压缩多个文件</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip data.zip file1.txt file2.jpg file3.png</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>加密压缩</strong>（会提示输入密码）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip -e secret.zip file.txt</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="2-解压-unzip"><a href="#2-解压-unzip" class="headerlink" title="2. 解压 (unzip)"></a>2. 解压 (unzip)</h3><p><strong>语法：</strong> <code>unzip [压缩包名] [参数]</code></p>
-<ul>
-<li><p><strong>解压到当前目录</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip file.zip</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>解压到指定目录（最常用，必须加 <code>-d</code>）</strong>：<br><code>-d</code> 代表 destination（目标）。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip file.zip -d /opt/myapp/</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>只查看内容不解压</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip -l file.zip</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="⚡️-核心记忆点："><a href="#⚡️-核心记忆点：" class="headerlink" title="⚡️ 核心记忆点："></a>⚡️ 核心记忆点：</h3><ul>
-<li>压缩文件夹用 <strong><code>-r</code></strong></li>
-<li>解压到指定位置用 <strong><code>-d</code></strong></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/22/CWE-Bench-Java%EF%BC%9A%E9%AB%98%E6%95%88%E6%9E%84%E5%BB%BA%E5%A4%A7%E8%A7%84%E6%A8%A1%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E6%95%B0%E6%8D%AE%E9%9B%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/22/CWE-Bench-Java%EF%BC%9A%E9%AB%98%E6%95%88%E6%9E%84%E5%BB%BA%E5%A4%A7%E8%A7%84%E6%A8%A1%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E6%95%B0%E6%8D%AE%E9%9B%86/" class="post-title-link" itemprop="url">CWE-Bench-Java：高效构建大规模漏洞挖掘数据集</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-22 22:28:01 / 修改时间：22:29:02" itemprop="dateCreated datePublished" datetime="2026-01-22T22:28:01+08:00">2026-01-22</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在软件安全研究和漏洞挖掘（Vulnerability Mining）领域，构建高质量的数据集是第一步，也是最耗时的一步。我们需要从成千上万个开源项目（如 Apache Spark, Spring Framework）中，精准还原出几年前某个特定版本的“案发现场”。</p>
-<p>最近在复现 IRIS 项目时，学习到了很实用的数据集构建方法，所以记录一下。</p>
-<p>项目中的数据集构建脚本 <code>fetch_one.py</code> ，采用了 <strong>“浅克隆 + 精准抓取”</strong> 的 Git 组合拳。这套方案避免了下载冗余的历史记录，将构建速度提升了数倍，博客记录一下学习这套 Git 命令背后的逻辑。</p>
-<h2 id="面临的挑战：时间与空间的博弈"><a href="#面临的挑战：时间与空间的博弈" class="headerlink" title="面临的挑战：时间与空间的博弈"></a>面临的挑战：时间与空间的博弈</h2><p>通常，想要获取某个历史版本的代码，最直接的做法是：<br><code>git clone &lt;repo_url&gt;</code> 然后 <code>git checkout &lt;old_commit&gt;</code>。</p>
-<p>但在大规模数据挖掘场景下，这种做法有两个致命弱点：</p>
-<ol>
-<li><strong>体积巨大</strong>：像 Linux 内核或 Chromium 这样的大型项目，<code>.git</code> 目录动辄几个 GB。如果我们要分析 1000 个项目，硬盘瞬间爆炸。</li>
-<li><strong>网络浪费</strong>：我们可能只需要 5 年前某次提交的那几十个文件，却下载了项目成立 10 年来的每一次变更记录。</li>
-</ol>
-<p>为了解决这个问题，项目在 <code>fetch_project</code> 函数中设计了一套“外科手术式”的精准 fetch 操作流程。</p>
-<h2 id="核心流程拆解"><a href="#核心流程拆解" class="headerlink" title="核心流程拆解"></a>核心流程拆解</h2><p>Python 脚本并没有一次性拉取所有数据，而是分四步走：<strong>快速搭架子 -&gt; 精准捞数据 -&gt; 时光倒流 -&gt; 环境修复</strong>。</p>
-<h3 id="第一步：极速克隆-Clone-Latest"><a href="#第一步：极速克隆-Clone-Latest" class="headerlink" title="第一步：极速克隆 (Clone Latest)"></a>第一步：极速克隆 (Clone Latest)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subprocess.run([<span class="string">&quot;git&quot;</span>, <span class="string">&quot;clone&quot;</span>, <span class="string">&quot;--depth&quot;</span>, <span class="string">&quot;1&quot;</span>, repo_url, <span class="built_in">str</span>(target_dir)], check=<span class="literal">True</span>, ...)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>命令</strong>：<code>git clone --depth 1 &lt;repo_url&gt; &lt;target_dir&gt;</code></li>
-<li><strong>解读</strong>：<br>这是整个流程的基石。参数 <code>--depth 1</code> 告诉 Git：<strong>“我只要最新的这一层代码，以前的历史我都不关心。”</strong></li>
-<li><strong>作用</strong>：<br>这被称为 <strong>浅克隆 (Shallow Clone)</strong>。它能以最小的代价（通常只有几十 MB）快速把仓库的“架子”搭好，确立远程连接，生成 <code>.git</code> 目录，而无需下载漫长的历史提交记录。</li>
-</ul>
-<h3 id="第二步：精准补货-Fetch-Old-Commit"><a href="#第二步：精准补货-Fetch-Old-Commit" class="headerlink" title="第二步：精准补货 (Fetch Old Commit)"></a>第二步：精准补货 (Fetch Old Commit)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subprocess.run([<span class="string">&quot;git&quot;</span>, <span class="string">&quot;fetch&quot;</span>, <span class="string">&quot;--depth&quot;</span>, <span class="string">&quot;1&quot;</span>, <span class="string">&quot;origin&quot;</span>, commit_id], cwd=target_dir, ...)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>命令</strong>：<code>git fetch --depth 1 origin &lt;commit_id&gt;</code></li>
-<li><strong>解读</strong>：<br>这是高阶的一步。我们已经有了仓库架子，但那个包含漏洞的 <code>commit_id</code> 可能深埋在 5 年前的历史中，本地并没有。<br>这条命令利用了现代 Git 服务器（如 GitHub）支持的特性，直接向服务器请求：<strong>“我只想要这个特定的 Commit Hash，把它以及它的文件快照给我，其他的父节点历史我依然不要。”</strong></li>
-<li><strong>作用</strong>：<br>这相当于“按需补货”。Git 会将这个古老的版本作为一个“孤岛”下载到本地的 <code>.git</code> 数据库中。既拿到了我们急需的数据，又保持了本地仓库的轻量化。</li>
-</ul>
-<h3 id="第三步：时光倒流-Checkout"><a href="#第三步：时光倒流-Checkout" class="headerlink" title="第三步：时光倒流 (Checkout)"></a>第三步：时光倒流 (Checkout)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subprocess.run([<span class="string">&quot;git&quot;</span>, <span class="string">&quot;checkout&quot;</span>, commit_id], cwd=target_dir, ...)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>命令</strong>：<code>git checkout &lt;commit_id&gt;</code></li>
-<li><strong>解读</strong>：<br>数据下载到了 <code>.git</code> 目录（通常存在 <code>FETCH_HEAD</code> 中），但工作区的文件还是最新的。这一步是将工作区的文件“刷新”成漏洞版本的状态。</li>
-<li><strong>作用</strong>：<br>执行后，工作区正式回到“案发时间”。此时虽然处于 <code>Detached HEAD</code>（头指针分离）状态，但这对于代码分析和编译来说完全足够。</li>
-</ul>
-<h3 id="第四步：修复环境-Apply-Patch"><a href="#第四步：修复环境-Apply-Patch" class="headerlink" title="第四步：修复环境 (Apply Patch)"></a>第四步：修复环境 (Apply Patch)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subprocess.run([<span class="string">&quot;git&quot;</span>, <span class="string">&quot;apply&quot;</span>, <span class="built_in">str</span>(patch_path)], cwd=target_dir, ...)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>命令</strong>：<code>git apply &lt;patch_path&gt;</code></li>
-<li><strong>解读</strong>：<br>如果我们提前准备了补丁文件（位于 <code>data/patches/</code>），则应用它。</li>
-<li><strong>为什么要这步？</strong>：<br>这是漏洞复现中最痛的一点——<strong>“代码虽然回去了，环境却变了”</strong>。<br>老旧的代码往往引用了已经关闭的 Maven 仓库，使用了不再兼容的 Gradle 插件，或者依赖了特定版本的编译器。我们不修改业务逻辑，只通过 Patch 修改构建脚本（如 <code>pom.xml</code>），确保这些“老古董”代码能在现代的机器上成功编译跑起来。</li>
-</ul>
-<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h2><p>通过这套流程，IRIS 成功构建了一个高效的数据集构建 pipeline：</p>
-<ol>
-<li><strong>Clone Latest</strong>: 只拿最新版，<strong>快</strong>。</li>
-<li><strong>Fetch Specific</strong>: 只抓特定点，<strong>准</strong>。</li>
-<li><strong>Checkout</strong>: 切换工作区，<strong>稳</strong>。</li>
-<li><strong>Patch</strong>: 修正构建项，<strong>活</strong>。</li>
-</ol>
-<p>这套 Git 组合拳极其精妙，它将原本可能需要数小时的下载任务缩短到了几秒钟，同时极大地节省了磁盘空间。对于从事软件仓库挖掘（Mining Software Repositories, MSR）的研究者来说，这绝对是必备的最佳实践。</p>
-<p>PS：注意需要收集到精确的 commit_id 也就是存在漏洞的 SHA-1 哈希值作为版本号。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/18/SSH%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/18/SSH%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="url">SSH安全协议</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-18 16:07:34 / 修改时间：16:20:56" itemprop="dateCreated datePublished" datetime="2026-01-18T16:07:34+08:00">2026-01-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="基础理论：Diffie-Hellman-DH-密钥交换协议"><a href="#基础理论：Diffie-Hellman-DH-密钥交换协议" class="headerlink" title="基础理论：Diffie-Hellman (DH) 密钥交换协议"></a>基础理论：Diffie-Hellman (DH) 密钥交换协议</h3><p>在介绍SSH之前，首先了解DH协议，因为它是SSH能够安全协商密钥的基石。</p>
-<ul>
-<li><strong>核心难题</strong>：如何在不安全的网络上，让两个人协商出一个只有他们知道的“密码”（会话密钥），而不用担心被旁人窃听？</li>
-<li><strong>数学原理</strong>：基于<strong>离散对数问题</strong>的困难性。<ul>
-<li>公式：<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex;" xmlns="http://www.w3.org/2000/svg" width="17.244ex" height="2.117ex" role="img" focusable="false" viewBox="0 -853.7 7621.8 935.7"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mi"><path data-c="1D436" d="M50 252Q50 367 117 473T286 641T490 704Q580 704 633 653Q642 643 648 636T656 626L657 623Q660 623 684 649Q691 655 699 663T715 679T725 690L740 705H746Q760 705 760 698Q760 694 728 561Q692 422 692 421Q690 416 687 415T669 413H653Q647 419 647 422Q647 423 648 429T650 449T651 481Q651 552 619 605T510 659Q484 659 454 652T382 628T299 572T226 479Q194 422 175 346T156 222Q156 108 232 58Q280 24 350 24Q441 24 512 92T606 240Q610 253 612 255T628 257Q648 257 648 248Q648 243 647 239Q618 132 523 55T319 -22Q206 -22 128 53T50 252Z"></path></g><g data-mml-node="mi" transform="translate(845.3,363) scale(0.707)"><path data-c="1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g></g><g data-mml-node="mo" transform="translate(1540.7,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mi" transform="translate(2596.5,0)"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g><g data-mml-node="mspace" transform="translate(3647.5,0)"></g><g data-mml-node="mi" transform="translate(4481.2,0)"><path data-c="6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(833,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1333,0)"></path></g><g data-mml-node="mstyle" transform="translate(6370.2,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mstyle" transform="translate(6537.2,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mi" transform="translate(6870.8,0)"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path></g></g></g></svg></mjx-container></li>
-<li><strong>正向计算容易</strong>：已知 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="6.607ex" height="2.034ex" role="img" focusable="false" viewBox="0 -705 2920.3 899"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D436" d="M50 252Q50 367 117 473T286 641T490 704Q580 704 633 653Q642 643 648 636T656 626L657 623Q660 623 684 649Q691 655 699 663T715 679T725 690L740 705H746Q760 705 760 698Q760 694 728 561Q692 422 692 421Q690 416 687 415T669 413H653Q647 419 647 422Q647 423 648 429T650 449T651 481Q651 552 619 605T510 659Q484 659 454 652T382 628T299 572T226 479Q194 422 175 346T156 222Q156 108 232 58Q280 24 350 24Q441 24 512 92T606 240Q610 253 612 255T628 257Q648 257 648 248Q648 243 647 239Q618 132 523 55T319 -22Q206 -22 128 53T50 252Z"></path></g><g data-mml-node="mo" transform="translate(760,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(1204.7,0)"><path data-c="1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g><g data-mml-node="mo" transform="translate(1724.7,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(2169.3,0)"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path></g></g></g></svg></mjx-container>，算出 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="2.378ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 1051 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g></g></g></svg></mjx-container> 很快。</li>
-<li><strong>反向计算极难</strong>：已知 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="7.808ex" height="2.034ex" role="img" focusable="false" viewBox="0 -705 3451.3 899"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g><g data-mml-node="mo" transform="translate(1051,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(1495.7,0)"><path data-c="1D436" d="M50 252Q50 367 117 473T286 641T490 704Q580 704 633 653Q642 643 648 636T656 626L657 623Q660 623 684 649Q691 655 699 663T715 679T725 690L740 705H746Q760 705 760 698Q760 694 728 561Q692 422 692 421Q690 416 687 415T669 413H653Q647 419 647 422Q647 423 648 429T650 449T651 481Q651 552 619 605T510 659Q484 659 454 652T382 628T299 572T226 479Q194 422 175 346T156 222Q156 108 232 58Q280 24 350 24Q441 24 512 92T606 240Q610 253 612 255T628 257Q648 257 648 248Q648 243 647 239Q618 132 523 55T319 -22Q206 -22 128 53T50 252Z"></path></g><g data-mml-node="mo" transform="translate(2255.7,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(2700.3,0)"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path></g></g></g></svg></mjx-container>，想要算出指数 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.023ex;" xmlns="http://www.w3.org/2000/svg" width="1.176ex" height="1.593ex" role="img" focusable="false" viewBox="0 -694 520 704"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g></g></g></svg></mjx-container>（私钥），在 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.699ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 751 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path></g></g></g></svg></mjx-container> 足够大时，计算量是指数级的，现代计算机无法在有效时间内破解。</li>
-</ul>
-</li>
-<li><strong>作用</strong>：SSH利用DH算法，在客户端和服务器之间安全地生成一个<strong>对称密钥</strong>，用于后续的数据加密传输。</li>
-</ul>
-<h3 id="核心重点：SSH协议详解-Secure-Shell"><a href="#核心重点：SSH协议详解-Secure-Shell" class="headerlink" title="核心重点：SSH协议详解 (Secure Shell)"></a>核心重点：SSH协议详解 (Secure Shell)</h3><h4 id="1-什么是SSH？"><a href="#1-什么是SSH？" class="headerlink" title="1. 什么是SSH？"></a>1. 什么是SSH？</h4><p>SSH（Secure Shell）即“安全外壳”。它是基于<strong>公钥密码体系</strong>的安全应用协议，专为<strong>远程登录会话</strong>和其他网络服务提供安全性。</p>
-<ul>
-<li><strong>主要目的</strong>：替代Telnet、rsh等不安全的明文传输协议。</li>
-<li><strong>核心功能</strong>：加密（防窃听）、认证（防伪装）、完整性检查（防篡改）。</li>
-</ul>
-<h4 id="2-SSH的内部架构（三大子协议）"><a href="#2-SSH的内部架构（三大子协议）" class="headerlink" title="2. SSH的内部架构（三大子协议）"></a>2. SSH的内部架构（三大子协议）</h4><p>SSH不是一个单一的协议，而是由三个分工明确的协议组成的“协议栈”：</p>
-<ol>
-<li><strong>SSH传输层协议 (Transport Layer Protocol)</strong><ul>
-<li><em>职责</em>：负责最底层的脏活累活。包括<strong>算法协商</strong>（商量用什么加密）、<strong>密钥交换</strong>（DH算法）、<strong>服务器认证</strong>（确认服务器是真的）。</li>
-<li><em>结果</em>：建立一个加密的、压缩的、保证完整性的安全通道。</li>
-</ul>
-</li>
-<li><strong>SSH用户认证协议 (User Authentication Protocol)</strong><ul>
-<li><em>职责</em>：运行在传输层之上，负责鉴别<strong>客户端（用户）</strong>是谁。</li>
-<li><em>方式</em>：支持口令认证（输入密码）、公钥认证（免密登录）等。</li>
-</ul>
-</li>
-<li><strong>SSH连接协议 (Connection Protocol)</strong><ul>
-<li><em>职责</em>：在加密和认证都完成后，负责把加密隧道<strong>多路复用</strong>。</li>
-<li><em>功能</em>：将一个物理连接逻辑上分为多个逻辑通道（Channel），分别处理终端会话、文件传输、端口转发等。</li>
-</ul>
-</li>
-</ol>
-<h4 id="3-SSH的工作流程（7个步骤）"><a href="#3-SSH的工作流程（7个步骤）" class="headerlink" title="3. SSH的工作流程（7个步骤）"></a>3. SSH的工作流程（7个步骤）</h4><p><img src="../uploads/ssh_2.png" alt=""></p>
-<ol>
-<li><strong>获取证书</strong>：客户端获取服务器的公钥证书（或已经存有服务器公钥）。</li>
-<li><strong>连接请求</strong>：客户端发起TCP连接（握手）。</li>
-<li><strong>服务器身份通告</strong>：服务器把自己的公钥发给客户端。</li>
-<li><strong>验证服务器</strong>：客户端验证这个公钥是不是真的服务器（防止中间人冒充）。</li>
-<li><strong>建立密钥 (DH)</strong>：双方通过Diffie-Hellman算法，协商出一个<strong>会话密钥</strong>（对称密钥）。</li>
-<li><strong>认证用户</strong>：建立加密隧道后，服务器验证客户端的身份（如输入密码）。</li>
-<li><strong>会话开始</strong>：使用SSH Tunnel进行加密通信。</li>
-</ol>
-<h4 id="4-关键环节：如何验证服务器公钥的真实性？"><a href="#4-关键环节：如何验证服务器公钥的真实性？" class="headerlink" title="4. 关键环节：如何验证服务器公钥的真实性？"></a>4. 关键环节：如何验证服务器公钥的真实性？</h4><p>客户端如何确认“发给我公钥的服务器真的是由于我要连接的那台服务器？”（防止中间人攻击）。主要有三种方法：</p>
-<ul>
-<li><strong>方法一：物理拷贝 (最原始)</strong><ul>
-<li>用户直接带个U盘把服务器的公钥拷到客户端电脑里。安全但麻烦，不适合大规模使用。</li>
-</ul>
-</li>
-<li><strong>方法二：指纹核对 (最常用)</strong><ul>
-<li><strong>流程</strong>：<ol>
-<li>首次连接时，客户端下载服务器公钥。</li>
-<li>屏幕显示公钥的<strong>指纹 (Hash值)</strong>。</li>
-<li>用户通过电话或其他渠道联系管理员核对指纹。</li>
-<li>若指纹一致，用户输入“yes”信任该主机，公钥被保存到 <code>known_hosts</code> 文件中。</li>
-</ol>
-</li>
-</ul>
-</li>
-<li><strong>方法三：PKI 认证 (最规范)</strong><ul>
-<li>通过权威的 CA 机构（PKI体系）来验证服务器证书的合法性。</li>
-</ul>
-</li>
-</ul>
-<h4 id="5-SSH-的实际应用与风险"><a href="#5-SSH-的实际应用与风险" class="headerlink" title="5. SSH 的实际应用与风险"></a>5. SSH 的实际应用与风险</h4><ul>
-<li><strong>默认端口</strong>：Linux系统中默认是 TCP <strong>22</strong> 端口。</li>
-<li><strong>功能扩展</strong>：不仅是远程黑窗口（Shell），还支持 <code>scp/sftp</code>（文件传输）、端口转发（跳板机/代理）。</li>
-<li><strong>安全隐患</strong>：<ul>
-<li><strong>中间人攻击 (MITM)</strong>：如果在首次连接（TOFU, Trust On First Use）时没有仔细核对指纹，攻击者可能拦截连接并伪造公钥。</li>
-<li><strong>拒绝服务攻击 (DoS)</strong>：因为SSH握手涉及复杂的加密计算（DH交换），消耗CPU资源大，攻击者可利用这一点耗尽服务器资源。</li>
-</ul>
-</li>
-</ul>
-<p><strong>总结</strong></p>
-<p>SSH 是一个<strong>分层</strong>的协议，利用 <strong>DH算法</strong> 协商密钥，通过 <strong>三种方式</strong> 验证服务器身份，最终建立加密隧道替代 Telnet，保障 <strong>22端口</strong> 的远程管理安全。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/18/%E5%8A%A0%E5%AF%86%E4%B8%8E%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8C%BA%E5%88%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/18/%E5%8A%A0%E5%AF%86%E4%B8%8E%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">加密与签名的区别</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-18 11:03:48 / 修改时间：11:09:41" itemprop="dateCreated datePublished" datetime="2026-01-18T11:03:48+08:00">2026-01-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>私钥和公钥在数学逻辑上是可以“反过来”使用的</strong>（特别是在最经典的 RSA 算法中）。</p>
-<p>但这两种“方向”所达到的<strong>安全目标</strong>是完全相反的，我们可以把这对密钥想象成一对<strong>神奇的数学钥匙</strong>：</p>
-<h3 id="数学原理：互为逆运算"><a href="#数学原理：互为逆运算" class="headerlink" title="数学原理：互为逆运算"></a>数学原理：互为逆运算</h3><p>在 RSA 这种经典的公钥密码体制中，公钥和私钥在数学上是<strong>成对生成</strong>的。</p>
-<ul>
-<li><strong>规则</strong>：用A钥匙锁上的东西，<strong>只能</strong>用B钥匙打开；反之，用B钥匙锁上的东西，<strong>只能</strong>用A钥匙打开。</li>
-</ul>
-<p>数学上没有规定谁必须叫“公钥”，谁必须叫“私钥”。只是在产生密钥后，我们人为地规定：</p>
-<ul>
-<li><strong>公开</strong>给所有人的那把叫<strong>公钥</strong>。</li>
-<li><strong>自己留着</strong>保密的那把叫<strong>私钥</strong>。</li>
-</ul>
-<h3 id="2-两种方向，两种用途"><a href="#2-两种方向，两种用途" class="headerlink" title="2. 两种方向，两种用途"></a>2. 两种方向，两种用途</h3><p>正是因为它们可以“反过来”用，才衍生出了密码学的两大支柱功能：<strong>加密</strong>和<strong>签名</strong>。</p>
-<h4 id="情况-A：公钥加密，私钥解密（正常加密）"><a href="#情况-A：公钥加密，私钥解密（正常加密）" class="headerlink" title="情况 A：公钥加密，私钥解密（正常加密）"></a>情况 A：公钥加密，私钥解密（正常加密）</h4><ul>
-<li><strong>操作</strong>：别人用你的<strong>公钥</strong>把数据锁起来。</li>
-<li><strong>结果</strong>：因为只有你才有<strong>私钥</strong>，所以全世界只有你一个人能打开看。</li>
-<li><strong>目的</strong>：<strong>机密性 (Confidentiality)</strong> —— 保护隐私，不让别人偷看。</li>
-<li><em>比喻</em>：别人把信扔进你的信箱（公钥），只有你有钥匙（私钥）能打开信箱取信。</li>
-</ul>
-<h4 id="情况-B：私钥“加密”，公钥“解密”（数字签名）"><a href="#情况-B：私钥“加密”，公钥“解密”（数字签名）" class="headerlink" title="情况 B：私钥“加密”，公钥“解密”（数字签名）"></a>情况 B：私钥“加密”，公钥“解密”（数字签名）</h4><ul>
-<li><strong>操作</strong>：你用你的<strong>私钥</strong>把一段数据（通常是摘要）锁起来（处理一下）。</li>
-<li><strong>结果</strong>：因为<strong>公钥</strong>是公开的，全世界所有人都能用你的公钥打开它。<ul>
-<li>你可能会问：<em>“所有人都能打开，那还有什么保密性可言？”</em></li>
-<li><strong>没错！这里根本不是为了保密！</strong></li>
-<li>既然所有人都能用你的公钥解开，这就证明了——<strong>这段密文一定是用你的私钥锁上的</strong>。因为除了你的私钥，别人的私钥锁出来的东西，你的公钥是打不开的。</li>
-</ul>
-</li>
-<li><strong>目的</strong>：<strong>认证/防抵赖 (Authentication)</strong> —— 证明“这确实是我发的”。</li>
-<li><em>比喻</em>：这就好比古代皇帝的“玉玺”（私钥）。皇帝在诏书上盖了章，全天下人（拿着公钥）一看印章纹路，就知道这是皇帝亲笔，不是别人伪造的。</li>
-</ul>
-<h3 id="3-一个小小的专业修正"><a href="#3-一个小小的专业修正" class="headerlink" title="3. 一个小小的专业修正"></a>3. 一个小小的专业修正</h3><p>虽然我们为了理解方便，常说“数字签名就是用私钥加密”。但在严格的学术定义中：</p>
-<ul>
-<li><strong>对于 RSA 算法</strong>：确实就是“私钥加密，公钥解密”的数学过程。</li>
-<li><strong>对于其他算法（如 ECC、SM2、DSA）</strong>：虽然逻辑上是“私钥处理，公钥验证”，但数学过程并不是简单的加密反运算，而是专门设计的<strong>签名算法</strong>和<strong>验证算法</strong>。</li>
-</ul>
-<p><strong>总结：</strong></p>
-<ul>
-<li><strong>公钥 -&gt; 私钥</strong> = 为了<strong>秘密</strong>（只有你能看）。</li>
-<li><strong>私钥 -&gt; 公钥</strong> = 为了<strong>证明</strong>（只有你能签）。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/18/%E8%BD%AF%E8%80%83%E5%AF%86%E7%A0%81%E5%AD%A6%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/18/%E8%BD%AF%E8%80%83%E5%AF%86%E7%A0%81%E5%AD%A6%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">软考密码学考点概述</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-18 09:59:28 / 修改时间：16:22:31" itemprop="dateCreated datePublished" datetime="2026-01-18T09:59:28+08:00">2026-01-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>软考常考的密码学基础知识、攻击类型以及主要的密码体制。以下是重要知识点：</p>
-<h3 id="一、-密码学基础概念-Overview"><a href="#一、-密码学基础概念-Overview" class="headerlink" title="一、 密码学基础概念 (Overview)"></a>一、 密码学基础概念 (Overview)</h3><ul>
-<li><strong>定义与目标</strong>：密码学是研究信息安全保护的科学。主要目标是实现信息的<strong>保密性、完整性、可用性及抗抵赖性</strong>。</li>
-<li><strong>组成</strong>：包含 <strong>密码编码学</strong>（研究加密/保护）和 <strong>密码分析学</strong>（研究破译/获取明文）。</li>
-<li><strong>相关法律</strong>：提及了《电子签名法》（2005年）、商用密码算法公布（2006年）及《密码法》草案（2019年）。</li>
-<li><strong>核心术语</strong>：<ul>
-<li><strong>明文</strong>：未加密的消息。</li>
-<li><strong>密文</strong>：加密后的消息。</li>
-<li><strong>加/解密算法</strong>：进行变换的运算规则。</li>
-<li><strong>密钥</strong>：控制算法操作的关键参数。</li>
-</ul>
-</li>
-</ul>
-<h3 id="二、-密码分析与攻击类型-Attack-Types"><a href="#二、-密码分析与攻击类型-Attack-Types" class="headerlink" title="二、 密码分析与攻击类型 (Attack Types)"></a>二、 密码分析与攻击类型 (Attack Types)</h3><p>根据攻击者拥有的信息量（前提条件），攻击类型分为五种（按攻击者能力从低到高）：</p>
-<ol>
-<li><strong>唯密文攻击</strong>：最困难，攻击者只有密文。</li>
-<li><strong>已知明文攻击</strong>：攻击者拥有一些“明文-密文”对。<strong>（注：一个安全的密码必须能经得起这种攻击）</strong>。</li>
-<li><strong>选择明文攻击</strong>：攻击者能制造明文并获取对应的密文（对攻击者有利）。</li>
-<li><strong>密文验证攻击</strong>：攻击者能判断某个密文解密后的结果是否合法。</li>
-<li><strong>选择密文攻击</strong>：最容易破译，攻击者能选定密文并获取对应明文（常见于攻击公钥体制和数字签名）。</li>
-</ol>
-<h3 id="三、-密码体制分类-Cryptosystems"><a href="#三、-密码体制分类-Cryptosystems" class="headerlink" title="三、 密码体制分类 (Cryptosystems)"></a>三、 密码体制分类 (Cryptosystems)</h3><h4 id="1-私钥密码体制-Symmetric-Key-对称加密"><a href="#1-私钥密码体制-Symmetric-Key-对称加密" class="headerlink" title="1. 私钥密码体制 (Symmetric Key / 对称加密)"></a>1. 私钥密码体制 (Symmetric Key / 对称加密)</h4><ul>
-<li><strong>特点</strong>：加密和解密使用<strong>相同</strong>的密钥。</li>
-<li><strong>流程</strong>：双方必须事先通过安全渠道交换密钥。</li>
-<li><strong>优缺点</strong>：<ul>
-<li><em>优点</em>：速度快</li>
-<li><em>缺点</em>：密钥分配困难、密钥管理量大、无法认证源（难以实现抗抵赖）。</li>
-</ul>
-</li>
-<li><strong>常见算法</strong>：<ul>
-<li><strong>DES</strong>：替换+移位、56位密钥、64位数据块、速度快、但56位密钥易被破解</li>
-<li><strong>3DES</strong>：三重DES，两个56位密钥，K1和K2，较DES更安全</li>
-<li><strong>AES</strong>：美国标准，替代DES，安全性高</li>
-<li><strong>IDEA</strong>：128位密钥、64位数据块、较DES加密性更好</li>
-<li><strong>RC-5</strong>：RSA 数据公司很多产品使用RC5</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-公钥密码体制-Asymmetric-Key-非对称加密"><a href="#2-公钥密码体制-Asymmetric-Key-非对称加密" class="headerlink" title="2. 公钥密码体制 (Asymmetric Key / 非对称加密)"></a>2. 公钥密码体制 (Asymmetric Key / 非对称加密)</h4><ul>
-<li><strong>特点</strong>：加密和解密使用<strong>不同</strong>的密钥（公钥和私钥）。</li>
-<li><strong>原理</strong>：<ul>
-<li><strong>公钥</strong>：公开，用于<strong>加密</strong>。</li>
-<li><strong>私钥</strong>：保密，用于<strong>解密</strong>。</li>
-<li><em>例子</em>：甲给乙发消息，用<strong>乙的公钥</strong>加密，只有<strong>乙的私钥</strong>能解密。</li>
-</ul>
-</li>
-<li><strong>优缺点</strong>：<ul>
-<li><em>优点</em>：密钥分发方便、管理量少、支持数字签名。在公钥密码体制中，仅根据密码算法和加密密钥来确定解密密钥在计算上是不可行的。</li>
-<li><em>缺点</em>：<strong>速度慢</strong>，计算量大，不适合加密大数据。</li>
-</ul>
-</li>
-<li><strong>常见算法</strong>：<ul>
-<li><strong>RSA</strong>：基于大数分解，应用最广。公钥 (e,n) 私钥 (d,n) 。</li>
-<li><strong>ECC</strong>（椭圆曲线）、<strong>Elgamal</strong>、<strong>D-H</strong>（Diffie-Hellman）、<strong>背包算法</strong>。</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-混合密码体制-Hybrid-System"><a href="#3-混合密码体制-Hybrid-System" class="headerlink" title="3. 混合密码体制 (Hybrid System)"></a>3. 混合密码体制 (Hybrid System)</h4><ul>
-<li><strong>目的</strong>：结合对称加密的“快”和非对称加密的“密钥分发方便”。</li>
-<li><strong>工作流程</strong>：<ol>
-<li>发送方随机生成一个<strong>对称密钥</strong>。</li>
-<li>用<strong>对称密钥</strong>加密<strong>明文消息</strong>（数据传输快）。</li>
-<li>用接收方的<strong>公钥</strong>加密这个<strong>对称密钥</strong>（数字信封）。</li>
-<li>将加密后的消息和加密后的密钥一起发送。</li>
-<li>接收方先用<strong>私钥</strong>解出<strong>对称密钥</strong>，再用<strong>对称密钥</strong>解密<strong>消息</strong>。</li>
-</ol>
-</li>
-</ul>
-<p><img src="../uploads/crypto_1.png" alt=""></p>
-<p>这张PPT主要详细介绍了四种常见的<strong>对称加密算法</strong>（DES、3DES、IDEA、AES）的具体参数和工作原理。以下是为您总结的核心知识点：</p>
-<h3 id="四、常见密码算法"><a href="#四、常见密码算法" class="headerlink" title="四、常见密码算法"></a>四、常见密码算法</h3><h4 id="1-DES-算法-Data-Encryption-Standard"><a href="#1-DES-算法-Data-Encryption-Standard" class="headerlink" title="1. DES 算法 (Data Encryption Standard)"></a>1. DES 算法 (Data Encryption Standard)</h4><ul>
-<li><strong>类型</strong>：分组加密算法。</li>
-<li><strong>分组长度</strong>：支持 <strong>64比特</strong> 的明文块加密。</li>
-<li><strong>密钥长度</strong>：<strong>56比特</strong>。</li>
-<li><strong>特点</strong>：由于密钥较短（56位），在现代算力下安全性较低，已逐渐被淘汰。</li>
-</ul>
-<h4 id="2-三重DES-3DES-TDEA"><a href="#2-三重DES-3DES-TDEA" class="headerlink" title="2. 三重DES (3DES / TDEA)"></a>2. 三重DES (3DES / TDEA)</h4><ul>
-<li><strong>原理</strong>：为了提高安全性，使用DES算法对明文进行 <strong>“加密 - 解密 - 加密”</strong> 的三次操作。</li>
-<li><strong>操作流程</strong>：<ul>
-<li><strong>加密</strong>：明文 -&gt; (用K1加密) -&gt; (用K2解密) -&gt; (用K3加密) -&gt; 密文。</li>
-<li><strong>解密</strong>：密文 -&gt; (用K3解密) -&gt; (用K2加密) -&gt; (用K1解密) -&gt; 明文。</li>
-</ul>
-</li>
-<li><strong>密钥规则</strong>：通常情况下，<strong>K1 和 K3 是相同的密钥</strong>（即使用两个不同的密钥K1和K2进行三次运算）。</li>
-</ul>
-<h4 id="3-IDEA-算法-International-Data-Encryption-Algorithm"><a href="#3-IDEA-算法-International-Data-Encryption-Algorithm" class="headerlink" title="3. IDEA 算法 (International Data Encryption Algorithm)"></a>3. IDEA 算法 (International Data Encryption Algorithm)</h4><ul>
-<li><strong>类型</strong>：分组加密算法。</li>
-<li><strong>分组长度</strong>：明文和密文分组均为 <strong>64比特</strong>。</li>
-<li><strong>密钥长度</strong>：<strong>128比特</strong>（比DES更安全）。</li>
-<li><strong>设计思想</strong>：混合使用来自不同代数群中的运算。</li>
-</ul>
-<h4 id="4-AES-算法-Advanced-Encryption-Standard"><a href="#4-AES-算法-Advanced-Encryption-Standard" class="headerlink" title="4. AES 算法 (Advanced Encryption Standard)"></a>4. AES 算法 (Advanced Encryption Standard)</h4><p>AES是用来替代DES的新一代标准，PPT中列出了该算法必须满足的标准要求：</p>
-<ul>
-<li><strong>公开性</strong>：算法无密级，描述必须完全公开披露。</li>
-<li><strong>免费性</strong>：必须可以在世界范围内免费使用。</li>
-<li><strong>分组长度</strong>：支持至少 <strong>128比特</strong> 的分组。</li>
-<li><strong>密钥长度</strong>：支持 <strong>128、192 和 256比特</strong> 的密钥长度。</li>
-</ul>
-<hr>
-<p><strong>总结对比表：</strong></p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:left">算法</th>
-<th style="text-align:left">分组长度</th>
-<th style="text-align:left">密钥长度</th>
-<th style="text-align:left">关键特征</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><strong>DES</strong></td>
-<td style="text-align:left">64 bit</td>
-<td style="text-align:left">56 bit</td>
-<td style="text-align:left">早期标准，现已被认为不够安全。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>3DES</strong></td>
-<td style="text-align:left">64 bit</td>
-<td style="text-align:left">112 bit* (通常)</td>
-<td style="text-align:left">“加密-解密-加密”模式，过渡方案。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>IDEA</strong></td>
-<td style="text-align:left">64 bit</td>
-<td style="text-align:left">128 bit</td>
-<td style="text-align:left">混合代数运算设计。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>AES</strong></td>
-<td style="text-align:left">≥128 bit</td>
-<td style="text-align:left">128/192/256 bit</td>
-<td style="text-align:left">现行标准，公开、免费、强度高。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><em>(注：3DES如果K1=K3，有效密钥长度通常认为是112位)</em></p>
-<h4 id="5-国产密码算法"><a href="#5-国产密码算法" class="headerlink" title="5.国产密码算法"></a>5.国产密码算法</h4><ul>
-<li><strong>国产密码算法</strong>：指由国家密码研究相关机构自主研发、具有相关知识产权的商用密码算法。</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:left">算法名称</th>
-<th style="text-align:left">算法类型</th>
-<th style="text-align:left">关键参数/技术细节</th>
-<th style="text-align:left">主要用途/备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><strong>SM1</strong></td>
-<td style="text-align:left"><strong>对称加密</strong></td>
-<td style="text-align:left">分组长度：<strong>128比特</strong><br>密钥长度：<strong>128比特</strong></td>
-<td style="text-align:left">硬件实现为主，通常作为SM4的非公开版本背景知识</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>SM2</strong></td>
-<td style="text-align:left"><strong>非对称加密</strong></td>
-<td style="text-align:left">基于<strong>椭圆曲线（ECC）</strong><br>推荐使用素数域 <strong>256位</strong> 椭圆曲线</td>
-<td style="text-align:left">功能全面：包括公钥加密、密钥交换协议、<strong>数字签名</strong>算法。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>SM3</strong></td>
-<td style="text-align:left"><strong>杂凑算法</strong> (Hash)</td>
-<td style="text-align:left">杂凑值（摘要）长度：<strong>256比特</strong></td>
-<td style="text-align:left">类似于国际上的SHA-256。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>SM4</strong></td>
-<td style="text-align:left"><strong>对称加密</strong></td>
-<td style="text-align:left">分组长度：<strong>128比特</strong><br>密钥长度：<strong>128比特</strong></td>
-<td style="text-align:left">无线局域网标准算法，参数与SM1一致，但已公开。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>SM9</strong></td>
-<td style="text-align:left"><strong>标识密码</strong></td>
-<td style="text-align:left">标识密码算法 (IBC)</td>
-<td style="text-align:left">基于身份的密码技术（例如将邮箱或手机号直接作为公钥）。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>为了方便理解和记忆，可以将国产算法与国际通用算法进行对标：</p>
-<ul>
-<li><strong>SM1 / SM4 (对称)</strong> <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0.124ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="0.968ex" role="img" focusable="false" viewBox="0 -483 778 428"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2248" d="M55 319Q55 360 72 393T114 444T163 472T205 482Q207 482 213 482T223 483Q262 483 296 468T393 413L443 381Q502 346 553 346Q609 346 649 375T694 454Q694 465 698 474T708 483Q722 483 722 452Q722 386 675 338T555 289Q514 289 468 310T388 357T308 404T224 426Q164 426 125 393T83 318Q81 289 69 289Q55 289 55 319ZM55 85Q55 126 72 159T114 210T163 238T205 248Q207 248 213 248T223 249Q262 249 296 234T393 179L443 147Q502 112 553 112Q609 112 649 141T694 220Q694 249 708 249T722 217Q722 153 675 104T555 55Q514 55 468 76T388 123T308 170T224 192Q164 192 125 159T83 84Q80 55 69 55Q55 55 55 85Z"></path></g></g></g></svg></mjx-container> <strong>AES-128</strong> (两者都是128位分组和密钥)</li>
-<li><strong>SM2 (非对称)</strong> <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0.124ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="0.968ex" role="img" focusable="false" viewBox="0 -483 778 428"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2248" d="M55 319Q55 360 72 393T114 444T163 472T205 482Q207 482 213 482T223 483Q262 483 296 468T393 413L443 381Q502 346 553 346Q609 346 649 375T694 454Q694 465 698 474T708 483Q722 483 722 452Q722 386 675 338T555 289Q514 289 468 310T388 357T308 404T224 426Q164 426 125 393T83 318Q81 289 69 289Q55 289 55 319ZM55 85Q55 126 72 159T114 210T163 238T205 248Q207 248 213 248T223 249Q262 249 296 234T393 179L443 147Q502 112 553 112Q609 112 649 141T694 220Q694 249 708 249T722 217Q722 153 675 104T555 55Q514 55 468 76T388 123T308 170T224 192Q164 192 125 159T83 84Q80 55 69 55Q55 55 55 85Z"></path></g></g></g></svg></mjx-container> <strong>ECC / RSA</strong> (但在相同安全强度下，SM2比RSA密钥更短，速度更快)</li>
-<li><strong>SM3 (哈希)</strong> <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0.124ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="0.968ex" role="img" focusable="false" viewBox="0 -483 778 428"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2248" d="M55 319Q55 360 72 393T114 444T163 472T205 482Q207 482 213 482T223 483Q262 483 296 468T393 413L443 381Q502 346 553 346Q609 346 649 375T694 454Q694 465 698 474T708 483Q722 483 722 452Q722 386 675 338T555 289Q514 289 468 310T388 357T308 404T224 426Q164 426 125 393T83 318Q81 289 69 289Q55 289 55 319ZM55 85Q55 126 72 159T114 210T163 238T205 248Q207 248 213 248T223 249Q262 249 296 234T393 179L443 147Q502 112 553 112Q609 112 649 141T694 220Q694 249 708 249T722 217Q722 153 675 104T555 55Q514 55 468 76T388 123T308 170T224 192Q164 192 125 159T83 84Q80 55 69 55Q55 55 55 85Z"></path></g></g></g></svg></mjx-container> <strong>SHA-256</strong> (输出长度相同)</li>
-</ul>
-<h4 id="6-习题"><a href="#6-习题" class="headerlink" title="6.习题"></a>6.习题</h4><p>利用公开密钥算法进行数据加密时，采用方式是：<strong>发送方用公开密钥加密，接收方用私有密钥解密</strong>。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/01/18/%E8%BD%AF%E8%80%83%E5%AF%86%E7%A0%81%E5%AD%A6%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
