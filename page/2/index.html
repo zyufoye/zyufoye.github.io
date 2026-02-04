@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -208,6 +208,553 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/29/Java%E6%96%B9%E6%B3%95getCanonicalPath/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/29/Java%E6%96%B9%E6%B3%95getCanonicalPath/" class="post-title-link" itemprop="url">Java方法getCanonicalPath()</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-29 22:19:32 / 修改时间：22:20:17" itemprop="dateCreated datePublished" datetime="2026-01-29T22:19:32+08:00">2026-01-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="基本定义"><a href="#基本定义" class="headerlink" title="基本定义"></a>基本定义</h2><p><code>getCanonicalPath()</code> 是 Java <code>File</code> 类的方法，返回文件的<strong>规范化绝对路径</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">File</span> <span class="variable">file</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/home/user/../admin/./file.txt&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">canonical</span> <span class="operator">=</span> file.getCanonicalPath();</span><br><span class="line"><span class="comment">// 返回: &quot;/home/admin/file.txt&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h2><h3 id="1-解析相对路径符号"><a href="#1-解析相对路径符号" class="headerlink" title="1. 解析相对路径符号"></a>1. <strong>解析相对路径符号</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 示例 1: 解析 ..（父目录）</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/www/uploads/../config/db.conf&quot;</span>);</span><br><span class="line">System.out.println(f1.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /var/www/config/db.conf</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例 2: 解析 .（当前目录）</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/home/./user/./docs&quot;</span>);</span><br><span class="line">System.out.println(f2.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /home/user/docs</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例 3: 混合使用</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/a/b/../c/./d/../e&quot;</span>);</span><br><span class="line">System.out.println(f3.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /a/c/e</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-转换为绝对路径"><a href="#2-转换为绝对路径" class="headerlink" title="2. 转换为绝对路径"></a>2. <strong>转换为绝对路径</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 相对路径 → 绝对路径</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;data/logs/app.log&quot;</span>);</span><br><span class="line">System.out.println(f.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /home/user/project/data/logs/app.log (基于当前工作目录)</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-解析符号链接（软链接）"><a href="#3-解析符号链接（软链接）" class="headerlink" title="3. 解析符号链接（软链接）"></a>3. <strong>解析符号链接（软链接）</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Linux 示例</span></span><br><span class="line"><span class="comment">// /var/log -&gt; /mnt/storage/logs （符号链接）</span></span><br><span class="line"></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/log/app.log&quot;</span>);</span><br><span class="line">System.out.println(f.getAbsolutePath());   <span class="comment">// /var/log/app.log</span></span><br><span class="line">System.out.println(f.getCanonicalPath());  <span class="comment">// /mnt/storage/logs/app.log</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-规范化路径分隔符"><a href="#4-规范化路径分隔符" class="headerlink" title="4. 规范化路径分隔符"></a>4. <strong>规范化路径分隔符</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Windows 示例</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;C:\\Users\\..\\Windows\\System32&quot;</span>);</span><br><span class="line">System.out.println(f.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: C:\Windows\System32</span></span><br></pre></td></tr></table></figure>
+<h2 id="与其他方法对比"><a href="#与其他方法对比" class="headerlink" title="与其他方法对比"></a>与其他方法对比</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">File</span> <span class="variable">file</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;../admin/./docs/../secret.txt&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. getPath() - 返回构造时的字符串（不做处理）</span></span><br><span class="line">System.out.println(file.getPath());</span><br><span class="line"><span class="comment">// 输出: ../admin/./docs/../secret.txt</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. getAbsolutePath() - 转为绝对路径，但不解析 . 和 ..</span></span><br><span class="line">System.out.println(file.getAbsolutePath());</span><br><span class="line"><span class="comment">// 输出: /home/user/project/../admin/./docs/../secret.txt</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. getCanonicalPath() - 完全规范化</span></span><br><span class="line">System.out.println(file.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /home/admin/secret.txt</span></span><br></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>解析 <code>.</code></th>
+<th>解析 <code>..</code></th>
+<th>解析符号链接</th>
+<th>转绝对路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getPath()</code></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>getAbsolutePath()</code></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>getCanonicalPath()</code></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="在安全中的应用"><a href="#在安全中的应用" class="headerlink" title="在安全中的应用"></a>在安全中的应用</h2><h3 id="1-防止路径遍历攻击（Path-Traversal）"><a href="#1-防止路径遍历攻击（Path-Traversal）" class="headerlink" title="1. 防止路径遍历攻击（Path Traversal）"></a>1. <strong>防止路径遍历攻击（Path Traversal）</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 不安全的代码</span></span><br><span class="line"><span class="keyword">public</span> File <span class="title function_">getFile</span><span class="params">(String userInput)</span> &#123;</span><br><span class="line">    <span class="type">File</span> <span class="variable">baseDir</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/www/uploads/&quot;</span>);</span><br><span class="line">    <span class="type">File</span> <span class="variable">userFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(baseDir, userInput);</span><br><span class="line">    <span class="keyword">return</span> userFile;  <span class="comment">// 危险！</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 攻击示例</span></span><br><span class="line">getFile(<span class="string">&quot;../../../etc/passwd&quot;</span>);</span><br><span class="line"><span class="comment">// 实际路径: /var/www/uploads/../../../etc/passwd</span></span><br><span class="line"><span class="comment">// 最终访问: /etc/passwd</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 安全的代码</span></span><br><span class="line"><span class="keyword">public</span> File <span class="title function_">getFile</span><span class="params">(String userInput)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="type">File</span> <span class="variable">baseDir</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/www/uploads/&quot;</span>);</span><br><span class="line">    <span class="type">File</span> <span class="variable">userFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(baseDir, userInput);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 规范化路径</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">canonicalBase</span> <span class="operator">=</span> baseDir.getCanonicalPath();</span><br><span class="line">    <span class="type">String</span> <span class="variable">canonicalUser</span> <span class="operator">=</span> userFile.getCanonicalPath();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 检查是否在允许的目录内</span></span><br><span class="line">    <span class="keyword">if</span> (!canonicalUser.startsWith(canonicalBase)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Path traversal detected!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> userFile;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试</span></span><br><span class="line">getFile(<span class="string">&quot;../../../etc/passwd&quot;</span>);</span><br><span class="line"><span class="comment">// canonicalBase: /var/www/uploads</span></span><br><span class="line"><span class="comment">// canonicalUser:  /etc/passwd</span></span><br><span class="line"><span class="comment">// 检查失败，抛出异常 ✅</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-实际漏洞修复示例"><a href="#2-实际漏洞修复示例" class="headerlink" title="2. 实际漏洞修复示例"></a>2. <strong>实际漏洞修复示例</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CVE-XXXX-XXXX 风格的修复</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SecureFileHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">UPLOAD_DIR</span> <span class="operator">=</span> <span class="string">&quot;/var/www/uploads/&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> File <span class="title function_">validateAndGetFile</span><span class="params">(String fileName)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">// Step 1: 基础验证</span></span><br><span class="line">        <span class="keyword">if</span> (fileName == <span class="literal">null</span> || fileName.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;Invalid filename&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Step 2: 黑名单过滤（可选，双重防护）</span></span><br><span class="line">        <span class="keyword">if</span> (fileName.contains(<span class="string">&quot;..&quot;</span>) || fileName.startsWith(<span class="string">&quot;/&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Invalid path characters&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Step 3: 构造文件对象</span></span><br><span class="line">        <span class="type">File</span> <span class="variable">baseDir</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(UPLOAD_DIR);</span><br><span class="line">        <span class="type">File</span> <span class="variable">targetFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(baseDir, fileName);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Step 4: 规范化检查（核心防护）</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">canonicalBase</span> <span class="operator">=</span> baseDir.getCanonicalPath();</span><br><span class="line">        <span class="type">String</span> <span class="variable">canonicalTarget</span> <span class="operator">=</span> targetFile.getCanonicalPath();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!canonicalTarget.startsWith(canonicalBase + File.separator)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(</span><br><span class="line">                <span class="string">&quot;Path traversal attempt detected: &quot;</span> + fileName</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> targetFile;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试用例</span></span><br><span class="line"><span class="type">SecureFileHandler</span> <span class="variable">handler</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SecureFileHandler</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 合法路径</span></span><br><span class="line">handler.validateAndGetFile(<span class="string">&quot;user123/avatar.jpg&quot;</span>);</span><br><span class="line"><span class="comment">// 返回: /var/www/uploads/user123/avatar.jpg</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 攻击尝试 1</span></span><br><span class="line">handler.validateAndGetFile(<span class="string">&quot;../../etc/passwd&quot;</span>);</span><br><span class="line"><span class="comment">// 抛出: SecurityException: Path traversal attempt detected</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 攻击尝试 2</span></span><br><span class="line">handler.validateAndGetFile(<span class="string">&quot;../config/database.yml&quot;</span>);</span><br><span class="line"><span class="comment">// 抛出: SecurityException: Invalid path characters</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 攻击尝试 3（符号链接攻击）</span></span><br><span class="line"><span class="comment">// 假设 /var/www/uploads/link -&gt; /etc</span></span><br><span class="line">handler.validateAndGetFile(<span class="string">&quot;link/passwd&quot;</span>);</span><br><span class="line"><span class="comment">// canonicalTarget 会解析为 /etc/passwd</span></span><br><span class="line"><span class="comment">// 检查失败，抛出异常 ✅</span></span><br></pre></td></tr></table></figure>
+<h2 id="符号链接攻击示例"><a href="#符号链接攻击示例" class="headerlink" title="符号链接攻击示例"></a>符号链接攻击示例</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 攻击场景设置</span></span><br><span class="line"><span class="built_in">cd</span> /var/www/uploads/</span><br><span class="line"><span class="built_in">ln</span> -s /etc secret_link  <span class="comment"># 创建指向 /etc 的符号链接</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不使用 getCanonicalPath()</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/www/uploads/secret_link/passwd&quot;</span>);</span><br><span class="line">System.out.println(f.getAbsolutePath());</span><br><span class="line"><span class="comment">// 输出: /var/www/uploads/secret_link/passwd</span></span><br><span class="line"><span class="comment">// 看起来在允许目录内！❌</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 getCanonicalPath()</span></span><br><span class="line">System.out.println(f.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /etc/passwd</span></span><br><span class="line"><span class="comment">// 暴露真实路径！✅ 可以检测到攻击</span></span><br></pre></td></tr></table></figure>
+<h2 id="性能考虑"><a href="#性能考虑" class="headerlink" title="性能考虑"></a>性能考虑</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// getCanonicalPath() 会进行系统调用，相对较慢</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/www/uploads/file.txt&quot;</span>).getCanonicalPath();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">long</span> <span class="variable">end</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">    System.out.println(<span class="string">&quot;Time: &quot;</span> + (end - start) / <span class="number">1000000</span> + <span class="string">&quot;ms&quot;</span>);</span><br><span class="line">    <span class="comment">// 可能输出: Time: 50-100ms</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 优化建议：缓存结果</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> String CANONICAL_BASE;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="title function_">SecureFileHandler</span><span class="params">()</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    CANONICAL_BASE = <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/var/www/uploads/&quot;</span>).getCanonicalPath();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> File <span class="title function_">validateFile</span><span class="params">(String name)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="type">File</span> <span class="variable">target</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(CANONICAL_BASE, name);</span><br><span class="line">    <span class="type">String</span> <span class="variable">canonical</span> <span class="operator">=</span> target.getCanonicalPath();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!canonical.startsWith(CANONICAL_BASE)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Invalid path&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// getCanonicalPath() 抛出 IOException</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/nonexistent/../path&quot;</span>);</span><br><span class="line">    <span class="type">String</span> <span class="variable">path</span> <span class="operator">=</span> f.getCanonicalPath();  <span class="comment">// 可能抛出异常</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    <span class="comment">// 处理 IO 错误（如权限不足、路径不存在等）</span></span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="跨平台差异"><a href="#跨平台差异" class="headerlink" title="跨平台差异"></a>跨平台差异</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Windows</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;C:\\Users\\..\\Windows\\System32&quot;</span>);</span><br><span class="line">System.out.println(f.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: C:\Windows\System32</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Linux/Unix</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;/home/../etc/passwd&quot;</span>);</span><br><span class="line">System.out.println(f.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: /etc/passwd</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Windows UNC 路径</span></span><br><span class="line"><span class="type">File</span> <span class="variable">f</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;\\\\server\\share\\..\\file.txt&quot;</span>);</span><br><span class="line">System.out.println(f.getCanonicalPath());</span><br><span class="line"><span class="comment">// 输出: \\server\file.txt</span></span><br></pre></td></tr></table></figure>
+<h2 id="现代-Java-替代方案（Java-7-）"><a href="#现代-Java-替代方案（Java-7-）" class="headerlink" title="现代 Java 替代方案（Java 7+）"></a>现代 Java 替代方案（Java 7+）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.nio.file.*;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 Path API（推荐）</span></span><br><span class="line"><span class="type">Path</span> <span class="variable">basePath</span> <span class="operator">=</span> Paths.get(<span class="string">&quot;/var/www/uploads/&quot;</span>).toRealPath();</span><br><span class="line"><span class="type">Path</span> <span class="variable">userPath</span> <span class="operator">=</span> basePath.resolve(userInput).normalize();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 检查路径</span></span><br><span class="line"><span class="keyword">if</span> (!userPath.startsWith(basePath)) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Path traversal detected&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// toRealPath() 类似 getCanonicalPath()</span></span><br><span class="line"><span class="comment">// - 解析符号链接</span></span><br><span class="line"><span class="comment">// - 规范化路径</span></span><br><span class="line"><span class="comment">// - 需要文件实际存在（可选参数控制）</span></span><br></pre></td></tr></table></figure>
+<h2 id="完整安全示例"><a href="#完整安全示例" class="headerlink" title="完整安全示例"></a>完整安全示例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.nio.file.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SecureFileAccess</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Path baseDirectory;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SecureFileAccess</span><span class="params">(String baseDir)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="built_in">this</span>.baseDirectory = Paths.get(baseDir).toRealPath();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> File <span class="title function_">getSecureFile</span><span class="params">(String userInput)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">// 1. 参数验证</span></span><br><span class="line">        <span class="keyword">if</span> (userInput == <span class="literal">null</span> || userInput.trim().isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;Filename cannot be empty&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2. 黑名单检查</span></span><br><span class="line">        <span class="keyword">if</span> (userInput.contains(<span class="string">&quot;\0&quot;</span>) || userInput.contains(<span class="string">&quot;../&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Invalid characters in filename&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 3. 构造路径</span></span><br><span class="line">        <span class="type">Path</span> <span class="variable">targetPath</span> <span class="operator">=</span> baseDirectory.resolve(userInput).normalize();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 4. 边界检查（方法1：使用 Path）</span></span><br><span class="line">        <span class="keyword">if</span> (!targetPath.startsWith(baseDirectory)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Path traversal attempt&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 5. 符号链接检查（方法2：使用 getCanonicalPath）</span></span><br><span class="line">        <span class="type">File</span> <span class="variable">targetFile</span> <span class="operator">=</span> targetPath.toFile();</span><br><span class="line">        <span class="type">String</span> <span class="variable">canonicalTarget</span> <span class="operator">=</span> targetFile.getCanonicalPath();</span><br><span class="line">        <span class="type">String</span> <span class="variable">canonicalBase</span> <span class="operator">=</span> baseDirectory.toFile().getCanonicalPath();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!canonicalTarget.startsWith(canonicalBase + File.separator)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SecurityException</span>(<span class="string">&quot;Symlink attack detected&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> targetFile;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>主要用途</strong></td>
+<td>获取文件的唯一、规范化绝对路径</td>
+</tr>
+<tr>
+<td><strong>核心功能</strong></td>
+<td>解析 <code>.</code>、<code>..</code>、符号链接</td>
+</tr>
+<tr>
+<td><strong>安全作用</strong></td>
+<td>防止路径遍历攻击</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>较慢（涉及系统调用），建议缓存</td>
+</tr>
+<tr>
+<td><strong>异常</strong></td>
+<td>抛出 <code>IOException</code></td>
+</tr>
+<tr>
+<td><strong>现代替代</strong></td>
+<td><code>Path.toRealPath()</code> (Java 7+)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>安全关键点</strong>：在处理用户提供的文件路径时，<strong>必须</strong>使用 <code>getCanonicalPath()</code> 或 <code>toRealPath()</code> 进行边界检查！</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/29/Java%E6%96%B9%E6%B3%95trim/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/29/Java%E6%96%B9%E6%B3%95trim/" class="post-title-link" itemprop="url">Java方法trim()</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-29 22:19:15 / 修改时间：22:20:07" itemprop="dateCreated datePublished" datetime="2026-01-29T22:19:15+08:00">2026-01-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在分析Java代码时，经常能看到 trim() 方法</p>
+<h2 id="基本功能"><a href="#基本功能" class="headerlink" title="基本功能"></a>基本功能</h2><p><code>.trim()</code> 是 Java String 类的方法，用于<strong>删除字符串首尾的空白字符</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="string">&quot;   hello world   &quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> str.trim();</span><br><span class="line"><span class="comment">// result = &quot;hello world&quot;  (去掉了前后空格)</span></span><br></pre></td></tr></table></figure>
+<h2 id="空白字符定义"><a href="#空白字符定义" class="headerlink" title="空白字符定义"></a>空白字符定义</h2><p>在 Java 中，trim() 删除的是 <strong>Unicode 码点 ≤ U+0020 的字符</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 会被 trim() 删除的字符</span></span><br><span class="line">空格        <span class="string">&#x27; &#x27;</span>   (U+<span class="number">0020</span>)</span><br><span class="line">制表符      <span class="string">&#x27;\t&#x27;</span>  (U+0009)</span><br><span class="line">换行符      <span class="string">&#x27;\n&#x27;</span>  (U+000A)</span><br><span class="line">回车符      <span class="string">&#x27;\r&#x27;</span>  (U+<span class="number">000D</span>)</span><br><span class="line">换页符      <span class="string">&#x27;\f&#x27;</span>  (U+000C)</span><br></pre></td></tr></table></figure>
+<h2 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 示例 1: 基本用法</span></span><br><span class="line"><span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="string">&quot;  Java  &quot;</span>;</span><br><span class="line">System.out.println(s1.trim());  <span class="comment">// &quot;Java&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例 2: 只删除首尾</span></span><br><span class="line"><span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;  Hello  World  &quot;</span>;</span><br><span class="line">System.out.println(s2.trim());  <span class="comment">// &quot;Hello  World&quot; (中间空格保留)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例 3: 处理用户输入</span></span><br><span class="line"><span class="type">String</span> <span class="variable">userInput</span> <span class="operator">=</span> <span class="string">&quot;  admin@example.com  \n&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">email</span> <span class="operator">=</span> userInput.trim();  <span class="comment">// &quot;admin@example.com&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例 4: 多种空白字符</span></span><br><span class="line"><span class="type">String</span> <span class="variable">s3</span> <span class="operator">=</span> <span class="string">&quot;\t\n  text  \r\n&quot;</span>;</span><br><span class="line">System.out.println(s3.trim());  <span class="comment">// &quot;text&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例 5: 没有空白字符</span></span><br><span class="line"><span class="type">String</span> <span class="variable">s4</span> <span class="operator">=</span> <span class="string">&quot;NoSpaces&quot;</span>;</span><br><span class="line">System.out.println(s4.trim());  <span class="comment">// &quot;NoSpaces&quot; (无变化)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 示例 6: 全是空白</span></span><br><span class="line"><span class="type">String</span> <span class="variable">s5</span> <span class="operator">=</span> <span class="string">&quot;   \t\n   &quot;</span>;</span><br><span class="line">System.out.println(s5.trim());  <span class="comment">// &quot;&quot; (空字符串)</span></span><br></pre></td></tr></table></figure>
+<h2 id="在安全代码中的作用"><a href="#在安全代码中的作用" class="headerlink" title="在安全代码中的作用"></a>在安全代码中的作用</h2><h3 id="1-防止绕过验证"><a href="#1-防止绕过验证" class="headerlink" title="1. 防止绕过验证"></a>1. <strong>防止绕过验证</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 不使用 trim 的问题</span></span><br><span class="line"><span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> <span class="string">&quot;admin   &quot;</span>;  <span class="comment">// 尾部有空格</span></span><br><span class="line"><span class="keyword">if</span> (username.equals(<span class="string">&quot;admin&quot;</span>)) &#123;  <span class="comment">// false，验证失败</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 使用 trim</span></span><br><span class="line"><span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> <span class="string">&quot;admin   &quot;</span>.trim();  <span class="comment">// &quot;admin&quot;</span></span><br><span class="line"><span class="keyword">if</span> (username.equals(<span class="string">&quot;admin&quot;</span>)) &#123;  <span class="comment">// true</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-在-CVE-2020-2261-中的应用"><a href="#2-在-CVE-2020-2261-中的应用" class="headerlink" title="2. 在 CVE-2020-2261 中的应用"></a>2. <strong>在 CVE-2020-2261 中的应用</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构建命令时使用 trim</span></span><br><span class="line"><span class="type">String</span> <span class="variable">baseCommand</span> <span class="operator">=</span> pcLocation.trim() + <span class="string">&quot; start -c &quot;</span> + </span><br><span class="line">                     cloudName.trim() + <span class="string">&quot;.perfectomobile.com -s &quot;</span> + </span><br><span class="line">                     apiKey.trim();</span><br></pre></td></tr></table></figure>
+<p><strong>目的：</strong></p>
+<ul>
+<li>防止额外空格导致命令格式错误</li>
+<li>清理用户输入的意外空白</li>
+</ul>
+<h2 id="trim-的局限性"><a href="#trim-的局限性" class="headerlink" title="trim() 的局限性"></a>trim() 的局限性</h2><h3 id="1-不能防止命令注入"><a href="#1-不能防止命令注入" class="headerlink" title="1. 不能防止命令注入"></a>1. <strong>不能防止命令注入</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ trim 不能防御注入攻击</span></span><br><span class="line"><span class="type">String</span> <span class="variable">malicious</span> <span class="operator">=</span> <span class="string">&quot;  ; rm -rf /  &quot;</span>.trim();  <span class="comment">// &quot;; rm -rf /&quot;</span></span><br><span class="line"><span class="comment">// 仍然是危险字符串！</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-只删除首尾空白"><a href="#2-只删除首尾空白" class="headerlink" title="2. 只删除首尾空白"></a>2. <strong>只删除首尾空白</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;  hello   world  &quot;</span>;</span><br><span class="line">System.out.println(s.trim());  <span class="comment">// &quot;hello   world&quot;</span></span><br><span class="line"><span class="comment">// 中间的多余空格没有被删除</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-不处理-Unicode-空白"><a href="#3-不处理-Unicode-空白" class="headerlink" title="3. 不处理 Unicode 空白"></a>3. <strong>不处理 Unicode 空白</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// trim() 不删除这些 Unicode 空白字符</span></span><br><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;\u00A0hello\u00A0&quot;</span>;  <span class="comment">// 不间断空格 (nbsp)</span></span><br><span class="line">System.out.println(s.trim());     <span class="comment">// &quot;\u00A0hello\u00A0&quot; (未删除)</span></span><br></pre></td></tr></table></figure>
+<h2 id="现代替代方案"><a href="#现代替代方案" class="headerlink" title="现代替代方案"></a>现代替代方案</h2><h3 id="Java-11-推荐使用-strip"><a href="#Java-11-推荐使用-strip" class="headerlink" title="Java 11+ 推荐使用 strip()"></a>Java 11+ 推荐使用 <code>strip()</code></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// strip() 更符合 Unicode 标准</span></span><br><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;\u00A0  hello  \u2003&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// trim() - 只删除 ≤ U+0020</span></span><br><span class="line">System.out.println(s.trim());    <span class="comment">// &quot;\u00A0  hello  \u2003&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// strip() - 删除所有 Unicode 空白</span></span><br><span class="line">System.out.println(s.strip());   <span class="comment">// &quot;hello&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 还有</span></span><br><span class="line">s.stripLeading();  <span class="comment">// 只删除开头</span></span><br><span class="line">s.stripTrailing(); <span class="comment">// 只删除结尾</span></span><br></pre></td></tr></table></figure>
+<h3 id="删除所有空白（包括中间）"><a href="#删除所有空白（包括中间）" class="headerlink" title="删除所有空白（包括中间）"></a>删除所有空白（包括中间）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;  hello   world  &quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除所有空白</span></span><br><span class="line"><span class="type">String</span> <span class="variable">noSpaces</span> <span class="operator">=</span> s.replaceAll(<span class="string">&quot;\\s+&quot;</span>, <span class="string">&quot;&quot;</span>);  <span class="comment">// &quot;helloworld&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 规范化空白（多个空格变一个）</span></span><br><span class="line"><span class="type">String</span> <span class="variable">normalized</span> <span class="operator">=</span> s.trim().replaceAll(<span class="string">&quot;\\s+&quot;</span>, <span class="string">&quot; &quot;</span>);  <span class="comment">// &quot;hello world&quot;</span></span><br></pre></td></tr></table></figure>
+<h2 id="实际应用场景"><a href="#实际应用场景" class="headerlink" title="实际应用场景"></a>实际应用场景</h2><h3 id="1-处理用户输入"><a href="#1-处理用户输入" class="headerlink" title="1. 处理用户输入"></a>1. <strong>处理用户输入</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">login</span><span class="params">(String username, String password)</span> &#123;</span><br><span class="line">    <span class="comment">// 清理输入</span></span><br><span class="line">    username = username.trim();</span><br><span class="line">    password = password.trim();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 验证</span></span><br><span class="line">    <span class="keyword">if</span> (username.isEmpty() || password.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> authenticate(username, password);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-配置文件解析"><a href="#2-配置文件解析" class="headerlink" title="2. 配置文件解析"></a>2. <strong>配置文件解析</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Properties</span> <span class="variable">props</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">props.load(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;config.properties&quot;</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置文件中可能有：server.host = localhost  </span></span><br><span class="line"><span class="type">String</span> <span class="variable">host</span> <span class="operator">=</span> props.getProperty(<span class="string">&quot;server.host&quot;</span>).trim();  <span class="comment">// &quot;localhost&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-CSV-日志处理"><a href="#3-CSV-日志处理" class="headerlink" title="3. CSV/日志处理"></a>3. <strong>CSV/日志处理</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">csvLine</span> <span class="operator">=</span> <span class="string">&quot; John , Doe , 30 , USA &quot;</span>;</span><br><span class="line">String[] fields = csvLine.split(<span class="string">&quot;,&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; fields.length; i++) &#123;</span><br><span class="line">    fields[i] = fields[i].trim();  <span class="comment">// [&quot;John&quot;, &quot;Doe&quot;, &quot;30&quot;, &quot;USA&quot;]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-数据库查询前清理"><a href="#4-数据库查询前清理" class="headerlink" title="4. 数据库查询前清理"></a>4. <strong>数据库查询前清理</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> User <span class="title function_">findByEmail</span><span class="params">(String email)</span> &#123;</span><br><span class="line">    <span class="comment">// 防止 &quot; admin@test.com &quot; 和 &quot;admin@test.com&quot; 被当作不同值</span></span><br><span class="line">    email = email.trim().toLowerCase();</span><br><span class="line">    <span class="keyword">return</span> userRepository.findByEmail(email);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="性能考虑"><a href="#性能考虑" class="headerlink" title="性能考虑"></a>性能考虑</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// trim() 创建新字符串（如果有空白需要删除）</span></span><br><span class="line"><span class="type">String</span> <span class="variable">original</span> <span class="operator">=</span> <span class="string">&quot;  text  &quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">trimmed</span> <span class="operator">=</span> original.trim();  <span class="comment">// 新字符串对象</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果没有空白，返回原字符串</span></span><br><span class="line"><span class="type">String</span> <span class="variable">noSpace</span> <span class="operator">=</span> <span class="string">&quot;text&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> noSpace.trim();    <span class="comment">// 返回原对象，不创建新对象</span></span><br><span class="line">System.out.println(noSpace == result);  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>作用</strong></td>
+<td>删除字符串首尾空白字符 (≤ U+0020)</td>
+</tr>
+<tr>
+<td><strong>不改变</strong></td>
+<td>字符串中间的空白</td>
+</tr>
+<tr>
+<td><strong>返回值</strong></td>
+<td>新字符串（或原字符串如果无需修改）</td>
+</tr>
+<tr>
+<td><strong>用途</strong></td>
+<td>清理用户输入、配置解析、数据标准化</td>
+</tr>
+<tr>
+<td><strong>局限</strong></td>
+<td>不能防止注入攻击、不处理高位 Unicode 空白</td>
+</tr>
+<tr>
+<td><strong>替代</strong></td>
+<td>Java 11+ 推荐 <code>strip()</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Java%E6%BC%8F%E6%B4%9E%E8%B0%83%E8%AF%95-%E4%BB%A5Retrofit%E4%B8%BA%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/28/Java%E6%BC%8F%E6%B4%9E%E8%B0%83%E8%AF%95-%E4%BB%A5Retrofit%E4%B8%BA%E4%BE%8B/" class="post-title-link" itemprop="url">Java漏洞调试-以Retrofit为例</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-28 22:23:16 / 修改时间：22:24:22" itemprop="dateCreated datePublished" datetime="2026-01-28T22:23:16+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Java漏洞分析时，如果能够对程序进行动态调试，那就可以完整的追踪数据流的控制流，这样就可以知道漏洞的触发过程，对于漏洞原理的理解也会更加清晰。</p>
+<p>以 Retrofit 项目为例，简单记录一下漏洞的调试过程。</p>
+<h3 id="打断点"><a href="#打断点" class="headerlink" title="打断点"></a>打断点</h3><p>一般在程序的三个位置打断点：入口点、核心漏洞点、编码决策点，在该项目中：</p>
+<h4 id="入口点-PathTraversalTest-java-23"><a href="#入口点-PathTraversalTest-java-23" class="headerlink" title="入口点 PathTraversalTest.java:23"></a>入口点 PathTraversalTest.java:23</h4><p>测试用例发起的请求，这里是数据流的起点，参数 ../attacker 传入系统。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">PathTraversalTest</span> &#123;</span><br><span class="line">  <span class="meta">@Test</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pathTraversalWithEncodedTrue</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Example</span> &#123;</span><br><span class="line">      <span class="meta">@GET(&quot;users/&#123;user&#125;/profile&quot;)</span></span><br><span class="line">      Call&lt;ResponseBody&gt; <span class="title function_">getUser</span><span class="params">(<span class="meta">@Path(value = &quot;user&quot;, encoded = true)</span> String user)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Inputting a path traversal sequence</span></span><br><span class="line">    <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> buildRequest(Example.class, <span class="string">&quot;../attacker&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// If vulnerable, the URL will be resolved as http://example.com/attacker/profile</span></span><br><span class="line">    <span class="comment">// effectively escaping the &quot;users&quot; path segment.</span></span><br><span class="line">    System.out.println(<span class="string">&quot;Resolved URL: &quot;</span> + request.url().toString());</span><br><span class="line">    assertThat(request.url().toString()).isEqualTo(<span class="string">&quot;http://example.com/attacker/profile&quot;</span>);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="核心漏洞点-RequestBuilder-java-94"><a href="#核心漏洞点-RequestBuilder-java-94" class="headerlink" title="核心漏洞点 RequestBuilder.java:94"></a>核心漏洞点 RequestBuilder.java:94</h4><p>观察 relativeUrl 在替换前后的变化。这里会调用 canonicalizeForPath ，可以单步跟进这个函数，查看为什么 encoded=true 时 ../ 没有被编码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">addPathParam</span><span class="params">(String name, String value, <span class="type">boolean</span> encoded)</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (relativeUrl == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// The relative URL is cleared when the first query parameter is set.</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AssertionError</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  relativeUrl = relativeUrl.replace(<span class="string">&quot;&#123;&quot;</span> + name + <span class="string">&quot;&#125;&quot;</span>, canonicalizeForPath(value, encoded));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="编码决策逻辑-RequestBuilder-java-103"><a href="#编码决策逻辑-RequestBuilder-java-103" class="headerlink" title="编码决策逻辑 RequestBuilder.java:103"></a>编码决策逻辑 RequestBuilder.java:103</h4><p>这是判断是否需要编码的核心逻辑。如果 alreadyEncoded 为 true （来自 @Path(encoded=true) ），这里的判断会直接跳过 / 的编码，导致路径遍历字符被保留。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title function_">canonicalizeForPath</span><span class="params">(String input, <span class="type">boolean</span> alreadyEncoded)</span> &#123;</span><br><span class="line">    <span class="type">int</span> codePoint;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>, limit = input.length(); i &lt; limit; i += Character.charCount(codePoint)) &#123;</span><br><span class="line">      codePoint = input.codePointAt(i);</span><br><span class="line">      <span class="keyword">if</span> (codePoint &lt; <span class="number">0x20</span> || codePoint &gt;= <span class="number">0x7f</span></span><br><span class="line">          || PATH_SEGMENT_ALWAYS_ENCODE_SET.indexOf(codePoint) != -<span class="number">1</span></span><br><span class="line">          || (!alreadyEncoded &amp;&amp; (codePoint == <span class="string">&#x27;/&#x27;</span> || codePoint == <span class="string">&#x27;%&#x27;</span>))) &#123;</span><br><span class="line">        <span class="comment">// Slow path: the character at i requires encoding!</span></span><br><span class="line">        <span class="type">Buffer</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Buffer</span>();</span><br><span class="line">        out.writeUtf8(input, <span class="number">0</span>, i);</span><br><span class="line">        canonicalizeForPath(out, input, i, limit, alreadyEncoded);</span><br><span class="line">        <span class="keyword">return</span> out.readUtf8();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn -pl retrofit <span class="built_in">test</span> -Dtest=PathTraversalTest -Dmaven.surefire.debug</span><br></pre></td></tr></table></figure>
+<p>等待终端显示 Listening for transport dt_socket at address: 5005</p>
+<p>在 IDE 中使用 Attach to Remote JVM (端口 5005) 连接调试器，一般位置都在IDE的右上角，选择调试那个虫子按钮</p>
+<p>程序会在第一个断点停下，然后可以使用 Step Over (F10) 和 Step Into (F11) 逐步跟踪数据流向</p>
+<p>在 launch.json 中添加配置内容：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Attach to Remote JVM&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="string">&quot;attach&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hostName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;localhost&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">5005</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        ...</span><br><span class="line">    <span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/28/Java%E6%BC%8F%E6%B4%9E%E8%B0%83%E8%AF%95-%E4%BB%A5Retrofit%E4%B8%BA%E4%BE%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/%E7%94%A8URL%E7%BC%96%E7%A0%81%E6%9C%BA%E5%88%B6%E9%98%B2%E5%BE%A1%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/28/%E7%94%A8URL%E7%BC%96%E7%A0%81%E6%9C%BA%E5%88%B6%E9%98%B2%E5%BE%A1%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">用URL编码机制防御路径遍历漏洞</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-28 22:22:23 / 修改时间：22:22:59" itemprop="dateCreated datePublished" datetime="2026-01-28T22:22:23+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>为什么服务器会将 ..%2Fadmin 视为一个名为 “…/admin” 的普通用户名，找不到该用户，返回 404？</p>
+<p>这是一个非常深刻且核心的计算机安全问题，涉及到 <strong>URL 编码（Percent-encoding）的本质机制</strong>。</p>
+<p>简单来说，区别在于：<strong><code>/</code> 是指令（分隔符），而 <code>%2F</code> 是数据（纯文本）。</strong></p>
+<p>我们可以通过“<strong>信封与地址</strong>”或者“<strong>文件系统</strong>”的逻辑来拆解这个问题：</p>
+<h3 id="1-核心原理：控制字符-vs-数据字符"><a href="#1-核心原理：控制字符-vs-数据字符" class="headerlink" title="1. 核心原理：控制字符 vs 数据字符"></a>1. 核心原理：控制字符 vs 数据字符</h3><p>在 HTTP 协议和 URL 标准（RFC 3986）中，某些字符具有特殊的“结构化含义”，被称为保留字符（Reserved Characters）。</p>
+<ul>
+<li><strong><code>/</code> (斜杠)</strong>：这是一个<strong>控制字符</strong>。它的作用是告诉服务器：“当前的目录结束了，进入下一级目录”。</li>
+<li><strong><code>..</code> (双点)</strong>：配合斜杠使用时，也是<strong>控制指令</strong>。它的作用是告诉服务器：“返回上一级目录”。</li>
+</ul>
+<p>当 Retrofit（默认为 <code>encoded=false</code>）将 <code>/</code> 转义为 <code>%2F</code> 时，它实际上是在做一件最重要的事情：<strong>“去功能化”</strong>。</p>
+<h3 id="2-服务器视角的解析过程对比"><a href="#2-服务器视角的解析过程对比" class="headerlink" title="2. 服务器视角的解析过程对比"></a>2. 服务器视角的解析过程对比</h3><p>假设服务器收到请求，Web 服务器（如 Nginx、Tomcat）会按照 <code>/</code> 来切割路径，决定把请求路由到哪里。</p>
+<h4 id="场景-A：攻击成功（未编码）"><a href="#场景-A：攻击成功（未编码）" class="headerlink" title="场景 A：攻击成功（未编码）"></a>场景 A：攻击成功（未编码）</h4><p><strong>URL</strong>: <code>http://example.com/users/../admin/profile</code></p>
+<ol>
+<li>服务器看到第一个 <code>/</code>：进入 <code>users</code> 目录。</li>
+<li>服务器看到第二个 <code>/</code>：发现前面是 <code>..</code>。<ul>
+<li><strong>指令生效</strong>：服务器执行“回退”操作，跳出了 <code>users</code> 目录，回到了根目录。</li>
+</ul>
+</li>
+<li>服务器继续解析：进入 <code>admin</code> 目录。</li>
+<li><strong>结果</strong>：最终访问的是 <code>/admin/profile</code>。</li>
+</ol>
+<hr>
+<h4 id="场景-B：防御成功（已编码）"><a href="#场景-B：防御成功（已编码）" class="headerlink" title="场景 B：防御成功（已编码）"></a>场景 B：防御成功（已编码）</h4><p><strong>URL</strong>: <code>http://example.com/users/..%2Fadmin/profile</code></p>
+<ol>
+<li>服务器扫描 URL，寻找分隔符 <code>/</code>。</li>
+<li><strong>关键点</strong>：服务器<strong>不认识</strong> <code>%2F</code> 是分隔符。对服务器来说，<code>%2F</code> 只是三个普通的字符：<code>%</code>、<code>2</code>、<code>F</code>。它们和 <code>a</code>、<code>b</code>、<code>c</code> 没有任何区别。</li>
+<li>服务器的解析逻辑如下：<ul>
+<li><strong>第一段</strong>：<code>users</code>（进入该层级）。</li>
+<li><strong>第二段</strong>：读取下一个 <code>/</code> 之前的所有内容。这块内容是：<code>..%2Fadmin</code>。</li>
+</ul>
+</li>
+<li><strong>路由决策</strong>：<ul>
+<li>服务器会在 <code>users</code> 的上下文里，寻找一个名字叫 <code>..%2Fadmin</code> 的资源。</li>
+<li>注意：它<strong>不是</strong>寻找一个叫 <code>..</code> 的文件夹，也不是寻找一个叫 <code>admin</code> 的文件夹。</li>
+<li>它是在找<strong>单个</strong>文件/资源，这个资源的完整名字就叫 <code>..%2Fadmin</code>（或者解码后叫 <code>../admin</code>）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-为什么是-404？"><a href="#3-为什么是-404？" class="headerlink" title="3. 为什么是 404？"></a>3. 为什么是 404？</h3><p>因为在数据库或业务逻辑中，肯定不存在一个用户的名字叫 <code>../admin</code>。</p>
+<ul>
+<li>你的后端逻辑大概是这样的：<code>SELECT * FROM users WHERE username = ?</code></li>
+<li>传入的参数是：<code>&quot;../admin&quot;</code></li>
+<li>数据库查询结果：空。</li>
+<li>服务器返回：<strong>404 Not Found</strong>（用户不存在）。</li>
+</ul>
+<p><strong>最重要的是：请求依然是被路由到了 <code>getUser</code> 这个接口，而没有跳转到 <code>getAdmin</code> 接口。</strong></p>
+<h3 id="4-总结：买火车票的隐喻"><a href="#4-总结：买火车票的隐喻" class="headerlink" title="4. 总结：买火车票的隐喻"></a>4. 总结：买火车票的隐喻</h3><p>想象去火车站买票：</p>
+<ul>
+<li><p><strong>未编码（漏洞）</strong>：你递给售票员一张纸条，上面写着：“我要去<strong>上海/..</strong>”。</p>
+<ul>
+<li>售票员（服务器）看到 <code>/</code>，理解为分隔。</li>
+<li>先定位到“上海”，然后看到“..”，于是退回上一级。</li>
+<li>结果：可能卖给了你一张起步站的票，或者把你送到了错误的地方。</li>
+</ul>
+</li>
+<li><p><strong>已编码（安全）</strong>：你把 <code>/</code> 进行了打包（编码），装进一个盒子里。纸条写着：“我要去【<strong>上海%2F..</strong>】”。</p>
+<ul>
+<li>售票员看到这只是<strong>一个地名</strong>。</li>
+<li>他在系统里搜索名为“上海/..”的城市。</li>
+<li>系统提示：查无此地（404）。</li>
+<li><strong>安全</strong>：因为他没有执行“退回”这个动作，只是在傻傻地找一个名字很奇怪的城市。</li>
+</ul>
+</li>
+</ul>
+<p>这就是为什么 <code>%2F</code> 能够防御路径遍历的根本原因。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1004,475 +1551,6 @@
 <li><strong>慎用 <code>encoded = true</code></strong>：除非你非常清楚自己在做什么，并且确定输入源绝对安全（例如来自内部配置而非用户输入），否则永远使用默认值（<code>false</code>）。</li>
 <li><strong>输入校验</strong>：在调用网络库之前，对用户输入的敏感字符（如 <code>/</code>, <code>\</code>, <code>.</code>）进行过滤或校验。</li>
 </ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/27/Spark-CVE-2016-9177-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/27/Spark-CVE-2016-9177-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="post-title-link" itemprop="url">Spark CVE-2016-9177 漏洞研究</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2026-01-27 22:23:15" itemprop="dateCreated datePublished" datetime="2026-01-27T22:23:15+08:00">2026-01-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-01-28 22:14:55" itemprop="dateModified" datetime="2026-01-28T22:14:55+08:00">2026-01-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>CVE-2016-9177 是 Spark (Java Web Framework) 中一个允许攻击者读取服务器任意文件的严重漏洞。官方补丁如下：</p>
-<p><img src="../uploads/Spark20161.png" alt=""></p>
-<p>添加了校验逻辑：</p>
-<p><img src="../uploads/Spark20162.png" alt=""></p>
-<h3 id="1-漏洞核心原理：盲目的-“Exists”-检查"><a href="#1-漏洞核心原理：盲目的-“Exists”-检查" class="headerlink" title="1. 漏洞核心原理：盲目的 “Exists” 检查"></a>1. 漏洞核心原理：盲目的 “Exists” 检查</h3><p>在修复之前，<code>ClassPathResourceHandler.java</code> 和 <code>ExternalResourceHandler.java</code> 的逻辑非常简单，甚至可以说过于单纯。</p>
-<p><strong>漏洞代码逻辑（Before）：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 伪代码逻辑</span></span><br><span class="line"><span class="keyword">public</span> Resource <span class="title function_">getResource</span><span class="params">(String path)</span> &#123;</span><br><span class="line">    <span class="comment">// Spark 根据 URL 拼接出文件路径，并创建一个 Resource 对象</span></span><br><span class="line">    <span class="type">Resource</span> <span class="variable">resource</span> <span class="operator">=</span> ...; </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 漏洞点：只检查了文件是否存在</span></span><br><span class="line">    <span class="keyword">return</span> (resource != <span class="literal">null</span> &amp;&amp; resource.exists()) ? resource : <span class="literal">null</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>攻击场景：</strong><br>假设开发者配置了静态文件目录为 <code>/var/www/public</code></p>
-<ol>
-<li><strong>正常请求</strong>：用户请求 <code>/style.css</code>。系统查找 <code>/var/www/public/style.css</code> -&gt; 存在 -&gt; 返回文件。</li>
-<li><strong>攻击请求</strong>：用户请求 <code>/../../../../etc/passwd</code>（URL编码后）。</li>
-<li><strong>解析过程</strong>：<ul>
-<li>Spark 将请求路径拼接到根目录：<code>/var/www/public/../../../../etc/passwd</code>。</li>
-<li>操作系统或 Java 的 File 类解析这个路径。<code>..</code> 代表上一级目录，路径被“标准化”解析为 <code>/etc/passwd</code>。</li>
-</ul>
-</li>
-<li><strong>漏洞触发</strong>：<ul>
-<li>旧代码执行 <code>resource.exists()</code>。</li>
-<li>由于 <code>/etc/passwd</code> 确实存在于磁盘上，函数返回 <code>true</code>。</li>
-<li><strong>Spark 直接把 <code>/etc/passwd</code> 的内容发给了攻击者。</strong></li>
-</ul>
-</li>
-</ol>
-<p><strong>根本原因</strong>：旧代码只关心“文件在不在”，完全没有校验“文件还在不在我允许的文件夹里”。</p>
-<h3 id="2-修复方案分析：引入“路径校验”-Path-Confinement"><a href="#2-修复方案分析：引入“路径校验”-Path-Confinement" class="headerlink" title="2. 修复方案分析：引入“路径校验” (Path Confinement)"></a>2. 修复方案分析：引入“路径校验” (Path Confinement)</h3><p>修复后的代码引入了一个全新的类 <code>DirectoryTraversal.java</code>，并强制所有静态文件请求必须通过这个类的检查。</p>
-<h4 id="A-新增防御类-DirectoryTraversal-java"><a href="#A-新增防御类-DirectoryTraversal-java" class="headerlink" title="A. 新增防御类 DirectoryTraversal.java"></a>A. 新增防御类 <code>DirectoryTraversal.java</code></h4><p>这是修复的核心。它定义了两个静态方法：</p>
-<ol>
-<li><code>protectAgainstInClassPath</code> (针对 JAR 包内资源)</li>
-<li><code>protectAgainstForExternal</code> (针对磁盘文件资源)</li>
-</ol>
-<p><strong>防御逻辑（After）：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">protectAgainstForExternal</span><span class="params">(String path)</span> &#123;</span><br><span class="line">    <span class="comment">// 1. 获取请求的文件路径，并移除首尾斜杠（标准化）</span></span><br><span class="line">    <span class="comment">// 2. 检查：这个路径是否以 &quot;允许的根目录&quot; (StaticFilesFolder.external()) 开头？</span></span><br><span class="line">    <span class="keyword">if</span> (!removeLeadingAndTrailingSlashesFrom(path).startsWith(StaticFilesFolder.external())) &#123;</span><br><span class="line">        <span class="comment">// 如果不是以根目录开头，说明发生了目录逃逸</span></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">DirectoryTraversalDetection</span>(<span class="string">&quot;external&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="B-在资源处理器中植入检查"><a href="#B-在资源处理器中植入检查" class="headerlink" title="B. 在资源处理器中植入检查"></a>B. 在资源处理器中植入检查</h4><p>在 <code>ClassPathResourceHandler</code> 和 <code>ExternalResourceHandler</code> 中，<code>return</code> 之前增加了一道关卡：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (resource != <span class="literal">null</span> &amp;&amp; resource.exists()) &#123;</span><br><span class="line">    <span class="comment">// 在返回文件之前，先校验路径安全性</span></span><br><span class="line">    DirectoryTraversal.protectAgainstForExternal(resource.getPath()); </span><br><span class="line">    <span class="keyword">return</span> resource;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="C-拦截异常"><a href="#C-拦截异常" class="headerlink" title="C. 拦截异常"></a>C. 拦截异常</h4><p>在 <code>StaticFilesConfiguration.java</code> 中，捕获了 <code>DirectoryTraversalDetection</code> 异常。一旦捕获到这个异常，说明有人试图进行目录遍历攻击，系统将记录日志并拒绝服务（返回 false，最终导致 404 或 403）。</p>
-<h3 id="3-为什么这样能修好？"><a href="#3-为什么这样能修好？" class="headerlink" title="3. 为什么这样能修好？"></a>3. 为什么这样能修好？</h3><p>让我们回到刚才的攻击场景：</p>
-<ol>
-<li><strong>攻击者请求</strong>：<code>/../../../../etc/passwd</code></li>
-<li><strong>解析路径</strong>：Java 解析出的 <code>resource.getPath()</code> 绝对路径变成了 <code>/etc/passwd</code>。</li>
-<li><strong>安全检查</strong>：<ul>
-<li><code>StaticFilesFolder.external()</code> (允许的根目录) 是 <code>/var/www/public</code>。</li>
-<li>代码执行检查：<code>&quot;/etc/passwd&quot;.startsWith(&quot;/var/www/public&quot;)</code> ?</li>
-<li><strong>结果为 False</strong>。</li>
-</ul>
-</li>
-<li><strong>结果</strong>：抛出异常，拦截请求。</li>
-</ol>
-<h3 id="4-总结与启示"><a href="#4-总结与启示" class="headerlink" title="4. 总结与启示"></a>4. 总结与启示</h3><p>GitHub 中的漏洞修复 Diff 展示了 Java 中防御目录遍历的标准范式（Best Practice）：</p>
-<ol>
-<li><strong>不要相信输入</strong>：永远不要直接使用用户传来的路径去读取文件。</li>
-<li><strong>路径标准化 (Canonicalization)</strong>：在比较路径之前，必须解析所有的 <code>..</code>、<code>.</code> 和符号链接（Java 中通常用 <code>getCanonicalPath()</code>，虽然这里Spark用了自定义的 <code>startsWith</code> 逻辑，原理类似）。</li>
-<li><strong>白名单前缀检查</strong>：<ul>
-<li><strong>错误做法</strong>：检查路径里有没有 <code>..</code> (容易被绕过)。</li>
-<li><strong>正确做法</strong>：<strong>最终解析出来的绝对路径，必须以限定的 Base 路径开头。</strong></li>
-</ul>
-</li>
-</ol>
-<h3 id="关于-Java-中的静态资源的学习"><a href="#关于-Java-中的静态资源的学习" class="headerlink" title="关于 Java 中的静态资源的学习"></a>关于 Java 中的静态资源的学习</h3><p>我一直认为“Java 就是写逻辑、查数据库的”，并不理解读取静态资源的作用。简单来说：<strong>如果没有静态资源，Web 世界将只剩下纯文本，没有排版、没有图片、也没有交互。</strong></p>
-<h4 id="1-什么是静态资源？"><a href="#1-什么是静态资源？" class="headerlink" title="1. 什么是静态资源？"></a>1. 什么是静态资源？</h4><p>在 Web 开发中，<strong>静态资源</strong>指的是那些<strong>不需要经过服务器动态计算或处理</strong>，原本长什么样，发给浏览器就是什么样的文件。</p>
-<p>主要包括以下几类：</p>
-<ul>
-<li><strong>HTML</strong>：网页的骨架（比如 <code>index.html</code>）。</li>
-<li><strong>CSS</strong>：网页的“皮肤”和排版（比如 <code>style.css</code>，决定按钮是蓝色的、文字居中）。</li>
-<li><strong>JavaScript (JS)</strong>：网页的交互逻辑（比如 <code>app.js</code>，点击按钮弹出窗口、发送 AJAX 请求）。</li>
-<li><strong>图片/媒体</strong>：Logo、照片、图标、字体文件（<code>logo.png</code>, <code>font.woff</code>）。</li>
-</ul>
-<h4 id="2-为什么-Java-Web-框架需要读取它们？"><a href="#2-为什么-Java-Web-框架需要读取它们？" class="headerlink" title="2. 为什么 Java Web 框架需要读取它们？"></a>2. 为什么 Java Web 框架需要读取它们？</h4><p>我们可能会想：“Java 只要负责算出数据（比如 JSON）给前端不就好了吗？”</p>
-<p>但在很多场景下，Java 应用不仅是一个 API 提供者，它还是一个<strong>完整的 Web 服务器</strong>。</p>
-<p>原因一：为了让浏览器能“看到”完整的网页</p>
-<p>浏览器请求访问 <code>http://localhost:8080/index.html</code> 时，服务器（Java 程序）必须去硬盘或者 JAR 包里找到这个 <code>index.html</code> 文件，并把它把<strong>读取</strong>出来，通过网络<strong>发送</strong>给浏览器。</p>
-<p>如果 Java 框架没有“读取静态资源”的功能，浏览器就拿不到 HTML，用户就什么都看不见。同理，如果拿不到 CSS，网页就是乱的；拿不到 JS，网页就是死的。</p>
-<p>原因二：开发便利性（开箱即用）</p>
-<p>像 Spark Java、Spring Boot 这种现代框架，都追求<strong>开发效率</strong>。</p>
-<ul>
-<li><strong>如果没有这个功能</strong>：想写一个带简单页面的小系统，得先装一个 Nginx 或 Apache 服务器来托管 HTML/CSS，再启动一个 Java 服务器写逻辑，然后配置跨域……这太麻烦了。</li>
-<li><strong>有了这个功能</strong>：把 HTML/CSS 往项目的 <code>resources</code> 文件夹里一扔，启动 Java 程序，就可以直接访问了。<strong>这对于开发测试、小型应用、管理后台非常重要。</strong></li>
-</ul>
-<p>原因三：打包分发的便捷（All-in-One）</p>
-<p>代码里的 <code>local</code> 变量，它支持从 <strong>Classpath</strong> 读取。这意味着我们可以把 HTML/CSS/JS 全部打进一个 <code>.jar</code> 文件里。</p>
-<ul>
-<li><strong>好处</strong>：交付给客户时，只需要给一个 jar 包，运行起来就是一个带完整界面的 Web 系统。不需要告诉客户“请先安装 Web 服务器，再配置路径…”。</li>
-</ul>
-<h4 id="3-这是所有-Java-Web-框架的标配吗？"><a href="#3-这是所有-Java-Web-框架的标配吗？" class="headerlink" title="3. 这是所有 Java Web 框架的标配吗？"></a>3. 这是所有 Java Web 框架的标配吗？</h4><p><strong>是的，基本上 99% 的 Java Web 框架都具备这个功能。</strong><br>无论是老牌的 Servlet/JSP、Struts，还是现代的 Spring Boot、Spark Java、Javalin，它们都内置了静态资源处理器（ResourceHandler）。</p>
-<h4 id="4-进阶视角：什么时候-Java-不应该读取静态资源？"><a href="#4-进阶视角：什么时候-Java-不应该读取静态资源？" class="headerlink" title="4. 进阶视角：什么时候 Java 不应该读取静态资源？"></a>4. 进阶视角：什么时候 Java <strong>不应该</strong>读取静态资源？</h4><p>虽然 Java 框架<strong>具备</strong>这个功能，但在大型互联网公司的<strong>生产环境</strong>中，我们通常<strong>不会</strong>让 Java 去干这件事。</p>
-<p><strong>为什么？</strong></p>
-<ul>
-<li><strong>Java 很“贵”</strong>：Java 的强项是处理复杂的业务逻辑（算钱、处理订单、查数据库）。读取文件并发送给浏览器这种简单的 IO 操作，Java 虽然能做，但有点“大材小用”，而且消耗 Java 虚拟机的线程和内存。</li>
-<li><strong>Nginx 更专业</strong>：在生产架构中，我们通常会在 Java 前面挡一层 <strong>Nginx</strong> 或者使用 <strong>CDN</strong>。<ul>
-<li><strong>Nginx</strong> 专门做静态文件服务，性能极高，并发能力极强。</li>
-<li><strong>CDN</strong> 把图片缓存到离用户最近的节点。</li>
-</ul>
-</li>
-</ul>
-<p><strong>架构演变图：</strong></p>
-<ol>
-<li><p><strong>单体/开发模式（Spark 项目）：</strong></p>
-<blockquote>
-<p>浏览器 -&gt; <strong>Java (Spark)</strong> -&gt; [处理逻辑 + 读取 CSS/JS/图片]</p>
-</blockquote>
-</li>
-<li><p><strong>生产/高性能模式：</strong></p>
-<blockquote>
-<p>浏览器 -&gt; <strong>Nginx</strong> (如果请求是图片/CSS/JS，直接返回)</p>
-<pre><code>         |
-         (如果请求是API数据) -&gt; **Java (Spark)** -&gt; [只处理业务逻辑]
-</code></pre></blockquote>
-</li>
-</ol>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>代码里的 <code>StaticFilesFolder</code> 存在的意义是：</p>
-<p><strong>让 Spark Java 具备独立对外提供完整 Web 服务（不仅仅是 API，还包括页面和图片）的能力。这对于快速开发、独立部署微服务、或者构建自包含的 Web 应用是必不可少的基础设施。</strong></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/27/Spark-CVE-2018-9159-%E6%BC%8F%E6%B4%9E%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%8B%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/27/Spark-CVE-2018-9159-%E6%BC%8F%E6%B4%9E%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%8B%9F/" class="post-title-link" itemprop="url">Spark CVE-2018-9159 漏洞代码模拟</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-27 22:22:58 / 修改时间：22:26:00" itemprop="dateCreated datePublished" datetime="2026-01-27T22:22:58+08:00">2026-01-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>CVE-2018-9159 交互式演示 Demo (Full Flow Interactive Demo)</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spark;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.OutputStream;</span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * CVE-2018-9159 全流程交互式演示 (Full Flow Interactive Demo)</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 这是一个完全独立的 Java 程序，模拟了一个微型的 Spark Web 服务器。</span></span><br><span class="line"><span class="comment"> * 它实现了从 &quot;接收用户输入&quot; 到 &quot;读取并输出文件内容&quot; 的完整闭环。</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 核心功能：</span></span><br><span class="line"><span class="comment"> * 1. 模拟 Web 服务器启动，等待用户输入 URL 路径。</span></span><br><span class="line"><span class="comment"> * 2. 模拟 Spark 的请求处理流程 (Matcher -&gt; StaticFiles -&gt; ResourceHandler)。</span></span><br><span class="line"><span class="comment"> * 3. 包含真实的漏洞逻辑 (UriPath 绕过 + DirectoryTraversal 绕过)。</span></span><br><span class="line"><span class="comment"> * 4. 包含真实的文件读取逻辑 (Sink)，演示敏感数据泄露。</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 使用方法：</span></span><br><span class="line"><span class="comment"> * 运行程序后，在控制台输入路径，例如：</span></span><br><span class="line"><span class="comment"> * - 正常访问: /public/index.html</span></span><br><span class="line"><span class="comment"> * - 攻击尝试: /..%5cpublic_secret/secret.txt (模拟 URL 编码输入)</span></span><br><span class="line"><span class="comment"> * - 攻击尝试: \..\public_secret\secret.txt (模拟解码后的输入)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CVE_2018_9159_Full_Demo</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 模拟配置：静态资源根目录位于 classpath 下的 &quot;public&quot; 文件夹</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">STATIC_FILES_FOLDER</span> <span class="operator">=</span> <span class="string">&quot;public&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;=== Spark CVE-2018-9159 漏洞全流程演示服务器启动 ===&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;静态资源根目录配置为: classpath:/&quot;</span> + STATIC_FILES_FOLDER);</span><br><span class="line">        System.out.println(<span class="string">&quot;尝试输入路径来访问文件 (输入 &#x27;exit&#x27; 退出):&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;提示: 敏感文件位于兄弟目录 public_secret/secret.txt&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;--------------------------------------------------&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">scanner</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            System.out.print(<span class="string">&quot;\n[Client] GET &quot;</span>);</span><br><span class="line">            <span class="type">String</span> <span class="variable">inputPath</span> <span class="operator">=</span> scanner.nextLine();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="string">&quot;exit&quot;</span>.equalsIgnoreCase(inputPath)) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 模拟 Web 服务器接收请求</span></span><br><span class="line">            handleRequest(inputPath);</span><br><span class="line">        &#125;</span><br><span class="line">        scanner.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 模拟 Spark 的请求处理入口 (Source)</span></span><br><span class="line"><span class="comment">     * 对应: MatcherFilter.doFilter -&gt; StaticFilesConfiguration.consume</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">handleRequest</span><span class="params">(String pathInfo)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;[Server] 接收到请求: &quot;</span> + pathInfo);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 模拟 URL 解码 (Web 服务器通常会自动处理 %5c -&gt; \)</span></span><br><span class="line">        <span class="keyword">if</span> (pathInfo.contains(<span class="string">&quot;%5c&quot;</span>) || pathInfo.contains(<span class="string">&quot;%5C&quot;</span>)) &#123;</span><br><span class="line">            pathInfo = pathInfo.replace(<span class="string">&quot;%5c&quot;</span>, <span class="string">&quot;\\&quot;</span>).replace(<span class="string">&quot;%5C&quot;</span>, <span class="string">&quot;\\&quot;</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;[Server] URL 解码后路径: &quot;</span> + pathInfo);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 进入资源处理流程</span></span><br><span class="line">            <span class="type">boolean</span> <span class="variable">consumed</span> <span class="operator">=</span> consumeWithFileResourceHandlers(pathInfo);</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (!consumed) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;[Server] 404 Not Found - 未找到静态资源&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;[Server] 403 Forbidden - 安全拦截: &quot;</span> + e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 模拟静态资源分发逻辑</span></span><br><span class="line"><span class="comment">     * 对应: StaticFilesConfiguration.consumeWithFileResourceHandlers</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">consumeWithFileResourceHandlers</span><span class="params">(String pathInfo)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 1. [Propagation] 路径规范化 (漏洞点 1: UriPath)</span></span><br><span class="line">        <span class="comment">// 试图移除 ..，但无法处理反斜杠 \</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">canonicalPath</span> <span class="operator">=</span> UriPath.canonical(pathInfo);</span><br><span class="line">        <span class="keyword">if</span> (canonicalPath == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 如果检测到标准目录遍历 (如 /../)，返回 null</span></span><br><span class="line">            System.out.println(<span class="string">&quot;    [Log] UriPath 拦截了非法路径 (返回 null)&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;    [Log] UriPath 规范化结果: &quot;</span> + canonicalPath);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. [Propagation] 路径拼接</span></span><br><span class="line">        <span class="comment">// 将请求路径拼接到根目录 /public 后面</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">addedPath</span> <span class="operator">=</span> addPaths(<span class="string">&quot;/&quot;</span> + STATIC_FILES_FOLDER, canonicalPath);</span><br><span class="line">        System.out.println(<span class="string">&quot;    [Log] 拼接根目录后: &quot;</span> + addedPath);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. [Propagation] 创建资源对象时的路径清洗</span></span><br><span class="line">        <span class="comment">// StringUtils.cleanPath 会识别反斜杠并解析 ..，导致路径指向 public_secret</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">finalPath</span> <span class="operator">=</span> StringUtils.cleanPath(addedPath);</span><br><span class="line">        <span class="comment">// 移除开头的 / 以便 ClassLoader 加载</span></span><br><span class="line">        <span class="keyword">if</span> (finalPath.startsWith(<span class="string">&quot;/&quot;</span>)) &#123;</span><br><span class="line">            finalPath = finalPath.substring(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;    [Log] 最终解析出的资源路径: &quot;</span> + finalPath);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4. [Sink Check] 安全校验 (漏洞点 2: DirectoryTraversal)</span></span><br><span class="line">        <span class="comment">// 检查路径是否以 public 开头</span></span><br><span class="line">        checkDirectoryTraversal(finalPath);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 5. [Sink] 读取文件并输出 (模拟响应)</span></span><br><span class="line">        <span class="comment">// 到了这里，说明所有检查都通过了，开始读取文件</span></span><br><span class="line">        <span class="keyword">return</span> serveResource(finalPath);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 模拟从 Classpath 读取文件并输出内容 (真正的 Sink)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">serveResource</span><span class="params">(String resourcePath)</span> &#123;</span><br><span class="line">        <span class="comment">// 修改点：直接使用文件系统路径读取，不再依赖 ClassLoader</span></span><br><span class="line">        <span class="comment">// 获取当前项目的资源目录绝对路径</span></span><br><span class="line">        java.io.<span class="type">File</span> <span class="variable">resourceFile</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">java</span>.io.File(<span class="string">&quot;../resources/&quot;</span> + resourcePath);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!resourceFile.exists() || resourceFile.isDirectory()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">// 文件不存在</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;    [Sink] 正在读取文件: &quot;</span> + resourceFile.getAbsolutePath());</span><br><span class="line">        System.out.println(<span class="string">&quot;    ↓ ↓ ↓ 文件内容 ↓ ↓ ↓&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> (<span class="type">InputStream</span> <span class="variable">inputStream</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">java</span>.io.FileInputStream(resourceFile)) &#123;</span><br><span class="line">            <span class="type">byte</span>[] buffer = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="type">int</span> bytesRead;</span><br><span class="line">            <span class="keyword">while</span> ((bytesRead = inputStream.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                <span class="comment">// 将文件内容输出到控制台 (模拟写回 HTTP 响应)</span></span><br><span class="line">                System.out.write(buffer, <span class="number">0</span>, bytesRead);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;\n    ↑ ↑ ↑ 文件结束 ↑ ↑ ↑&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;    [Error] 读取文件失败: &quot;</span> + e.getMessage());</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ========================================================================</span></span><br><span class="line">    <span class="comment">// 核心漏洞逻辑模拟 (与 Spark 源码保持一致)</span></span><br><span class="line">    <span class="comment">// ========================================================================</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">UriPath</span> &#123;</span><br><span class="line">        <span class="comment">// 漏洞：只处理正斜杠，忽略反斜杠</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">canonical</span><span class="params">(String path)</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (path == <span class="literal">null</span> || path.length() == <span class="number">0</span>) <span class="keyword">return</span> path;</span><br><span class="line">            <span class="comment">// 简单模拟 Spark 的逻辑：只要发现 /../ 就拦截，但不检查 \..\</span></span><br><span class="line">            <span class="keyword">if</span> (path.contains(<span class="string">&quot;/../&quot;</span>) || path.equals(<span class="string">&quot;/..&quot;</span>) || path.endsWith(<span class="string">&quot;/..&quot;</span>)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">null</span>; </span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> path;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">StringUtils</span> &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">FOLDER_SEPARATOR</span> <span class="operator">=</span> <span class="string">&quot;/&quot;</span>;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">WINDOWS_FOLDER_SEPARATOR</span> <span class="operator">=</span> <span class="string">&quot;\\&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 能够识别反斜杠并进行替换和解析</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">cleanPath</span><span class="params">(String path)</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (path == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">            <span class="comment">// 1. 替换反斜杠</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">pathToUse</span> <span class="operator">=</span> replace(path, WINDOWS_FOLDER_SEPARATOR, FOLDER_SEPARATOR);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 2. 简单模拟解析逻辑：把 /public/../ 替换掉</span></span><br><span class="line">            <span class="comment">// 真实情况是解析所有 ..，这里为了演示简化处理</span></span><br><span class="line">            <span class="keyword">if</span> (pathToUse.contains(<span class="string">&quot;/../&quot;</span>)) &#123;</span><br><span class="line">                <span class="comment">// 如果是 /public/../public_secret... -&gt; /public_secret...</span></span><br><span class="line">                <span class="comment">// 模拟 .. 抵消了上一级目录</span></span><br><span class="line">                <span class="type">int</span> <span class="variable">doubleDotIndex</span> <span class="operator">=</span> pathToUse.indexOf(<span class="string">&quot;/../&quot;</span>);</span><br><span class="line">                <span class="keyword">if</span> (doubleDotIndex &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="type">int</span> <span class="variable">prevSlash</span> <span class="operator">=</span> pathToUse.lastIndexOf(<span class="string">&quot;/&quot;</span>, doubleDotIndex - <span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">if</span> (prevSlash &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                        <span class="keyword">return</span> pathToUse.substring(<span class="number">0</span>, prevSlash + <span class="number">1</span>) + pathToUse.substring(doubleDotIndex + <span class="number">4</span>);</span><br><span class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (doubleDotIndex == <span class="number">0</span>) &#123; <span class="comment">// 开头的 /../</span></span><br><span class="line">                         <span class="keyword">return</span> pathToUse.substring(<span class="number">4</span>);</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123; <span class="comment">// 类似于 public/../</span></span><br><span class="line">                         <span class="keyword">return</span> pathToUse.substring(doubleDotIndex + <span class="number">4</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> pathToUse;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">replace</span><span class="params">(String inString, String oldPattern, String newPattern)</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (inString == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">            <span class="keyword">if</span> (oldPattern == <span class="literal">null</span> || newPattern == <span class="literal">null</span>) <span class="keyword">return</span> inString;</span><br><span class="line">            <span class="keyword">return</span> inString.replace(oldPattern, newPattern);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">removeLeadingAndTrailingSlashesFrom</span><span class="params">(String string)</span> &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">trimmed</span> <span class="operator">=</span> string;</span><br><span class="line">            <span class="keyword">if</span> (trimmed.endsWith(<span class="string">&quot;/&quot;</span>) || trimmed.endsWith(<span class="string">&quot;\\&quot;</span>)) trimmed = trimmed.substring(<span class="number">0</span>, trimmed.length() - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span> (trimmed.startsWith(<span class="string">&quot;/&quot;</span>)) trimmed = trimmed.substring(<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">return</span> trimmed;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">addPaths</span><span class="params">(String segment1, String segment2)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (segment1 == <span class="literal">null</span> || segment1.length() == <span class="number">0</span>) <span class="keyword">return</span> segment2;</span><br><span class="line">        <span class="keyword">if</span> (segment2 == <span class="literal">null</span> || segment2.length() == <span class="number">0</span>) <span class="keyword">return</span> segment1;</span><br><span class="line">        </span><br><span class="line">        <span class="type">StringBuilder</span> <span class="variable">buf</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">        buf.append(segment1);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (segment1.endsWith(<span class="string">&quot;/&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">if</span> (segment2.startsWith(<span class="string">&quot;/&quot;</span>)) buf.append(segment2.substring(<span class="number">1</span>));</span><br><span class="line">            <span class="keyword">else</span> buf.append(segment2);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (segment2.startsWith(<span class="string">&quot;/&quot;</span>)) buf.append(segment2);</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                buf.append(<span class="string">&#x27;/&#x27;</span>);</span><br><span class="line">                buf.append(segment2);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> buf.toString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 漏洞点：startsWith 前缀匹配</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">checkDirectoryTraversal</span><span class="params">(String path)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">configuredRoot</span> <span class="operator">=</span> STATIC_FILES_FOLDER; <span class="comment">// &quot;public&quot;</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">pathToCheck</span> <span class="operator">=</span> StringUtils.removeLeadingAndTrailingSlashesFrom(path); </span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;    [Log] 安全校验: 检查 &#x27;&quot;</span> + pathToCheck + <span class="string">&quot;&#x27; 是否以 &#x27;&quot;</span> + configuredRoot + <span class="string">&quot;&#x27; 开头&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!pathToCheck.startsWith(configuredRoot)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;Directory Traversal Detected! (安全拦截)&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 只有这里不抛异常，流程才会继续</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>测试情况：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">(base) server-Rack-Server% javac spark/CVE_2018_9159_Full_Demo.java</span><br><span class="line">(base) server-Rack-Server% java spark.CVE_2018_9159_Full_Demo</span><br><span class="line">=== Spark CVE-2018-9159 漏洞全流程演示服务器启动 ===</span><br><span class="line">静态资源根目录配置为: classpath:/public</span><br><span class="line">尝试输入路径来访问文件 (输入 <span class="string">&#x27;exit&#x27;</span> 退出):</span><br><span class="line">提示: 敏感文件位于兄弟目录 public_secret/secret.txt</span><br><span class="line">--------------------------------------------------</span><br><span class="line"></span><br><span class="line">[Client] GET ..%5cpublic_secret/secret.txt</span><br><span class="line">[Server] 接收到请求: ..%5cpublic_secret/secret.txt</span><br><span class="line">[Server] URL 解码后路径: ..\public_secret/secret.txt</span><br><span class="line">    [Log] UriPath 规范化结果: ..\public_secret/secret.txt</span><br><span class="line">    [Log] 拼接根目录后: /public/..\public_secret/secret.txt</span><br><span class="line">    [Log] 最终解析出的资源路径: public_secret/secret.txt</span><br><span class="line">    [Log] 安全校验: 检查 <span class="string">&#x27;public_secret/secret.txt&#x27;</span> 是否以 <span class="string">&#x27;public&#x27;</span> 开头</span><br><span class="line">    [Sink] 正在读取文件: /home/zyu/java_vuln/spark-2.7.1/spark-2.7.1/src/main/java/../resources/public_secret/secret.txt</span><br><span class="line">    ↓ ↓ ↓ 文件内容 ↓ ↓ ↓</span><br><span class="line">SIBLING_SECRET_DATA</span><br><span class="line"></span><br><span class="line">    ↑ ↑ ↑ 文件结束 ↑ ↑ ↑</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/27/Spark-CVE-2018-9159-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/27/Spark-CVE-2018-9159-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="post-title-link" itemprop="url">Spark CVE-2018-9159 漏洞研究</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2026-01-27 22:22:38" itemprop="dateCreated datePublished" datetime="2026-01-27T22:22:38+08:00">2026-01-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-01-28 22:14:43" itemprop="dateModified" datetime="2026-01-28T22:14:43+08:00">2026-01-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>Spark (SparkJava)</strong> 是一个受 Ruby 框架 Sinatra 启发的 Java 微型 Web 框架。它以轻量级、声明式和快速开发著称，常用于构建微服务、Web API 和小型 Web 应用程序。由于其简洁的 API 设计（如 <code>get(&quot;/hello&quot;, (req, res) -&gt; &quot;Hello World&quot;);</code>），它在 Java 开发者中非常流行。</p>
-<h2 id="漏洞概述"><a href="#漏洞概述" class="headerlink" title="漏洞概述"></a>漏洞概述</h2><ul>
-<li><strong>CVE编号</strong>：CVE-2018-9159</li>
-<li><strong>漏洞名称</strong>：SparkJava 静态资源目录遍历漏洞 (Directory Traversal)</li>
-<li><strong>影响版本</strong>：Spark &lt; 2.7.2 (即 2.7.1 及以下版本)</li>
-<li><strong>简要描述</strong>：<br>在 SparkJava 处理静态文件资源（Static Files）时，没有对用户请求的路径进行充分的合法性校验。攻击者可以通过构造包含 <code>../</code>（父目录跳转符）的恶意 URL，跳出开发者指定的静态资源根目录，读取服务器文件系统上的任意文件（取决于运行权限），造成敏感信息泄露。</li>
-</ul>
-<h2 id="环境构建"><a href="#环境构建" class="headerlink" title="环境构建"></a>环境构建</h2><p>我使用了 SDKMAN 进行环境构建，这里使用 Java 8 and Maven 3.5</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">curl -s <span class="string">&quot;https://get.sdkman.io&quot;</span> | bash</span><br><span class="line"><span class="built_in">source</span> <span class="string">&quot;<span class="variable">$HOME</span>/.sdkman/bin/sdkman-init.sh&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Install Java 8 and Maven 3.5.0</span></span><br><span class="line">sdk install java 8.0.452-amzn</span><br><span class="line">sdk install maven 3.5.0</span><br></pre></td></tr></table></figure>
-<p>直接找到 Spark <a target="_blank" rel="noopener" href="https://github.com/perwendel/spark/tags">https://github.com/perwendel/spark/tags</a> 的官方仓库，找到带有 2.7.1 的版本 tag，下载对应的 code.zip 即可。</p>
-<h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><h3 id="diff-分析-补丁分析"><a href="#diff-分析-补丁分析" class="headerlink" title="diff 分析 补丁分析"></a>diff 分析 补丁分析</h3><p>通过对比漏洞版本 [2.7.1] 和修复版本 [2.7.2] 的代码差异，我们可以定位到关键的修复点。</p>
-<p>修复漏洞的commit：<a target="_blank" rel="noopener" href="https://github.com/perwendel/spark/commit/030e9d00125cbd1ad759668f85488aba1019c668">https://github.com/perwendel/spark/commit/030e9d00125cbd1ad759668f85488aba1019c668</a></p>
-<p>在 <code>src/main/java/spark/resource/ClassPathResource.java</code> 文件中，开发者添加了对路径的校验逻辑。<br>修复代码引入了一个 <code>isValid</code> 方法（或类似的断言逻辑），用于检查请求的路径是否存在目录遍历风险。</p>
-<p><strong>关键修复代码片段（参考）：</strong></p>
-<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">    // 修复前直接使用路径拼接，未检测 &quot;..&quot;</span><br><span class="line">    public ClassPathResource(String path, ClassLoader classLoader) &#123;</span><br><span class="line">        Assert.notNull(path, &quot;Path must not be null&quot;);</span><br><span class="line"><span class="addition">+       Assert.isTrue(isValid(path), &quot;Path is not valid&quot;);</span></span><br><span class="line"><span class="deletion">-       Assert.state(doesNotContainFileColon(path), &quot;Path must not contain &#x27;file:&#x27;&quot;);</span></span><br><span class="line"></span><br><span class="line">        String pathToUse = StringUtils.cleanPath(path);</span><br><span class="line"></span><br><span class="line">    public ClassPathResource(String path, ClassLoader classLoader) &#123;</span><br><span class="line">        this.classLoader = (classLoader != null ? classLoader : ClassUtils.getDefaultClassLoader());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="deletion">-    private static boolean doesNotContainFileColon(String path) &#123;</span></span><br><span class="line"><span class="deletion">-        return !path.contains(&quot;file:&quot;);</span></span><br><span class="line"></span><br><span class="line"><span class="addition">+  private static boolean isValid(final String path) &#123;</span></span><br><span class="line"><span class="addition">+          return !isInvalidPath(path);</span></span><br><span class="line"><span class="addition">+      &#125;</span></span><br><span class="line"><span class="addition">+  </span></span><br><span class="line"><span class="addition">+      private static boolean isInvalidPath(String path) &#123;</span></span><br><span class="line"><span class="addition">+          if (path.contains(&quot;WEB-INF&quot;) || path.contains(&quot;META-INF&quot;)) &#123;</span></span><br><span class="line"><span class="addition">+              return true;</span></span><br><span class="line"><span class="addition">+          &#125;</span></span><br><span class="line"><span class="addition">+          if (path.contains(&quot;:/&quot;)) &#123;</span></span><br><span class="line"><span class="addition">+              String relativePath = (path.charAt(0) == &#x27;/&#x27; ? path.substring(1) : +  path);</span></span><br><span class="line"><span class="addition">+              if (ResourceUtils.isUrl(relativePath) || relativePath.startsWith+  (&quot;url:&quot;)) &#123;</span></span><br><span class="line"><span class="addition">+                  return true;</span></span><br><span class="line"><span class="addition">+              &#125;</span></span><br><span class="line"><span class="addition">+          &#125;</span></span><br><span class="line"><span class="addition">+          if (path.contains(&quot;&quot;)) &#123;</span></span><br><span class="line"><span class="addition">+              path = StringUtils.cleanPath(path);</span></span><br><span class="line"><span class="addition">+              if (path.contains(&quot;../&quot;)) &#123;</span></span><br><span class="line"><span class="addition">+                  return true;</span></span><br><span class="line"><span class="addition">+              &#125;</span></span><br><span class="line"><span class="addition">+          &#125;</span></span><br><span class="line"><span class="addition">+          return false;</span></span><br><span class="line"><span class="addition">+      &#125;</span></span><br></pre></td></tr></table></figure>
-<p>修复的核心原理是：在解析路径后，校验<strong>最终解析的规范路径（Canonical Path）</strong>是否仍然位于<strong>预期的基准目录</strong>内。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/01/27/Spark-CVE-2018-9159-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/27/Java%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/27/Java%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">Java单元测试</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-27 22:21:48 / 修改时间：22:22:07" itemprop="dateCreated datePublished" datetime="2026-01-27T22:21:48+08:00">2026-01-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Java 的单元测试（Unit Test）是<strong>独立运行</strong>的，只需要通过构建工具（Maven）来触发它们，而不需要先把整个项目运行起来。</p>
-<p>可以把“测试”想象成是给代码做体检，不需要从头到尾全部检查一遍，只需要对某个器官（类或方法）进行单独检查。</p>
-<h3 id="如何运行测试"><a href="#如何运行测试" class="headerlink" title="如何运行测试"></a>如何运行测试</h3><p>以 Retrofit 为例，在当前的 Retrofit 项目中，我们主要使用 <strong>Maven</strong> 来运行测试。</p>
-<h4 id="1-运行所有测试"><a href="#1-运行所有测试" class="headerlink" title="1. 运行所有测试"></a>1. 运行所有测试</h4><p>如果想给整个项目做一次全身体检，运行所有测试用例：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在项目根目录 ./retrofit-parent-2.4.0/retrofit-parent-2.4.0 下</span></span><br><span class="line">mvn <span class="built_in">test</span></span><br></pre></td></tr></table></figure><br><em>这会花一些时间，因为它会跑完 <code>src/test/java</code> 下所有的测试文件。</em></p>
-<h4 id="2-运行单个测试文件（推荐）"><a href="#2-运行单个测试文件（推荐）" class="headerlink" title="2. 运行单个测试文件（推荐）"></a>2. 运行单个测试文件（推荐）</h4><p>如果只想测试某个特定的功能（比如漏洞验证脚本 <code>PathTraversalTest</code>），可以使用 <code>-Dtest</code> 参数：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 格式: mvn -pl &lt;子模块名&gt; test -Dtest=&lt;测试类名&gt;</span></span><br><span class="line"><span class="comment"># -pl retrofit: 指定只在 retrofit 子模块中运行，因为代码在那里</span></span><br><span class="line">mvn -pl retrofit <span class="built_in">test</span> -Dtest=PathTraversalTest</span><br></pre></td></tr></table></figure>
-<h4 id="3-运行某个测试文件中的单个方法"><a href="#3-运行某个测试文件中的单个方法" class="headerlink" title="3. 运行某个测试文件中的单个方法"></a>3. 运行某个测试文件中的单个方法</h4><p>如果只想跑某个具体的测试方法（例如只测 <code>pathTraversalWithEncodedTrue</code>）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn -pl retrofit <span class="built_in">test</span> -Dtest=PathTraversalTest#pathTraversalWithEncodedTrue</span><br></pre></td></tr></table></figure>
-<h3 id="实践操作"><a href="#实践操作" class="headerlink" title="实践操作"></a>实践操作</h3><p>尝试在终端（Terminal 11）中运行我们刚才创建的漏洞验证测试：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ./retrofit-parent-2.4.0/retrofit-parent-2.4.0</span><br><span class="line">mvn -pl retrofit <span class="built_in">test</span> -Dtest=PathTraversalTest</span><br></pre></td></tr></table></figure>
-<p><strong>观察输出结果：</strong><br>我们会在控制台中看到类似这样的输出：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">[INFO] </span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Building Retrofit 2.4.0</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-enforcer-plugin:1.0:enforce (enforce-maven) @ retrofit ---</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ retrofit ---</span><br><span class="line">[INFO] Using &#x27;UTF-8&#x27; encoding to copy filtered resources.</span><br><span class="line">[INFO] skip non existing resourceDirectory /home/zyu/java_vuln/retrofit-parent-2.4.0/retrofit-parent-2.4.0/retrofit/src/main/resources</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ retrofit ---</span><br><span class="line">[INFO] Changes detected - recompiling the module!</span><br><span class="line">[INFO] Compiling 42 source files to /home/zyu/java_vuln/retrofit-parent-2.4.0/retrofit-parent-2.4.0/retrofit/target/classes</span><br><span class="line">Note: Some input files use unchecked or unsafe operations.</span><br><span class="line">Note: Recompile with -Xlint:unchecked for details.</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ retrofit ---</span><br><span class="line">[INFO] Using &#x27;UTF-8&#x27; encoding to copy filtered resources.</span><br><span class="line">[INFO] skip non existing resourceDirectory /home/zyu/java_vuln/retrofit-parent-2.4.0/retrofit-parent-2.4.0/retrofit/src/test/resources</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ retrofit ---</span><br><span class="line">[INFO] Nothing to compile - all classes are up to date</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ retrofit ---</span><br><span class="line">[INFO] Surefire report directory: /home/zyu/java_vuln/retrofit-parent-2.4.0/retrofit-parent-2.4.0/retrofit/target/surefire-reports</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------</span><br><span class="line"> T E S T S</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">Running retrofit2.PathTraversalTest</span><br><span class="line">Resolved URL: http://example.com/attacker/profile</span><br><span class="line">Resolved URL (Safe): http://example.com/users/..%2Fattacker/profile</span><br><span class="line">Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.079 sec</span><br><span class="line"></span><br><span class="line">Results :</span><br><span class="line"></span><br><span class="line">Tests run: 2, Failures: 0, Errors: 0, Skipped: 0</span><br><span class="line"></span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- animal-sniffer-maven-plugin:1.14:check (default) @ retrofit ---</span><br><span class="line">[INFO] Checking unresolved references to org.codehaus.mojo.signature:java16:1.1</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time: 3.155 s</span><br><span class="line">[INFO] Finished at: 2026-01-27T18:06:49+08:00</span><br><span class="line">[INFO] Final Memory: 29M/2344M</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure><br>这就证明我们成功运行了测试，并且验证了漏洞的存在。不需要启动任何 Web 服务器或主程序，Maven 会自动编译并运行这些测试代码。</p>
 
       
     </div>

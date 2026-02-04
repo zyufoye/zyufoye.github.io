@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="访问控制包含的主要部分：基本概念与目标、参考模型、主要的访问控制类型、策略设计、管理流程、具体规则实现以及相关产品。 一、 访问控制概述1. 核心定义  概念：对资源对象的访问者进行授权、控制的方法及运行机制。 三个关键要素： 主体 (Subject)：访问者（如用户、进程、应用程序）。 客体 (Object)：被访问的对象（如文件、应用服务、数据）。 授权 (Authorization)：允许访">
+<meta property="og:type" content="article">
+<meta property="og:title" content="访问控制">
+<meta property="og:url" content="https://zyufoye.github.io/2026/02/04/%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="访问控制包含的主要部分：基本概念与目标、参考模型、主要的访问控制类型、策略设计、管理流程、具体规则实现以及相关产品。 一、 访问控制概述1. 核心定义  概念：对资源对象的访问者进行授权、控制的方法及运行机制。 三个关键要素： 主体 (Subject)：访问者（如用户、进程、应用程序）。 客体 (Object)：被访问的对象（如文件、应用服务、数据）。 授权 (Authorization)：允许访">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zyufoye.github.io/2026/02/04/uploads/accesscontrol.png">
+<meta property="article:published_time" content="2026-02-04T12:36:52.000Z">
+<meta property="article:modified_time" content="2026-02-04T12:38:01.436Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="软考">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zyufoye.github.io/2026/02/04/uploads/accesscontrol.png">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/02/04/%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/02/04/%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/","path":"2026/02/04/访问控制/","title":"访问控制"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>访问控制 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">一、 访问控制概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">二、 访问控制模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E7%9A%84%E4%B8%BB%E8%A6%81%E7%B1%BB%E5%9E%8B-%E6%A0%B8%E5%BF%83%E9%87%8D%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">三、 访问控制的主要类型 (核心重点)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%87%AA%E4%B8%BB%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6-DAC-Discretionary-Access-Control"><span class="nav-number">3.1.</span> <span class="nav-text">1. 自主访问控制 (DAC - Discretionary Access Control)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%BC%BA%E5%88%B6%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6-MAC-Mandatory-Access-Control"><span class="nav-number">3.2.</span> <span class="nav-text">2. 强制访问控制 (MAC - Mandatory Access Control)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%9F%BA%E4%BA%8E%E8%A7%92%E8%89%B2%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6-RBAC-Role-Based-Access-Control"><span class="nav-number">3.3.</span> <span class="nav-text">3. 基于角色的访问控制 (RBAC - Role-Based Access Control)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E5%9F%BA%E4%BA%8E%E5%B1%9E%E6%80%A7%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6-ABAC-Attribute-Based-Access-Control"><span class="nav-number">3.4.</span> <span class="nav-text">4. 基于属性的访问控制 (ABAC - Attribute-Based Access Control)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E7%AD%96%E7%95%A5%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">四、 访问控制策略的设计与实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%AD%96%E7%95%A5%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">4.1.</span> <span class="nav-text">1. 策略设计原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E8%A7%84%E5%88%99%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.2.</span> <span class="nav-text">2. 常见的访问控制规则类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E8%BF%87%E7%A8%8B%E4%B8%8E%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">五、 访问控制过程与安全管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%AE%9E%E6%96%BD%E7%9A%84%E4%BA%94%E4%B8%AA%E6%AD%A5%E9%AA%A4"><span class="nav-number">5.1.</span> <span class="nav-text">1. 实施的五个步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%9C%80%E5%B0%8F%E7%89%B9%E6%9D%83%E7%AE%A1%E7%90%86-Least-Privilege"><span class="nav-number">5.2.</span> <span class="nav-text">2. 最小特权管理 (Least Privilege)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%94%A8%E6%88%B7%E8%AE%BF%E9%97%AE%E7%AE%A1%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-number">5.3.</span> <span class="nav-text">3. 用户访问管理流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E5%8F%A3%E4%BB%A4%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%EF%BC%88%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%EF%BC%89"><span class="nav-number">5.4.</span> <span class="nav-text">4. 口令安全管理（最佳实践）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AD%E3%80%81-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E4%B8%BB%E8%A6%81%E4%BA%A7%E5%93%81%E4%B8%8E%E6%8A%80%E6%9C%AF%E6%8C%87%E6%A0%87"><span class="nav-number">6.</span> <span class="nav-text">六、 访问控制主要产品与技术指标</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E4%B8%BB%E8%A6%81%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81"><span class="nav-number">6.1.</span> <span class="nav-text">1. 主要产品形态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E4%B8%BB%E8%A6%81%E6%8A%80%E6%9C%AF%E6%8C%87%E6%A0%87"><span class="nav-number">6.2.</span> <span class="nav-text">2. 主要技术指标</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%83%E3%80%81-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E7%9A%84%E4%B8%BB%E8%A6%81%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E5%88%86%E7%B1%BB"><span class="nav-number">7.</span> <span class="nav-text">七、 访问控制的主要应用场景分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AB%E3%80%81-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E5%AE%9E%E7%8E%B0"><span class="nav-number">8.</span> <span class="nav-text">八、 操作系统中的访问控制实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-UNIX-Linux-%E7%B3%BB%E7%BB%9F"><span class="nav-number">8.1.</span> <span class="nav-text">1. UNIX&#x2F;Linux 系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Windows-%E7%B3%BB%E7%BB%9F"><span class="nav-number">8.2.</span> <span class="nav-text">2. Windows 系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Windows-%E6%A0%B8%E5%BF%83%E8%AE%BF%E9%97%AE%E6%B5%81%E7%A8%8B"><span class="nav-number">8.3.</span> <span class="nav-text">3. Windows 核心访问流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%9D%E3%80%81-%E5%B8%B8%E8%A7%81%E6%9C%8D%E5%8A%A1%E4%B8%8E%E7%BD%91%E7%BB%9C%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E5%BA%94%E7%94%A8"><span class="nav-number">9.</span> <span class="nav-text">九、 常见服务与网络访问控制应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-IIS-FTP-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="nav-number">9.1.</span> <span class="nav-text">1. IIS FTP 访问控制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E7%BD%91%E7%BB%9C%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="nav-number">9.2.</span> <span class="nav-text">2. 网络访问控制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Web-%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="nav-number">9.3.</span> <span class="nav-text">3. Web 服务访问控制流程</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/02/04/%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="访问控制 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          访问控制
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-02-04 20:36:52 / 修改时间：20:38:01" itemprop="dateCreated datePublished" datetime="2026-02-04T20:36:52+08:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>访问控制包含的主要部分：<strong>基本概念与目标</strong>、<strong>参考模型</strong>、<strong>主要的访问控制类型</strong>、<strong>策略设计</strong>、<strong>管理流程</strong>、<strong>具体规则实现</strong>以及<strong>相关产品</strong>。</p>
+<h3 id="一、-访问控制概述"><a href="#一、-访问控制概述" class="headerlink" title="一、 访问控制概述"></a>一、 访问控制概述</h3><p><strong>1. 核心定义</strong></p>
+<ul>
+<li><strong>概念</strong>：对资源对象的访问者进行授权、控制的方法及运行机制。</li>
+<li><strong>三个关键要素</strong>：<ul>
+<li><strong>主体 (Subject)</strong>：访问者（如用户、进程、应用程序）。</li>
+<li><strong>客体 (Object)</strong>：被访问的对象（如文件、应用服务、数据）。</li>
+<li><strong>授权 (Authorization)</strong>：允许访问的方式（如读、写、执行、发送）。</li>
+</ul>
+</li>
+<li><strong>控制机制</strong>：对使用方式的监测、限制以及决策（如允许、拒绝）。</li>
+</ul>
+<p><strong>2. 主要目标</strong></p>
+<ul>
+<li><strong>防外</strong>：防止非法用户进入系统。</li>
+<li><strong>防内</strong>：阻止合法用户对资源的非法使用（即防止越权访问）。</li>
+</ul>
+<p><strong>3. 实现流程</strong></p>
+<ul>
+<li><strong>身份认证</strong>（首先确认是谁） $\rightarrow$ <strong>授权</strong>（根据身份赋予权限） $\rightarrow$ <strong>保护资源</strong>。</li>
+<li>同时伴随<strong>安全审计</strong>和<strong>监控</strong>，以检测攻击企图。</li>
+</ul>
+<h3 id="二、-访问控制模型"><a href="#二、-访问控制模型" class="headerlink" title="二、 访问控制模型"></a>二、 访问控制模型</h3><p><strong>1. 参考模型组成 (5要素)</strong><br>一个标准的访问控制机制通常包含以下组件：</p>
+<ul>
+<li><strong>主体 (Subject)</strong>：操作实施者。</li>
+<li><strong>客体 (Object)</strong>：被操作对象。</li>
+<li><strong>参考监视器 (Reference Monitor)</strong>：核心组件，负责决策和执行。</li>
+<li><strong>访问控制数据库</strong>：策略库，记录权限信息，作为判断依据。</li>
+<li><strong>审计库</strong>：记录操作日志（成功或失败）。</li>
+</ul>
+<p><img src="../uploads/accesscontrol.png" alt=""></p>
+<p><strong>2. 模型的发展与应用场景</strong></p>
+<ul>
+<li><strong>基础类</strong>：DAC、MAC、RBAC（常用于操作系统、数据库）。</li>
+<li><strong>隐私与版权类</strong>：基于使用（UCON）。</li>
+<li><strong>移动互联类</strong>：基于地理位置。</li>
+<li><strong>新兴/分布式类</strong>：基于属性（ABAC，用于Web服务）。</li>
+<li><strong>风控/动态类</strong>：基于行为、基于时态。</li>
+</ul>
+<h3 id="三、-访问控制的主要类型-核心重点"><a href="#三、-访问控制的主要类型-核心重点" class="headerlink" title="三、 访问控制的主要类型 (核心重点)"></a>三、 访问控制的主要类型 (核心重点)</h3><h4 id="1-自主访问控制-DAC-Discretionary-Access-Control"><a href="#1-自主访问控制-DAC-Discretionary-Access-Control" class="headerlink" title="1. 自主访问控制 (DAC - Discretionary Access Control)"></a>1. 自主访问控制 (DAC - Discretionary Access Control)</h4><ul>
+<li><strong>定义</strong>：客体的<strong>拥有者</strong>按照自己的策略，将权限授予其他用户。</li>
+<li><strong>实现方式</strong>：<ul>
+<li><strong>基于行（附在主体上）</strong>：<ul>
+<li><em>能力表</em>：用户持有访问客体的“钥匙”。</li>
+<li><em>前缀表</em>：用户拥有的权限清单。</li>
+<li><em>口令</em>：用户需提供客体对应的密码。</li>
+</ul>
+</li>
+<li><strong>基于列（附在客体上）</strong>：<ul>
+<li><em>保护位</em>：如UNIX/Linux的 <code>rwx</code> 权限位。</li>
+<li><em>访问控制表 (ACL)</em>：每个客体附带一个列表，记录谁能做什么（矩阵形式）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-强制访问控制-MAC-Mandatory-Access-Control"><a href="#2-强制访问控制-MAC-Mandatory-Access-Control" class="headerlink" title="2. 强制访问控制 (MAC - Mandatory Access Control)"></a>2. 强制访问控制 (MAC - Mandatory Access Control)</h4><ul>
+<li><strong>定义</strong>：根据主体和客体的<strong>安全属性（安全级别）</strong>，由系统强制控制。</li>
+<li><strong>机制</strong>：每个进程和文件都有安全标签。</li>
+<li><strong>规则</strong>：当且仅当 <strong>主体安全级别 $\ge$ 客体安全级别</strong>（且范畴包含）时，才允许访问。否则直接拒绝。</li>
+</ul>
+<h4 id="3-基于角色的访问控制-RBAC-Role-Based-Access-Control"><a href="#3-基于角色的访问控制-RBAC-Role-Based-Access-Control" class="headerlink" title="3. 基于角色的访问控制 (RBAC - Role-Based Access Control)"></a>3. 基于角色的访问控制 (RBAC - Role-Based Access Control)</h4><ul>
+<li><strong>定义</strong>：目前国际流行的先进方法。引入“角色”作为中间层。</li>
+<li><strong>核心逻辑</strong>：<ul>
+<li><strong>用户 (U) $\leftrightarrow$ 角色 (R)</strong>：用户被分配角色（岗位/职位）。</li>
+<li><strong>角色 (R) $\leftrightarrow$ 权限 (P)</strong>：角色被赋予权限。</li>
+</ul>
+</li>
+<li><strong>优势</strong>：实现了用户与权限的<strong>逻辑分离</strong>，便于授权管理、分级管理、任务分担和实现最小特权原则。</li>
+<li><strong>四要素</strong>：用户(U)、角色(R)、会话(S)、权限(P)。</li>
+</ul>
+<h4 id="4-基于属性的访问控制-ABAC-Attribute-Based-Access-Control"><a href="#4-基于属性的访问控制-ABAC-Attribute-Based-Access-Control" class="headerlink" title="4. 基于属性的访问控制 (ABAC - Attribute-Based Access Control)"></a>4. 基于属性的访问控制 (ABAC - Attribute-Based Access Control)</h4><ul>
+<li><strong>定义</strong>：根据<strong>主体属性</strong>（如年龄、部门）、<strong>客体属性</strong>（如机密性）、<strong>环境条件</strong>（如时间、地点）以及<strong>策略</strong>来进行授权决策。</li>
+<li><strong>特点</strong>：细粒度、灵活性高，适用于分布式环境。</li>
+</ul>
+<h3 id="四、-访问控制策略的设计与实现"><a href="#四、-访问控制策略的设计与实现" class="headerlink" title="四、 访问控制策略的设计与实现"></a>四、 访问控制策略的设计与实现</h3><h4 id="1-策略设计原则"><a href="#1-策略设计原则" class="headerlink" title="1. 策略设计原则"></a>1. 策略设计原则</h4><p>访问控制策略是规定资源访问权限的核心文件。</p>
+<ul>
+<li><strong>设计考量因素</strong>：<ul>
+<li>区分用户类型（内部 vs 外部）。</li>
+<li>确认应用信息（端口、IP）。</li>
+<li>明确信息的分级与授权策略。</li>
+<li>保持不同系统间策略的一致性。</li>
+<li>符合法规与合同义务。</li>
+<li>考虑权限的维护与更新。</li>
+</ul>
+</li>
+<li><strong>核心原则（重点）</strong>：<ul>
+<li><strong>“默认拒绝”原则</strong>：建立规则应以<strong>“未经明确允许的都是禁止的”</strong>为前提（比“未经禁止即允许”更安全）。</li>
+<li>规则颁布前需经管理层批准。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-常见的访问控制规则类型"><a href="#2-常见的访问控制规则类型" class="headerlink" title="2. 常见的访问控制规则类型"></a>2. 常见的访问控制规则类型</h4><p>访问控制规则实际上就是访问约束条件集，规则是策略的具体表现形式，主要有以下6种：</p>
+<ol>
+<li><strong>基于用户身份</strong>：最常用（账号+口令）。</li>
+<li><strong>基于角色</strong>：根据任务/岗位分配权限。</li>
+<li><strong>基于地址</strong>：利用物理或逻辑地址（IP、域名）限制。例如：禁止远程访问，仅许本地。</li>
+<li><strong>基于时间</strong>：设置时间段限制。例如：下班时间禁止访问。</li>
+<li><strong>基于异常事件</strong>：触发防御机制。例如：登录失败3次冻结账号。</li>
+<li><strong>基于服务数量</strong>：流量/并发控制。例如：防止DoS攻击，达到阈值拒绝新请求。</li>
+</ol>
+<h3 id="五、-访问控制过程与安全管理"><a href="#五、-访问控制过程与安全管理" class="headerlink" title="五、 访问控制过程与安全管理"></a>五、 访问控制过程与安全管理</h3><h4 id="1-实施的五个步骤"><a href="#1-实施的五个步骤" class="headerlink" title="1. 实施的五个步骤"></a>1. 实施的五个步骤</h4><ol>
+<li><strong>明确资产</strong>：识别要保护的对象（如路由器、Web服务）。</li>
+<li><strong>分析需求</strong>：确定CIA需求（保密性、完整性、可用性）。</li>
+<li><strong>制定策略</strong>：确定规则及权限分配。</li>
+<li><strong>实现策略</strong>：建立认证系统，授权用户。</li>
+<li><strong>运行维护</strong>：监控系统，调整策略。</li>
+</ol>
+<h4 id="2-最小特权管理-Least-Privilege"><a href="#2-最小特权管理-Least-Privilege" class="headerlink" title="2. 最小特权管理 (Least Privilege)"></a>2. 最小特权管理 (Least Privilege)</h4><ul>
+<li><strong>定义</strong>：系统中每个主体只能拥有完成任务所必须的<strong>最小权限集</strong>。</li>
+<li><strong>原则</strong>：“按需使用”。</li>
+<li><strong>目的</strong>：防止特权滥用，限制特权被攻破后的危害范围。</li>
+</ul>
+<h4 id="3-用户访问管理流程"><a href="#3-用户访问管理流程" class="headerlink" title="3. 用户访问管理流程"></a>3. 用户访问管理流程</h4><p>涵盖用户全生命周期管理，防止非授权使用。</p>
+<ul>
+<li><strong>主要工作</strong>：用户登记 $\rightarrow$ 权限分配 $\rightarrow$ 访问记录 $\rightarrow$ 权限监测 $\rightarrow$ 权限取消/撤销。</li>
+<li><strong>关键环节</strong>：包括用户责任确认签字、审计用户操作、定期检查违规行为或多余账号。</li>
+</ul>
+<h4 id="4-口令安全管理（最佳实践）"><a href="#4-口令安全管理（最佳实践）" class="headerlink" title="4. 口令安全管理（最佳实践）"></a>4. 口令安全管理（最佳实践）</h4><p>口令是身份鉴别的核心依据，需遵守严格规范：</p>
+<ul>
+<li><strong>复杂度</strong>：8字符以上，包含大小写、数字、特殊字符。</li>
+<li><strong>差异性</strong>：禁止使用与账号相同的口令，禁止使用默认口令。</li>
+<li><strong>防爆破</strong>：限制登录次数（建议3次）。</li>
+<li><strong>存储与传输</strong>：文件加密存放（仅超级用户可读），禁止明文传输。</li>
+<li><strong>生命周期</strong>：设置时效（强制定期更改），禁止重用旧口令。</li>
+<li><strong>审计</strong>：定期运行工具检查弱口令或空口令。</li>
+</ul>
+<h3 id="六、-访问控制主要产品与技术指标"><a href="#六、-访问控制主要产品与技术指标" class="headerlink" title="六、 访问控制主要产品与技术指标"></a>六、 访问控制主要产品与技术指标</h3><h4 id="1-主要产品形态"><a href="#1-主要产品形态" class="headerlink" title="1. 主要产品形态"></a>1. 主要产品形态</h4><ul>
+<li><strong>4A系统 (统一安全管理平台)</strong>：<ul>
+<li>核心功能：<strong>Account</strong> (账号)、<strong>Authentication</strong> (认证)、<strong>Authorization</strong> (授权)、<strong>Audit</strong> (审计)。</li>
+<li>特点：集中管理，通常基于<strong>角色</strong>的访问控制 (RBAC)。</li>
+</ul>
+</li>
+<li><strong>安全网关</strong>：<ul>
+<li>特点：利用数据包信息和威胁特征库进行控制。</li>
+<li>例子：防火墙、统一威胁管理 (UTM)。</li>
+</ul>
+</li>
+<li><strong>系统安全增强</strong>：<ul>
+<li>特点：利用<strong>强制访问控制 (MAC)</strong> 技术加固操作系统。</li>
+<li>例子：Linux的SELinux、Windows系统加固。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-主要技术指标"><a href="#2-主要技术指标" class="headerlink" title="2. 主要技术指标"></a>2. 主要技术指标</h4><p>评价访问控制产品的四个维度：</p>
+<ol>
+<li>支持的策略规则类型（越丰富越灵活）。</li>
+<li>支持的最大规则数量。</li>
+<li>规则检查速度（性能指标）。</li>
+<li>产品自身的安全和质量保障级别。</li>
+</ol>
+<h3 id="七、-访问控制的主要应用场景分类"><a href="#七、-访问控制的主要应用场景分类" class="headerlink" title="七、 访问控制的主要应用场景分类"></a>七、 访问控制的主要应用场景分类</h3><p>根据控制对象的不同，分为五大类：</p>
+<ol>
+<li><strong>物理访问控制</strong>：针对环境/实体。如门禁、警卫、门锁、区域划分。</li>
+<li><strong>网络访问控制</strong>：针对网络资源。如接入控制、路由控制、VLAN划分。</li>
+<li><strong>操作系统访问控制</strong>：针对系统资源。如文件读写、进程/内存访问。</li>
+<li><strong>数据库/数据访问控制</strong>：针对数据操作。如建表、数据分发。</li>
+<li><strong>应用系统访问控制</strong>：针对业务操作。如业务执行、文件读取。</li>
+</ol>
+<h3 id="八、-操作系统中的访问控制实现"><a href="#八、-操作系统中的访问控制实现" class="headerlink" title="八、 操作系统中的访问控制实现"></a>八、 操作系统中的访问控制实现</h3><h4 id="1-UNIX-Linux-系统"><a href="#1-UNIX-Linux-系统" class="headerlink" title="1. UNIX/Linux 系统"></a>1. UNIX/Linux 系统</h4><p>采用 <strong>“9比特位模式”</strong> 来标识文件权限。</p>
+<ul>
+<li><strong>结构</strong>：共10个字符（例如 <code>-rw-r--r--</code>）。<ul>
+<li><strong>第1位</strong>：类型标识（<code>-</code>代表文件，<code>d</code>代表目录）。</li>
+<li><strong>后9位</strong>：分为三组，每组3位，分别对应 <strong>所有者 (u)</strong>、<strong>所属组 (g)</strong>、<strong>其他用户 (o)</strong>。</li>
+</ul>
+</li>
+<li><strong>权限表示</strong>：<ul>
+<li><strong>读 (r)</strong> = 4</li>
+<li><strong>写 (w)</strong> = 2</li>
+<li><strong>执行 (x)</strong> = 1</li>
+</ul>
+</li>
+<li><strong>数字表示法</strong>：例如 <code>rw-</code> (4+2=6)，<code>r--</code> (4)，即 <code>644</code>。</li>
+</ul>
+<h4 id="2-Windows-系统"><a href="#2-Windows-系统" class="headerlink" title="2. Windows 系统"></a>2. Windows 系统</h4><p>采用 <strong>访问令牌 (Access Token)</strong> 与 <strong>访问控制列表 (ACL)</strong> 机制。</p>
+<ul>
+<li><strong>身份标识</strong>：用户登录时，WinLogon进程创建“访问令牌”，包含用户及所属组的安全标识符 (<strong>SID</strong>)。</li>
+<li><strong>客体属性</strong>：<ul>
+<li><strong>DACL (自主访问控制列表)</strong>：决定谁有权访问，以及有什么权限。</li>
+<li><strong>SACL (系统访问控制列表)</strong>：决定哪些访问行为需要被<strong>审计</strong>（记录日志）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-Windows-核心访问流程"><a href="#3-Windows-核心访问流程" class="headerlink" title="3. Windows 核心访问流程"></a>3. Windows 核心访问流程</h4><ul>
+<li><strong>请求</strong>：用户进程通过WIN32子系统向核心请求服务。</li>
+<li><strong>决策者</strong>：核心的 <strong>安全参考监视器 (SRM)</strong>。</li>
+<li><strong>判定逻辑</strong>：<ol>
+<li>SRM 将用户的 <strong>访问令牌</strong> 与客体的 <strong>DACL</strong> 进行比较 $\rightarrow$ 决定是否授权。</li>
+<li>同时检查 <strong>SACL</strong> $\rightarrow$ 决定是否将该操作发送至审计子系统。</li>
+</ol>
+</li>
+</ul>
+<h3 id="九、-常见服务与网络访问控制应用"><a href="#九、-常见服务与网络访问控制应用" class="headerlink" title="九、 常见服务与网络访问控制应用"></a>九、 常见服务与网络访问控制应用</h3><h4 id="1-IIS-FTP-访问控制"><a href="#1-IIS-FTP-访问控制" class="headerlink" title="1. IIS FTP 访问控制"></a>1. IIS FTP 访问控制</h4><ul>
+<li><strong>控制方式</strong>：通过FTP站点属性进行配置。</li>
+<li><strong>关键设置</strong>：<ul>
+<li><strong>身份验证</strong>：是否允许匿名连接。</li>
+<li><strong>目录权限</strong>：读取（即下载）、写入（即上传）。</li>
+<li><em>注：FTP目录权限对所有FTP用户生效。</em></li>
+</ul>
+</li>
+</ul>
+<h4 id="2-网络访问控制"><a href="#2-网络访问控制" class="headerlink" title="2. 网络访问控制"></a>2. 网络访问控制</h4><ul>
+<li><strong>网络通信连接控制</strong>：<ul>
+<li><strong>设备</strong>：防火墙、路由器、网关。</li>
+<li><strong>原理</strong>：部署在不同网络的连接处，强制所有流量经过控制器，仅符合规则的流量才放行。</li>
+</ul>
+</li>
+<li><strong>VLAN 网络隔离</strong>：<ul>
+<li><strong>原理</strong>：根据功能或业务用途，将网络划分为若干逻辑子网（网段）。</li>
+<li><strong>目的</strong>：隔离内外部网络，避免各网段间多余的信息交换，缩小攻击面。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-Web-服务访问控制流程"><a href="#3-Web-服务访问控制流程" class="headerlink" title="3. Web 服务访问控制流程"></a>3. Web 服务访问控制流程</h4><p>Web服务的访问控制是一个<strong>多层级、顺序执行</strong>的过滤过程。只有通过前一层，才能进入下一层判定：</p>
+<ol>
+<li><strong>HTTP请求发起</strong>。</li>
+<li><strong>IP/DNS 检查</strong>：客户端IP或域是否被允许？（否则拒绝）</li>
+<li><strong>Web 用户认证</strong>：Web账号是否允许访问？（否则拒绝）</li>
+<li><strong>文件系统权限</strong>：NTFS/Linux文件权限是否允许？（否则拒绝）</li>
+<li><strong>数据库权限</strong>：DB系统是否允许操作？（否则拒绝）</li>
+<li><strong>最终授权访问</strong>。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E8%80%83/" rel="tag"># 软考</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/02/04/%E5%85%B6%E4%BB%96%E7%89%A9%E7%90%86%E8%AE%BE%E5%A4%87%E5%AE%89%E5%85%A8%E5%88%86%E6%9E%90%E4%B8%8E%E9%98%B2%E6%8A%A4/" rel="prev" title="其他物理设备安全分析与防护">
+                  <i class="fa fa-angle-left"></i> 其他物理设备安全分析与防护
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
