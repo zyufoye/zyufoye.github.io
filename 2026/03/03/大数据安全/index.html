@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="大数据安全讲解记录了大数据时代面临的安全威胁、安全需求、保护技术体系以及各大知名企业的实际安全应用案例。 大数据的特征与七大安全威胁1. 大数据基本特征海量（大）、快速（快）、多样（多）、价值密度低。大数据不仅打破了传统数据的处理方式，也彻底打破了传统网络安全的物理边界。 2. 面临的七大核心安全威胁（重点考点）  边界模糊：多源、分布式存储导致传统“守大门”式的边界防护（如单靠防火墙）失效。 敏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据安全">
+<meta property="og:url" content="https://zyufoye.github.io/2026/03/03/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="大数据安全讲解记录了大数据时代面临的安全威胁、安全需求、保护技术体系以及各大知名企业的实际安全应用案例。 大数据的特征与七大安全威胁1. 大数据基本特征海量（大）、快速（快）、多样（多）、价值密度低。大数据不仅打破了传统数据的处理方式，也彻底打破了传统网络安全的物理边界。 2. 面临的七大核心安全威胁（重点考点）  边界模糊：多源、分布式存储导致传统“守大门”式的边界防护（如单靠防火墙）失效。 敏">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-03T14:05:50.000Z">
+<meta property="article:modified_time" content="2026-03-03T14:06:53.527Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="软考">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/03/03/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/03/03/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8/","path":"2026/03/03/大数据安全/","title":"大数据安全"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>大数据安全 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8"><span class="nav-number">1.</span> <span class="nav-text">大数据安全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%9A%84%E7%89%B9%E5%BE%81%E4%B8%8E%E4%B8%83%E5%A4%A7%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81"><span class="nav-number">1.1.</span> <span class="nav-text">大数据的特征与七大安全威胁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%9A%84%E5%85%A8%E6%96%B9%E4%BD%8D%E5%AE%89%E5%85%A8%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">大数据的全方位安全需求分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8%E4%BF%9D%E6%8A%A4%E4%BD%93%E7%B3%BB%E4%B8%8E%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF"><span class="nav-number">1.3.</span> <span class="nav-text">大数据安全保护体系与关键技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9A%E7%95%8C%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%EF%BC%88%E5%AE%9E%E6%88%98%E5%8F%82%E8%80%83%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">业界经典案例分析（实战参考）</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">77</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/03/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="大数据安全 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          大数据安全
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-03-03 22:05:50 / 修改时间：22:06:53" itemprop="dateCreated datePublished" datetime="2026-03-03T22:05:50+08:00">2026-03-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="大数据安全"><a href="#大数据安全" class="headerlink" title="大数据安全"></a>大数据安全</h2><p>讲解记录了<strong>大数据时代面临的安全威胁、安全需求、保护技术体系</strong>以及<strong>各大知名企业的实际安全应用案例</strong>。</p>
+<h3 id="大数据的特征与七大安全威胁"><a href="#大数据的特征与七大安全威胁" class="headerlink" title="大数据的特征与七大安全威胁"></a>大数据的特征与七大安全威胁</h3><p><strong>1. 大数据基本特征</strong><br>海量（大）、快速（快）、多样（多）、价值密度低。大数据不仅打破了传统数据的处理方式，也彻底打破了传统网络安全的物理边界。</p>
+<p><strong>2. 面临的七大核心安全威胁（重点考点）</strong></p>
+<ul>
+<li><strong>边界模糊</strong>：多源、分布式存储导致传统“守大门”式的边界防护（如单靠防火墙）失效。</li>
+<li><strong>敏感数据泄露</strong>：数据高度集中，一旦泄露，对国家、社会或个人造成毁灭性打击。</li>
+<li><strong>数据失真与污染（投毒）</strong>：黑客故意注入恶意或虚假数据（如刷单、虚假流量），导致大数据平台算出错误结果，甚至干扰人工智能学习。</li>
+<li><strong>拒绝服务与业务中断</strong>：大数据平台如果宕机，高度依赖它的关键业务（如电商、金融）将全面瘫痪。</li>
+<li><strong>隐私保护极难</strong>：个人数据散落在各处，极易被拼凑成完整的个人画像。</li>
+<li><strong>数据交易风险</strong>：非法买卖、交易过程中泄露、以及数据跨境流动带来的国家安全风险。</li>
+<li><strong>大数据滥用</strong>：通过深度关联挖掘，甚至能开发针对特定人群的生物武器，或精准曝光个人隐私。</li>
+</ul>
+<h3 id="大数据的全方位安全需求分析"><a href="#大数据的全方位安全需求分析" class="headerlink" title="大数据的全方位安全需求分析"></a>大数据的全方位安全需求分析</h3><p>面对上述威胁，大数据的安全需求不再局限于“防黑客”，而是扩展到了数据管理的全流程：</p>
+<ol>
+<li><strong>大数据自身安全</strong>：保障数据在<strong>采集、存储、使用、传输、共享、发布、销毁</strong>等全生命周期中的机密性、完整性、可用性及可追溯性。</li>
+<li><strong>合规与跨境需求</strong>：必须符合国家法律法规（如等保2.0），且满足数据出境的安全评估要求。</li>
+<li><strong>隐私保护需求</strong>：针对个人敏感信息，急需强有力的去标识化和隐私保护技术。</li>
+<li><strong>平台与业务安全</strong>：从底层的物理机、操作系统、数据库，到上层的业务授权机制，都需要安全防护，防止内部人员越权和数据滥用。</li>
+<li><strong>安全运营需求</strong>：需要建立大数据分类分级制度，进行持续的安全监测。</li>
+</ol>
+<h3 id="大数据安全保护体系与关键技术"><a href="#大数据安全保护体系与关键技术" class="headerlink" title="大数据安全保护体系与关键技术"></a>大数据安全保护体系与关键技术</h3><p>大数据的保护是一个立体工程，文档将其分为五大技术层面：</p>
+<ol>
+<li><strong>平台安全保护</strong>：采用安全分区、系统加固、DLP（数据防泄露）、防火墙等传统技术打底。</li>
+<li><strong>业务安全保护</strong>：采用 <strong>RBAC（基于角色的访问控制）</strong> 进行业务授权，保障业务逻辑不被篡改，并监控配置基线。</li>
+<li><strong>隐私安全保护（核心技术）</strong>：使用 <strong>数据匿名化、差分隐私、数据脱敏、加密</strong> 等前沿技术保护个人隐私。（依据《信息安全技术个人信息安全规范》 2020.10.1实施）。</li>
+<li><strong>运营与交易保护</strong>：通过态势感知、堡垒机管控运维人员；在数据交易时使用数据脱敏和安全网关。</li>
+<li><strong>国家标准护航</strong>：全国信安标委（TC260）制定了一系列国家标准（如大数据服务安全能力要求、交易服务要求、去标识化指南等）来规范行业。</li>
+</ol>
+<h3 id="业界经典案例分析（实战参考）"><a href="#业界经典案例分析（实战参考）" class="headerlink" title="业界经典案例分析（实战参考）"></a>业界经典案例分析（实战参考）</h3><p>列举了多个真实场景的大数据安全实践，非常具有参考价值：</p>
+<ol>
+<li><strong>阿里巴巴（生命周期与生态管控）</strong><ul>
+<li><strong>核心理念</strong>：从业务、数据、生态三个层面来保护数据安全与隐私。以数据为中心，围绕<strong>数据生命周期</strong>进行管控（加工前、加工中、加工后、合规流转）。</li>
+<li><strong>成熟度模型</strong>：提出了业界著名的 <strong>DSMM（数据安全能力成熟度模型）</strong>，从组织、制度、技术、人员多维度评估安全能力。</li>
+</ul>
+</li>
+<li><strong>京东（区块链确权溯源）</strong><ul>
+<li><strong>核心技术</strong>：在数据交易平台引入 <strong>区块链技术</strong>。买家购买数据的每一笔交易都会上链，利用区块链不可篡改的特性，完美实现数据交易的<strong>确权和溯源</strong>。</li>
+</ul>
+</li>
+<li><strong>上海数据交易中心（规制+技术）</strong><ul>
+<li><strong>隐私保护原则</strong>：严格执行告知同意、禁止公开、选择退出、数据正确、应急补救等原则。</li>
+</ul>
+</li>
+<li><strong>华为 FusionInsight（平台级防护）</strong><ul>
+<li>在 Hadoop 基础上增强安全。网络层隔离；主机层加固；用户层使用 <strong>LDAP+Kerberos 进行身份认证</strong>，使用 <strong>RBAC 进行权限控制</strong>和审计；数据层提供容灾备份。</li>
+</ul>
+</li>
+<li><strong>科学数据与 PCI-DSS 规范</strong><ul>
+<li><strong>科学数据</strong>：涉及国家秘密的科学数据<strong>绝对禁止</strong>对外开放共享，必须严格审查，建立容灾备份（异地备份）。</li>
+<li><strong>支付卡行业数据安全标准 PCI-DSS</strong>：国际支付卡行业数据安全标准。极其严格地控制信用卡持卡人数据的存储和传输，适用于所有涉及信用卡支付的企业。</li>
+</ul>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E8%80%83/" rel="tag"># 软考</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/02/%E7%89%A9%E7%90%86%E9%9A%94%E7%A6%BB%E6%8A%80%E6%9C%AF/" rel="prev" title="物理隔离技术">
+                  <i class="fa fa-angle-left"></i> 物理隔离技术
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/03/03/%E7%A7%BB%E5%8A%A8%E5%BA%94%E7%94%A8%E5%AE%89%E5%85%A8/" rel="next" title="移动应用安全">
+                  移动应用安全 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
