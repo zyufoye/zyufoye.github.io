@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="云计算安全一、云计算基本概念与特征1. 云计算定义 通过虚拟化及网络通信技术，提供按需服务、弹性化的IT资源池服务平台  2. 四大主要特征    特征 说明     IT资源服务化 IaaS、PaaS、SaaS、DaaS、STaaS等服务形式   多租户共享 支持多个组织按需租赁，需实现功能&#x2F;性能&#x2F;故障隔离   按需定制与按用付费 即付即用，降低用户成本，实现规模效益   可伸缩性部署 按时段添">
+<meta property="og:type" content="article">
+<meta property="og:title" content="云计算安全">
+<meta property="og:url" content="https://zyufoye.github.io/2026/03/08/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%89%E5%85%A8/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="云计算安全一、云计算基本概念与特征1. 云计算定义 通过虚拟化及网络通信技术，提供按需服务、弹性化的IT资源池服务平台  2. 四大主要特征    特征 说明     IT资源服务化 IaaS、PaaS、SaaS、DaaS、STaaS等服务形式   多租户共享 支持多个组织按需租赁，需实现功能&#x2F;性能&#x2F;故障隔离   按需定制与按用付费 即付即用，降低用户成本，实现规模效益   可伸缩性部署 按时段添">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-08T14:45:28.000Z">
+<meta property="article:modified_time" content="2026-03-08T14:48:45.898Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="软考">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/03/08/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%89%E5%85%A8/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/03/08/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%89%E5%85%A8/","path":"2026/03/08/云计算安全/","title":"云计算安全"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>云计算安全 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%89%E5%85%A8"><span class="nav-number">1.</span> <span class="nav-text">云计算安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BA%91%E8%AE%A1%E7%AE%97%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E7%89%B9%E5%BE%81"><span class="nav-number">1.1.</span> <span class="nav-text">一、云计算基本概念与特征</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 云计算定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%9B%9B%E5%A4%A7%E4%B8%BB%E8%A6%81%E7%89%B9%E5%BE%81"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 四大主要特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%9B%9B%E7%A7%8D%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 四种部署模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81%E5%88%86%E6%9E%90%EF%BC%88%E7%AB%AF-%E7%AE%A1-%E4%BA%91%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">二、云计算安全威胁分析（端-管-云）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BA%91%E7%AB%AF%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 云端安全威胁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BA%91%E2%80%9D%E7%AE%A1%E2%80%9D%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 云”管”安全威胁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BA%91%E8%AE%A1%E7%AE%97%E5%B9%B3%E5%8F%B0%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81%EF%BC%8811%E7%B1%BB%EF%BC%89"><span class="nav-number">1.2.3.</span> <span class="nav-text">3. 云计算平台安全威胁（11类）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%89%E5%85%A8%E9%9C%80%E6%B1%82"><span class="nav-number">1.3.</span> <span class="nav-text">三、云计算安全需求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%8A%80%E6%9C%AF%E5%AE%89%E5%85%A8%E9%9C%80%E6%B1%82%EF%BC%88%E4%B8%89%E9%83%A8%E5%88%86%EF%BC%89"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 技术安全需求（三部分）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E9%9C%80%E6%B1%82%EF%BC%886%E6%96%B9%E9%9D%A2%EF%BC%89"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 隐私保护需求（6方面）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%89%E5%85%A8%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6%E4%B8%8E%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88"><span class="nav-number">1.4.</span> <span class="nav-text">四、云计算安全保护机制与技术方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%89%E5%85%A8%E7%AD%89%E7%BA%A7%E4%BF%9D%E6%8A%A4%E6%A1%86%E6%9E%B6"><span class="nav-number">1.4.1.</span> <span class="nav-text">1. 安全等级保护框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%85%AD%E5%A4%A7%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6"><span class="nav-number">1.4.2.</span> <span class="nav-text">2. 六大网络安全机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%89%E5%85%A8%E8%BF%90%E7%BB%B4%E4%BA%94%E5%A4%A7%E6%8E%AA%E6%96%BD"><span class="nav-number">1.4.3.</span> <span class="nav-text">3. 安全运维五大措施</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E4%B8%BB%E6%B5%81%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%95%86%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E5%AF%B9%E6%AF%94"><span class="nav-number">1.5.</span> <span class="nav-text">五、主流云服务商安全体系对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%98%BF%E9%87%8C%E4%BA%91%E5%AE%89%E5%85%A8"><span class="nav-number">1.5.1.</span> <span class="nav-text">1. 阿里云安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%89%E5%85%A8%EF%BC%888%E5%A4%A7%E4%BD%93%E7%B3%BB%EF%BC%89"><span class="nav-number">1.5.2.</span> <span class="nav-text">2. 腾讯云安全（8大体系）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%8D%8E%E4%B8%BA%E4%BA%91%E5%AE%89%E5%85%A8%EF%BC%888%E5%B1%82%E9%98%B2%E6%8A%A4%EF%BC%89"><span class="nav-number">1.5.3.</span> <span class="nav-text">3. 华为云安全（8层防护）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%BE%AE%E8%BD%AFAzure%E4%BA%91%E5%AE%89%E5%85%A8"><span class="nav-number">1.5.4.</span> <span class="nav-text">4. 微软Azure云安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E4%BA%91%E8%AE%A1%E7%AE%97%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4%E6%8E%AA%E6%96%BD"><span class="nav-number">1.6.</span> <span class="nav-text">六、云计算隐私保护措施</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E6%96%B9%E6%8E%AA%E6%96%BD"><span class="nav-number">1.6.1.</span> <span class="nav-text">1. 服务提供方措施</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%94%A8%E6%88%B7%E8%87%AA%E6%88%91%E4%BF%9D%E6%8A%A4%E6%8E%AA%E6%96%BD"><span class="nav-number">1.6.2.</span> <span class="nav-text">2. 用户自我保护措施</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E6%8E%AA%E6%96%BD"><span class="nav-number">1.6.3.</span> <span class="nav-text">3. 应急响应措施</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9%E5%9B%BE%E8%B0%B1"><span class="nav-number">1.7.</span> <span class="nav-text">七、核心知识点图谱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E5%85%B3%E9%94%AE%E8%A6%81%E7%82%B9%E6%80%BB%E7%BB%93"><span class="nav-number">1.8.</span> <span class="nav-text">八、关键要点总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/08/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%89%E5%85%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="云计算安全 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          云计算安全
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-03-08 22:45:28 / 修改时间：22:48:45" itemprop="dateCreated datePublished" datetime="2026-03-08T22:45:28+08:00">2026-03-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="云计算安全"><a href="#云计算安全" class="headerlink" title="云计算安全"></a>云计算安全</h1><h2 id="一、云计算基本概念与特征"><a href="#一、云计算基本概念与特征" class="headerlink" title="一、云计算基本概念与特征"></a>一、云计算基本概念与特征</h2><h3 id="1-云计算定义"><a href="#1-云计算定义" class="headerlink" title="1. 云计算定义"></a>1. 云计算定义</h3><ul>
+<li>通过<strong>虚拟化及网络通信技术</strong>，提供按需服务、弹性化的IT资源池服务平台</li>
+</ul>
+<h3 id="2-四大主要特征"><a href="#2-四大主要特征" class="headerlink" title="2. 四大主要特征"></a>2. 四大主要特征</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IT资源服务化</strong></td>
+<td>IaaS、PaaS、SaaS、DaaS、STaaS等服务形式</td>
+</tr>
+<tr>
+<td><strong>多租户共享</strong></td>
+<td>支持多个组织按需租赁，需实现功能/性能/故障隔离</td>
+</tr>
+<tr>
+<td><strong>按需定制与按用付费</strong></td>
+<td>即付即用，降低用户成本，实现规模效益</td>
+</tr>
+<tr>
+<td><strong>可伸缩性部署</strong></td>
+<td>按时段添加/移除资源，满足弹性需求</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="3-四种部署模式"><a href="#3-四种部署模式" class="headerlink" title="3. 四种部署模式"></a>3. 四种部署模式</h3><ul>
+<li><strong>私有云</strong>：特定组织单独运营</li>
+<li><strong>公有云</strong>：商业化向社会公众提供服务</li>
+<li><strong>社区云</strong>：多个组织共享，支持特定社区团体</li>
+<li><strong>混合云</strong>：两个或多个云实体构成，具备可移植性</li>
+</ul>
+<h2 id="二、云计算安全威胁分析（端-管-云）"><a href="#二、云计算安全威胁分析（端-管-云）" class="headerlink" title="二、云计算安全威胁分析（端-管-云）"></a>二、云计算安全威胁分析（端-管-云）</h2><h3 id="1-云端安全威胁"><a href="#1-云端安全威胁" class="headerlink" title="1. 云端安全威胁"></a>1. 云端安全威胁</h3><ul>
+<li>弱口令导致账号被劫</li>
+<li>黑客攻击终端平台，假冒云用户</li>
+<li>终端设备安全漏洞</li>
+</ul>
+<h3 id="2-云”管”安全威胁"><a href="#2-云”管”安全威胁" class="headerlink" title="2. 云”管”安全威胁"></a>2. 云”管”安全威胁</h3><ul>
+<li>网络监听、数据泄露</li>
+<li>中间人攻击、拒绝服务攻击</li>
+</ul>
+<h3 id="3-云计算平台安全威胁（11类）"><a href="#3-云计算平台安全威胁（11类）" class="headerlink" title="3. 云计算平台安全威胁（11类）"></a>3. 云计算平台安全威胁（11类）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1. 物理安全威胁 → 资源集中化形成单点高风险</span><br><span class="line">2. 服务安全威胁 → 用户无法掌握技术细节</span><br><span class="line">3. 资源滥用威胁 → 构造僵尸网络、发动DDoS</span><br><span class="line">4. 运维及内部威胁 → 内部人员违规或误操作</span><br><span class="line">5. 数据残留 → 存储空间回收后信息未清除</span><br><span class="line">6. 过度依赖 → 缺乏统一标准，迁移困难</span><br><span class="line">7. 共享技术漏洞 → 租户隔离失效</span><br><span class="line">8. 滥用云服务 → 被攻击者利用发动攻击</span><br><span class="line">9. 云服务中断 → 网络或平台故障</span><br><span class="line">10. 不安全接口攻击 → 接口漏洞导致数据泄露</span><br><span class="line">11. 数据丢失/篡改/泄露 → 存储位置可能在境外</span><br></pre></td></tr></table></figure>
+<h2 id="三、云计算安全需求"><a href="#三、云计算安全需求" class="headerlink" title="三、云计算安全需求"></a>三、云计算安全需求</h2><h3 id="1-技术安全需求（三部分）"><a href="#1-技术安全需求（三部分）" class="headerlink" title="1. 技术安全需求（三部分）"></a>1. 技术安全需求（三部分）</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>层面</th>
+<th>安全目标</th>
+<th>主要需求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>云端</strong></td>
+<td>确保用户获取可信云服务</td>
+<td>身份标识鉴别、访问控制、数据安全存储</td>
+</tr>
+<tr>
+<td><strong>网络通信</strong></td>
+<td>确保及时访问及数据安全</td>
+<td>身份认证、加密、防火墙、VPN、抗DDoS</td>
+</tr>
+<tr>
+<td><strong>云平台</strong></td>
+<td>确保安全可信和业务连续性</td>
+<td>物理环境、主机、操作系统、虚拟机、多租户隔离</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="2-隐私保护需求（6方面）"><a href="#2-隐私保护需求（6方面）" class="headerlink" title="2. 隐私保护需求（6方面）"></a>2. 隐私保护需求（6方面）</h3><ol>
+<li><strong>数据采集</strong>：明确范围和用途，告知安全风险</li>
+<li><strong>数据传输</strong>：敏感数据加密传输</li>
+<li><strong>数据存储</strong>：加密、认证、访问控制、备份</li>
+<li><strong>数据使用</strong>：特权管理、实名认证、安全标记</li>
+<li><strong>数据维护</strong>：生命周期管理、保密协议、按规定清除</li>
+<li><strong>安全事件处置</strong>：制定应急预案</li>
+</ol>
+<h2 id="四、云计算安全保护机制与技术方案"><a href="#四、云计算安全保护机制与技术方案" class="headerlink" title="四、云计算安全保护机制与技术方案"></a>四、云计算安全保护机制与技术方案</h2><h3 id="1-安全等级保护框架"><a href="#1-安全等级保护框架" class="headerlink" title="1. 安全等级保护框架"></a>1. 安全等级保护框架</h3><ul>
+<li><strong>原则</strong>：”一中心，三重防护”</li>
+<li><strong>一中心</strong>：安全管理中心</li>
+<li><strong>三重防护</strong>：安全计算环境、安全区域边界、安全通信网络</li>
+<li><strong>要求</strong>：云计算基础设施位于中国境内</li>
+</ul>
+<p>云计算安全防护涉及：物理与环境安全、网络与通信安全、设备与计算安全、应用与数据安全。</p>
+<h3 id="2-六大网络安全机制"><a href="#2-六大网络安全机制" class="headerlink" title="2. 六大网络安全机制"></a>2. 六大网络安全机制</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">① 身份鉴别认证 → 用户名/口令、强制密码策略、多因子认证、Kerberos</span><br><span class="line">② 数据完整性 → 数字签名</span><br><span class="line">③ 访问控制 → 授权规则</span><br><span class="line">④ 入侵防范 → IDS/IPS、沙箱、抗DDoS</span><br><span class="line">⑤ 安全审计 → 日志集中管理</span><br><span class="line">⑥ 云操作系统安全增强 → 热补丁、恶意程序检测</span><br></pre></td></tr></table></figure>
+<h3 id="3-安全运维五大措施"><a href="#3-安全运维五大措施" class="headerlink" title="3. 安全运维五大措施"></a>3. 安全运维五大措施</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>措施</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>风险评估</strong></td>
+<td>资产清单、脆弱性、威胁分析</td>
+</tr>
+<tr>
+<td><strong>内部安全防护</strong></td>
+<td>多因素认证、堡垒机、SSH、VPN</td>
+</tr>
+<tr>
+<td><strong>网络安全监测</strong></td>
+<td>流量、日志、漏洞数据分析</td>
+</tr>
+<tr>
+<td><strong>应急响应</strong></td>
+<td>针对端口扫描、暴力破解、恶意代码等</td>
+</tr>
+<tr>
+<td><strong>容灾备份</strong></td>
+<td>“两地三中心”机制（同城+异地） 生产中心、同城容灾、异地容灾中心</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="五、主流云服务商安全体系对比"><a href="#五、主流云服务商安全体系对比" class="headerlink" title="五、主流云服务商安全体系对比"></a>五、主流云服务商安全体系对比</h2><h3 id="1-阿里云安全"><a href="#1-阿里云安全" class="headerlink" title="1. 阿里云安全"></a>1. 阿里云安全</h3><ul>
+<li><strong>安全体系</strong>：防护、监控、审计、身份认证、运维机制</li>
+<li><strong>主要产品</strong>：云盾、DDoS高防IP、Web应用防火墙、态势感知、SSL证书、云防火墙、加密服务</li>
+</ul>
+<h3 id="2-腾讯云安全（8大体系）"><a href="#2-腾讯云安全（8大体系）" class="headerlink" title="2. 腾讯云安全（8大体系）"></a>2. 腾讯云安全（8大体系）</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>体系</th>
+<th>核心产品/服务</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>网络安全</td>
+<td>DDoS防护、云防火墙、入侵防护系统</td>
+</tr>
+<tr>
+<td>终端安全</td>
+<td>主机安全、反病毒引擎、零信任访问控制</td>
+</tr>
+<tr>
+<td>应用安全</td>
+<td>Web应用防火墙、漏洞扫描、移动应用安全</td>
+</tr>
+<tr>
+<td>业务安全</td>
+<td>反欺诈、登录保护、验证码、活动防刷</td>
+</tr>
+<tr>
+<td>数据安全</td>
+<td>堡垒机、数据安全审计、加密机、脱敏</td>
+</tr>
+<tr>
+<td>安全管理</td>
+<td>SOC运营中心、密钥/凭据管理系统</td>
+</tr>
+<tr>
+<td>安全服务</td>
+<td>专家服务、威胁情报、资产风险监测</td>
+</tr>
+<tr>
+<td>身份验证</td>
+<td>身份证OCR、人脸比对、活体检测</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="3-华为云安全（8层防护）"><a href="#3-华为云安全（8层防护）" class="headerlink" title="3. 华为云安全（8层防护）"></a>3. 华为云安全（8层防护）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">芯片级 → 可信计算模块、国密算法</span><br><span class="line">平台级 → 统一虚拟化平台(UVP)、硬件辅助虚拟化</span><br><span class="line">系统级 → EulerOS加固策略、内核级安全</span><br><span class="line">应用级 → API网关、身份认证、传输加密</span><br><span class="line">数据级 → 全生命周期防护、加密、脱敏、销毁</span><br><span class="line">开发级 → 安全设计、编码、测试、漏洞管理</span><br><span class="line">生态级 → 开源及第三方软件安全管控</span><br><span class="line">隐私级 → 隐私保护设计规范</span><br></pre></td></tr></table></figure>
+<h3 id="4-微软Azure云安全"><a href="#4-微软Azure云安全" class="headerlink" title="4. 微软Azure云安全"></a>4. 微软Azure云安全</h3><ul>
+<li><strong>数据存储</strong>：客户数据全部位于中国境内</li>
+<li><strong>业务连续性</strong>：异地复制（相距1000km以上）</li>
+<li><strong>物理安全</strong>：N+1或2N路不间断电源、柴油发电机</li>
+<li><strong>合规性</strong>：ISO/IEC 27001、等保三级</li>
+<li><strong>技术措施</strong>：密钥保管库、AD单一登录、应用网关、VPN网关</li>
+<li><strong>服务保障</strong>：99.99% SLA、最多6个数据备份</li>
+</ul>
+<h2 id="六、云计算隐私保护措施"><a href="#六、云计算隐私保护措施" class="headerlink" title="六、云计算隐私保护措施"></a>六、云计算隐私保护措施</h2><h3 id="1-服务提供方措施"><a href="#1-服务提供方措施" class="headerlink" title="1. 服务提供方措施"></a>1. 服务提供方措施</h3><ul>
+<li>个人信息备份保管（多备份、加密）</li>
+<li>严格管理制度和流程</li>
+<li>安全合规机制与认证</li>
+<li>强化身份验证和访问控制</li>
+<li>限制存储地理位置（国内服务器）</li>
+<li>个人信息留存管理（不超过必需时间）</li>
+</ul>
+<h3 id="2-用户自我保护措施"><a href="#2-用户自我保护措施" class="headerlink" title="2. 用户自我保护措施"></a>2. 用户自我保护措施</h3><ul>
+<li>加强自我保护意识</li>
+<li>监督信息收集符合性</li>
+<li>个人信息更正权利</li>
+<li>个性化服务选择（Cookies管理）</li>
+</ul>
+<h3 id="3-应急响应措施"><a href="#3-应急响应措施" class="headerlink" title="3. 应急响应措施"></a>3. 应急响应措施</h3><ul>
+<li>制定个人信息安全事件应急预案</li>
+</ul>
+<h2 id="七、核心知识点图谱"><a href="#七、核心知识点图谱" class="headerlink" title="七、核心知识点图谱"></a>七、核心知识点图谱</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">云计算安全</span><br><span class="line">├── 概念特征（4特征、4部署模式）</span><br><span class="line">├── 安全威胁（端-管-云 11类威胁）</span><br><span class="line">├── 安全需求（技术需求 + 隐私保护）</span><br><span class="line">├── 保护机制（等级保护框架 + 6大机制 + 5运维措施）</span><br><span class="line">├── 案例分析（阿里云、腾讯云、华为云、Azure）</span><br><span class="line">└── 隐私保护（服务方 + 用户 + 应急响应）</span><br></pre></td></tr></table></figure>
+<h2 id="八、关键要点总结"><a href="#八、关键要点总结" class="headerlink" title="八、关键要点总结"></a>八、关键要点总结</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>核心要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>安全原则</strong></td>
+<td>“一中心，三重防护”、基础设施境内部署</td>
+</tr>
+<tr>
+<td><strong>威胁重点</strong></td>
+<td>多租户隔离、数据泄露、服务中断、接口安全</td>
+</tr>
+<tr>
+<td><strong>防护核心</strong></td>
+<td>身份认证、访问控制、加密、审计、容灾备份</td>
+</tr>
+<tr>
+<td><strong>运维关键</strong></td>
+<td>风险评估、应急响应、两地三中心容灾</td>
+</tr>
+<tr>
+<td><strong>隐私保护</strong></td>
+<td>全生命周期管理、境内部署、用户知情权</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E8%80%83/" rel="tag"># 软考</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/03/%E5%B7%A5%E6%8E%A7%E5%AE%89%E5%85%A8/" rel="prev" title="工控安全">
+                  <i class="fa fa-angle-left"></i> 工控安全
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E9%80%9A%E8%BF%87AUX-VTY%E4%BD%BF%E7%94%A8TACACS-%E8%BF%9B%E8%A1%8C%E8%AE%A4%E8%AF%81/" rel="next" title="路由器通过AUX&#x2F;VTY使用TACACS+进行认证">
+                  路由器通过AUX/VTY使用TACACS+进行认证 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
