@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、网络安全漏洞概述核心概念 网络安全漏洞（脆弱性）：致使网络信息系统安全策略相冲突的缺陷，通常称为安全隐患。  漏洞影响范围机密性受损 &#x2F; 完整性破坏 &#x2F; 可用性降低 &#x2F; 抗抵赖性缺失 &#x2F; 可控制性下降 &#x2F; 真实性不保 漏洞分类（按补丁状况）⭐    类型 说明     普通漏洞 漏洞信息已广泛公开，安全厂商已有修补方案   零日漏洞（Zero-day） 新发现、尚未提供补丁的漏洞，通常用于定向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漏洞防护">
+<meta property="og:url" content="https://zyufoye.github.io/2026/03/09/%E6%BC%8F%E6%B4%9E%E9%98%B2%E6%8A%A4/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="一、网络安全漏洞概述核心概念 网络安全漏洞（脆弱性）：致使网络信息系统安全策略相冲突的缺陷，通常称为安全隐患。  漏洞影响范围机密性受损 &#x2F; 完整性破坏 &#x2F; 可用性降低 &#x2F; 抗抵赖性缺失 &#x2F; 可控制性下降 &#x2F; 真实性不保 漏洞分类（按补丁状况）⭐    类型 说明     普通漏洞 漏洞信息已广泛公开，安全厂商已有修补方案   零日漏洞（Zero-day） 新发现、尚未提供补丁的漏洞，通常用于定向">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-09T14:23:44.000Z">
+<meta property="article:modified_time" content="2026-03-09T14:27:28.104Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="软考">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/03/09/%E6%BC%8F%E6%B4%9E%E9%98%B2%E6%8A%A4/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/03/09/%E6%BC%8F%E6%B4%9E%E9%98%B2%E6%8A%A4/","path":"2026/03/09/漏洞防护/","title":"漏洞防护"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>漏洞防护 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">一、网络安全漏洞概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%BD%B1%E5%93%8D%E8%8C%83%E5%9B%B4"><span class="nav-number">1.2.</span> <span class="nav-text">漏洞影响范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E7%B1%BB%EF%BC%88%E6%8C%89%E8%A1%A5%E4%B8%81%E7%8A%B6%E5%86%B5%EF%BC%89%E2%AD%90"><span class="nav-number">1.3.</span> <span class="nav-text">漏洞分类（按补丁状况）⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%A8%81%E8%83%81%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.4.</span> <span class="nav-text">漏洞威胁类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E5%9B%BD%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3%E5%B9%B3%E5%8F%B0%E4%B8%8E%E6%A0%87%E5%87%86-%E2%AD%90"><span class="nav-number">1.5.</span> <span class="nav-text">我国漏洞相关平台与标准 ⭐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E5%88%86%E7%B1%BB%E4%B8%8E%E7%AE%A1%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">二、网络安全漏洞分类与管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E6%9D%A5%E6%BA%90%E5%88%86%E7%B1%BB"><span class="nav-number">2.1.</span> <span class="nav-text">漏洞来源分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%9E%E6%8A%80%E6%9C%AF%E6%80%A7%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%EF%BC%885%E7%B1%BB%EF%BC%89"><span class="nav-number">2.1.1.</span> <span class="nav-text">非技术性安全漏洞（5类）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%80%A7%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%EF%BC%888%E7%B1%BB%EF%BC%89%E2%AD%90"><span class="nav-number">2.1.2.</span> <span class="nav-text">技术性安全漏洞（8类）⭐</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E7%B1%BB%E6%A0%87%E5%87%86-%E2%AD%90"><span class="nav-number">2.2.</span> <span class="nav-text">漏洞分类标准 ⭐</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-CVE%EF%BC%88%E7%BE%8E%E5%9B%BDMITRE%E5%85%AC%E5%8F%B8%EF%BC%89"><span class="nav-number">2.2.1.</span> <span class="nav-text">1. CVE（美国MITRE公司）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-CVSS%EF%BC%88%E9%80%9A%E7%94%A8%E6%BC%8F%E6%B4%9E%E8%AE%A1%E5%88%86%E7%B3%BB%E7%BB%9F%EF%BC%89%E2%AD%90"><span class="nav-number">2.2.2.</span> <span class="nav-text">2. CVSS（通用漏洞计分系统）⭐</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%88%91%E5%9B%BD%E6%BC%8F%E6%B4%9E%E5%88%86%E7%B1%BB-%E2%AD%90"><span class="nav-number">2.2.3.</span> <span class="nav-text">3. 我国漏洞分类 ⭐</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-OWASP-TOP-10%EF%BC%88Web%E5%BA%94%E7%94%A8%E6%BC%8F%E6%B4%9E%EF%BC%89%E2%AD%90"><span class="nav-number">2.2.4.</span> <span class="nav-text">4. OWASP TOP 10（Web应用漏洞）⭐</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E7%AE%A1%E7%90%86%E8%BF%87%E7%A8%8B%EF%BC%885%E4%B8%AA%E7%8E%AF%E8%8A%82%EF%BC%89%E2%AD%90"><span class="nav-number">2.3.</span> <span class="nav-text">漏洞管理过程（5个环节）⭐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E6%8A%80%E6%9C%AF"><span class="nav-number">3.</span> <span class="nav-text">三、网络安全漏洞扫描技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8%E7%BB%84%E6%88%90%EF%BC%884%E6%A8%A1%E5%9D%97%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">漏洞扫描器组成（4模块）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8%E4%B8%89%E7%A7%8D%E7%B1%BB%E5%9E%8B-%E2%AD%90"><span class="nav-number">3.2.</span> <span class="nav-text">漏洞扫描器三种类型 ⭐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E5%A4%84%E7%BD%AE%E6%8A%80%E6%9C%AF"><span class="nav-number">4.</span> <span class="nav-text">四、网络安全漏洞处置技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E6%8A%80%E6%9C%AF"><span class="nav-number">4.1.</span> <span class="nav-text">漏洞发现技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A5%E4%B8%81%E7%AE%A1%E7%90%86%E5%85%AD%E7%8E%AF%E8%8A%82-%E2%AD%90"><span class="nav-number">4.2.</span> <span class="nav-text">补丁管理六环节 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E9%98%B2%E8%8C%83%E6%8A%80%E6%9C%AF%EF%BC%885%E7%A7%8D%EF%BC%89%E2%AD%90"><span class="nav-number">4.3.</span> <span class="nav-text">漏洞利用防范技术（5种）⭐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E4%B8%BB%E8%A6%81%E4%BA%A7%E5%93%81%E4%B8%8E%E6%8A%80%E6%9C%AF%E6%8C%87%E6%A0%87"><span class="nav-number">5.</span> <span class="nav-text">五、主要产品与技术指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8%E6%8A%80%E6%9C%AF%E6%8C%87%E6%A0%87-%E2%AD%90"><span class="nav-number">5.1.</span> <span class="nav-text">漏洞扫描器技术指标 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E9%98%B2%E6%8A%A4%E7%BD%91%E5%85%B3%E6%8A%80%E6%9C%AF%E6%8C%87%E6%A0%87"><span class="nav-number">5.2.</span> <span class="nav-text">漏洞防护网关技术指标</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8C-%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0"><span class="nav-number">6.</span> <span class="nav-text">📌 高频考点速记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">88</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/09/%E6%BC%8F%E6%B4%9E%E9%98%B2%E6%8A%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="漏洞防护 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          漏洞防护
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-03-09 22:23:44 / 修改时间：22:27:28" itemprop="dateCreated datePublished" datetime="2026-03-09T22:23:44+08:00">2026-03-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="一、网络安全漏洞概述"><a href="#一、网络安全漏洞概述" class="headerlink" title="一、网络安全漏洞概述"></a>一、网络安全漏洞概述</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><blockquote>
+<p><strong>网络安全漏洞</strong>（脆弱性）：致使网络信息系统安全策略相冲突的缺陷，通常称为安全隐患。</p>
+</blockquote>
+<h3 id="漏洞影响范围"><a href="#漏洞影响范围" class="headerlink" title="漏洞影响范围"></a>漏洞影响范围</h3><p>机密性受损 / 完整性破坏 / 可用性降低 / 抗抵赖性缺失 / 可控制性下降 / 真实性不保</p>
+<h3 id="漏洞分类（按补丁状况）⭐"><a href="#漏洞分类（按补丁状况）⭐" class="headerlink" title="漏洞分类（按补丁状况）⭐"></a>漏洞分类（按补丁状况）⭐</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>普通漏洞</strong></td>
+<td>漏洞信息已广泛公开，安全厂商已有修补方案</td>
+</tr>
+<tr>
+<td><strong>零日漏洞（Zero-day）</strong></td>
+<td>新发现、<strong>尚未提供补丁</strong>的漏洞，通常用于<strong>定向攻击</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="漏洞威胁类型"><a href="#漏洞威胁类型" class="headerlink" title="漏洞威胁类型"></a>漏洞威胁类型</h3><p>网络信息系统漏洞的存在是攻击成功的必要条件之一。</p>
+<blockquote>
+<p>敏感信息泄露 / 未授权访问 / 身份假冒 / 拒绝服务</p>
+</blockquote>
+<h3 id="我国漏洞相关平台与标准-⭐"><a href="#我国漏洞相关平台与标准-⭐" class="headerlink" title="我国漏洞相关平台与标准 ⭐"></a>我国漏洞相关平台与标准 ⭐</h3><ul>
+<li><strong>CNNVD</strong>：国家信息安全漏洞库（中国信息安全测评中心建设）</li>
+<li><strong>CNVD</strong>：国家信息安全漏洞共享平台（国家计算机网络应急技术处理协调中心）</li>
+<li>相关标准：GB/T 33561 / GB/T 30279 / GB/T 28458 / GB/T 30276</li>
+</ul>
+<h2 id="二、网络安全漏洞分类与管理"><a href="#二、网络安全漏洞分类与管理" class="headerlink" title="二、网络安全漏洞分类与管理"></a>二、网络安全漏洞分类与管理</h2><h3 id="漏洞来源分类"><a href="#漏洞来源分类" class="headerlink" title="漏洞来源分类"></a>漏洞来源分类</h3><h4 id="非技术性安全漏洞（5类）"><a href="#非技术性安全漏洞（5类）" class="headerlink" title="非技术性安全漏洞（5类）"></a>非技术性安全漏洞（5类）</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>安全责任主体不明确</td>
+<td>缺少负责安全的机构</td>
+</tr>
+<tr>
+<td>安全策略不完备</td>
+<td>缺少规范的安全策略</td>
+</tr>
+<tr>
+<td>操作技能不足</td>
+<td>缺少安全培训机制</td>
+</tr>
+<tr>
+<td>安全监督缺失</td>
+<td>缺少强有力的监督机制</td>
+</tr>
+<tr>
+<td>特权控制不完备</td>
+<td>超级用户权限缺少审计和约束</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="技术性安全漏洞（8类）⭐"><a href="#技术性安全漏洞（8类）⭐" class="headerlink" title="技术性安全漏洞（8类）⭐"></a>技术性安全漏洞（8类）⭐</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>设计错误</strong></td>
+<td>系统或程序设计错误导致</td>
+</tr>
+<tr>
+<td><strong>输入验证错误</strong></td>
+<td>未验证用户输入合法性</td>
+</tr>
+<tr>
+<td><strong>缓冲区溢出</strong></td>
+<td>输入数据超过缓冲区规定长度，破坏堆栈</td>
+</tr>
+<tr>
+<td><strong>意外情况处置错误</strong></td>
+<td>未考虑意外情况导致运行出错</td>
+</tr>
+<tr>
+<td><strong>访问验证错误</strong></td>
+<td>逻辑错误使攻击者绕过访问控制</td>
+</tr>
+<tr>
+<td><strong>配置错误</strong></td>
+<td>配置参数、权限、策略配置有误</td>
+</tr>
+<tr>
+<td><strong>竞争条件</strong></td>
+<td>时序和同步问题造成的短暂可利用时机</td>
+</tr>
+<tr>
+<td><strong>环境错误</strong></td>
+<td>环境变量错误或被恶意设置</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="漏洞分类标准-⭐"><a href="#漏洞分类标准-⭐" class="headerlink" title="漏洞分类标准 ⭐"></a>漏洞分类标准 ⭐</h3><h4 id="1-CVE（美国MITRE公司）"><a href="#1-CVE（美国MITRE公司）" class="headerlink" title="1. CVE（美国MITRE公司）"></a>1. CVE（美国MITRE公司）</h4><ul>
+<li>安全漏洞统一标识字典，目标是<strong>便于共享漏洞数据</strong></li>
+<li>CVE ID 格式：<strong>年份数字 + 其他数字</strong>，如 <code>CVE-2019-1543</code></li>
+<li>条目内容：标识数字 + 漏洞简要描述 + 至少一个公开参考</li>
+</ul>
+<h4 id="2-CVSS（通用漏洞计分系统）⭐"><a href="#2-CVSS（通用漏洞计分系统）⭐" class="headerlink" title="2. CVSS（通用漏洞计分系统）⭐"></a>2. CVSS（通用漏洞计分系统）⭐</h4><p>评分由三部分组成：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>计分维度</th>
+<th>关键参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>基本度量计分</strong></td>
+<td>攻击向量、攻击复杂性、特权要求、用户交互、完整性/保密性/可用性影响、影响范围</td>
+</tr>
+<tr>
+<td><strong>时序度量计分</strong></td>
+<td>漏洞利用代码成熟度、修补级别、漏洞报告可信度</td>
+</tr>
+<tr>
+<td><strong>环境度量计分</strong></td>
+<td>完整性/保密性/可用性要求、修订基本得分</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="3-我国漏洞分类-⭐"><a href="#3-我国漏洞分类-⭐" class="headerlink" title="3. 我国漏洞分类 ⭐"></a>3. 我国漏洞分类 ⭐</h4><p><strong>CNNVD 漏洞分类（25类，重点记）：</strong></p>
+<blockquote>
+<p>配置错误、代码问题、资源管理错误、数字错误、信息泄露、竞争条件、输入验证、缓冲区错误、格式化字符串、<strong>跨站脚本、路径遍历、后置链接、SQL注入、代码注入、命令注入</strong>、操作系统命令注入、安全特征问题、授权问题、信任管理、加密问题、未充分验证数据可靠性、<strong>跨站请求伪造</strong>、权限许可和访问控制、访问控制错误、资料不足</p>
+</blockquote>
+<p><strong>CNVD 漏洞分类（11类）：</strong></p>
+<blockquote>
+<p>输入验证错误、访问验证错误、意外情况处理错误、边界条件错误、配置错误、竞争条件、环境错误、设计错误、缓冲区错误、其他错误、未知错误</p>
+</blockquote>
+<p><strong>CNVD 危害级别：高 / 中 / 低 三级</strong></p>
+<h4 id="4-OWASP-TOP-10（Web应用漏洞）⭐"><a href="#4-OWASP-TOP-10（Web应用漏洞）⭐" class="headerlink" title="4. OWASP TOP 10（Web应用漏洞）⭐"></a>4. OWASP TOP 10（Web应用漏洞）⭐</h4><blockquote>
+<p>注入、失效的身份认证、敏感信息泄露、XML外部实体(XXE)、失效的访问控制、安全配置错误、<strong>跨站脚本(XSS)</strong>、不安全的反序列化、使用含已知漏洞的组件、不足的日志记录和监控、未验证的重定向和转发、非安全加密存储</p>
+</blockquote>
+<h3 id="漏洞管理过程（5个环节）⭐"><a href="#漏洞管理过程（5个环节）⭐" class="headerlink" title="漏洞管理过程（5个环节）⭐"></a>漏洞管理过程（5个环节）⭐</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">① 资产确认 → ② 漏洞信息采集 → ③ 漏洞评估 → ④ 漏洞消除和控制 → ⑤ 漏洞变化跟踪</span><br></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>核心内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>资产确认</strong></td>
+<td>摸底调查，建立信息资产档案</td>
+</tr>
+<tr>
+<td><strong>漏洞信息采集</strong></td>
+<td>收集漏洞类型、补丁级别、影响资产</td>
+</tr>
+<tr>
+<td><strong>漏洞评估</strong></td>
+<td>评估业务影响、被利用可能性、修补级别，形成威胁排序</td>
+</tr>
+<tr>
+<td><strong>漏洞消除和控制</strong></td>
+<td><strong>安装补丁包、升级系统、更新IPS/IDS特征库、变更管理流程</strong></td>
+</tr>
+<tr>
+<td><strong>漏洞变化跟踪</strong></td>
+<td>持续跟踪漏洞状态，持续修补</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="三、网络安全漏洞扫描技术"><a href="#三、网络安全漏洞扫描技术" class="headerlink" title="三、网络安全漏洞扫描技术"></a>三、网络安全漏洞扫描技术</h2><h3 id="漏洞扫描器组成（4模块）"><a href="#漏洞扫描器组成（4模块）" class="headerlink" title="漏洞扫描器组成（4模块）"></a>漏洞扫描器组成（4模块）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用户界面 → 扫描引擎 → 漏洞扫描结果分析 → 漏洞信息及配置参数库</span><br></pre></td></tr></table></figure>
+<h3 id="漏洞扫描器三种类型-⭐"><a href="#漏洞扫描器三种类型-⭐" class="headerlink" title="漏洞扫描器三种类型 ⭐"></a>漏洞扫描器三种类型 ⭐</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>特点</th>
+<th>局限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>主机漏洞扫描器</strong></td>
+<td>检查本地关键文件内容及安全属性，无需网络连接，只能单机检测</td>
+<td>仅限本地</td>
+</tr>
+<tr>
+<td><strong>网络漏洞扫描器</strong></td>
+<td>建立网络连接，发送特定请求，便于远程检查</td>
+<td>无本地权限，检查能力受限</td>
+</tr>
+<tr>
+<td><strong>专用漏洞扫描器</strong></td>
+<td>针对特定系统（数据库/网络设备/Web/工控）</td>
+<td>范围专一</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="四、网络安全漏洞处置技术"><a href="#四、网络安全漏洞处置技术" class="headerlink" title="四、网络安全漏洞处置技术"></a>四、网络安全漏洞处置技术</h2><h3 id="漏洞发现技术"><a href="#漏洞发现技术" class="headerlink" title="漏洞发现技术"></a>漏洞发现技术</h3><p>漏洞发现方法依赖于人工安全性分析、工具自动化检测及人工智能辅助分析。把已发现的漏洞进行总结，形成一个特征库，利用特征库进行智能化识别。</p>
+<blockquote>
+<p>文本搜索、词法分析、范围检查、状态机检查、错误注入、<strong>模糊测试</strong>、动态污点分析、形式化验证</p>
+</blockquote>
+<h3 id="补丁管理六环节-⭐"><a href="#补丁管理六环节-⭐" class="headerlink" title="补丁管理六环节 ⭐"></a>补丁管理六环节 ⭐</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">现状分析 → 补丁跟踪 → 补丁验证 → 补丁安装 → 应急处理 → 补丁检查</span><br></pre></td></tr></table></figure>
+<h3 id="漏洞利用防范技术（5种）⭐"><a href="#漏洞利用防范技术（5种）⭐" class="headerlink" title="漏洞利用防范技术（5种）⭐"></a>漏洞利用防范技术（5种）⭐</h3><p>针对漏洞利用触发条件进行干扰和拦截。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>原理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>地址空间随机化（ASLR）</strong></td>
+<td>对程序加载内存地址随机化，使攻击者无法预知返回地址，防御缓冲区溢出</td>
+</tr>
+<tr>
+<td><strong>数据执行阻止（DEP）</strong></td>
+<td>将特定内存区域标注为<strong>非执行</strong>，保护堆栈区域</td>
+</tr>
+<tr>
+<td><strong>SEHOP</strong></td>
+<td>防止攻击者利用结构化异常处理（SEH）重写</td>
+</tr>
+<tr>
+<td><strong>堆栈保护</strong></td>
+<td>设置堆栈完整性标记，检测函数调用返回地址是否被篡改</td>
+</tr>
+<tr>
+<td><strong>虚拟补丁</strong></td>
+<td>不修改程序，通过过滤网络流量中的漏洞攻击数据包保护目标系统，由IPS/WAF实现</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="五、主要产品与技术指标"><a href="#五、主要产品与技术指标" class="headerlink" title="五、主要产品与技术指标"></a>五、主要产品与技术指标</h2><h3 id="漏洞扫描器技术指标-⭐"><a href="#漏洞扫描器技术指标-⭐" class="headerlink" title="漏洞扫描器技术指标 ⭐"></a>漏洞扫描器技术指标 ⭐</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>扫描主机数量</td>
+<td>有无IP/域名限制</td>
+</tr>
+<tr>
+<td>并发数</td>
+<td>支持并发扫描任务数量</td>
+</tr>
+<tr>
+<td>扫描速度</td>
+<td>单位时间扫描效率</td>
+</tr>
+<tr>
+<td>漏洞检测能力</td>
+<td>数量、类型、是否覆盖主流OS/数据库/网络设备</td>
+</tr>
+<tr>
+<td>数据库漏洞检查</td>
+<td>Oracle/MySQL/MS SQL/DB2/Sybase/PostgreSQL/MongoDB</td>
+</tr>
+<tr>
+<td>Web应用漏洞检查</td>
+<td>SQL注入/XSS/网站挂马/网页木马/CGI漏洞</td>
+</tr>
+<tr>
+<td><strong>口令检查功能</strong></td>
+<td>SMB/Telnet/FTP/SSH/POP3/SQL Server/MySQL/Oracle等口令猜测</td>
+</tr>
+<tr>
+<td>标准兼容性</td>
+<td>兼容CVE/CNNVD/CNVD/BugTraq，提供CVE兼容证书</td>
+</tr>
+<tr>
+<td>部署环境</td>
+<td>是否支持虚拟化VM平台</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="漏洞防护网关技术指标"><a href="#漏洞防护网关技术指标" class="headerlink" title="漏洞防护网关技术指标"></a>漏洞防护网关技术指标</h3><blockquote>
+<p>常见产品：<strong>IPS、WAF（Web防火墙）、UTM（统一威胁管理）</strong></p>
+</blockquote>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阻断攻击种类与数量</td>
+<td>能防御的漏洞利用类型及数量</td>
+</tr>
+<tr>
+<td>阻断准确率</td>
+<td>检测并阻止漏洞利用的正确程度</td>
+</tr>
+<tr>
+<td>阻断性能</td>
+<td>单位时间内有效阻止的数量</td>
+</tr>
+<tr>
+<td>支持网络带宽能力</td>
+<td>对网络流量大小的控制能力</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="📌-高频考点速记"><a href="#📌-高频考点速记" class="headerlink" title="📌 高频考点速记"></a>📌 高频考点速记</h2><ol>
+<li><strong>零日漏洞</strong> = 无补丁 + 定向攻击</li>
+<li><strong>CVE ID格式</strong>：年份+数字，如 <code>CVE-2019-1543</code></li>
+<li><strong>CVSS三维度</strong>：基本度量 / 时序度量 / 环境度量</li>
+<li><strong>CNVD危害级别</strong>：高 / 中 / 低</li>
+<li><strong>漏洞管理5步</strong>：资产确认→采集→评估→消除控制→变化跟踪</li>
+<li><strong>漏洞消除方法</strong>：打补丁 / 升级系统 / 更新IPS特征库 / 变更管理流程</li>
+<li><strong>ASLR</strong> 防缓冲区溢出；<strong>DEP</strong> 防内存区域执行；<strong>虚拟补丁</strong> 靠流量过滤</li>
+<li><strong>补丁管理6环节</strong>：现状分析→跟踪→验证→安装→应急→检查</li>
+<li><strong>漏洞防护网关产品</strong>：IPS / WAF / UTM</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E8%80%83/" rel="tag"># 软考</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/09/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E9%98%B2%E6%8A%A4/" rel="prev" title="恶意代码防护">
+                  <i class="fa fa-angle-left"></i> 恶意代码防护
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/03/09/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AE%A1%E8%AE%A1/" rel="next" title="网络安全审计">
+                  网络安全审计 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

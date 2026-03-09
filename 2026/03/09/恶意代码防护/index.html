@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、恶意代码概述核心概念 恶意代码：违背目标系统安全策略的程序代码，造成信息泄露、资源滥用，破坏系统完整性及可用性，可经存储介质或网络传播。  恶意代码种类 计算机病毒 &#x2F; 蠕虫 &#x2F; 特洛伊木马 &#x2F; 逻辑炸弹 &#x2F; 细菌 &#x2F; 恶意脚本 &#x2F; 恶意ActiveX控件 &#x2F; 间谍软件  恶意代码攻击模型（6步）⭐1① 侵入系统 → ② 维持&#x2F;提升权限 → ③ 隐蔽 → ④ 潜伏 → ⑤ 破坏 → ⑥ 重复攻">
+<meta property="og:type" content="article">
+<meta property="og:title" content="恶意代码防护">
+<meta property="og:url" content="https://zyufoye.github.io/2026/03/09/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E9%98%B2%E6%8A%A4/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="一、恶意代码概述核心概念 恶意代码：违背目标系统安全策略的程序代码，造成信息泄露、资源滥用，破坏系统完整性及可用性，可经存储介质或网络传播。  恶意代码种类 计算机病毒 &#x2F; 蠕虫 &#x2F; 特洛伊木马 &#x2F; 逻辑炸弹 &#x2F; 细菌 &#x2F; 恶意脚本 &#x2F; 恶意ActiveX控件 &#x2F; 间谍软件  恶意代码攻击模型（6步）⭐1① 侵入系统 → ② 维持&#x2F;提升权限 → ③ 隐蔽 → ④ 潜伏 → ⑤ 破坏 → ⑥ 重复攻">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-09T14:23:32.000Z">
+<meta property="article:modified_time" content="2026-03-09T14:26:08.940Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="软考">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/03/09/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E9%98%B2%E6%8A%A4/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/03/09/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E9%98%B2%E6%8A%A4/","path":"2026/03/09/恶意代码防护/","title":"恶意代码防护"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>恶意代码防护 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">一、恶意代码概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E7%A7%8D%E7%B1%BB"><span class="nav-number">1.2.</span> <span class="nav-text">恶意代码种类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E6%94%BB%E5%87%BB%E6%A8%A1%E5%9E%8B%EF%BC%886%E6%AD%A5%EF%BC%89%E2%AD%90"><span class="nav-number">1.3.</span> <span class="nav-text">恶意代码攻击模型（6步）⭐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E7%94%9F%E5%AD%98%E6%8A%80%E6%9C%AF-%E2%AD%90"><span class="nav-number">2.</span> <span class="nav-text">二、恶意代码生存技术 ⭐</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%8F%8D%E8%B7%9F%E8%B8%AA%E6%8A%80%E6%9C%AF"><span class="nav-number">2.1.</span> <span class="nav-text">1. 反跟踪技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%8A%A0%E5%AF%86%E6%8A%80%E6%9C%AF"><span class="nav-number">2.2.</span> <span class="nav-text">2. 加密技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%A8%A1%E7%B3%8A%E5%8F%98%E6%8D%A2%E6%8A%80%E6%9C%AF-%E2%AD%90"><span class="nav-number">2.3.</span> <span class="nav-text">3. 模糊变换技术 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E8%87%AA%E5%8A%A8%E7%94%9F%E4%BA%A7%E6%8A%80%E6%9C%AF"><span class="nav-number">2.4.</span> <span class="nav-text">4. 自动生产技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%8F%98%E5%BD%A2%E6%8A%80%E6%9C%AF"><span class="nav-number">2.5.</span> <span class="nav-text">5. 变形技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E4%B8%89%E7%BA%BF%E7%A8%8B%E6%8A%80%E6%9C%AF-%E2%AD%90"><span class="nav-number">2.6.</span> <span class="nav-text">6. 三线程技术 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E8%BF%9B%E7%A8%8B%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF"><span class="nav-number">2.7.</span> <span class="nav-text">7. 进程注入技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E9%80%9A%E4%BF%A1%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF-%E2%AD%90"><span class="nav-number">2.8.</span> <span class="nav-text">8. 通信隐藏技术 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-%E5%86%85%E6%A0%B8%E7%BA%A7%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF"><span class="nav-number">2.9.</span> <span class="nav-text">9. 内核级隐藏技术</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E6%94%BB%E5%87%BB%E6%8A%80%E6%9C%AF-%E2%AD%90"><span class="nav-number">3.</span> <span class="nav-text">三、恶意代码攻击技术 ⭐</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E6%8A%80%E6%9C%AF"><span class="nav-number">4.</span> <span class="nav-text">四、恶意代码分析技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90%E6%96%B9%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">静态分析方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90%E6%96%B9%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">动态分析方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90%E4%B8%8E%E9%98%B2%E6%8A%A4"><span class="nav-number">5.</span> <span class="nav-text">五、计算机病毒分析与防护</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%97%85%E6%AF%92%E5%9B%9B%E5%A4%A7%E5%9F%BA%E6%9C%AC%E7%89%B9%E7%82%B9-%E2%AD%90"><span class="nav-number">5.1.</span> <span class="nav-text">病毒四大基本特点 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%97%85%E6%AF%92%E7%BB%84%E6%88%90-%E2%AD%90"><span class="nav-number">5.2.</span> <span class="nav-text">计算机病毒组成 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%97%85%E6%AF%92%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">5.3.</span> <span class="nav-text">计算机病毒生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%97%85%E6%AF%92%E5%B8%B8%E8%A7%81%E7%B1%BB%E5%9E%8B-%E2%AD%90"><span class="nav-number">5.4.</span> <span class="nav-text">计算机病毒常见类型 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%97%85%E6%AF%92%E9%98%B2%E6%8A%A4%E6%96%B9%E6%A1%88-%E2%AD%90"><span class="nav-number">5.5.</span> <span class="nav-text">病毒防护方案 ⭐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E7%89%B9%E6%B4%9B%E4%BC%8A%E6%9C%A8%E9%A9%AC%E5%88%86%E6%9E%90%E4%B8%8E%E9%98%B2%E6%8A%A4-Trojan-Horse"><span class="nav-number">6.</span> <span class="nav-text">六、特洛伊木马分析与防护 Trojan Horse</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E5%BE%81-%E2%AD%90"><span class="nav-number">6.1.</span> <span class="nav-text">核心特征 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%A8%E9%A9%AC%E5%88%86%E7%B1%BB"><span class="nav-number">6.2.</span> <span class="nav-text">木马分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%A8%E9%A9%AC%E6%94%BB%E5%87%BB%E4%BA%94%E6%AD%A5%E9%AA%A4-%E2%AD%90"><span class="nav-number">6.3.</span> <span class="nav-text">木马攻击五步骤 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%A8%E9%A9%AC%E6%A4%8D%E5%85%A5%E6%8A%80%E6%9C%AF-%E2%AD%90"><span class="nav-number">6.4.</span> <span class="nav-text">木马植入技术 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%A8%E9%A9%AC%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF-%E2%AD%90"><span class="nav-number">6.5.</span> <span class="nav-text">木马隐藏技术 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%A8%E9%A9%AC%E6%A3%80%E6%B5%8B%E6%8A%80%E6%9C%AF-%E2%AD%90"><span class="nav-number">6.6.</span> <span class="nav-text">木马检测技术 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%A8%E9%A9%AC%E9%98%B2%E8%8C%83%E4%B8%8E%E6%B8%85%E9%99%A4"><span class="nav-number">6.7.</span> <span class="nav-text">木马防范与清除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E7%BD%91%E7%BB%9C%E8%A0%95%E8%99%AB%E5%88%86%E6%9E%90%E4%B8%8E%E9%98%B2%E6%8A%A4"><span class="nav-number">7.</span> <span class="nav-text">七、网络蠕虫分析与防护</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E5%BE%81-%E2%AD%90-1"><span class="nav-number">7.1.</span> <span class="nav-text">核心特征 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A0%95%E8%99%AB%E5%9B%9B%E5%A4%A7%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97-%E2%AD%90"><span class="nav-number">7.2.</span> <span class="nav-text">蠕虫四大功能模块 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A0%95%E8%99%AB%E8%BF%90%E8%A1%8C%E4%B8%89%E9%98%B6%E6%AE%B5"><span class="nav-number">7.3.</span> <span class="nav-text">蠕虫运行三阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A0%95%E8%99%AB%E6%89%AB%E6%8F%8F%E6%8A%80%E6%9C%AF-%E2%AD%90"><span class="nav-number">7.4.</span> <span class="nav-text">蠕虫扫描技术 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A0%95%E8%99%AB%E9%98%B2%E8%8C%83%E6%8A%80%E6%9C%AF-%E2%AD%90"><span class="nav-number">7.5.</span> <span class="nav-text">蠕虫防范技术 ⭐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E5%83%B5%E5%B0%B8%E7%BD%91%E7%BB%9C%E5%88%86%E6%9E%90%E4%B8%8E%E9%98%B2%E6%8A%A4"><span class="nav-number">8.</span> <span class="nav-text">八、僵尸网络分析与防护</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5-%E2%AD%90"><span class="nav-number">8.1.</span> <span class="nav-text">核心概念 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E6%96%B9%E5%BC%8F"><span class="nav-number">8.2.</span> <span class="nav-text">构建方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E4%B8%89%E6%AD%A5%E9%AA%A4"><span class="nav-number">8.3.</span> <span class="nav-text">运行三步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B2%E8%8C%83%E6%8A%80%E6%9C%AF"><span class="nav-number">8.4.</span> <span class="nav-text">防范技术</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E5%85%B6%E4%BB%96%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81-%E2%AD%90"><span class="nav-number">9.</span> <span class="nav-text">九、其他恶意代码 ⭐</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E9%98%B2%E6%8A%A4%E4%BA%A7%E5%93%81%E4%B8%8E%E6%8A%80%E6%9C%AF%E6%8C%87%E6%A0%87"><span class="nav-number">10.</span> <span class="nav-text">十、恶意代码防护产品与技术指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E4%BA%A7%E5%93%81-%E2%AD%90"><span class="nav-number">10.1.</span> <span class="nav-text">主要产品 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%8A%80%E6%9C%AF%E6%8C%87%E6%A0%87-%E2%AD%90"><span class="nav-number">10.2.</span> <span class="nav-text">主要技术指标 ⭐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#APT%E9%98%B2%E6%8A%A4-%E2%AD%90"><span class="nav-number">10.3.</span> <span class="nav-text">APT防护 ⭐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8C-%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9%E9%80%9F%E8%AE%B0"><span class="nav-number">11.</span> <span class="nav-text">📌 高频考点速记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">88</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/09/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E9%98%B2%E6%8A%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="恶意代码防护 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          恶意代码防护
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-03-09 22:23:32 / 修改时间：22:26:08" itemprop="dateCreated datePublished" datetime="2026-03-09T22:23:32+08:00">2026-03-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="一、恶意代码概述"><a href="#一、恶意代码概述" class="headerlink" title="一、恶意代码概述"></a>一、恶意代码概述</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><blockquote>
+<p><strong>恶意代码</strong>：违背目标系统安全策略的程序代码，造成信息泄露、资源滥用，破坏系统完整性及可用性，可经存储介质或网络传播。</p>
+</blockquote>
+<h3 id="恶意代码种类"><a href="#恶意代码种类" class="headerlink" title="恶意代码种类"></a>恶意代码种类</h3><blockquote>
+<p>计算机病毒 / 蠕虫 / 特洛伊木马 / 逻辑炸弹 / 细菌 / 恶意脚本 / 恶意ActiveX控件 / 间谍软件</p>
+</blockquote>
+<h3 id="恶意代码攻击模型（6步）⭐"><a href="#恶意代码攻击模型（6步）⭐" class="headerlink" title="恶意代码攻击模型（6步）⭐"></a>恶意代码攻击模型（6步）⭐</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">① 侵入系统 → ② 维持/提升权限 → ③ 隐蔽 → ④ 潜伏 → ⑤ 破坏 → ⑥ 重复攻击新目标</span><br></pre></td></tr></table></figure>
+<h2 id="二、恶意代码生存技术-⭐"><a href="#二、恶意代码生存技术-⭐" class="headerlink" title="二、恶意代码生存技术 ⭐"></a>二、恶意代码生存技术 ⭐</h2><h3 id="1-反跟踪技术"><a href="#1-反跟踪技术" class="headerlink" title="1. 反跟踪技术"></a>1. 反跟踪技术</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>技术方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>反动态跟踪</strong></td>
+<td>禁止跟踪中断、检测跟踪法、指令流队列法、逆指令流法</td>
+</tr>
+<tr>
+<td><strong>反静态分析</strong></td>
+<td>程序代码分块加密执行、伪指令法（插入”废指令”）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="2-加密技术"><a href="#2-加密技术" class="headerlink" title="2. 加密技术"></a>2. 加密技术</h3><ul>
+<li>加密手段三种：<strong>信息加密、数据加密、程序代码加密</strong></li>
+<li>目的：使分析者无法调试、阅读代码，无法抽取特征串</li>
+</ul>
+<h3 id="3-模糊变换技术-⭐"><a href="#3-模糊变换技术-⭐" class="headerlink" title="3. 模糊变换技术 ⭐"></a>3. 模糊变换技术 ⭐</h3><p>使恶意代码每次感染后代码不同，逃避特征检测：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>指令替换技术</strong></td>
+<td>对二进制代码进行同义变换，如 <code>XOR REG,REG</code> → <code>SUB REG,REG</code></td>
+</tr>
+<tr>
+<td><strong>指令压缩技术</strong></td>
+<td>对可压缩指令同义压缩，需对跳转指令重定位</td>
+</tr>
+<tr>
+<td><strong>指令扩展技术</strong></td>
+<td>对汇编指令同义扩展，变换空间更大</td>
+</tr>
+<tr>
+<td><strong>伪指令技术</strong></td>
+<td>插入无效指令（如空指令）干扰分析</td>
+</tr>
+<tr>
+<td><strong>重编译技术</strong></td>
+<td>携带源码自带编译器重新编译，实现跨平台变形（宏病毒/脚本典型应用）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p>📌 <strong>Tequila</strong> 是第一例在全球范围传播和破坏的变形病毒</p>
+</blockquote>
+<h3 id="4-自动生产技术"><a href="#4-自动生产技术" class="headerlink" title="4. 自动生产技术"></a>4. 自动生产技术</h3><ul>
+<li>利用”<strong>多态性发生器</strong>“编译出具有多态性的病毒</li>
+<li>代码本身改变但功能保持不变，可绕过特征扫描</li>
+</ul>
+<h3 id="5-变形技术"><a href="#5-变形技术" class="headerlink" title="5. 变形技术"></a>5. 变形技术</h3><blockquote>
+<p>重汇编技术 / 压缩技术 / 膨胀技术 / 伪指令技术</p>
+</blockquote>
+<h3 id="6-三线程技术-⭐"><a href="#6-三线程技术-⭐" class="headerlink" title="6. 三线程技术 ⭐"></a>6. 三线程技术 ⭐</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>线程</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>主线程</strong></td>
+<td>负责远程控制</td>
+</tr>
+<tr>
+<td><strong>监视线程</strong></td>
+<td>检查恶意代码是否被删除或停止自启动</td>
+</tr>
+<tr>
+<td><strong>守护线程</strong></td>
+<td>注入其他可执行文件，进程被停止后自动重启</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="7-进程注入技术"><a href="#7-进程注入技术" class="headerlink" title="7. 进程注入技术"></a>7. 进程注入技术</h3><ul>
+<li>把恶意代码嵌入系统服务/网络服务的进程中，<strong>只需安装一次</strong>，可持续活跃运行</li>
+</ul>
+<h3 id="8-通信隐藏技术-⭐"><a href="#8-通信隐藏技术-⭐" class="headerlink" title="8. 通信隐藏技术 ⭐"></a>8. 通信隐藏技术 ⭐</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>端口定制技术</strong></td>
+<td>定制端口，避开对缺省端口的检测</td>
+</tr>
+<tr>
+<td><strong>端口复用技术</strong></td>
+<td>复用已开放端口（如25、139），欺骗防火墙/IDS</td>
+</tr>
+<tr>
+<td><strong>通信加密技术</strong></td>
+<td>隐藏通信内容，但通信状态无法隐藏</td>
+</tr>
+<tr>
+<td><strong>隐蔽通道技术</strong></td>
+<td>能同时隐藏通信内容和通信状态，但开发代价大</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="9-内核级隐藏技术"><a href="#9-内核级隐藏技术" class="headerlink" title="9. 内核级隐藏技术"></a>9. 内核级隐藏技术</h3><ul>
+<li><strong>LKM隐藏</strong>：通过Linux可加载内核模块，hook系统调用实现隐藏，LKM经常使用在设备驱动和Rootkit中。</li>
+<li><strong>内存映射隐藏</strong>：通过内存映射避免多次I/O调用</li>
+</ul>
+<h2 id="三、恶意代码攻击技术-⭐"><a href="#三、恶意代码攻击技术-⭐" class="headerlink" title="三、恶意代码攻击技术 ⭐"></a>三、恶意代码攻击技术 ⭐</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>进程注入技术</strong></td>
+<td>嵌入系统服务相关进程，实现自身隐藏和启动</td>
+</tr>
+<tr>
+<td><strong>超级管理技术</strong></td>
+<td>对反恶意代码软件发起拒绝服务攻击</td>
+</tr>
+<tr>
+<td><strong>端口反向连接技术</strong></td>
+<td>被控端主动连接控制端，绕过防火墙（如”灰鸽子”、”网络神偷”）</td>
+</tr>
+<tr>
+<td><strong>缓冲区溢出攻击技术</strong></td>
+<td>利用漏洞植入并执行攻击代码，主动传播的主要途径（如”红色代码”）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="四、恶意代码分析技术"><a href="#四、恶意代码分析技术" class="headerlink" title="四、恶意代码分析技术"></a>四、恶意代码分析技术</h2><h3 id="静态分析方法"><a href="#静态分析方法" class="headerlink" title="静态分析方法"></a>静态分析方法</h3><blockquote>
+<p>特征代码法、校验和法、行为监测法、软件模拟法、字符串分析、脚本分析、静态反编译分析、静态反汇编分析（线性遍历 / 递归遍历）</p>
+</blockquote>
+<h3 id="动态分析方法"><a href="#动态分析方法" class="headerlink" title="动态分析方法"></a>动态分析方法</h3><blockquote>
+<p>文件监测、进程监测、网络活动监测、注册表监测、动态反汇编分析（同内存调试 / 仿真调试）</p>
+</blockquote>
+<h2 id="五、计算机病毒分析与防护"><a href="#五、计算机病毒分析与防护" class="headerlink" title="五、计算机病毒分析与防护"></a>五、计算机病毒分析与防护</h2><p>计算机病毒是一组具有自我复制、传播能力的程序代码。</p>
+<h3 id="病毒四大基本特点-⭐"><a href="#病毒四大基本特点-⭐" class="headerlink" title="病毒四大基本特点 ⭐"></a>病毒四大基本特点 ⭐</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>特点</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>隐蔽性</strong></td>
+<td>附加在正常软件中，用户不知不觉感染</td>
+</tr>
+<tr>
+<td><strong>传染性</strong></td>
+<td>自我复制并附加到无病毒程序，<strong>是与其他程序最本质的区别</strong></td>
+</tr>
+<tr>
+<td><strong>潜伏性</strong></td>
+<td>触发条件满足才发作，<strong>常见触发条件是特定日期</strong></td>
+</tr>
+<tr>
+<td><strong>破坏性</strong></td>
+<td>造成数据丢失、系统无法使用、远程控制等</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="计算机病毒组成-⭐"><a href="#计算机病毒组成-⭐" class="headerlink" title="计算机病毒组成 ⭐"></a>计算机病毒组成 ⭐</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">复制传染部件（replicator）+ 隐藏部件（concealer）+ 破坏部件（bomb）</span><br></pre></td></tr></table></figure>
+<h3 id="计算机病毒生命周期"><a href="#计算机病毒生命周期" class="headerlink" title="计算机病毒生命周期"></a>计算机病毒生命周期</h3><ul>
+<li><strong>第一阶段</strong>：复制传播阶段（持续一周到几年，隐蔽传播）</li>
+<li><strong>第二阶段</strong>：激活阶段（条件满足后发作破坏）</li>
+</ul>
+<h3 id="计算机病毒常见类型-⭐"><a href="#计算机病毒常见类型-⭐" class="headerlink" title="计算机病毒常见类型 ⭐"></a>计算机病毒常见类型 ⭐</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>引导型病毒</strong></td>
+<td>感染系统引导区，修改/替换真实引导区内容</td>
+</tr>
+<tr>
+<td><strong>宏病毒</strong></td>
+<td>利用宏语言实现，<strong>文档/数据也可作为载体</strong>，可跨平台感染任何运行Office的计算机</td>
+</tr>
+<tr>
+<td><strong>多态病毒</strong></td>
+<td>每次感染更换加密算法，无固定特征码，需<strong>启发式分析</strong>检测；三部分：杂乱的病毒体+解密例程+<strong>变化引擎</strong></td>
+</tr>
+<tr>
+<td><strong>隐蔽病毒</strong></td>
+<td>隐藏文件日期/大小变化，病毒加密，逃避检测</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="病毒防护方案-⭐"><a href="#病毒防护方案-⭐" class="headerlink" title="病毒防护方案 ⭐"></a>病毒防护方案 ⭐</h3><p>防病毒策略：查找病毒源、阻断传播、主动查杀、应急响应与灾备。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>单机防护</strong></td>
+<td>传统模式，防守终端最后防线</td>
+</tr>
+<tr>
+<td><strong>网络防护</strong></td>
+<td>建立网络防病毒管理平台，集中监控，统一管理</td>
+</tr>
+<tr>
+<td><strong>网络分级防护</strong></td>
+<td>单机终端杀毒 → 局域网集中监控 → 广域网总部管理（三级模式）</td>
+</tr>
+<tr>
+<td><strong>邮件网关防护</strong></td>
+<td>放置在邮件网关入口，过滤病毒和不良邮件</td>
+</tr>
+<tr>
+<td><strong>网关防护</strong></td>
+<td>网关杀毒+防火墙联动，<strong>几乎不影响网络带宽</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="六、特洛伊木马分析与防护-Trojan-Horse"><a href="#六、特洛伊木马分析与防护-Trojan-Horse" class="headerlink" title="六、特洛伊木马分析与防护 Trojan Horse"></a>六、特洛伊木马分析与防护 Trojan Horse</h2><h3 id="核心特征-⭐"><a href="#核心特征-⭐" class="headerlink" title="核心特征 ⭐"></a>核心特征 ⭐</h3><ul>
+<li><strong>不具有自我传播能力</strong>（区别于病毒和蠕虫）</li>
+<li>通过伪装成合法程序/文件植入系统</li>
+<li>可实现远程控制、执行命令、发动DDoS攻击</li>
+</ul>
+<h3 id="木马分类"><a href="#木马分类" class="headerlink" title="木马分类"></a>木马分类</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>本地木马</strong></td>
+<td>只在单机运行，无远程通信，盗用口令为典型</td>
+</tr>
+<tr>
+<td><strong>网络木马</strong></td>
+<td>由<strong>远程控制管理端 + 木马代理端</strong>组成，是主要类型</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="木马攻击五步骤-⭐"><a href="#木马攻击五步骤-⭐" class="headerlink" title="木马攻击五步骤 ⭐"></a>木马攻击五步骤 ⭐</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">① 寻找攻击目标 → ② 收集目标信息 → ③ 植入木马 → ④ 木马隐藏 → ⑤ 激活实施攻击</span><br></pre></td></tr></table></figure>
+<h3 id="木马植入技术-⭐"><a href="#木马植入技术-⭐" class="headerlink" title="木马植入技术 ⭐"></a>木马植入技术 ⭐</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>被动植入</strong></td>
+<td>文件捆绑法、邮件附件、Web网页（html嵌入）</td>
+</tr>
+<tr>
+<td><strong>主动植入</strong></td>
+<td>程序自动安装，无需用户操作</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="木马隐藏技术-⭐"><a href="#木马隐藏技术-⭐" class="headerlink" title="木马隐藏技术 ⭐"></a>木马隐藏技术 ⭐</h3><ul>
+<li><strong>本地隐藏</strong>：文件隐藏、进程隐藏、通信连接隐藏（利用LKM）</li>
+<li><strong>远程通信隐藏</strong>：通信内容加密、<strong>端口复用</strong>、<strong>网络隐蔽通道</strong>（可同时隐藏内容和状态）</li>
+</ul>
+<h3 id="木马检测技术-⭐"><a href="#木马检测技术-⭐" class="headerlink" title="木马检测技术 ⭐"></a>木马检测技术 ⭐</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>原理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>查看开放端口</strong></td>
+<td>netstat命令 / 端口扫描软件</td>
+</tr>
+<tr>
+<td><strong>重要系统文件检测</strong></td>
+<td>比对系统文件变化（与自启动相关）</td>
+</tr>
+<tr>
+<td><strong>注册表检测</strong></td>
+<td>检查注册表键值异常（Windows木马常修改注册表实现自启动）</td>
+</tr>
+<tr>
+<td><strong>Rootkit检测</strong></td>
+<td>①已知特征检测；②<strong>执行路径分析</strong>（CPU指令计数比较）；③<strong>直接读取内核数据</strong></td>
+</tr>
+<tr>
+<td><strong>网络检测</strong></td>
+<td>安装IDS，捕获网络通信，检查木马特征</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="木马防范与清除"><a href="#木马防范与清除" class="headerlink" title="木马防范与清除"></a>木马防范与清除</h3><ul>
+<li><strong>阻断</strong>：防火墙、路由器、安全网关阻断木马通信</li>
+<li><strong>清除</strong>：删除木马文件、禁止通信、恢复系统文件/注册表</li>
+</ul>
+<h2 id="七、网络蠕虫分析与防护"><a href="#七、网络蠕虫分析与防护" class="headerlink" title="七、网络蠕虫分析与防护"></a>七、网络蠕虫分析与防护</h2><h3 id="核心特征-⭐-1"><a href="#核心特征-⭐-1" class="headerlink" title="核心特征 ⭐"></a>核心特征 ⭐</h3><ul>
+<li><strong>可独立自动运行</strong>，具有自我复制和传播能力</li>
+<li>综合黑客技术和病毒技术，利用漏洞传播</li>
+</ul>
+<h3 id="蠕虫四大功能模块-⭐"><a href="#蠕虫四大功能模块-⭐" class="headerlink" title="蠕虫四大功能模块 ⭐"></a>蠕虫四大功能模块 ⭐</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">探测模块 + 传播模块 + 蠕虫引擎模块 + 负载模块</span><br></pre></td></tr></table></figure>
+<h3 id="蠕虫运行三阶段"><a href="#蠕虫运行三阶段" class="headerlink" title="蠕虫运行三阶段"></a>蠕虫运行三阶段</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">① 感染主机搜索易感目标 → ② 传送蠕虫代码 → ③ 目标执行蠕虫，重复循环</span><br></pre></td></tr></table></figure>
+<h3 id="蠕虫扫描技术-⭐"><a href="#蠕虫扫描技术-⭐" class="headerlink" title="蠕虫扫描技术 ⭐"></a>蠕虫扫描技术 ⭐</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>扫描方式</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>随机扫描</strong></td>
+<td>对整个IP空间随机抽取地址扫描，非确定性传播</td>
+</tr>
+<tr>
+<td><strong>顺序扫描（子网扫描）</strong></td>
+<td>按本地优先原则，扫A则下一个扫A+1或A-1，可能重复扫描引起拥塞</td>
+</tr>
+<tr>
+<td><strong>选择性随机扫描</strong></td>
+<td>选漏洞密度高的地址空间，提高扫描效率</td>
+</tr>
+<tr>
+<td><strong>基于目标列表扫描</strong></td>
+<td>预先生成易感目标列表</td>
+</tr>
+<tr>
+<td><strong>基于路由的扫描</strong></td>
+<td>依据BGP路由表，感染率是随机扫描的<strong>3.5倍</strong>，但蠕虫体积大</td>
+</tr>
+<tr>
+<td><strong>基于DNS的扫描</strong></td>
+<td>从DNS获取IP，针对性和可用性强</td>
+</tr>
+<tr>
+<td><strong>分而治之的扫描</strong></td>
+<td>多蠕虫协作，避免重复扫描，但存在”<strong>坏点</strong>“问题</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="蠕虫防范技术-⭐"><a href="#蠕虫防范技术-⭐" class="headerlink" title="蠕虫防范技术 ⭐"></a>蠕虫防范技术 ⭐</h3><blockquote>
+<p>监测与预警（探测器）/ <strong>传播抑制</strong>（蜜罐技术）/ 漏洞检测与系统加固 / <strong>免疫技术</strong>（预设感染标记欺骗蠕虫）/ 阻断与隔离（防火墙、路由器）/ 清除技术</p>
+</blockquote>
+<h2 id="八、僵尸网络分析与防护"><a href="#八、僵尸网络分析与防护" class="headerlink" title="八、僵尸网络分析与防护"></a>八、僵尸网络分析与防护</h2><h3 id="核心概念-⭐"><a href="#核心概念-⭐" class="headerlink" title="核心概念 ⭐"></a>核心概念 ⭐</h3><blockquote>
+<p><strong>Botnet</strong>：攻击者将僵尸程序（bot/zombie）植入目标计算机，操纵受害机执行恶意活动的网络。</p>
+</blockquote>
+<h3 id="构建方式"><a href="#构建方式" class="headerlink" title="构建方式"></a>构建方式</h3><blockquote>
+<p>远程漏洞攻击 / 弱口令扫描入侵 / 邮件附件 / 恶意文档 / 文件共享</p>
+</blockquote>
+<h3 id="运行三步骤"><a href="#运行三步骤" class="headerlink" title="运行三步骤"></a>运行三步骤</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">① 僵尸程序传播 → ② 远程命令控制，组成网络 → ③ 通过控制服务器发送攻击指令</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>📌 通信使用<strong>加密机制</strong>，嵌入正常HTTP流量；采用<strong>认证机制</strong>防止消息伪造</p>
+</blockquote>
+<h3 id="防范技术"><a href="#防范技术" class="headerlink" title="防范技术"></a>防范技术</h3><blockquote>
+<p>威胁监测（<strong>蜜罐技术</strong>）/ 异常流量检测 / <strong>路由和DNS黑名单</strong>主动遏制 / 专用工具查杀</p>
+</blockquote>
+<h2 id="九、其他恶意代码-⭐"><a href="#九、其他恶意代码-⭐" class="headerlink" title="九、其他恶意代码 ⭐"></a>九、其他恶意代码 ⭐</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>核心特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>逻辑炸弹</strong></td>
+<td>依附在其他软件中，触发条件满足才执行（计数器/时间/文件/特定用户）；<strong>不能复制自身，不能感染其他程序</strong></td>
+</tr>
+<tr>
+<td><strong>陷门</strong></td>
+<td>允许绕过安全机制访问系统；<strong>不具备自动传播和自我复制功能</strong></td>
+</tr>
+<tr>
+<td><strong>细菌</strong></td>
+<td>独立程序，通过指数级自我复制耗尽系统资源（CPU/内存/磁盘），<strong>不直接攻击软件</strong></td>
+</tr>
+<tr>
+<td><strong>间谍软件</strong></td>
+<td>在用户不知情下安装，收集击键、浏览习惯、账号口令；<strong>不具备自我复制功能</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="十、恶意代码防护产品与技术指标"><a href="#十、恶意代码防护产品与技术指标" class="headerlink" title="十、恶意代码防护产品与技术指标"></a>十、恶意代码防护产品与技术指标</h2><h3 id="主要产品-⭐"><a href="#主要产品-⭐" class="headerlink" title="主要产品 ⭐"></a>主要产品 ⭐</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>产品</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>终端防护产品</strong></td>
+<td>部署在终端，典型模式：<strong>云+终端</strong></td>
+</tr>
+<tr>
+<td><strong>安全网关产品</strong></td>
+<td>UTM/IPS（通用）、邮件网关/WAF（应用）、路由器（具有安全功能）</td>
+</tr>
+<tr>
+<td><strong>恶意代码监测产品</strong></td>
+<td>IDS、网络协议分析器，监测异常节点/通信</td>
+</tr>
+<tr>
+<td><strong>补丁管理系统</strong></td>
+<td>PC端（集成在杀毒软件中）/ 企业级（服务器+代理）</td>
+</tr>
+<tr>
+<td><strong>应急响应</strong></td>
+<td>针对特定恶意代码研发专杀工具</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="主要技术指标-⭐"><a href="#主要技术指标-⭐" class="headerlink" title="主要技术指标 ⭐"></a>主要技术指标 ⭐</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>检测能力</strong></td>
+<td>静态检测（特征/指纹）+ 动态检测（沙箱/调试/系统监测/协议分析）</td>
+</tr>
+<tr>
+<td><strong>检测准确性</strong></td>
+<td>误报（正常误报为恶意）和漏报难以根除</td>
+</tr>
+<tr>
+<td><strong>阻断能力</strong></td>
+<td>网络阻断/主机阻断/应用阻断/人工干预；关注阻断类型、数量、<strong>时效性</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="APT防护-⭐"><a href="#APT防护-⭐" class="headerlink" title="APT防护 ⭐"></a>APT防护 ⭐</h3><blockquote>
+<p><strong>APT（高级持续威胁）</strong> 通常利用<strong>电子邮件</strong>作为攻击载体，将恶意代码嵌入邮件/文档，诱使收件人打开后植入恶意代码，逐步渗透网络。</p>
+<p>防护措施：部署<strong>APT检测系统</strong>，检测电子文档和电子邮件中的恶意代码。</p>
+</blockquote>
+<h2 id="📌-高频考点速记"><a href="#📌-高频考点速记" class="headerlink" title="📌 高频考点速记"></a>📌 高频考点速记</h2><ol>
+<li><strong>恶意代码6步攻击模型</strong>：侵入→提权→隐蔽→潜伏→破坏→重复</li>
+<li><strong>三线程技术</strong>：主线程（控制）+ 监视线程 + 守护线程</li>
+<li><strong>端口反向连接</strong>：被控端主动连接控制端，绕过防火墙（灰鸽子）</li>
+<li><strong>病毒四特征</strong>：隐蔽性、<strong>传染性（最本质）</strong>、潜伏性、破坏性</li>
+<li><strong>病毒三组成</strong>：复制传染部件 + 隐藏部件 + 破坏部件</li>
+<li><strong>多态病毒</strong>检测需用<strong>启发式分析</strong></li>
+<li><strong>木马不具有自我传播能力</strong>（区别于病毒和蠕虫）</li>
+<li><strong>Rootkit检测三类</strong>：特征检测 / 执行路径分析 / 直接读取内核数据</li>
+<li><strong>蠕虫四模块</strong>：探测 + 传播 + 引擎 + 负载</li>
+<li><strong>僵尸网络监测</strong>用<strong>蜜罐技术</strong>；主动遏制用<strong>路由和DNS黑名单</strong></li>
+<li><strong>逻辑炸弹/陷门/间谍软件</strong> 均不具备自我复制功能</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E8%80%83/" rel="tag"># 软考</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/08/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94%E6%8A%80%E6%9C%AF/" rel="prev" title="应急响应技术">
+                  <i class="fa fa-angle-left"></i> 应急响应技术
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/03/09/%E6%BC%8F%E6%B4%9E%E9%98%B2%E6%8A%A4/" rel="next" title="漏洞防护">
+                  漏洞防护 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
