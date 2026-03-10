@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="网络安全风险评估1. 网络安全风险评估概述 核心定义：依据信息安全技术和管理标准，对网络系统的保密性、完整性、可控性和可用性进行科学评价；评估脆弱性、网络安全威胁以及脆弱性被威胁者利用后所造成的实际影响，并根据安全事件发生的可能性影响大小确认风险等级。 本质：评估威胁者利用网络资产的脆弱性，造成网络资产损失的严重程度。 计算模型：网络安全风险值等价为安全事件发生的概率（可能性）与安全事件的损失的乘">
+<meta property="og:type" content="article">
+<meta property="og:title" content="风险评估技术">
+<meta property="og:url" content="https://zyufoye.github.io/2026/03/10/%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0%E6%8A%80%E6%9C%AF/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="网络安全风险评估1. 网络安全风险评估概述 核心定义：依据信息安全技术和管理标准，对网络系统的保密性、完整性、可控性和可用性进行科学评价；评估脆弱性、网络安全威胁以及脆弱性被威胁者利用后所造成的实际影响，并根据安全事件发生的可能性影响大小确认风险等级。 本质：评估威胁者利用网络资产的脆弱性，造成网络资产损失的严重程度。 计算模型：网络安全风险值等价为安全事件发生的概率（可能性）与安全事件的损失的乘">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-10T13:57:11.000Z">
+<meta property="article:modified_time" content="2026-03-10T13:58:03.246Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="软考">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/03/10/%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0%E6%8A%80%E6%9C%AF/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/03/10/%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0%E6%8A%80%E6%9C%AF/","path":"2026/03/10/风险评估技术/","title":"风险评估技术"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>风险评估技术 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0"><span class="nav-number">1.</span> <span class="nav-text">网络安全风险评估</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">1. 网络安全风险评估概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0%E6%A0%B8%E5%BF%83%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">2. 网络安全风险评估核心过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%A1%E7%AE%97"><span class="nav-number">1.3.</span> <span class="nav-text">3. 网络安全风险分析与计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E8%AF%84%E4%BC%B0%E6%8A%80%E6%9C%AF%E6%96%B9%E6%B3%95%E4%B8%8E%E5%B7%A5%E5%85%B7"><span class="nav-number">1.4.</span> <span class="nav-text">4. 评估技术方法与工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E8%AF%84%E4%BC%B0%E9%A1%B9%E7%9B%AE%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%A7%84%E8%8C%83"><span class="nav-number">1.5.</span> <span class="nav-text">5. 评估项目流程与规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E6%8A%80%E6%9C%AF%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E4%B8%8E%E5%89%8D%E6%B2%BF"><span class="nav-number">1.6.</span> <span class="nav-text">6. 技术应用场景与前沿</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/10/%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="风险评估技术 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          风险评估技术
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-03-10 21:57:11 / 修改时间：21:58:03" itemprop="dateCreated datePublished" datetime="2026-03-10T21:57:11+08:00">2026-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="网络安全风险评估"><a href="#网络安全风险评估" class="headerlink" title="网络安全风险评估"></a>网络安全风险评估</h2><h3 id="1-网络安全风险评估概述"><a href="#1-网络安全风险评估概述" class="headerlink" title="1. 网络安全风险评估概述"></a>1. 网络安全风险评估概述</h3><ul>
+<li><strong>核心定义</strong>：依据信息安全技术和管理标准，对网络系统的<strong>保密性、完整性、可控性和可用性</strong>进行科学评价；评估<strong>脆弱性、网络安全威胁以及脆弱性被威胁者利用后所造成的实际影响</strong>，并根据<strong>安全事件发生的可能性影响大小</strong>确认风险等级。</li>
+<li><strong>本质</strong>：评估威胁者利用网络资产的脆弱性，<strong>造成网络资产损失的严重程度</strong>。</li>
+<li><strong>计算模型</strong>：网络安全风险值等价为<strong>安全事件发生的概率（可能性）与安全事件的损失的乘积</strong>，即 <strong><code>R = f (Ep, Ev)</code></strong>。</li>
+<li><strong>六大评估要素</strong>：涉及<strong>资产、威胁、脆弱性、安全措施、风险等各个要素</strong>。其中，资产因其价值受威胁，威胁者利用资产脆弱性构成威胁，安全措施修补脆弱性从而降低风险。</li>
+<li><strong>三种评估模式</strong>：<ol>
+<li><strong>自评估</strong>：依靠<strong>自身力量</strong>进行。</li>
+<li><strong>检查评估</strong>：由<strong>网络安全主管机关或业务主管机关发起</strong>。</li>
+<li><strong>委托评估</strong>：<strong>委托具有风险评估能力的专业评估机构实施的评估活动</strong>。</li>
+</ol>
+</li>
+</ul>
+<h3 id="2-网络安全风险评估核心过程"><a href="#2-网络安全风险评估核心过程" class="headerlink" title="2. 网络安全风险评估核心过程"></a>2. 网络安全风险评估核心过程</h3><p>风险评估包括：<strong>准备、资产识别、威胁识别、脆弱性识别、已有的网络安全措施分析、网络安全风险分析、网络安全风险处置与管理</strong>等多个环节。</p>
+<ul>
+<li><strong>准备阶段</strong>：首要工作是<strong>确定评估对象和范围</strong>（首先进行网络系统范围的界定），最终生成<strong>《网络风险评估范围界定报告》</strong>。</li>
+<li><strong>资产识别</strong>：包括<strong>网络资产鉴定和网络资产价值估算</strong>。资产主要分为<strong>网络设备、主机、服务器、应用、数据和文档资产</strong>。价值估算是确认其<strong>重要程度</strong>，它<strong>不是资产的物理实际经济价值，而是相对价值</strong>，以<strong>保密性、完整性和可用性</strong>为基础衡量。</li>
+<li><strong>威胁识别</strong>：分析资产<strong>有可能受到的安全危害</strong>，从<strong>威胁来源、威胁途径、威胁能力、威胁效果、威胁意图、威胁频率</strong>等方面分析。<ul>
+<li>需<strong>标记出潜在的威胁源，形成威胁列表</strong>（分自然威胁和人为威胁），并根据其<strong>表现形式分类</strong>。</li>
+<li>分析威胁者<strong>为了实现其意图，会使用各种攻击方法和工具</strong>（途径）；<strong>成功后给网络系统造成的影响</strong>如<strong>非法访问、欺骗、拒绝服务</strong>（效果）；目的如<strong>挑战、情报信息获取、恐怖主义、经济利益和报复</strong>（意图）。</li>
+<li>对出现频率进行<strong>等级化处理</strong>。</li>
+</ul>
+</li>
+<li><strong>脆弱性识别</strong>：通过各种测试方法，<strong>获得网络资产中所存在的缺陷清单</strong>。以<strong>资产为核心</strong>，识别可能被<strong>威胁利用的弱点，并对脆弱性的严重程度进行评估</strong>。依据主要是<strong>网络安全法律法规政策、标准及行业要求</strong>。<ul>
+<li>包括<strong>技术脆弱性评估</strong>（现有安全技术措施的合理性和有效性）和<strong>管理脆弱性评估</strong>（从管理上分析弱点并标识严重程度）。</li>
+</ul>
+</li>
+<li><strong>安全措施确认</strong>：确认<strong>已采取的各种预防性和保护性安全措施的有效性</strong>。</li>
+</ul>
+<h3 id="3-网络安全风险分析与计算"><a href="#3-网络安全风险分析与计算" class="headerlink" title="3. 网络安全风险分析与计算"></a>3. 网络安全风险分析与计算</h3><ul>
+<li><strong>风险分析步骤</strong>：在各项评估基础上，<strong>综合利用定性和定量的分析方法，确定风险的大小与风险等级</strong>（形成风险测量列表）。步骤依次为：对资产识别、对威胁识别、对脆弱性识别 -&gt; <strong>判断安全事件发生的可能性</strong> -&gt; <strong>计算安全事件的损失</strong> -&gt; 计算<strong>一旦发生对组织的影响，即网络安全风险值</strong>。</li>
+<li><strong>风险计算方法</strong>：<ol>
+<li><strong>定性计算</strong>：对各要素属性进行<strong>主观评估</strong>，结果分为：<strong>无关紧要、可接受、待观察、不可接受</strong>。</li>
+<li><strong>定量计算</strong>：将要素<strong>量化为数据</strong>，输出结果是一个<strong>风险数值</strong>。</li>
+<li><strong>综合计算</strong>：<strong>结合定性和定量方法</strong>进行<strong>量化赋值</strong>，输出<strong>风险数值，同时给出相应的定性结论</strong>。</li>
+<li>具体算法包含<strong>相乘法</strong>（可能性与损失相乘）和<strong>矩阵法</strong>（构造二维矩阵）。</li>
+</ol>
+</li>
+</ul>
+<h3 id="4-评估技术方法与工具"><a href="#4-评估技术方法与工具" class="headerlink" title="4. 评估技术方法与工具"></a>4. 评估技术方法与工具</h3><ul>
+<li><strong>资产信息收集</strong>：通过<strong>调查表形式，查询资产登记数据库</strong>，掌握<strong>重要资产分布</strong>。</li>
+<li><strong>网络拓扑发现</strong>：<strong>获取被评估网络信息系统的资产关联结构信息，进而获取资产信息</strong>（生成网络拓扑结构图，掌握关联情况）。</li>
+<li><strong>漏洞扫描</strong>：<strong>自动搜集待评估对象的漏洞信息，以评估其脆弱性</strong>。</li>
+<li><strong>人工检查</strong>：<strong>通过人直接操作评估对象以获取信息</strong>，需事先设计好<strong>“检查表 (CheckList)”</strong>。</li>
+<li><strong>渗透测试</strong>：<strong>获得法律授权后，模拟黑客攻击网络系统</strong>，进行<strong>安全漏洞发现、网络攻击路径构造、安全漏洞利用验证</strong>。</li>
+<li><strong>问卷调查</strong>：采用<strong>书面的形式获得相关信息</strong>，<strong>根据调查对象进行分别设计</strong>（分<strong>管理类和技术类</strong>）。</li>
+<li><strong>安全访谈</strong>：通过专家与<strong>使用人员、管理人员等相关人员进行直接交谈</strong>。</li>
+<li><strong>审计数据分析</strong>：<strong>通常用于威胁识别</strong>，作用包括<strong>侵害行为检测、异常事件监测、潜在攻击征兆发觉等</strong>（采用特征模式匹配等技术）。</li>
+<li><strong>入侵监测</strong>：将设备接入网络，<strong>采集评估对象的威胁信息和安全状态</strong>。</li>
+</ul>
+<h3 id="5-评估项目流程与规范"><a href="#5-评估项目流程与规范" class="headerlink" title="5. 评估项目流程与规范"></a>5. 评估项目流程与规范</h3><ul>
+<li><strong>五大流程</strong>：<strong>评估工程前期准备、评估方案设计与论证、评估方案实施、评估报告撰写、评估结果评审与认可</strong>。</li>
+<li><strong>前期准备</strong>：是<strong>后续工作开展的前提</strong>，需<strong>确定对象、界定范围、粒度和时间等</strong>。开始前<strong>一定要签订合同和保密协议</strong>。需要<strong>多方面的协调，必要的、充分的准备是风险评估成功的关键</strong>。</li>
+<li><strong>方案设计与论证</strong>：<strong>依据被评估方的安全需求来制定，需经过双方讨论并论证通过后方可进行下一步工作</strong>。涵盖<strong>评估方法、评估人员组织、评估工具选择、预期风险分析、评估实施计划等</strong>。</li>
+<li><strong>方案实施</strong>：<strong>在论证通过后，才能组织相关人员进行实施</strong>。包含<strong>基本情况调查、安全需求挖掘以及确定具体操作步骤</strong>。<ul>
+<li><strong>红线要求</strong>：<strong>应避免改变系统的任何设置或必须备份系统原有的配置，并书面记录操作过程和相关数据</strong>；必须有<strong>工作备忘录</strong>；敏感系统测试<strong>要求至少两人，且必须领导签字批准</strong>。</li>
+</ul>
+</li>
+<li><strong>报告撰写</strong>：<strong>完成评估报告撰写</strong>，它是<strong>风险评估结果的记录文件，是组织实施风险管理的主要依据</strong>。内容包括<strong>评估范围、计算方法、问题归纳及描述、风险级数、安全建议等</strong>。</li>
+<li><strong>评审与认可</strong>：<strong>最高管理层或其委托的机构应组织召开评估工作结束会议，总结评估工作，对风险评估活动进行评审</strong>。对结果的验收是<strong>本次风险评估活动结束的标志</strong>，最后将经验形成<strong>书面文字材料</strong>备案。</li>
+</ul>
+<h3 id="6-技术应用场景与前沿"><a href="#6-技术应用场景与前沿" class="headerlink" title="6. 技术应用场景与前沿"></a>6. 技术应用场景与前沿</h3><ul>
+<li><strong>四大应用场景</strong>：<strong>网络安全规划和设计；网络安全等级保护；网络安全运维与应急响应；数据安全管理与运营</strong>。</li>
+<li><strong>OWASP Web应用风险评估6步法</strong>：<ol>
+<li><strong>确定风险类别</strong>。</li>
+<li><strong>评估可能性的因素</strong>（从<strong>攻击者因素、漏洞因素分析</strong>）。</li>
+<li><strong>评估影响的因素</strong>（包括<strong>技术影响因素、业务影响因素</strong>）。</li>
+<li><strong>确定风险的严重程度</strong>。</li>
+<li><strong>决定修复内容</strong>（规则是<strong>首先修复最严重的风险</strong>）。</li>
+<li><strong>定制合适的风险评级模型</strong>。</li>
+</ol>
+</li>
+<li><strong>ICT供应链安全</strong>：面临风险目标为完整性、保密性、可用性及可控性（<strong>ICT供应链</strong>概念）。</li>
+<li><strong>人工智能 (AI) 安全风险分析</strong>：核心是防范<strong>对人工智能系统的攻击、侵入、干扰、破坏和非法利用以及意外事故，使系统处于稳定可靠的运行状态</strong>。主要面临5大风险：<ol>
+<li><strong>人工智能训练数据安全风险</strong>。</li>
+<li><strong>人工智能算法安全风险</strong>。</li>
+<li><strong>人工智能系统代码实现安全风险</strong>。</li>
+<li><strong>人工智能技术滥用风险</strong>。</li>
+<li><strong>高度自治智能系统导致社会安全风险</strong>。</li>
+</ol>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E8%80%83/" rel="tag"># 软考</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/10/%E4%B8%BB%E5%8A%A8%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/" rel="prev" title="主动防御技术">
+                  <i class="fa fa-angle-left"></i> 主动防御技术
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

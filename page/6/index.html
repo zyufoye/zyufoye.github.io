@@ -284,7 +284,7 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">88</span>
+          <span class="site-state-item-count">90</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -320,6 +320,401 @@ mjx-container[display="true"] + br {
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/18/%E5%8A%A0%E5%AF%86%E4%B8%8E%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/18/%E5%8A%A0%E5%AF%86%E4%B8%8E%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">加密与签名的区别</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-18 11:03:48 / 修改时间：11:09:41" itemprop="dateCreated datePublished" datetime="2026-01-18T11:03:48+08:00">2026-01-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>私钥和公钥在数学逻辑上是可以“反过来”使用的</strong>（特别是在最经典的 RSA 算法中）。</p>
+<p>但这两种“方向”所达到的<strong>安全目标</strong>是完全相反的，我们可以把这对密钥想象成一对<strong>神奇的数学钥匙</strong>：</p>
+<h3 id="数学原理：互为逆运算"><a href="#数学原理：互为逆运算" class="headerlink" title="数学原理：互为逆运算"></a>数学原理：互为逆运算</h3><p>在 RSA 这种经典的公钥密码体制中，公钥和私钥在数学上是<strong>成对生成</strong>的。</p>
+<ul>
+<li><strong>规则</strong>：用A钥匙锁上的东西，<strong>只能</strong>用B钥匙打开；反之，用B钥匙锁上的东西，<strong>只能</strong>用A钥匙打开。</li>
+</ul>
+<p>数学上没有规定谁必须叫“公钥”，谁必须叫“私钥”。只是在产生密钥后，我们人为地规定：</p>
+<ul>
+<li><strong>公开</strong>给所有人的那把叫<strong>公钥</strong>。</li>
+<li><strong>自己留着</strong>保密的那把叫<strong>私钥</strong>。</li>
+</ul>
+<h3 id="2-两种方向，两种用途"><a href="#2-两种方向，两种用途" class="headerlink" title="2. 两种方向，两种用途"></a>2. 两种方向，两种用途</h3><p>正是因为它们可以“反过来”用，才衍生出了密码学的两大支柱功能：<strong>加密</strong>和<strong>签名</strong>。</p>
+<h4 id="情况-A：公钥加密，私钥解密（正常加密）"><a href="#情况-A：公钥加密，私钥解密（正常加密）" class="headerlink" title="情况 A：公钥加密，私钥解密（正常加密）"></a>情况 A：公钥加密，私钥解密（正常加密）</h4><ul>
+<li><strong>操作</strong>：别人用你的<strong>公钥</strong>把数据锁起来。</li>
+<li><strong>结果</strong>：因为只有你才有<strong>私钥</strong>，所以全世界只有你一个人能打开看。</li>
+<li><strong>目的</strong>：<strong>机密性 (Confidentiality)</strong> —— 保护隐私，不让别人偷看。</li>
+<li><em>比喻</em>：别人把信扔进你的信箱（公钥），只有你有钥匙（私钥）能打开信箱取信。</li>
+</ul>
+<h4 id="情况-B：私钥“加密”，公钥“解密”（数字签名）"><a href="#情况-B：私钥“加密”，公钥“解密”（数字签名）" class="headerlink" title="情况 B：私钥“加密”，公钥“解密”（数字签名）"></a>情况 B：私钥“加密”，公钥“解密”（数字签名）</h4><ul>
+<li><strong>操作</strong>：你用你的<strong>私钥</strong>把一段数据（通常是摘要）锁起来（处理一下）。</li>
+<li><strong>结果</strong>：因为<strong>公钥</strong>是公开的，全世界所有人都能用你的公钥打开它。<ul>
+<li>你可能会问：<em>“所有人都能打开，那还有什么保密性可言？”</em></li>
+<li><strong>没错！这里根本不是为了保密！</strong></li>
+<li>既然所有人都能用你的公钥解开，这就证明了——<strong>这段密文一定是用你的私钥锁上的</strong>。因为除了你的私钥，别人的私钥锁出来的东西，你的公钥是打不开的。</li>
+</ul>
+</li>
+<li><strong>目的</strong>：<strong>认证/防抵赖 (Authentication)</strong> —— 证明“这确实是我发的”。</li>
+<li><em>比喻</em>：这就好比古代皇帝的“玉玺”（私钥）。皇帝在诏书上盖了章，全天下人（拿着公钥）一看印章纹路，就知道这是皇帝亲笔，不是别人伪造的。</li>
+</ul>
+<h3 id="3-一个小小的专业修正"><a href="#3-一个小小的专业修正" class="headerlink" title="3. 一个小小的专业修正"></a>3. 一个小小的专业修正</h3><p>虽然我们为了理解方便，常说“数字签名就是用私钥加密”。但在严格的学术定义中：</p>
+<ul>
+<li><strong>对于 RSA 算法</strong>：确实就是“私钥加密，公钥解密”的数学过程。</li>
+<li><strong>对于其他算法（如 ECC、SM2、DSA）</strong>：虽然逻辑上是“私钥处理，公钥验证”，但数学过程并不是简单的加密反运算，而是专门设计的<strong>签名算法</strong>和<strong>验证算法</strong>。</li>
+</ul>
+<p><strong>总结：</strong></p>
+<ul>
+<li><strong>公钥 -&gt; 私钥</strong> = 为了<strong>秘密</strong>（只有你能看）。</li>
+<li><strong>私钥 -&gt; 公钥</strong> = 为了<strong>证明</strong>（只有你能签）。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/18/%E8%BD%AF%E8%80%83%E5%AF%86%E7%A0%81%E5%AD%A6%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/18/%E8%BD%AF%E8%80%83%E5%AF%86%E7%A0%81%E5%AD%A6%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">软考密码学考点概述</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-18 09:59:28 / 修改时间：16:22:31" itemprop="dateCreated datePublished" datetime="2026-01-18T09:59:28+08:00">2026-01-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>软考常考的密码学基础知识、攻击类型以及主要的密码体制。以下是重要知识点：</p>
+<h3 id="一、-密码学基础概念-Overview"><a href="#一、-密码学基础概念-Overview" class="headerlink" title="一、 密码学基础概念 (Overview)"></a>一、 密码学基础概念 (Overview)</h3><ul>
+<li><strong>定义与目标</strong>：密码学是研究信息安全保护的科学。主要目标是实现信息的<strong>保密性、完整性、可用性及抗抵赖性</strong>。</li>
+<li><strong>组成</strong>：包含 <strong>密码编码学</strong>（研究加密/保护）和 <strong>密码分析学</strong>（研究破译/获取明文）。</li>
+<li><strong>相关法律</strong>：提及了《电子签名法》（2005年）、商用密码算法公布（2006年）及《密码法》草案（2019年）。</li>
+<li><strong>核心术语</strong>：<ul>
+<li><strong>明文</strong>：未加密的消息。</li>
+<li><strong>密文</strong>：加密后的消息。</li>
+<li><strong>加/解密算法</strong>：进行变换的运算规则。</li>
+<li><strong>密钥</strong>：控制算法操作的关键参数。</li>
+</ul>
+</li>
+</ul>
+<h3 id="二、-密码分析与攻击类型-Attack-Types"><a href="#二、-密码分析与攻击类型-Attack-Types" class="headerlink" title="二、 密码分析与攻击类型 (Attack Types)"></a>二、 密码分析与攻击类型 (Attack Types)</h3><p>根据攻击者拥有的信息量（前提条件），攻击类型分为五种（按攻击者能力从低到高）：</p>
+<ol>
+<li><strong>唯密文攻击</strong>：最困难，攻击者只有密文。</li>
+<li><strong>已知明文攻击</strong>：攻击者拥有一些“明文-密文”对。<strong>（注：一个安全的密码必须能经得起这种攻击）</strong>。</li>
+<li><strong>选择明文攻击</strong>：攻击者能制造明文并获取对应的密文（对攻击者有利）。</li>
+<li><strong>密文验证攻击</strong>：攻击者能判断某个密文解密后的结果是否合法。</li>
+<li><strong>选择密文攻击</strong>：最容易破译，攻击者能选定密文并获取对应明文（常见于攻击公钥体制和数字签名）。</li>
+</ol>
+<h3 id="三、-密码体制分类-Cryptosystems"><a href="#三、-密码体制分类-Cryptosystems" class="headerlink" title="三、 密码体制分类 (Cryptosystems)"></a>三、 密码体制分类 (Cryptosystems)</h3><h4 id="1-私钥密码体制-Symmetric-Key-对称加密"><a href="#1-私钥密码体制-Symmetric-Key-对称加密" class="headerlink" title="1. 私钥密码体制 (Symmetric Key / 对称加密)"></a>1. 私钥密码体制 (Symmetric Key / 对称加密)</h4><ul>
+<li><strong>特点</strong>：加密和解密使用<strong>相同</strong>的密钥。</li>
+<li><strong>流程</strong>：双方必须事先通过安全渠道交换密钥。</li>
+<li><strong>优缺点</strong>：<ul>
+<li><em>优点</em>：速度快</li>
+<li><em>缺点</em>：密钥分配困难、密钥管理量大、无法认证源（难以实现抗抵赖）。</li>
+</ul>
+</li>
+<li><strong>常见算法</strong>：<ul>
+<li><strong>DES</strong>：替换+移位、56位密钥、64位数据块、速度快、但56位密钥易被破解</li>
+<li><strong>3DES</strong>：三重DES，两个56位密钥，K1和K2，较DES更安全</li>
+<li><strong>AES</strong>：美国标准，替代DES，安全性高</li>
+<li><strong>IDEA</strong>：128位密钥、64位数据块、较DES加密性更好</li>
+<li><strong>RC-5</strong>：RSA 数据公司很多产品使用RC5</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-公钥密码体制-Asymmetric-Key-非对称加密"><a href="#2-公钥密码体制-Asymmetric-Key-非对称加密" class="headerlink" title="2. 公钥密码体制 (Asymmetric Key / 非对称加密)"></a>2. 公钥密码体制 (Asymmetric Key / 非对称加密)</h4><ul>
+<li><strong>特点</strong>：加密和解密使用<strong>不同</strong>的密钥（公钥和私钥）。</li>
+<li><strong>原理</strong>：<ul>
+<li><strong>公钥</strong>：公开，用于<strong>加密</strong>。</li>
+<li><strong>私钥</strong>：保密，用于<strong>解密</strong>。</li>
+<li><em>例子</em>：甲给乙发消息，用<strong>乙的公钥</strong>加密，只有<strong>乙的私钥</strong>能解密。</li>
+</ul>
+</li>
+<li><strong>优缺点</strong>：<ul>
+<li><em>优点</em>：密钥分发方便、管理量少、支持数字签名。在公钥密码体制中，仅根据密码算法和加密密钥来确定解密密钥在计算上是不可行的。</li>
+<li><em>缺点</em>：<strong>速度慢</strong>，计算量大，不适合加密大数据。</li>
+</ul>
+</li>
+<li><strong>常见算法</strong>：<ul>
+<li><strong>RSA</strong>：基于大数分解，应用最广。公钥 (e,n) 私钥 (d,n) 。</li>
+<li><strong>ECC</strong>（椭圆曲线）、<strong>Elgamal</strong>、<strong>D-H</strong>（Diffie-Hellman）、<strong>背包算法</strong>。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-混合密码体制-Hybrid-System"><a href="#3-混合密码体制-Hybrid-System" class="headerlink" title="3. 混合密码体制 (Hybrid System)"></a>3. 混合密码体制 (Hybrid System)</h4><ul>
+<li><strong>目的</strong>：结合对称加密的“快”和非对称加密的“密钥分发方便”。</li>
+<li><strong>工作流程</strong>：<ol>
+<li>发送方随机生成一个<strong>对称密钥</strong>。</li>
+<li>用<strong>对称密钥</strong>加密<strong>明文消息</strong>（数据传输快）。</li>
+<li>用接收方的<strong>公钥</strong>加密这个<strong>对称密钥</strong>（数字信封）。</li>
+<li>将加密后的消息和加密后的密钥一起发送。</li>
+<li>接收方先用<strong>私钥</strong>解出<strong>对称密钥</strong>，再用<strong>对称密钥</strong>解密<strong>消息</strong>。</li>
+</ol>
+</li>
+</ul>
+<p><img src="../uploads/crypto_1.png" alt=""></p>
+<p>这张PPT主要详细介绍了四种常见的<strong>对称加密算法</strong>（DES、3DES、IDEA、AES）的具体参数和工作原理。以下是为您总结的核心知识点：</p>
+<h3 id="四、常见密码算法"><a href="#四、常见密码算法" class="headerlink" title="四、常见密码算法"></a>四、常见密码算法</h3><h4 id="1-DES-算法-Data-Encryption-Standard"><a href="#1-DES-算法-Data-Encryption-Standard" class="headerlink" title="1. DES 算法 (Data Encryption Standard)"></a>1. DES 算法 (Data Encryption Standard)</h4><ul>
+<li><strong>类型</strong>：分组加密算法。</li>
+<li><strong>分组长度</strong>：支持 <strong>64比特</strong> 的明文块加密。</li>
+<li><strong>密钥长度</strong>：<strong>56比特</strong>。</li>
+<li><strong>特点</strong>：由于密钥较短（56位），在现代算力下安全性较低，已逐渐被淘汰。</li>
+</ul>
+<h4 id="2-三重DES-3DES-TDEA"><a href="#2-三重DES-3DES-TDEA" class="headerlink" title="2. 三重DES (3DES / TDEA)"></a>2. 三重DES (3DES / TDEA)</h4><ul>
+<li><strong>原理</strong>：为了提高安全性，使用DES算法对明文进行 <strong>“加密 - 解密 - 加密”</strong> 的三次操作。</li>
+<li><strong>操作流程</strong>：<ul>
+<li><strong>加密</strong>：明文 -&gt; (用K1加密) -&gt; (用K2解密) -&gt; (用K3加密) -&gt; 密文。</li>
+<li><strong>解密</strong>：密文 -&gt; (用K3解密) -&gt; (用K2加密) -&gt; (用K1解密) -&gt; 明文。</li>
+</ul>
+</li>
+<li><strong>密钥规则</strong>：通常情况下，<strong>K1 和 K3 是相同的密钥</strong>（即使用两个不同的密钥K1和K2进行三次运算）。</li>
+</ul>
+<h4 id="3-IDEA-算法-International-Data-Encryption-Algorithm"><a href="#3-IDEA-算法-International-Data-Encryption-Algorithm" class="headerlink" title="3. IDEA 算法 (International Data Encryption Algorithm)"></a>3. IDEA 算法 (International Data Encryption Algorithm)</h4><ul>
+<li><strong>类型</strong>：分组加密算法。</li>
+<li><strong>分组长度</strong>：明文和密文分组均为 <strong>64比特</strong>。</li>
+<li><strong>密钥长度</strong>：<strong>128比特</strong>（比DES更安全）。</li>
+<li><strong>设计思想</strong>：混合使用来自不同代数群中的运算。</li>
+</ul>
+<h4 id="4-AES-算法-Advanced-Encryption-Standard"><a href="#4-AES-算法-Advanced-Encryption-Standard" class="headerlink" title="4. AES 算法 (Advanced Encryption Standard)"></a>4. AES 算法 (Advanced Encryption Standard)</h4><p>AES是用来替代DES的新一代标准，PPT中列出了该算法必须满足的标准要求：</p>
+<ul>
+<li><strong>公开性</strong>：算法无密级，描述必须完全公开披露。</li>
+<li><strong>免费性</strong>：必须可以在世界范围内免费使用。</li>
+<li><strong>分组长度</strong>：支持至少 <strong>128比特</strong> 的分组。</li>
+<li><strong>密钥长度</strong>：支持 <strong>128、192 和 256比特</strong> 的密钥长度。</li>
+</ul>
+<hr>
+<p><strong>总结对比表：</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">算法</th>
+<th style="text-align:left">分组长度</th>
+<th style="text-align:left">密钥长度</th>
+<th style="text-align:left">关键特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>DES</strong></td>
+<td style="text-align:left">64 bit</td>
+<td style="text-align:left">56 bit</td>
+<td style="text-align:left">早期标准，现已被认为不够安全。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>3DES</strong></td>
+<td style="text-align:left">64 bit</td>
+<td style="text-align:left">112 bit* (通常)</td>
+<td style="text-align:left">“加密-解密-加密”模式，过渡方案。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>IDEA</strong></td>
+<td style="text-align:left">64 bit</td>
+<td style="text-align:left">128 bit</td>
+<td style="text-align:left">混合代数运算设计。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AES</strong></td>
+<td style="text-align:left">≥128 bit</td>
+<td style="text-align:left">128/192/256 bit</td>
+<td style="text-align:left">现行标准，公开、免费、强度高。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><em>(注：3DES如果K1=K3，有效密钥长度通常认为是112位)</em></p>
+<h4 id="5-国产密码算法"><a href="#5-国产密码算法" class="headerlink" title="5.国产密码算法"></a>5.国产密码算法</h4><ul>
+<li><strong>国产密码算法</strong>：指由国家密码研究相关机构自主研发、具有相关知识产权的商用密码算法。</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">算法名称</th>
+<th style="text-align:left">算法类型</th>
+<th style="text-align:left">关键参数/技术细节</th>
+<th style="text-align:left">主要用途/备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>SM1</strong></td>
+<td style="text-align:left"><strong>对称加密</strong></td>
+<td style="text-align:left">分组长度：<strong>128比特</strong><br>密钥长度：<strong>128比特</strong></td>
+<td style="text-align:left">硬件实现为主，通常作为SM4的非公开版本背景知识</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SM2</strong></td>
+<td style="text-align:left"><strong>非对称加密</strong></td>
+<td style="text-align:left">基于<strong>椭圆曲线（ECC）</strong><br>推荐使用素数域 <strong>256位</strong> 椭圆曲线</td>
+<td style="text-align:left">功能全面：包括公钥加密、密钥交换协议、<strong>数字签名</strong>算法。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SM3</strong></td>
+<td style="text-align:left"><strong>杂凑算法</strong> (Hash)</td>
+<td style="text-align:left">杂凑值（摘要）长度：<strong>256比特</strong></td>
+<td style="text-align:left">类似于国际上的SHA-256。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SM4</strong></td>
+<td style="text-align:left"><strong>对称加密</strong></td>
+<td style="text-align:left">分组长度：<strong>128比特</strong><br>密钥长度：<strong>128比特</strong></td>
+<td style="text-align:left">无线局域网标准算法，参数与SM1一致，但已公开。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SM9</strong></td>
+<td style="text-align:left"><strong>标识密码</strong></td>
+<td style="text-align:left">标识密码算法 (IBC)</td>
+<td style="text-align:left">基于身份的密码技术（例如将邮箱或手机号直接作为公钥）。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>为了方便理解和记忆，可以将国产算法与国际通用算法进行对标：</p>
+<ul>
+<li><strong>SM1 / SM4 (对称)</strong> <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0.124ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="0.968ex" role="img" focusable="false" viewBox="0 -483 778 428"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2248" d="M55 319Q55 360 72 393T114 444T163 472T205 482Q207 482 213 482T223 483Q262 483 296 468T393 413L443 381Q502 346 553 346Q609 346 649 375T694 454Q694 465 698 474T708 483Q722 483 722 452Q722 386 675 338T555 289Q514 289 468 310T388 357T308 404T224 426Q164 426 125 393T83 318Q81 289 69 289Q55 289 55 319ZM55 85Q55 126 72 159T114 210T163 238T205 248Q207 248 213 248T223 249Q262 249 296 234T393 179L443 147Q502 112 553 112Q609 112 649 141T694 220Q694 249 708 249T722 217Q722 153 675 104T555 55Q514 55 468 76T388 123T308 170T224 192Q164 192 125 159T83 84Q80 55 69 55Q55 55 55 85Z"></path></g></g></g></svg></mjx-container> <strong>AES-128</strong> (两者都是128位分组和密钥)</li>
+<li><strong>SM2 (非对称)</strong> <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0.124ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="0.968ex" role="img" focusable="false" viewBox="0 -483 778 428"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2248" d="M55 319Q55 360 72 393T114 444T163 472T205 482Q207 482 213 482T223 483Q262 483 296 468T393 413L443 381Q502 346 553 346Q609 346 649 375T694 454Q694 465 698 474T708 483Q722 483 722 452Q722 386 675 338T555 289Q514 289 468 310T388 357T308 404T224 426Q164 426 125 393T83 318Q81 289 69 289Q55 289 55 319ZM55 85Q55 126 72 159T114 210T163 238T205 248Q207 248 213 248T223 249Q262 249 296 234T393 179L443 147Q502 112 553 112Q609 112 649 141T694 220Q694 249 708 249T722 217Q722 153 675 104T555 55Q514 55 468 76T388 123T308 170T224 192Q164 192 125 159T83 84Q80 55 69 55Q55 55 55 85Z"></path></g></g></g></svg></mjx-container> <strong>ECC / RSA</strong> (但在相同安全强度下，SM2比RSA密钥更短，速度更快)</li>
+<li><strong>SM3 (哈希)</strong> <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0.124ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="0.968ex" role="img" focusable="false" viewBox="0 -483 778 428"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2248" d="M55 319Q55 360 72 393T114 444T163 472T205 482Q207 482 213 482T223 483Q262 483 296 468T393 413L443 381Q502 346 553 346Q609 346 649 375T694 454Q694 465 698 474T708 483Q722 483 722 452Q722 386 675 338T555 289Q514 289 468 310T388 357T308 404T224 426Q164 426 125 393T83 318Q81 289 69 289Q55 289 55 319ZM55 85Q55 126 72 159T114 210T163 238T205 248Q207 248 213 248T223 249Q262 249 296 234T393 179L443 147Q502 112 553 112Q609 112 649 141T694 220Q694 249 708 249T722 217Q722 153 675 104T555 55Q514 55 468 76T388 123T308 170T224 192Q164 192 125 159T83 84Q80 55 69 55Q55 55 55 85Z"></path></g></g></g></svg></mjx-container> <strong>SHA-256</strong> (输出长度相同)</li>
+</ul>
+<h4 id="6-习题"><a href="#6-习题" class="headerlink" title="6.习题"></a>6.习题</h4><p>利用公开密钥算法进行数据加密时，采用方式是：<strong>发送方用公开密钥加密，接收方用私有密钥解密</strong>。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/18/%E8%BD%AF%E8%80%83%E5%AF%86%E7%A0%81%E5%AD%A6%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1240,256 +1635,6 @@ mjx-container[display="true"] + br {
 <h2 id="PowerShell激活"><a href="#PowerShell激活" class="headerlink" title="PowerShell激活"></a>PowerShell激活</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irm https://get.activated.win | iex</span><br></pre></td></tr></table></figure>
 <p>看到激活选项，选择[1] HWID 用于 Windows 激活，选择[2] Ohook 用于 Office 激活。</p>
 <p>Windows 激活需要联网，属于在线激活方式，office激活无需联网。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/07/%E8%A7%A3%E5%86%B3Microsoft%E5%AE%98%E7%BD%91%E6%97%A0%E6%B3%95%E4%B8%8B%E8%BD%BDWin10-iso%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/07/%E8%A7%A3%E5%86%B3Microsoft%E5%AE%98%E7%BD%91%E6%97%A0%E6%B3%95%E4%B8%8B%E8%BD%BDWin10-iso%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">解决Microsoft官网无法下载Win10-iso问题</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-07 20:56:04 / 修改时间：22:16:06" itemprop="dateCreated datePublished" datetime="2026-01-07T20:56:04+08:00">2026-01-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在使用Windows系统访问微软官网时，无法直接下载到 Windows 10 iso 镜像，只提供MediaCreationTool_22H2.exe工具，修改浏览器 UA 即可，如果没有改包插件或者burp，可以用 Chrome 自带的 Devtools。</p>
-<p>F12 -&gt; More tools -&gt; Network conditions -&gt; User Agent</p>
-<p>随便输入其他系统的 UA，以 Linux 为例，输入以下内容即可：</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36</span><br></pre></td></tr></table></figure>
-<p>操作步骤如下：</p>
-<p><img src="../uploads/UA_1.png" alt=""></p>
-<p><img src="../uploads/UA_2.png" alt=""></p>
-<p><img src="../uploads/UA_3.png" alt=""></p>
-<p>参考链接：<a target="_blank" rel="noopener" href="https://github.com/hosxy/Settings/blob/master/Firefox/Windows%E4%B8%8B%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BD%BDWindows10%20ISO%E9%95%9C%E5%83%8F.md">https://github.com/hosxy/Settings/blob/master/Firefox/Windows%E4%B8%8B%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BD%BDWindows10%20ISO%E9%95%9C%E5%83%8F.md</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/06/%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%A6%82%E8%BF%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/06/%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">网络信息安全概述</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-06 22:48:55 / 修改时间：22:50:27" itemprop="dateCreated datePublished" datetime="2026-01-06T22:48:55+08:00">2026-01-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>网络发展趋势——数字化、网络化、智能化</p>
-<p>网络安全（狭义）指网络信息系统的各组成要素符合安全属性的要求，包含机密性、完整性、可用性、抗抵赖和可控性</p>
-<p>网络安全（广义）包含国家安全、城市安全、经济安全、社会安全、生产安全、人身安全在内的大安全</p>
-<p>网络安全新变化：</p>
-<ul>
-<li>单维向多维转变，保障维度包含网络空间域、物理空间域、社会空间域</li>
-<li>网络信息安全保障措施从单一性转向综合性（法律、政策、技术、管理、产业、教育）</li>
-<li>保障时间维度要求涵盖网络系统的整个生命周期，保障相应速度不断缩短，网络安全无战时、平时之分，而是时时刻刻</li>
-</ul>
-<h2 id="网络信息安全涉及方面"><a href="#网络信息安全涉及方面" class="headerlink" title="网络信息安全涉及方面"></a>网络信息安全涉及方面</h2><ol>
-<li>网络强依赖及关联风险</li>
-<li>产品供应链和安全质量风险</li>
-<li>技术同质性和技术滥用风险</li>
-<li>安全建设和管理发展不平衡</li>
-<li>数据安全</li>
-<li>高级持续威胁</li>
-<li>恶意代码</li>
-<li>软件安全漏洞</li>
-<li>网络安全意识</li>
-<li>技术复杂性和运营安全</li>
-<li>灰黑产</li>
-<li>间谍</li>
-</ol>
-<h2 id="网络信息安全基本属性"><a href="#网络信息安全基本属性" class="headerlink" title="网络信息安全基本属性"></a>网络信息安全基本属性</h2><p>基本属性</p>
-<ul>
-<li>机密性 Confidentiality 信息不泄露给非授权用户</li>
-<li>完整性 integrity 未经授权不能进行更改</li>
-<li>可用性 availability 合法许可用户能够及时获取网络信息或服务</li>
-<li>抗抵赖性 防止用户否认其活动行为</li>
-<li>可控性 主体对其具有管理和支配能力</li>
-</ul>
-<p>其他属性</p>
-<ul>
-<li>真实性 客观事实保持一致</li>
-<li>时效性 满足时间约束要求</li>
-<li>合规性 符合法律法规政策、标准规范要求</li>
-<li>公平性 同等地位处理相关任务</li>
-<li>可靠性 有效完成预定系统功能特性</li>
-<li>可生存性 提供最小化必要服务</li>
-<li>隐私性 敏感信息不对外公开</li>
-</ul>
-<h2 id="网络安全基本要求"><a href="#网络安全基本要求" class="headerlink" title="网络安全基本要求"></a>网络安全基本要求</h2><p>宏观：网络信息系统满足国家安全需求特性</p>
-<p>微观：具体安全要求</p>
-<p>基本功能：具备防御、监测、应急和恢复功能</p>
-<p>其他方面：物理环境安全、安全认证、访问控制、保密、漏洞扫描、恶意代码防护、内容安全、监测预警、应急响应。</p>
-<h2 id="网络信息安全管理"><a href="#网络信息安全管理" class="headerlink" title="网络信息安全管理"></a>网络信息安全管理</h2><p>管理对象：网络设备、网络通信协议、操作系统、网络服务、安全网络管理在内的软硬件和。企业、机构直接赋予了价值而需要保护的资产。</p>
-<p>涉及内容：物理安全、通信安全、操作系统安全、网络服务安全、操作安全和人员安全。</p>
-<p>网络安全管理方法：风险管理、等级保护、纵深防御、层次化防护、应急响应以及PDCA方法。</p>
-<p>网络信息安全管理要素：网络管理对象、网络威胁、网络脆弱性、网络风险、网络保护措施。</p>
-<p>安全威胁：自然威胁和人为威胁。</p>
-<p>风险控制包括：避免风险、转移风险、减少威胁、消除脆弱点、减少威胁影响、风险监测。</p>
-<p>管理工作流程如下：确定对象、评估价值、识别威胁、识别脆弱性、确定风险级别、指定防护体系和措施、实施和落实、运行和维护。</p>
-<p>生命周期：</p>
-<ul>
-<li>系统规划：风险评估，标识安全目标和安全需求；</li>
-<li>系统设计：风险控制方法，安全解决方案，安全体系结构涉及；</li>
-<li>系统集成：购买部署安全产品，系统安全配置，效果评估，需求、环境验证；</li>
-<li>运行维护：建立管理组织，制定规章制度，定期评估对象，挑战安全配置，漏洞修复，安全监测和应急处理；</li>
-<li>系统废弃：对要废弃的系统组件进行评估、处理和更新。</li>
-</ul>
-<h2 id="网络信息安全法规"><a href="#网络信息安全法规" class="headerlink" title="网络信息安全法规"></a>网络信息安全法规</h2><p>网络信息安全管理评估：网络信息安全等级保护测评、信息安全管理体系认证（ISMS）、系统安全工程能力成熟度模型（SSE-CMM）</p>
-<p>《中华人民共和国网络安全法》由第十二届全国人大第二十四次会议2016年11月7日通过，2017年6月1日执行。</p>
-<p>《中华人民共和国密码法》于2020年1月1日起实施。</p>
-<p>采取监测、记录网络运行状态、网络安全事件的技术措施，按照规定留存的网络日志<strong>不少于6个月</strong>。</p>
-<h2 id="网络安全等级保护"><a href="#网络安全等级保护" class="headerlink" title="网络安全等级保护"></a>网络安全等级保护</h2><p>等保工作可以概括为：定级、备案、建设整改、等级测评、运营维护。</p>
-<ul>
-<li>定级：确定定级对象</li>
-<li>备案：准备备案材料</li>
-<li>建设整改：根据差距分析，针对不符合项结合行业要求对保护对象进行整改</li>
-<li>等级测评：对定级的保护对象进行测评</li>
-<li>运行维护：对保护对象的安全相关事宜进行监督管理</li>
-</ul>
-<p>中国网络安全审查技术与认证中心 CCRC （原中国信息安全认证中心）</p>
-<p>域名服务是网络基础服务，域名服务出现安全事件时，应在24小时内向电信管理机构报告。域名是政府网站的基本组成部分和重要身份标识。</p>
-<p>国家计算机网络应急技术处理协调中心 CNCERT CNCERT/CC “积极预防、及时发现、快速响应、力保恢复”</p>
-<p>网络信息安全领域顶刊：S&amp;P、CCS、NDSS、USENIX Security</p>
-<p>网络信息安全术语包含：基础技术类、风险评估类、防护技术类、检测技术类、响应恢复类、测评技术类。</p>
-<ul>
-<li>密码：加密、解密、非对称加密、公钥、私钥</li>
-<li>风险评估：分布式拒绝服务、网页篡改、网页仿冒、挂马、域名劫持、垃圾邮件、恶意代码、特洛伊木马、网络蠕虫、僵尸网络</li>
-<li>防护技术：访问控制、防火墙、入侵检测</li>
-<li>检测技术：入侵检测、漏洞扫描</li>
-<li>响应恢复：应急响应、灾难恢复、备份</li>
-<li>测评技术：黑盒测试、白盒测试、灰盒测试、渗透测试、模糊测试</li>
-</ul>
 
       
     </div>

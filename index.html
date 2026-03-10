@@ -284,7 +284,7 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">88</span>
+          <span class="site-state-item-count">90</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -320,6 +320,326 @@ mjx-container[display="true"] + br {
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/10/%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/03/10/%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">风险评估技术</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-03-10 21:57:11 / 修改时间：21:58:03" itemprop="dateCreated datePublished" datetime="2026-03-10T21:57:11+08:00">2026-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="网络安全风险评估"><a href="#网络安全风险评估" class="headerlink" title="网络安全风险评估"></a>网络安全风险评估</h2><h3 id="1-网络安全风险评估概述"><a href="#1-网络安全风险评估概述" class="headerlink" title="1. 网络安全风险评估概述"></a>1. 网络安全风险评估概述</h3><ul>
+<li><strong>核心定义</strong>：依据信息安全技术和管理标准，对网络系统的<strong>保密性、完整性、可控性和可用性</strong>进行科学评价；评估<strong>脆弱性、网络安全威胁以及脆弱性被威胁者利用后所造成的实际影响</strong>，并根据<strong>安全事件发生的可能性影响大小</strong>确认风险等级。</li>
+<li><strong>本质</strong>：评估威胁者利用网络资产的脆弱性，<strong>造成网络资产损失的严重程度</strong>。</li>
+<li><strong>计算模型</strong>：网络安全风险值等价为<strong>安全事件发生的概率（可能性）与安全事件的损失的乘积</strong>，即 <strong><code>R = f (Ep, Ev)</code></strong>。</li>
+<li><strong>六大评估要素</strong>：涉及<strong>资产、威胁、脆弱性、安全措施、风险等各个要素</strong>。其中，资产因其价值受威胁，威胁者利用资产脆弱性构成威胁，安全措施修补脆弱性从而降低风险。</li>
+<li><strong>三种评估模式</strong>：<ol>
+<li><strong>自评估</strong>：依靠<strong>自身力量</strong>进行。</li>
+<li><strong>检查评估</strong>：由<strong>网络安全主管机关或业务主管机关发起</strong>。</li>
+<li><strong>委托评估</strong>：<strong>委托具有风险评估能力的专业评估机构实施的评估活动</strong>。</li>
+</ol>
+</li>
+</ul>
+<h3 id="2-网络安全风险评估核心过程"><a href="#2-网络安全风险评估核心过程" class="headerlink" title="2. 网络安全风险评估核心过程"></a>2. 网络安全风险评估核心过程</h3><p>风险评估包括：<strong>准备、资产识别、威胁识别、脆弱性识别、已有的网络安全措施分析、网络安全风险分析、网络安全风险处置与管理</strong>等多个环节。</p>
+<ul>
+<li><strong>准备阶段</strong>：首要工作是<strong>确定评估对象和范围</strong>（首先进行网络系统范围的界定），最终生成<strong>《网络风险评估范围界定报告》</strong>。</li>
+<li><strong>资产识别</strong>：包括<strong>网络资产鉴定和网络资产价值估算</strong>。资产主要分为<strong>网络设备、主机、服务器、应用、数据和文档资产</strong>。价值估算是确认其<strong>重要程度</strong>，它<strong>不是资产的物理实际经济价值，而是相对价值</strong>，以<strong>保密性、完整性和可用性</strong>为基础衡量。</li>
+<li><strong>威胁识别</strong>：分析资产<strong>有可能受到的安全危害</strong>，从<strong>威胁来源、威胁途径、威胁能力、威胁效果、威胁意图、威胁频率</strong>等方面分析。<ul>
+<li>需<strong>标记出潜在的威胁源，形成威胁列表</strong>（分自然威胁和人为威胁），并根据其<strong>表现形式分类</strong>。</li>
+<li>分析威胁者<strong>为了实现其意图，会使用各种攻击方法和工具</strong>（途径）；<strong>成功后给网络系统造成的影响</strong>如<strong>非法访问、欺骗、拒绝服务</strong>（效果）；目的如<strong>挑战、情报信息获取、恐怖主义、经济利益和报复</strong>（意图）。</li>
+<li>对出现频率进行<strong>等级化处理</strong>。</li>
+</ul>
+</li>
+<li><strong>脆弱性识别</strong>：通过各种测试方法，<strong>获得网络资产中所存在的缺陷清单</strong>。以<strong>资产为核心</strong>，识别可能被<strong>威胁利用的弱点，并对脆弱性的严重程度进行评估</strong>。依据主要是<strong>网络安全法律法规政策、标准及行业要求</strong>。<ul>
+<li>包括<strong>技术脆弱性评估</strong>（现有安全技术措施的合理性和有效性）和<strong>管理脆弱性评估</strong>（从管理上分析弱点并标识严重程度）。</li>
+</ul>
+</li>
+<li><strong>安全措施确认</strong>：确认<strong>已采取的各种预防性和保护性安全措施的有效性</strong>。</li>
+</ul>
+<h3 id="3-网络安全风险分析与计算"><a href="#3-网络安全风险分析与计算" class="headerlink" title="3. 网络安全风险分析与计算"></a>3. 网络安全风险分析与计算</h3><ul>
+<li><strong>风险分析步骤</strong>：在各项评估基础上，<strong>综合利用定性和定量的分析方法，确定风险的大小与风险等级</strong>（形成风险测量列表）。步骤依次为：对资产识别、对威胁识别、对脆弱性识别 -&gt; <strong>判断安全事件发生的可能性</strong> -&gt; <strong>计算安全事件的损失</strong> -&gt; 计算<strong>一旦发生对组织的影响，即网络安全风险值</strong>。</li>
+<li><strong>风险计算方法</strong>：<ol>
+<li><strong>定性计算</strong>：对各要素属性进行<strong>主观评估</strong>，结果分为：<strong>无关紧要、可接受、待观察、不可接受</strong>。</li>
+<li><strong>定量计算</strong>：将要素<strong>量化为数据</strong>，输出结果是一个<strong>风险数值</strong>。</li>
+<li><strong>综合计算</strong>：<strong>结合定性和定量方法</strong>进行<strong>量化赋值</strong>，输出<strong>风险数值，同时给出相应的定性结论</strong>。</li>
+<li>具体算法包含<strong>相乘法</strong>（可能性与损失相乘）和<strong>矩阵法</strong>（构造二维矩阵）。</li>
+</ol>
+</li>
+</ul>
+<h3 id="4-评估技术方法与工具"><a href="#4-评估技术方法与工具" class="headerlink" title="4. 评估技术方法与工具"></a>4. 评估技术方法与工具</h3><ul>
+<li><strong>资产信息收集</strong>：通过<strong>调查表形式，查询资产登记数据库</strong>，掌握<strong>重要资产分布</strong>。</li>
+<li><strong>网络拓扑发现</strong>：<strong>获取被评估网络信息系统的资产关联结构信息，进而获取资产信息</strong>（生成网络拓扑结构图，掌握关联情况）。</li>
+<li><strong>漏洞扫描</strong>：<strong>自动搜集待评估对象的漏洞信息，以评估其脆弱性</strong>。</li>
+<li><strong>人工检查</strong>：<strong>通过人直接操作评估对象以获取信息</strong>，需事先设计好<strong>“检查表 (CheckList)”</strong>。</li>
+<li><strong>渗透测试</strong>：<strong>获得法律授权后，模拟黑客攻击网络系统</strong>，进行<strong>安全漏洞发现、网络攻击路径构造、安全漏洞利用验证</strong>。</li>
+<li><strong>问卷调查</strong>：采用<strong>书面的形式获得相关信息</strong>，<strong>根据调查对象进行分别设计</strong>（分<strong>管理类和技术类</strong>）。</li>
+<li><strong>安全访谈</strong>：通过专家与<strong>使用人员、管理人员等相关人员进行直接交谈</strong>。</li>
+<li><strong>审计数据分析</strong>：<strong>通常用于威胁识别</strong>，作用包括<strong>侵害行为检测、异常事件监测、潜在攻击征兆发觉等</strong>（采用特征模式匹配等技术）。</li>
+<li><strong>入侵监测</strong>：将设备接入网络，<strong>采集评估对象的威胁信息和安全状态</strong>。</li>
+</ul>
+<h3 id="5-评估项目流程与规范"><a href="#5-评估项目流程与规范" class="headerlink" title="5. 评估项目流程与规范"></a>5. 评估项目流程与规范</h3><ul>
+<li><strong>五大流程</strong>：<strong>评估工程前期准备、评估方案设计与论证、评估方案实施、评估报告撰写、评估结果评审与认可</strong>。</li>
+<li><strong>前期准备</strong>：是<strong>后续工作开展的前提</strong>，需<strong>确定对象、界定范围、粒度和时间等</strong>。开始前<strong>一定要签订合同和保密协议</strong>。需要<strong>多方面的协调，必要的、充分的准备是风险评估成功的关键</strong>。</li>
+<li><strong>方案设计与论证</strong>：<strong>依据被评估方的安全需求来制定，需经过双方讨论并论证通过后方可进行下一步工作</strong>。涵盖<strong>评估方法、评估人员组织、评估工具选择、预期风险分析、评估实施计划等</strong>。</li>
+<li><strong>方案实施</strong>：<strong>在论证通过后，才能组织相关人员进行实施</strong>。包含<strong>基本情况调查、安全需求挖掘以及确定具体操作步骤</strong>。<ul>
+<li><strong>红线要求</strong>：<strong>应避免改变系统的任何设置或必须备份系统原有的配置，并书面记录操作过程和相关数据</strong>；必须有<strong>工作备忘录</strong>；敏感系统测试<strong>要求至少两人，且必须领导签字批准</strong>。</li>
+</ul>
+</li>
+<li><strong>报告撰写</strong>：<strong>完成评估报告撰写</strong>，它是<strong>风险评估结果的记录文件，是组织实施风险管理的主要依据</strong>。内容包括<strong>评估范围、计算方法、问题归纳及描述、风险级数、安全建议等</strong>。</li>
+<li><strong>评审与认可</strong>：<strong>最高管理层或其委托的机构应组织召开评估工作结束会议，总结评估工作，对风险评估活动进行评审</strong>。对结果的验收是<strong>本次风险评估活动结束的标志</strong>，最后将经验形成<strong>书面文字材料</strong>备案。</li>
+</ul>
+<h3 id="6-技术应用场景与前沿"><a href="#6-技术应用场景与前沿" class="headerlink" title="6. 技术应用场景与前沿"></a>6. 技术应用场景与前沿</h3><ul>
+<li><strong>四大应用场景</strong>：<strong>网络安全规划和设计；网络安全等级保护；网络安全运维与应急响应；数据安全管理与运营</strong>。</li>
+<li><strong>OWASP Web应用风险评估6步法</strong>：<ol>
+<li><strong>确定风险类别</strong>。</li>
+<li><strong>评估可能性的因素</strong>（从<strong>攻击者因素、漏洞因素分析</strong>）。</li>
+<li><strong>评估影响的因素</strong>（包括<strong>技术影响因素、业务影响因素</strong>）。</li>
+<li><strong>确定风险的严重程度</strong>。</li>
+<li><strong>决定修复内容</strong>（规则是<strong>首先修复最严重的风险</strong>）。</li>
+<li><strong>定制合适的风险评级模型</strong>。</li>
+</ol>
+</li>
+<li><strong>ICT供应链安全</strong>：面临风险目标为完整性、保密性、可用性及可控性（<strong>ICT供应链</strong>概念）。</li>
+<li><strong>人工智能 (AI) 安全风险分析</strong>：核心是防范<strong>对人工智能系统的攻击、侵入、干扰、破坏和非法利用以及意外事故，使系统处于稳定可靠的运行状态</strong>。主要面临5大风险：<ol>
+<li><strong>人工智能训练数据安全风险</strong>。</li>
+<li><strong>人工智能算法安全风险</strong>。</li>
+<li><strong>人工智能系统代码实现安全风险</strong>。</li>
+<li><strong>人工智能技术滥用风险</strong>。</li>
+<li><strong>高度自治智能系统导致社会安全风险</strong>。</li>
+</ol>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/10/%E4%B8%BB%E5%8A%A8%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/03/10/%E4%B8%BB%E5%8A%A8%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">主动防御技术</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-03-10 21:57:01 / 修改时间：21:58:25" itemprop="dateCreated datePublished" datetime="2026-03-10T21:57:01+08:00">2026-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="主动防御技术"><a href="#主动防御技术" class="headerlink" title="主动防御技术"></a>主动防御技术</h2><h3 id="1-入侵阻断技术与应用-IPS-SPS"><a href="#1-入侵阻断技术与应用-IPS-SPS" class="headerlink" title="1. 入侵阻断技术与应用 (IPS/SPS)"></a>1. 入侵阻断技术与应用 (IPS/SPS)</h3><ul>
+<li><strong>核心理念</strong>：网络安全的<strong>主动防御</strong>方法，其基本原理是对目标对象的<strong>网络攻击行为进行阻断</strong>。</li>
+<li><strong>技术实现</strong>：<ul>
+<li><strong>入侵防御系统 (IPS)</strong>：根据<strong>网络包的特性及上下文进行攻击行为判断</strong>。为解决性能瓶颈，商用多采用<strong>硬件方式</strong>或基于<strong>旁路阻断 (SPS)</strong>。</li>
+<li><strong>旁路阻断 (SPS)</strong>：一般<strong>对网络延迟影响不大</strong>。</li>
+</ul>
+</li>
+<li><strong>主要作用</strong>：<strong>过滤掉有害的网络信息流，阻断入侵者对目标的攻击行为</strong>。</li>
+</ul>
+<h3 id="2-软件白名单技术与应用"><a href="#2-软件白名单技术与应用" class="headerlink" title="2. 软件白名单技术与应用"></a>2. 软件白名单技术与应用</h3><ul>
+<li><strong>核心原理</strong>：<strong>设置可信任的软件名单列表，以阻止恶意的软件在相关的网络信息系统运行</strong>。</li>
+<li><strong>应用机制</strong>：<ul>
+<li>应用审查设立<strong>初审、复审、终审</strong>三个环节，发布过程分为<strong>公示和发布</strong>两个阶段，以<strong>构建安全、可信的移动互联网安全生态环境</strong>。</li>
+<li><strong>恶意代码防护</strong>：相比黑名单，白名单能更好防范零日漏洞。</li>
+<li><strong>白环境保护</strong>：核心在于“三可信”——<strong>只有可信任的设备才能接入；只有可信任的消息才能传输；只有可信任的软件才允许执行</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-网络流量清洗技术与应用"><a href="#3-网络流量清洗技术与应用" class="headerlink" title="3. 网络流量清洗技术与应用"></a>3. 网络流量清洗技术与应用</h3><ul>
+<li><strong>工作原理 (三步曲)</strong>：<ol>
+<li><strong>流量检测</strong>：基于深度包检测 <strong>(DPI)</strong> 识别异常，<strong>快速识别隐藏在背景流量中的攻击包</strong>。</li>
+<li><strong>流量牵引与清洗</strong>：将目标系统的流量<strong>动态转发到流量清洗中心</strong>，<strong>拒绝对指向目标系统的恶意流量进行路由转发</strong>。</li>
+<li><strong>流量回注</strong>：将<strong>清洗后的干净流量回送给目标系统</strong>。</li>
+</ol>
+</li>
+<li><strong>典型应用</strong>：畸形数据报文过滤、抗拒绝服务攻击 (DDoS)、Web应用保护、<strong>DDoS高防IP服务（采用代理转发模式，流量牵引到高防IP）</strong>。</li>
+</ul>
+<h3 id="4-可信计算技术与应用-核心重点"><a href="#4-可信计算技术与应用-核心重点" class="headerlink" title="4. 可信计算技术与应用 (核心重点)"></a>4. 可信计算技术与应用 (核心重点)</h3><ul>
+<li><strong>概念发展</strong>：早期集中于<strong>操作系统的安全机制和容错计算</strong>。由TCPA演进为TCG，制定了<strong>TPM（可信平台模块）</strong>和<strong>TNC（可信网络连接）</strong>标准。</li>
+<li><strong>信任体系</strong>：<strong>TPM是信任根</strong>。包含三个根：<strong>可信度量根RTM</strong>、<strong>可信存储根RTS</strong>、<strong>可信报告根RTR</strong>。目的是<strong>从硬件、BIOS、操作系统等各个层次上增强计算系统平台的可信性</strong>。</li>
+<li><strong>中国标准</strong>：建立起以自主密码算法 <strong>TCM为核心</strong> 的标准，由<strong>可信密码模块(TCM)和TCM服务模块(TSM)</strong>组成。</li>
+<li><strong>TNC 三层架构</strong>：<strong>完整性度量层</strong>（搜集和验证）、<strong>完整性评估层</strong>（评估状况）、<strong>网络访问层</strong>（请求处理与授权）。</li>
+</ul>
+<h3 id="5-数字水印技术与应用"><a href="#5-数字水印技术与应用" class="headerlink" title="5. 数字水印技术与应用"></a>5. 数字水印技术与应用</h3><ul>
+<li><strong>核心原理</strong>：通过<strong>数字信号处理方法，在数字化的媒体文件中嵌入特定的标记</strong>。分为<strong>水印的嵌入和水印的提取</strong>。</li>
+<li><strong>两大核心算法</strong>：<ol>
+<li><strong>空间域方法</strong>：<strong>直接叠加到数字载体的空间域上</strong>。典型如Schyndel算法（即<strong>最低有效位算法 LSB</strong>，按像素点逐一嵌入<strong>最低位上</strong>）和Patchwork算法（改变<strong>统计特性</strong>）。</li>
+<li><strong>变换域方法</strong>：利用<strong>扩展频谱通信技术</strong>和<strong>离散余弦变换(DCT)</strong>，将水印叠加到<strong>DCT域中幅值最大的前L个系数上（不包括直流分量）</strong>。</li>
+</ol>
+</li>
+<li><strong>应用场景</strong>：<strong>版权保护、信息隐藏</strong>（提升保护程度）、<strong>信息溯源、访问控制</strong>。</li>
+</ul>
+<h3 id="6-网络攻击陷阱技术-蜜罐-陷阱网络"><a href="#6-网络攻击陷阱技术-蜜罐-陷阱网络" class="headerlink" title="6. 网络攻击陷阱技术 (蜜罐/陷阱网络)"></a>6. 网络攻击陷阱技术 (蜜罐/陷阱网络)</h3><ul>
+<li><strong>核心理念</strong>：一种<strong>主动的防御方法</strong>，帮助防守方<strong>获得信息优势</strong>。能<strong>消耗攻击者资源、加重工作量、迷惑/跟踪攻击者、制止破坏行为，形成威慑</strong>。</li>
+<li><strong>蜜罐主机技术</strong>：<ul>
+<li><strong>空系统</strong>：<strong>标准的机器，运行着真实完整的OS及程序</strong>，包含<strong>真实系统中的漏洞</strong>。</li>
+<li><strong>镜像系统</strong>：建立<strong>提供敌手感兴趣的服务的服务器镜像</strong>，具有<strong>较强的欺骗性</strong>。</li>
+<li><strong>虚拟系统</strong>：在<strong>真实物理机上运行仿真软件</strong>，运行<strong>多个不同OS（虚拟机）</strong>。</li>
+</ul>
+</li>
+<li><strong>陷阱网络发展</strong>：<ul>
+<li>第一代：<strong>多个设备共同组成</strong>，不对外限制但<strong>对内加强控制</strong>，必须<strong>获取系统活动记录（远程日志、监控软件）</strong>。</li>
+<li>第二代：实现<strong>集成系统</strong>（监控非授权、隐蔽性更强、可积极响应限制非法活动）。</li>
+<li>第三代：<strong>虚拟陷阱网络 (Virtual Honeynets)</strong>，将功能<strong>集中到一个物理设备中运行</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-入侵容忍及系统生存技术"><a href="#7-入侵容忍及系统生存技术" class="headerlink" title="7. 入侵容忍及系统生存技术"></a>7. 入侵容忍及系统生存技术</h3><ul>
+<li><strong>核心理念</strong>：<strong>安全3.0理念是容忍入侵</strong>（区别于1.0挡在门外，2.0检测隔离），目标是实现<strong>网络安全弹性，具有容侵能力、可恢复能力</strong>。</li>
+<li><strong>生存性3R方法</strong>：将系统划分为<strong>不可攻破的安全核和可恢复部分</strong>（假定<strong>基本服务不可攻破</strong>）。包含三策略：<strong>抵抗(Resistance)、识别(Recognition)、恢复(Recovery)</strong>。</li>
+<li><strong>关键技术与应用</strong>：<ul>
+<li><strong>分布式共识</strong>（如<strong>区块链</strong>，<strong>众多对等节点组成，去中心化</strong>，避免单一缺陷）。</li>
+<li><strong>门限密码</strong>（如<strong>弹性CA系统</strong>，<strong>容忍一台或多台设备被入侵</strong>，将私钥<strong>分解成若干个数的和</strong>）。</li>
+<li><strong>主动恢复</strong>（周期性<strong>转变到可信状态</strong>）与<strong>多样性设计</strong>（避免通用模式失效）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="8-隐私保护技术与应用"><a href="#8-隐私保护技术与应用" class="headerlink" title="8. 隐私保护技术与应用"></a>8. 隐私保护技术与应用</h3><ul>
+<li><strong>四类隐私</strong>：<strong>身份隐私、属性隐私、社交关系隐私、位置轨迹隐私</strong>。</li>
+<li><strong>保护目标</strong>：<strong>通过安全修改处理，使数据可公开发布而不会遭受隐私攻击，并最大可能保留原数据使用价值</strong>。</li>
+<li><strong>核心算法</strong>：<ul>
+<li><strong>k-匿名方法</strong>：对所有元组进行<strong>泛化处理</strong>（不再一一对应），但<strong>容易遭到一致性攻击</strong>。改进方案为 <strong>l-多样性方法</strong>（每个敏感属性至少有<strong>l个不同的值</strong>）。</li>
+<li><strong>差分隐私方法</strong>：通过<strong>添加随机噪声</strong>保护数据。</li>
+</ul>
+</li>
+<li><strong>操作方法</strong>：<strong>抑制</strong>（置空）、<strong>泛化</strong>（降精度）、<strong>置换</strong>（改属主）、<strong>扰动</strong>（加噪声）、<strong>裁剪</strong>（分开发布）。</li>
+<li><strong>脱敏处理</strong>：<strong>匿名化</strong>（<strong>处理后不能被复原</strong>）与 <strong>去标识化</strong>（采用<strong>假名、加密、Hash函数</strong>等置换）。系统敏感口令也常用<strong>Hash函数处理后再保存</strong>。</li>
+</ul>
+<h3 id="9-网络安全前沿技术动向"><a href="#9-网络安全前沿技术动向" class="headerlink" title="9. 网络安全前沿技术动向"></a>9. 网络安全前沿技术动向</h3><ul>
+<li><strong>网络威胁情报</strong>：指<strong>有关网络信息系统遭受安全威胁的信息</strong>（如漏洞、<strong>攻击来源IP、恶意邮箱/域名、攻击工具等</strong>）。</li>
+<li><strong>同态加密</strong>：允许在密文上直接进行计算，解密后的结果与明文计算结果一致（包括加同态、乘同态和全同态）。</li>
+<li><strong>DNS域名安全</strong>：DNS是<strong>逐级授权的分布式数据查询系统（完成域名到IP的翻译）</strong>，分为<strong>递归</strong>和<strong>权威（根、顶级等各级组成）</strong>。主要风险包括：<strong>域名信息篡改、解析配置错误、域名劫持、软件安全漏洞</strong>。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2517,259 +2837,6 @@ mjx-container[display="true"] + br {
 </ol>
 </li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/08/%E7%BD%91%E7%AB%99%E5%AE%89%E5%85%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/03/08/%E7%BD%91%E7%AB%99%E5%AE%89%E5%85%A8/" class="post-title-link" itemprop="url">网站安全</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-03-08 22:45:59 / 修改时间：22:50:52" itemprop="dateCreated datePublished" datetime="2026-03-08T22:45:59+08:00">2026-03-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="网站安全"><a href="#网站安全" class="headerlink" title="网站安全"></a>网站安全</h2><p>文档详细讲解了<strong>网站安全需求分析与安全保护工程</strong>，从理论分析到具体软件（Apache、IIS）的加固，再到Web应用漏洞及综合防护方案，形成了一个完整的网站安全建设框架。</p>
-<h3 id="一、-网站安全威胁与需求分析"><a href="#一、-网站安全威胁与需求分析" class="headerlink" title="一、 网站安全威胁与需求分析"></a>一、 网站安全威胁与需求分析</h3><p>网站是基于B/S技术架构的综合信息服务平台，提供网页信息和业务后台对外接口服务。</p>
-<ul>
-<li><strong>网站安全核心属性</strong>：机密性（防泄露）、完整性（防篡改）、可用性（防中断）、可控性（防滥用）。</li>
-<li><strong>主要安全威胁</strong>：<ol>
-<li><strong>非授权访问</strong>：撞库、口令猜测。</li>
-<li><strong>网页篡改与恶意代码</strong>：植入网页木马，控制终端。</li>
-<li><strong>数据泄露</strong>：敏感信息被窃取。</li>
-<li><strong>网站假冒</strong>：域名欺骗、劫持、中间人攻击（钓鱼网站）。</li>
-<li><strong>拒绝服务（DoS/DDoS）</strong>：如UDP、ICMP、SYN、HTTP Flood。</li>
-<li><strong>后台管理威胁</strong>：管理员密码被窃、权限分配不当。</li>
-</ol>
-</li>
-</ul>
-<p>网站安全需求涉及多个方面：物理环境、网络通信、操作系统、数据库、应用服务器、Web服务/应用、数据库安全等。</p>
-<h3 id="二、-Apache-Web-安全分析与增强"><a href="#二、-Apache-Web-安全分析与增强" class="headerlink" title="二、 Apache Web 安全分析与增强"></a>二、 Apache Web 安全分析与增强</h3><p>Apache httpd 是一个搭建Web服务器的开源软件。配置文件如下：</p>
-<ul>
-<li>httpd.conf 主配置文件</li>
-<li>conf/srm.conf 数据配置文件</li>
-<li>conf/access.conf 基本读取文件控制/f访问控制</li>
-<li>conf/mime.conf 设定能识别的MIME格式</li>
-</ul>
-<p><strong>常见威胁</strong>：软件程序漏洞（缓冲区溢出）、配置不当（目录索引泄露）、认证机制薄弱、通信未加密、全连接耗尽攻击等。</p>
-<p>Apache Web 主要面临以下以下安全威胁：软件程序、软件配置威胁，安全机制威胁，应用程序威胁，服务通信、服务内容‘拒绝服务威胁。</p>
-<p>Apache Web 安全机制：本地文件安全，认证机制，模块管理，连接耗尽应对机制。</p>
-<p>应对连接耗尽攻击，Apache 可以：<br>（1）减少超时设置，减少 Timeout，增大 Maxclients；<br>（2）限制同一IP最大连接数；<br>（3）多线程下载保护机制；<br>（4）自带访问控制，审计与日志（access.log error.log）,防DDoS；</p>
-<p><strong>安全增强与加固方案</strong>：</p>
-<pre><code>1.  **打补丁**：及时更新Apache软件。
-2.  **权限控制**：遵循最小特权原则，为Apache分配专门的用户和组（不使用预定义的nobody）。 
-3.  **信息隐藏**：隐藏Apache软件版本号（修改`ServerSignature`和`ServerTokens`）。
-4.  **目录保护**：禁止显示动态目录索引（`-Indexes`），禁止默认访问，启用`.htaccess`保护网页。.htaccess配置文件保护，设置网页密码，重定向文件，禁止读取文件名等。
-5.  **抗DoS攻击**：减少超时设置（Timeout）、限制同一IP连接数、使用防多线程下载机制或第三方防DoS模块。
-6.  **环境隔离**：构建“安全沙箱”（chroot机制），限制软件运行范围。
-7.  **通信加密**：配置Open SSL实现HTTPS加密传输。
-</code></pre><h3 id="三、-IIS-Web-安全分析与增强"><a href="#三、-IIS-Web-安全分析与增强" class="headerlink" title="三、 IIS Web 安全分析与增强"></a>三、 IIS Web 安全分析与增强</h3><ul>
-<li><strong>常见威胁</strong>：非授权访问、网络蠕虫（利用缓冲区溢出）、CVE软件漏洞（XSS、代码执行等）、拒绝服务。</li>
-<li><strong>IIS内置安全机制</strong>：<ul>
-<li><strong>认证</strong>：匿名、基本验证、证书认证、数字签名、Windows NTLM认证。</li>
-<li><strong>访问控制流程</strong>：IP地址限制检查 -&gt; 用户身份验证 -&gt; Web权限检查 -&gt; NTFS文件许可权限检查。</li>
-</ul>
-</li>
-<li><strong>安全增强方案</strong>：及时安装IIS补丁、启用动态IP限制（防暴力破解和DoS）、启用URLScan过滤危险请求、部署IIS WAF（Web应用防火墙）、启用SSL服务。</li>
-</ul>
-<h3 id="四、-Web应用漏洞分析与防护-基于OWASP-Top-10"><a href="#四、-Web应用漏洞分析与防护-基于OWASP-Top-10" class="headerlink" title="四、 Web应用漏洞分析与防护 (基于OWASP Top 10)"></a>四、 Web应用漏洞分析与防护 (基于OWASP Top 10)</h3><ul>
-<li><strong>两类漏洞</strong>：技术安全漏洞（SQL注入、XSS等）与业务逻辑漏洞（如密码找回缺陷、短信炸弹）。</li>
-<li><strong>常见漏洞及防护</strong>：<ol>
-<li><strong>SQL注入漏洞</strong>：<ul>
-<li>防护：对输入进行安全过滤（建立黑白名单）、设置数据库最小化权限（避免使用DBA权限连接）、屏蔽应用程序报错信息回显，对开源 Web应用做安全适应性改造。</li>
-</ul>
-</li>
-<li><strong>文件上传漏洞</strong>：<ul>
-<li>防护：将上传目录设置为<strong>不可执行</strong>，严格检查上传文件安全性。</li>
-</ul>
-</li>
-<li><strong>跨站脚本攻击 (XSS)</strong>：<ul>
-<li>攻击模式包括HTML内容替换、嵌入脚本代码等（需对输入输出做转义和验证）。</li>
-</ul>
-</li>
-<li><strong>其他OWASP高危漏洞</strong>：受破坏的认证、敏感数据暴露、XXE（外部实体注入）、失效的访问控制、安全配置错误、不安全的反序列化、使用带已知漏洞的组件、日志监控不足。</li>
-</ol>
-</li>
-</ul>
-<h3 id="五、-网站安全保护机制与技术方案"><a href="#五、-网站安全保护机制与技术方案" class="headerlink" title="五、 网站安全保护机制与技术方案"></a>五、 网站安全保护机制与技术方案</h3><p>构建网站整体安全的综合保护体系，包含以下技术机制：</p>
-<ol>
-<li><strong>身份鉴别与访问控制</strong>：用户名/口令、U盾、生物识别；防火墙拦截。</li>
-<li><strong>数据与内容安全</strong>：网页防篡改（文件底层监控或密码学哈希校验）、敏感词过滤、数据隔离与SSL加密。</li>
-<li><strong>攻击防护与流量清洗</strong>：部署WAF拦截Webshell、SQL注入等；部署抗DDoS清洗设备。</li>
-<li><strong>安全监测与扫描</strong>：定期漏洞扫描、网页挂马监测、合规性与备案监测、性能与DNS监测。</li>
-<li><strong>审计与应急响应</strong>：SysLog收集、网络/数据库审计；建立灾备中心、制定应急预案并开展等级保护测评。</li>
-</ol>
-<h3 id="六、-网站安全综合应用案例-政务网站"><a href="#六、-网站安全综合应用案例-政务网站" class="headerlink" title="六、 网站安全综合应用案例 (政务网站)"></a>六、 网站安全综合应用案例 (政务网站)</h3><ul>
-<li><strong>合规要求</strong>：政府网站信息安全等级原则上<strong>不低于二级</strong>（二级每两年测评，三级每年测评一次）。</li>
-<li><strong>整体架构方案部署</strong>：<ul>
-<li><strong>网络边界</strong>：防DDoS系统 + 防火墙（访问控制）。</li>
-<li><strong>应用层</strong>：Web应用防火墙 (WAF) 清洗异常流量 + IPS/防病毒网关检测阻断。</li>
-<li><strong>服务器端</strong>：防篡改监控代理（保护文件）。</li>
-<li><strong>后端支撑</strong>：网络/数据库审计系统（监控后台数据操作）。</li>
-<li><strong>管理面</strong>：网站安全监控系统。</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E9%80%9A%E8%BF%87AUX-VTY%E4%BD%BF%E7%94%A8TACACS-%E8%BF%9B%E8%A1%8C%E8%AE%A4%E8%AF%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/03/08/%E8%B7%AF%E7%94%B1%E5%99%A8%E9%80%9A%E8%BF%87AUX-VTY%E4%BD%BF%E7%94%A8TACACS-%E8%BF%9B%E8%A1%8C%E8%AE%A4%E8%AF%81/" class="post-title-link" itemprop="url">路由器通过AUX/VTY使用TACACS+进行认证</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-03-08 22:45:45 / 修改时间：22:51:02" itemprop="dateCreated datePublished" datetime="2026-03-08T22:45:45+08:00">2026-03-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>在路由器上为 AUX 和 VTY 线路配置 TACACS+ 身份认证</strong>的全过程。</p>
-<p>以下是整理后的配置过程及对应的步骤解析：</p>
-<h3 id="📝-背景说明"><a href="#📝-背景说明" class="headerlink" title="📝 背景说明"></a>📝 背景说明</h3><ul>
-<li><strong>应用场景</strong>：路由器通过 AUX、VTY 端口进行远程登录认证。</li>
-<li><strong>TACACS+ 服务器 IP 地址</strong>：<code>X.Y.Z.10</code></li>
-<li><strong>TACACS+ 服务器密钥</strong>：<code>MyTACACSkey</code></li>
-</ul>
-<h3 id="💻-完整配置代码"><a href="#💻-完整配置代码" class="headerlink" title="💻 完整配置代码"></a>💻 完整配置代码</h3><p>为了方便阅读和使用，把命令行提示符与间距进行了规范化整理：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Router# config terminal</span><br><span class="line">Enter configuration commands, one per line. End with CNTL/Z.</span><br><span class="line"></span><br><span class="line">Router(config)# aaa new-model</span><br><span class="line">Router(config)# tacacs-server host X.Y.Z.10</span><br><span class="line">Router(config)# tacacs-server key MyTACACSkey</span><br><span class="line">Router(config)# aaa authentication login default group tacacs+ local</span><br><span class="line"></span><br><span class="line">Router(config)# line aux 0</span><br><span class="line">Router(config-line)# login authentication default</span><br><span class="line">Router(config-line)# exit</span><br><span class="line"></span><br><span class="line">Router(config)# line vty 0 4</span><br><span class="line">Router(config-line)# login authentication default</span><br><span class="line">Router(config-line)# ^Z</span><br><span class="line">Router#</span><br></pre></td></tr></table></figure>
-<h3 id="🔍-步骤详细解析"><a href="#🔍-步骤详细解析" class="headerlink" title="🔍 步骤详细解析"></a>🔍 步骤详细解析</h3><p><strong>1. 进入全局配置模式</strong><br><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Router# config terminal</span><br></pre></td></tr></table></figure><br>系统提示输入配置命令，按 <code>Ctrl+Z</code> 结束。</p>
-<p><strong>2. 启用 AAA 服务</strong><br><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Router(config)# aaa new-model</span><br></pre></td></tr></table></figure><br>开启路由器的 AAA（认证、授权和计费）访问控制模型。</p>
-<p><strong>3. 配置 TACACS+ 服务器参数</strong><br><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Router(config)# tacacs-server host X.Y.Z.10</span><br><span class="line">Router(config)# tacacs-server key MyTACACSkey</span><br></pre></td></tr></table></figure><br>指定 TACACS+ 服务器的 IP 地址，并设置路由器与服务器之间通信的共享密钥（MyTACACSkey）。</p>
-<p><strong>4. 创建 AAA 认证方法列表</strong><br><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Router(config)# aaa authentication login default group tacacs+ local</span><br></pre></td></tr></table></figure><br>定义名为 <code>default</code> 的登录认证列表。认证顺序为：优先使用 <code>tacacs+</code> 服务器进行认证；如果 TACACS+ 服务器无响应，则降级使用本地数据库（<code>local</code>）进行认证。</p>
-<p><strong>5. 应用于 AUX 线路</strong><br><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Router(config)# line aux 0</span><br><span class="line">Router(config-line)# login authentication default</span><br><span class="line">Router(config-line)# exit</span><br></pre></td></tr></table></figure><br>进入辅助接口（AUX 0）配置模式，并调用刚才创建的 <code>default</code> 认证列表，配置完成后退回全局模式。</p>
-<p><strong>6. 应用于 VTY 虚拟终端线路</strong><br><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Router(config)# line vty 0 4</span><br><span class="line">Router(config-line)# login authentication default</span><br></pre></td></tr></table></figure><br>进入虚拟终端（VTY 0 到 4，供 Telnet/SSH 远程登录使用）配置模式，同样调用 <code>default</code> 认证列表。</p>
-<p><strong>7. 退出并结束配置</strong><br><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Router(config-line)# ^Z</span><br><span class="line">Router#</span><br></pre></td></tr></table></figure><br>使用 <code>^Z</code>（即键盘快捷键 <code>Ctrl+Z</code>）直接从线路配置模式退回到特权 EXEC 模式，完成全部配置。</p>
 
       
     </div>
