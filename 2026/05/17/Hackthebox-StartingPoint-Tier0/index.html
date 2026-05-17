@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Tier0起点包含了：Meow、Fawn、Dancing和Redeemer4个非vip靶场，侧重于渗透测试的基本构建模块。 Meow1.What does the acronym VM stand for? VM 这个缩写代表什么？ Virtual Machine 2.What tool do we use to interact with the operating system in orde">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hackthebox-StartingPoint-Tier0">
+<meta property="og:url" content="https://zyufoye.github.io/2026/05/17/Hackthebox-StartingPoint-Tier0/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="Tier0起点包含了：Meow、Fawn、Dancing和Redeemer4个非vip靶场，侧重于渗透测试的基本构建模块。 Meow1.What does the acronym VM stand for? VM 这个缩写代表什么？ Virtual Machine 2.What tool do we use to interact with the operating system in orde">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-17T12:30:07.000Z">
+<meta property="article:modified_time" content="2026-05-17T12:36:24.518Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="HTB">
+<meta property="article:tag" content="Penetration Testing">
+<meta property="article:tag" content="telnet">
+<meta property="article:tag" content="ftp">
+<meta property="article:tag" content="SMB">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/05/17/Hackthebox-StartingPoint-Tier0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/05/17/Hackthebox-StartingPoint-Tier0/","path":"2026/05/17/Hackthebox-StartingPoint-Tier0/","title":"Hackthebox-StartingPoint-Tier0"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hackthebox-StartingPoint-Tier0 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Meow"><span class="nav-number">1.</span> <span class="nav-text">Meow</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fawn"><span class="nav-number">2.</span> <span class="nav-text">Fawn</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dancing"><span class="nav-number">3.</span> <span class="nav-text">Dancing</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redeemer"><span class="nav-number">4.</span> <span class="nav-text">Redeemer</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/05/17/Hackthebox-StartingPoint-Tier0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hackthebox-StartingPoint-Tier0 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hackthebox-StartingPoint-Tier0
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-05-17 20:30:07 / 修改时间：20:36:24" itemprop="dateCreated datePublished" datetime="2026-05-17T20:30:07+08:00">2026-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HTB/" itemprop="url" rel="index"><span itemprop="name">HTB</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Tier0起点包含了：Meow、Fawn、Dancing和Redeemer4个非vip靶场，侧重于渗透测试的基本构建模块。</p>
+<h1 id="Meow"><a href="#Meow" class="headerlink" title="Meow"></a>Meow</h1><p>1.What does the acronym VM stand for?</p>
+<p>VM 这个缩写代表什么？</p>
+<p>Virtual Machine</p>
+<p>2.What tool do we use to interact with the operating system in order to issue commands via the command line, such as the one to start our VPN connection? It’s also known as a console or shell.</p>
+<p>我们使用什么工具与操作系统交互，以便通过命令行发出命令，例如启动 VPN 连接的命令？它也被称为控制台或 shell。</p>
+<p>Terminal</p>
+<p>3.What service do we use to form our VPN connection into HTB labs?</p>
+<p>我们使用什么服务来建立与 HTB 实验室的 VPN 连接？</p>
+<p>openvpn</p>
+<p>4.What tool do we use to test our connection to the target with an ICMP echo request?</p>
+<p>我们使用什么工具来测试与目标设备的 ICMP 回显请求连接？</p>
+<p>ping</p>
+<p>5.What is the name of the most common tool for finding open ports on a target?</p>
+<p>查找目标系统上开放端口最常用的工具叫什么名字？</p>
+<p>nmap</p>
+<p>6.What service do we identify on port 23/tcp during our scans?</p>
+<p>我们在扫描过程中，在 23/tcp 端口上识别出了什么服务？</p>
+<p>telent</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p- -v -min-rate 1000 10.129.125.52</span><br><span class="line"></span><br><span class="line">Discovered open port 23/tcp on 10.129.125.52</span><br><span class="line">PORT   STATE SERVICE</span><br><span class="line">23/tcp open  telnet</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>7.What username is able to log into the target over telnet with a blank password?</p>
+<p>哪个用户名可以使用空密码通过 telnet 登录到目标主机？</p>
+<p>root</p>
+<p>8.Submit root flag  提交根标志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">telnet 10.129.125.52</span><br><span class="line">Trying 10.129.125.52...</span><br><span class="line">Connected to 10.129.125.52.</span><br><span class="line">Escape character is <span class="string">&#x27;^]&#x27;</span>.</span><br><span class="line"></span><br><span class="line">  █  █         ▐▌     ▄█▄ █          ▄▄▄▄</span><br><span class="line">  █▄▄█ ▀▀█ █▀▀ ▐▌▄▀    █  █▀█ █▀█    █▌▄█ ▄▀▀▄ ▀▄▀</span><br><span class="line">  █  █ █▄█ █▄▄ ▐█▀▄    █  █ █ █▄▄    █▌▄█ ▀▄▄▀ █▀█</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Meow login: root</span><br><span class="line">Welcome to Ubuntu 20.04.2 LTS (GNU/Linux 5.4.0-77-generic x86_64)</span><br><span class="line">Last login: Mon Sep  6 15:15:23 UTC 2021 from 10.10.14.18 on pts/0</span><br><span class="line">root@Meow:~# <span class="built_in">ls</span></span><br><span class="line">flag.txt  snap</span><br><span class="line">root@Meow:~# <span class="built_in">cat</span> flag.txt</span><br></pre></td></tr></table></figure>
+<h1 id="Fawn"><a href="#Fawn" class="headerlink" title="Fawn"></a>Fawn</h1><p>1.What does the 3-letter acronym FTP stand for?</p>
+<p>FTP 这三个字母的缩写代表什么？</p>
+<p>File Transfer Protocol</p>
+<p>2.Which port does the FTP service listen on usually?</p>
+<p>FTP 服务通常监听哪个端口？</p>
+<p>21</p>
+<p>3.FTP sends data in the clear, without any encryption. What acronym is used for a later protocol designed to provide similar functionality to FTP but securely, as an extension of the SSH protocol?</p>
+<p>FTP 以明文形式发送数据，不进行任何加密。后来出现了一种协议，旨在提供与 FTP 类似的功能，但更加安全，它是 SSH 协议的扩展，该协议的缩写是什么？</p>
+<p>SFTP</p>
+<p>4.What is the command we can use to send an ICMP echo request to test our connection to the target?</p>
+<p>我们可以使用什么命令发送 ICMP 回显请求来测试与目标的连接？</p>
+<p>ping</p>
+<p>5.From your scans, what version is FTP running on the target?</p>
+<p>根据扫描结果，目标主机上运行的是哪个版本的 FTP？</p>
+<p>vsftpd 3.0.3</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p 21 -sCV 10.129.125.53</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nmap -p 21 -sCV 10.129.125.53</span><br><span class="line">[<span class="built_in">sudo</span>] password <span class="keyword">for</span> zyu:</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-10 23:28 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.125.53)</span><br><span class="line">Host is up (0.22s latency).</span><br><span class="line"></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">21/tcp open  ftp     vsftpd 3.0.3</span><br><span class="line">| ftp-anon: Anonymous FTP login allowed (FTP code 230)</span><br><span class="line">|_-rw-r--r--    1 0        0              32 Jun 04  2021 flag.txt</span><br><span class="line">| ftp-syst:</span><br><span class="line">|   STAT:</span><br><span class="line">| FTP server status:</span><br><span class="line">|      Connected to ::ffff:10.10.17.43</span><br><span class="line">|      Logged <span class="keyword">in</span> as ftp</span><br><span class="line">|      TYPE: ASCII</span><br><span class="line">|      No session bandwidth <span class="built_in">limit</span></span><br><span class="line">|      Session <span class="built_in">timeout</span> <span class="keyword">in</span> seconds is 300</span><br><span class="line">|      Control connection is plain text</span><br><span class="line">|      Data connections will be plain text</span><br><span class="line">|      At session startup, client count was 2</span><br><span class="line">|      vsFTPd 3.0.3 - secure, fast, stable</span><br><span class="line">|_End of status</span><br><span class="line">Service Info: OS: Unix</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>6.From your scans, what OS type is running on the target?</p>
+<p>根据扫描结果，目标设备运行的是哪种操作系统？</p>
+<p>Unix</p>
+<p>7.What is the command we need to run in order to display the ‘ftp’ client help menu?</p>
+<p>要显示“ftp”客户端的帮助菜单，我们需要运行什么命令？</p>
+<p>ftp -?</p>
+<p>8.What is username that is used over FTP when you want to log in without having an account?</p>
+<p>当您想在没有帐户的情况下通过 FTP 登录时，使用的用户名是什么？</p>
+<p>anonymous</p>
+<p>9.What is the response code we get for the FTP message ‘Login successful’?</p>
+<p>对于“登录成功”的 FTP 消息，我们得到的响应代码是什么？</p>
+<p>230</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ftp 10.129.125.53</span><br><span class="line">Connected to 10.129.125.53.</span><br><span class="line">220 (vsFTPd 3.0.3)</span><br><span class="line">Name (10.129.125.53:zyu): anonymous</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system <span class="built_in">type</span> is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>10.There are a couple of commands we can use to list the files and directories available on the FTP server. One is dir. What is the other that is a common way to list files on a Linux system.</p>
+<p>我们可以使用几个命令来列出 FTP 服务器上可用的文件和目录。一个是 dir 命令。另一个是 Linux 系统上常用的文件列表命令是什么？</p>
+<p>ls</p>
+<p>11.What is the command used to download the file we found on the FTP server?</p>
+<p>用来下载我们在 FTP 服务器上找到的文件的命令是什么？</p>
+<p>get</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ftp&gt; get flag.txt</span><br><span class="line"><span class="built_in">local</span>: flag.txt remote: flag.txt</span><br><span class="line">229 Entering Extended Passive Mode (|||35044|)</span><br><span class="line">150 Opening BINARY mode data connection <span class="keyword">for</span> flag.txt (32 bytes).</span><br><span class="line">100% |*******************************************************************************************************************|    32      105.57 KiB/s    00:00 ETA</span><br><span class="line">226 Transfer complete.</span><br><span class="line">32 bytes received <span class="keyword">in</span> 00:01 (0.02 KiB/s)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>12.cat flag.txt</p>
+<h1 id="Dancing"><a href="#Dancing" class="headerlink" title="Dancing"></a>Dancing</h1><p>1.What does the 3-letter acronym SMB stand for?</p>
+<p>SMB 这三个字母的缩写代表什么？</p>
+<p> Server Message Block  </p>
+<p>2.What port does SMB use to operate at?</p>
+<p>SMB 协议使用哪个端口运行？</p>
+<p>445</p>
+<p>3.What is the service name for port 445 that came up in our Nmap scan?</p>
+<p>我们在 Nmap 扫描中发现的 445 端口的服务名称是什么？</p>
+<p>microsoft-ds</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p 445 -sCV 10.129.125.72</span><br><span class="line">[<span class="built_in">sudo</span>] password <span class="keyword">for</span> zyu:</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 02:35 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.125.72)</span><br><span class="line">Host is up (0.30s latency).</span><br><span class="line"></span><br><span class="line">PORT    STATE SERVICE       VERSION</span><br><span class="line">445/tcp open  microsoft-ds?</span><br><span class="line"></span><br><span class="line">Host script results:</span><br><span class="line">| smb2-security-mode:</span><br><span class="line">|   3:1:1:</span><br><span class="line">|_    Message signing enabled but not required</span><br><span class="line">| smb2-time:</span><br><span class="line">|   <span class="built_in">date</span>: 2026-05-11T10:36:35</span><br><span class="line">|_  start_date: N/A</span><br><span class="line">|_clock-skew: 3h59m58s</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>4.What is the ‘flag’ or ‘switch’ that we can use with the smbclient utility to ‘list’ the available SMB shares on Dancing?</p>
+<p>我们可以使用 smbclient 工具的哪个“标志”或“开关”来“列出”Dancing 上可用的 SMB 共享？</p>
+<p>-L</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">smbclient -L 10.129.125.72</span><br><span class="line">Password <span class="keyword">for</span> [WORKGROUP\zyu]:</span><br><span class="line"></span><br><span class="line">        Sharename       Type      Comment</span><br><span class="line">        ---------       ----      -------</span><br><span class="line">        ADMIN$          Disk      Remote Admin</span><br><span class="line">        C$              Disk      Default share</span><br><span class="line">        IPC$            IPC       Remote IPC</span><br><span class="line">        WorkShares      Disk</span><br><span class="line">Reconnecting with SMB1 <span class="keyword">for</span> workgroup listing.</span><br><span class="line">do_connect: Connection to 10.129.125.72 failed (Error NT_STATUS_RESOURCE_NAME_NOT_FOUND)</span><br><span class="line">Unable to connect with SMB1 -- no workgroup available</span><br></pre></td></tr></table></figure>
+<p>SMB 的 445/tcp 端口已启动并运行，它就像一个共享文件夹。我们可以使用命令 smbclient -L {targetIP} 来枚举其内容。</p>
+<p>5.How many shares are there on Dancing?</p>
+<p>Dancing 有多少共享文件夹？</p>
+<p>4</p>
+<p>6.What is the name of the share we are able to access in the end with a blank password?</p>
+<p>最后，我们不用密码就能访问哪个共享文件夹？</p>
+<p>WorkShares</p>
+<p>7.What is the command we can use within the SMB shell to download the files we find?</p>
+<p>在 SMB shell 中，我们可以使用什么命令来下载找到的文件？</p>
+<p>get</p>
+<p>8.get flag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">smbclient \\\\10.129.125.72\\WorkShares</span><br><span class="line">smb: \&gt; <span class="built_in">cd</span> James.P</span><br><span class="line">smb: \James.P\&gt; <span class="built_in">ls</span></span><br><span class="line">  .                                   D        0  Thu Jun  3 04:38:03 2021</span><br><span class="line">  ..                                  D        0  Thu Jun  3 04:38:03 2021</span><br><span class="line">  flag.txt                            A       32  Mon Mar 29 05:26:57 2021</span><br><span class="line"></span><br><span class="line">                5114111 blocks of size 4096. 1750562 blocks available</span><br><span class="line">smb: \James.P\&gt; get flag.txt</span><br><span class="line">getting file \James.P\flag.txt of size 32 as flag.txt (0.0 KiloBytes/sec) (average 0.0 KiloBytes/sec)</span><br><span class="line">smb: \James.P\&gt; <span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h1 id="Redeemer"><a href="#Redeemer" class="headerlink" title="Redeemer"></a>Redeemer</h1><p>默认情况下，Nmap 在正式扫描端口之前，会先向目标发一个 Ping 包（ICMP 请求）。如果目标有回应，Nmap 才会继续扫端口；如果没有回应，Nmap 为了节省时间，会直接认为机器“没开机”，从而直接结束扫描。HTB 里的很多靶机（尤其是 Windows 机器）默认开启了防火墙，会拦截并丢弃所有的 Ping 请求。</p>
+<p>👉 解决方法：听从 Nmap 的建议，加上 -Pn 参数。</p>
+<p>-Pn 的意思是：“跳过主机存活检测（不发 Ping），无脑假设目标是开机的，直接强行扫它的端口。”</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap 10.129.125.73</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 03:01 EDT</span><br><span class="line">Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn</span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (0 hosts up) scanned <span class="keyword">in</span> 3.08 seconds</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nmap -Pn 10.129.125.73</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 03:02 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.125.73)</span><br><span class="line">Host is up.</span><br><span class="line">All 1000 scanned ports on localhost (10.129.125.73) are <span class="keyword">in</span> ignored states.</span><br><span class="line">Not shown: 1000 filtered tcp ports (no-response)</span><br><span class="line"></span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 201.43 seconds</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nmap -p 6379 -sCV 10.129.125.73</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 03:15 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.125.73)</span><br><span class="line">Host is up (0.31s latency).</span><br><span class="line"></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">6379/tcp open  redis   Redis key-value store 5.0.7</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 8.21 seconds</span><br></pre></td></tr></table></figure>
+<p>1.Which TCP port is open on the machine?</p>
+<p>机器上哪个 TCP 端口是开放的？</p>
+<p>6379</p>
+<p>2.Which service is running on the port that is open on the machine?</p>
+<p>机器上打开的端口正在运行哪个服务？</p>
+<p>redis</p>
+<p>3.What type of database is Redis? Choose from the following options: (i) In-memory Database, (ii) Traditional Database</p>
+<p>Redis 是什么类型的数据库？请从以下选项中选择：（i）内存数据库，（ii）传统数据库</p>
+<p>In-memory Database</p>
+<p>4.Which command-line utility is used to interact with the Redis server? Enter the program name you would enter into the terminal without any arguments.</p>
+<p>哪个命令行工具用于与 Redis 服务器交互？请输入您在终端中输入的程序名称（不带任何参数）。</p>
+<p>redis-cli</p>
+<p>5.Which flag is used with the Redis command-line utility to specify the hostname?</p>
+<p>在 Redis 命令行工具中，使用哪个标志来指定主机名？</p>
+<p>-h</p>
+<p>6.Once connected to a Redis server, which command is used to obtain the information and statistics about the Redis server?</p>
+<p>连接到 Redis 服务器后，使用哪个命令可以获取有关 Redis 服务器的信息和统计信息？</p>
+<p>info</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -h 10.129.125.73</span><br><span class="line">10.129.125.73:6379&gt; info</span><br><span class="line"><span class="comment"># Server</span></span><br><span class="line">redis_version:5.0.7</span><br><span class="line">redis_git_sha1:00000000</span><br><span class="line">redis_git_dirty:0</span><br><span class="line">redis_build_id:66bd629f924ac924</span><br><span class="line">redis_mode:standalone</span><br><span class="line">os:Linux 5.4.0-77-generic x86_64</span><br><span class="line">arch_bits:64</span><br><span class="line">multiplexing_api:epoll</span><br><span class="line">atomicvar_api:atomic-builtin</span><br><span class="line">gcc_version:9.3.0</span><br><span class="line">process_id:756</span><br><span class="line">run_id:b9ba300da3b4f92a5a8af4ab844c8b05d21460aa</span><br><span class="line">tcp_port:6379</span><br><span class="line">uptime_in_seconds:2356</span><br><span class="line">uptime_in_days:0</span><br><span class="line">hz:10</span><br><span class="line">configured_hz:10</span><br><span class="line">lru_clock:99981</span><br><span class="line">executable:/usr/bin/redis-server</span><br><span class="line">config_file:/etc/redis/redis.conf</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>7.What is the version of the Redis server being used on the target machine?</p>
+<p>目标机器上使用的 Redis 服务器版本是什么？</p>
+<p>5.0.7</p>
+<p>8.Which command is used to select the desired database in Redis?</p>
+<p>在 Redis 中，使用哪个命令来选择所需的数据库？</p>
+<p>select</p>
+<p>9.How many keys are present inside the database with index 0?</p>
+<p>数据库中索引为 0 的数据库键有多少个？</p>
+<p>4</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">10.129.125.73:6379&gt; <span class="keyword">select</span> 0</span><br><span class="line">OK</span><br><span class="line">(0.70s)</span><br><span class="line">10.129.125.73:6379&gt; keys *</span><br><span class="line">1) <span class="string">&quot;numb&quot;</span></span><br><span class="line">2) <span class="string">&quot;temp&quot;</span></span><br><span class="line">3) <span class="string">&quot;stor&quot;</span></span><br><span class="line">4) <span class="string">&quot;flag&quot;</span></span><br><span class="line">(3.83s)</span><br><span class="line">10.129.125.73:6379&gt; get flag</span><br></pre></td></tr></table></figure>
+<p>10.Which command is used to obtain all the keys in a database?</p>
+<p>哪个命令可以用来获取数据库中的所有键？</p>
+<p>keys *</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/HTB/" rel="tag"># HTB</a>
+              <a href="/tags/Penetration-Testing/" rel="tag"># Penetration Testing</a>
+              <a href="/tags/telnet/" rel="tag"># telnet</a>
+              <a href="/tags/ftp/" rel="tag"># ftp</a>
+              <a href="/tags/SMB/" rel="tag"># SMB</a>
+              <a href="/tags/Redis/" rel="tag"># Redis</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/10/%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0%E6%8A%80%E6%9C%AF/" rel="prev" title="风险评估技术">
+                  <i class="fa fa-angle-left"></i> 风险评估技术
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/05/17/Hackthebox-StartingPoint-Tier1/" rel="next" title="Hackthebox-StartingPoint-Tier1">
+                  Hackthebox-StartingPoint-Tier1 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

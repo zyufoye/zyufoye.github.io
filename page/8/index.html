@@ -172,18 +172,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -208,6 +208,446 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/20/%E5%B8%B8%E8%A7%81CWE%E7%B1%BB%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/20/%E5%B8%B8%E8%A7%81CWE%E7%B1%BB%E5%9E%8B/" class="post-title-link" itemprop="url">常见CWE类型</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-20 09:43:26 / 修改时间：09:50:46" itemprop="dateCreated datePublished" datetime="2025-12-20T09:43:26+08:00">2025-12-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>CWE（Common Weakness Enumeration，<strong>通用弱点枚举</strong>）可以理解为一份<strong>软件常见安全问题清单</strong>。</p>
+<p>它不是具体的漏洞编号（CVE），而是把各种程序和系统中<strong>容易犯的安全错误</strong>进行分类和编号，比如输入校验不严、权限控制错误、配置不当等。</p>
+<p>通过使用 CWE，开发人员可以在写代码和配置系统时提前避免这些常见问题，安全人员也可以用它来分析漏洞成因、指导加固和考试答题。在软考中，CWE 更多是用来<strong>说明漏洞属于哪一类错误和为什么会产生</strong>。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>CWE编号</strong></th>
+<th><strong>漏洞类型</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CWE-16</td>
+<td>配置错误（常见）</td>
+<td>所有由于系统、软件、服务配置不当导致的安全问题</td>
+</tr>
+<tr>
+<td>CWE-20</td>
+<td>输入验证不当</td>
+<td>由于输入校验不足，导致不可信数据被系统错误处理，从而引发多种安全漏洞的根本原因</td>
+</tr>
+<tr>
+<td>CWE-22</td>
+<td>路径/目录遍历</td>
+<td>攻击者通过构造包含特殊路径的输入，绕过目录限制，访问或读取本不应访问的文件</td>
+</tr>
+<tr>
+<td>CWE-78</td>
+<td>命令注入</td>
+<td>用户输入被直接用于构造操作系统命令，CWE-77 也属于命令注入</td>
+</tr>
+<tr>
+<td>CWE-79</td>
+<td>跨站脚本（XSS）</td>
+<td>未对用户输入进行充分过滤，导致恶意脚本被执行</td>
+</tr>
+<tr>
+<td>CWE-89</td>
+<td>SQL 注入</td>
+<td>构造 SQL 查询时未对用户输入进行有效处理，导致攻击者可注入恶意 SQL 语句，实现未授权的数据访问或操作</td>
+</tr>
+<tr>
+<td>CWE-119</td>
+<td>缓冲区溢出</td>
+<td>写入数据超出缓冲区边界，同样 CWE-120 也属于缓冲区溢出</td>
+</tr>
+<tr>
+<td>CWE-200</td>
+<td>信息泄露</td>
+<td>信息泄露的总类，常见的还有 CWE-215（开启 debug 模式、返回变量、配置等信息）</td>
+</tr>
+<tr>
+<td>CWE-284</td>
+<td>访问控制不当</td>
+<td>权限校验缺失或校验逻辑错误</td>
+</tr>
+<tr>
+<td>CWE-287</td>
+<td>身份认证不当</td>
+<td>认证逻辑存在缺陷</td>
+</tr>
+<tr>
+<td>CWE-552</td>
+<td>任意文件读取</td>
+<td>由于文件或目录权限、访问策略配置不当，导致未授权用户可以直接访问或读取系统敏感文件或目录</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/18/Vulnhalla%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/18/Vulnhalla%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/" class="post-title-link" itemprop="url">Vulnhalla文章阅读</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-18 22:17:32 / 修改时间：22:24:09" itemprop="dateCreated datePublished" datetime="2025-12-18T22:17:32+08:00">2025-12-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Papers/" itemprop="url" rel="index"><span itemprop="name">Papers</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Vulnhalla-Picking-the-true-vulnerabilities-from-the-CodeQL-haystack"><a href="#Vulnhalla-Picking-the-true-vulnerabilities-from-the-CodeQL-haystack" class="headerlink" title="Vulnhalla: Picking the true vulnerabilities from the CodeQL haystack"></a>Vulnhalla: Picking the true vulnerabilities from the CodeQL haystack</h2><p>从 CodeQL 海量结果中找到真正的漏洞。</p>
+<p>这篇文章主要介绍了一种结合 LLM 推理和静态分析来发现漏洞的方法。通过在 CodeQL 之上叠加 LLM，可以显著减少困扰安全团队的大量误报。最终，开发人员和安全研究人员能够专注于真正具有潜在利用价值的漏洞，从而优化工作流程。</p>
+<h2 id="使用-LLM-进行漏洞挖掘目前的挑战"><a href="#使用-LLM-进行漏洞挖掘目前的挑战" class="headerlink" title="使用 LLM 进行漏洞挖掘目前的挑战"></a>使用 LLM 进行漏洞挖掘目前的挑战</h2><p>过去，使用大型语言模型（LLM）进行漏洞检测的主要挑战在于大型代码库的上下文窗口有限。然而，如今这种情况正在改变；一些模型现在可以处理多达一百万个 token 。</p>
+<p>就如今的 <strong>大模型漏洞挖掘</strong>而言，主要问题可以归结为两个：</p>
+<ul>
+<li>WHERE</li>
+<li>WHAT</li>
+</ul>
+<p>WHERE 问题在于 LLM 无法确定代码的哪一部分值得关注。在大型代码库中，可能的关注点数量庞大，这意味着模型很容易分心，把注意力放在错误的地方。</p>
+<p>问题在于，即使模型检查到了正确的位置，它仍然需要猜测应该查找哪种类型的错误，例如内存问题、竞态条件或 API 误用。如果没有指导，它可能会完全选择错误的类别，从而无法检测到真正的错误。</p>
+<p>Google 和 OpenAI 采取了不同的解决方案。Google 的 Deep Sleep 试图通过分析与已知 CVE 关联的代码更改（例如 git diff 或提交补丁）来解决这些问题，并验证修复程序或附近的代码是否包含类似的问题。OpenAI 采取了不同的策略 ，专注于新的代码提交。他们声称大约 1.2% 的提交引入了已知的安全问题，他们的目标是识别并解决这些问题。这有助于通过将关注点缩小到潜在危险的提交来解决“查找位置”问题，但它并没有完全解决“查找内容”问题，因为该模型仍然需要决定在每种情况下要查找哪种类型的错误。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/12/18/Vulnhalla%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/18/Ubuntu%E9%80%9A%E8%BF%87Ollama%E9%83%A8%E7%BD%B2LLM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/18/Ubuntu%E9%80%9A%E8%BF%87Ollama%E9%83%A8%E7%BD%B2LLM/" class="post-title-link" itemprop="url">Ubuntu通过Ollama部署LLM</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-18 22:16:48 / 修改时间：22:19:43" itemprop="dateCreated datePublished" datetime="2025-12-18T22:16:48+08:00">2025-12-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>Ubuntu 24.04<br>python 3.12.3<br>ollama 0.13.4<br>git 2.43.0</p>
+<p>换源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 备份</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">cp</span> /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources.bak</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑文件</span></span><br><span class="line"><span class="built_in">sudo</span> vim /etc/apt/sources.list.d/ubuntu.sources</span><br><span class="line"></span><br><span class="line">Types: deb</span><br><span class="line">URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu/</span><br><span class="line">Suites: noble noble-updates noble-backports</span><br><span class="line">Components: main restricted universe multiverse</span><br><span class="line">Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg</span><br><span class="line"></span><br><span class="line">Types: deb</span><br><span class="line">URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu/</span><br><span class="line">Suites: noble-security</span><br><span class="line">Components: main restricted universe multiverse</span><br><span class="line">Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt upgrade -y</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/12/18/Ubuntu%E9%80%9A%E8%BF%87Ollama%E9%83%A8%E7%BD%B2LLM/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/17/CodeQL%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/17/CodeQL%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-title-link" itemprop="url">CodeQL入门（二）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-17 18:38:55 / 修改时间：18:45:58" itemprop="dateCreated datePublished" datetime="2025-12-17T18:38:55+08:00">2025-12-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SAST/" itemprop="url" rel="index"><span itemprop="name">SAST</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="CodeQL-查询语句编写"><a href="#CodeQL-查询语句编写" class="headerlink" title="CodeQL 查询语句编写"></a>CodeQL 查询语句编写</h2><p>以python为例，编写一个简单的hello world codeql查询。首先需要使用 codeql 创建一个数据库，这样才能为其编写查询语句，使用如下命令创建数据库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codeql database create test_db --language=python</span><br></pre></td></tr></table></figure>
+<p>此时文件中会多出一个文件夹 test_db 即为当前项目的 codeql 数据库。接下来需要编写查询语句，一个标准的 codeql 查询语句格式如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Query metadata</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">import <span class="comment">/* ... CodeQL libraries or modules ... */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* ... Optional, define CodeQL classes and predicates ... */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> <span class="comment">/* ... variable declarations ... */</span></span><br><span class="line"><span class="keyword">where</span> <span class="comment">/* ... logical formula ... */</span></span><br><span class="line"><span class="keyword">select</span> <span class="comment">/* ... expressions ... */</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>语句可以简单理解为：<strong>通过 <code>import</code> 导入哪些库，然后<code>from</code>从哪些数据中，查找 <code>select</code>满足哪些条件<code>where</code>的结果。</strong></p>
+</blockquote>
+<p>为hello world简单编写一个查询</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> &quot;hello,world&quot;</span><br></pre></td></tr></table></figure>
+<p>使用 query run 子命令指定 test_db 数据库执行 helloworld.ql 查询语句</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codeql query run -d test_db/ helloworld.ql</span><br></pre></td></tr></table></figure>
+<p>执行成功，结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">codeql query run -d test_db/ helloworld.ql</span><br><span class="line"></span><br><span class="line">Compiling query plan <span class="keyword">for</span> /home/zyu/projects/python_codeql_demo/helloworld.ql.</span><br><span class="line">[1/1 comp 745ms] Compiled /home/zyu/projects/python_codeql_demo/helloworld.ql.</span><br><span class="line">helloworld.ql: Evaluation completed (45ms).</span><br><span class="line">|    col0     |</span><br><span class="line">+-------------+</span><br><span class="line">| hello,world |</span><br><span class="line">Shutting down query evaluator.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>除了这种 cli 的运行方式，codeql 还提供了另外两种运行方式，分别是 VScode插件和 CI/CD 方式：</p>
+<ul>
+<li><p>CodeQL_cli：适合对项目源码进行批量的规则扫描和检测，使用命令行进行操作；</p>
+</li>
+<li><p>VSCode插件：适合使用 CodeQL 辅助进行代码审计，使用 VSCode 进行操作；</p>
+</li>
+<li><p>CI/CD：结合规则库将 CodeQL 添加进 CI/CD 流程进行持续化的项目安全管理，在 CI/CD 流程中自动执行；</p>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/12/17/CodeQL%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -983,415 +1423,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-title-link" itemprop="url">MCP编程快速入门（二）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-11 16:01:12 / 修改时间：17:46:08" itemprop="dateCreated datePublished" datetime="2025-12-11T16:01:12+08:00">2025-12-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="模型如何确定工具选用？"><a href="#模型如何确定工具选用？" class="headerlink" title="模型如何确定工具选用？"></a>模型如何确定工具选用？</h2><p>Anthropic 详细解释了这个问题：模型在什么时候确定使用哪些工具。</p>
-<p>当用户提出一个问题时：</p>
-<ol>
-<li>客户端（Claude Desktop / Cursor）将问题发送给 Claude；</li>
-<li>Claude 分析可用的工具，并决定使用哪一个（或多个）；</li>
-<li>客户端通过 MCP Server 执行所选的工具；</li>
-<li>工具的执行结果被送回给 Claude；</li>
-<li>Claude 结合执行结果构造最终的 prompt 并生成自然语言的回应；</li>
-<li>回应最终展示给用户！</li>
-</ol>
-<p>MCP Server 是由 Claude 主动选择并调用的，这个主动选择的过程可以分为两步：</p>
-<ol>
-<li>由 LLM（Claude）确定使用哪些 MCP Server；</li>
-<li>执行对应的 MCP Server 并对执行结果进行重新处理；</li>
-</ol>
-<p>MCP 流程图如下：</p>
-<p><img src="../uploads/MCP_11.jpg" alt=""></p>
-<p>流程图展示了 LLM 在接收到用户输入后，根据系统提示中提供的指令与工具描述，决定是否需要调用外部工具（包括 MCP Server 提供的工具）。<br>首先，用户输入与系统 prompt（包含工具的结构化描述）一同交给模型生成 Message1。如果模型判断某个任务需要借助工具完成（Case 1），它会生成一段结构化的 Tool call JSON，并由外部执行环境或 MCP Server 负责实际执行工具逻辑。执行结果再返回给模型，模型基于这份结果生成最终回答；<br>如果模型判断不需要工具（Case 2），则直接生成最终输出。<br>整个流程体现了：LLM 负责“决定用什么工具及如何调用”，而 MCP Servers 等外部系统负责“实际执行任务并返回数据”，从而实现模型与外部能力的协作。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">HEXO链接站内文章方法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-12-11 11:32:04" itemprop="dateCreated datePublished" datetime="2025-12-11T11:32:04+08:00">2025-12-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-12-15 22:05:31" itemprop="dateModified" datetime="2025-12-15T22:05:31+08:00">2025-12-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Hexo链接站内文章方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% post_link markdown-learning-by-maxiang 点击这里查看这篇文章 %&#125;</span><br></pre></td></tr></table></figure>
-<p>其中 <code>markdown-learning-by-maxiang</code> 为文章名称，我测试了同目录下修改为自己文章名称可以成功，注意不要加路径，如果文章名称有空格就用双引号引起来。<code>点击这里查看这篇文章</code> 是显示的内容，如果不写的话就默认是文章名称。</p>
-<p>参考链接：<a target="_blank" rel="noopener" href="https://github.com/iissnan/hexo-theme-next/issues/978">https://github.com/iissnan/hexo-theme-next/issues/978</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">Function Call和MCP的区别</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-11 10:52:18 / 修改时间：11:19:49" itemprop="dateCreated datePublished" datetime="2025-12-11T10:52:18+08:00">2025-12-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）"><a href="#Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）" class="headerlink" title="Function Call和MCP的核心区别梳理（由GPT 5.1 生成）"></a>Function Call和MCP的核心区别梳理（由GPT 5.1 生成）</h2><h2 id="🧩核心区别总结"><a href="#🧩核心区别总结" class="headerlink" title="🧩核心区别总结"></a>🧩核心区别总结</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>特性</th>
-<th>Function Call</th>
-<th>MCP（Model Context Protocol）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>定位</strong></td>
-<td>让模型按照开发者定义的结构化方式返回“调用某函数所需的参数”。</td>
-<td>让模型与外部工具、服务、数据源通过统一协议进行双向通信。</td>
-</tr>
-<tr>
-<td><strong>角色</strong></td>
-<td>模型只“产生命令”（函数+参数），不执行。执行由外部应用完成。</td>
-<td>除生成调用外，还可以<strong>发现、注册、调度、执行</strong>外部资源。</td>
-</tr>
-<tr>
-<td><strong>复杂度</strong></td>
-<td>简单、轻量级、多数场景够用。</td>
-<td>更底层、更通用，可连接复杂系统。</td>
-</tr>
-<tr>
-<td><strong>使用场景</strong></td>
-<td>调用某个特定函数、处理结构化任务。</td>
-<td>接入多个工具、多数据源、插件系统、企业级工作流。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<hr>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%80%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%80%EF%BC%89/" class="post-title-link" itemprop="url">MCP编程快速入门（一）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-11 10:15:07 / 修改时间：17:46:31" itemprop="dateCreated datePublished" datetime="2025-12-11T10:15:07+08:00">2025-12-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MCP/" itemprop="url" rel="index"><span itemprop="name">MCP</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="MCP-概念"><a href="#MCP-概念" class="headerlink" title="MCP 概念"></a>MCP 概念</h2><p>MCP 编程快速入门，MCP 全称 Model Context Protocol 模型上下文协议，其定义了 LLMs 与外部世界的互动方式，MCP 提供了一种标准化方法，使任意 LLMs 能够轻松连接各种数据源和工具，实现信息的高效交互和处理。</p>
-<p>目前的 AI 朝着两个方向发展：<strong>掌握更多信息</strong> 或 <strong>控制更多工具</strong>，在没有联网搜索之前，LLM 的数据来源只有训练时和推理时我们提供的数据。</p>
-<p>在MCP出现之前，如果LLM要访问外部数据，通常使用<code>Function Call</code>的方式，<code>Function Call</code>通过给模型预设函数描述（包括函数名、参数说明、返回值格式等），让模型在合适的时候返回一个符合结构的 JSON 格式，外部系统再解析这个 JSON，调用实际的后端函数。关于 <code>Function Call</code> 和<code>MCP</code> 的具体区别在 <a href="/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/" title="Function Call和MCP的区别">Function Call和MCP的区别</a></p>
-<p>但 <code>Function Call</code> 的方式没有一个统一的开发规范，你开发的函数我不能用，我开发的函数你不能用，而且开发起来很麻烦，为了解决这个问题，MCP 出现了。MCP作为LLMs的标准化工具箱，可以通过MCP调用外界的AI工具，而AI工具在开发的时候也需要遵循MCP协议。MCP 允许应用以标准化的方式向 LLM 提供上下文，并将<strong>提供上下文的逻辑</strong>与<strong>实际的LLM交互逻辑”</strong>解耦。</p>
-<p>在没有 MCP 之前，如果我们希望让模型使用本地数据，通常需要把这些数据直接复制到对话框中，让模型从文本中获取信息。而有了 MCP 之后，我们可以为特定能力编写一个 MCP Server，例如数据库读取、GitHub 操作、文件系统访问或获取当前时间等。模型通过 MCP 与这些 Server 通信，就能在无需手动粘贴数据的情况下，实时访问这些外部资源。</p>
-<p><img src="../uploads/MCP_1.png" alt=""></p>
-<p>MCP 服务器可以提供三种主要类型的功能:</p>
-<ol>
-<li>资源访问：客户端读取文件等数据；</li>
-<li>工具调用：由LLM调用的函数；</li>
-<li>Prompt模板：预先编写的帮助客户完成特定任务的Prompt；</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/11/MCP%E7%BC%96%E7%A8%8B%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BC%88%E4%B8%80%EF%BC%89/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/9/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/9/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

