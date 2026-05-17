@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -183,7 +183,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -208,6 +208,149 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/%E7%94%A8URL%E7%BC%96%E7%A0%81%E6%9C%BA%E5%88%B6%E9%98%B2%E5%BE%A1%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/28/%E7%94%A8URL%E7%BC%96%E7%A0%81%E6%9C%BA%E5%88%B6%E9%98%B2%E5%BE%A1%E8%B7%AF%E5%BE%84%E9%81%8D%E5%8E%86%E6%BC%8F%E6%B4%9E/" class="post-title-link" itemprop="url">用URL编码机制防御路径遍历漏洞</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-28 22:22:23 / 修改时间：22:22:59" itemprop="dateCreated datePublished" datetime="2026-01-28T22:22:23+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>为什么服务器会将 ..%2Fadmin 视为一个名为 “…/admin” 的普通用户名，找不到该用户，返回 404？</p>
+<p>这是一个非常深刻且核心的计算机安全问题，涉及到 <strong>URL 编码（Percent-encoding）的本质机制</strong>。</p>
+<p>简单来说，区别在于：<strong><code>/</code> 是指令（分隔符），而 <code>%2F</code> 是数据（纯文本）。</strong></p>
+<p>我们可以通过“<strong>信封与地址</strong>”或者“<strong>文件系统</strong>”的逻辑来拆解这个问题：</p>
+<h3 id="1-核心原理：控制字符-vs-数据字符"><a href="#1-核心原理：控制字符-vs-数据字符" class="headerlink" title="1. 核心原理：控制字符 vs 数据字符"></a>1. 核心原理：控制字符 vs 数据字符</h3><p>在 HTTP 协议和 URL 标准（RFC 3986）中，某些字符具有特殊的“结构化含义”，被称为保留字符（Reserved Characters）。</p>
+<ul>
+<li><strong><code>/</code> (斜杠)</strong>：这是一个<strong>控制字符</strong>。它的作用是告诉服务器：“当前的目录结束了，进入下一级目录”。</li>
+<li><strong><code>..</code> (双点)</strong>：配合斜杠使用时，也是<strong>控制指令</strong>。它的作用是告诉服务器：“返回上一级目录”。</li>
+</ul>
+<p>当 Retrofit（默认为 <code>encoded=false</code>）将 <code>/</code> 转义为 <code>%2F</code> 时，它实际上是在做一件最重要的事情：<strong>“去功能化”</strong>。</p>
+<h3 id="2-服务器视角的解析过程对比"><a href="#2-服务器视角的解析过程对比" class="headerlink" title="2. 服务器视角的解析过程对比"></a>2. 服务器视角的解析过程对比</h3><p>假设服务器收到请求，Web 服务器（如 Nginx、Tomcat）会按照 <code>/</code> 来切割路径，决定把请求路由到哪里。</p>
+<h4 id="场景-A：攻击成功（未编码）"><a href="#场景-A：攻击成功（未编码）" class="headerlink" title="场景 A：攻击成功（未编码）"></a>场景 A：攻击成功（未编码）</h4><p><strong>URL</strong>: <code>http://example.com/users/../admin/profile</code></p>
+<ol>
+<li>服务器看到第一个 <code>/</code>：进入 <code>users</code> 目录。</li>
+<li>服务器看到第二个 <code>/</code>：发现前面是 <code>..</code>。<ul>
+<li><strong>指令生效</strong>：服务器执行“回退”操作，跳出了 <code>users</code> 目录，回到了根目录。</li>
+</ul>
+</li>
+<li>服务器继续解析：进入 <code>admin</code> 目录。</li>
+<li><strong>结果</strong>：最终访问的是 <code>/admin/profile</code>。</li>
+</ol>
+<hr>
+<h4 id="场景-B：防御成功（已编码）"><a href="#场景-B：防御成功（已编码）" class="headerlink" title="场景 B：防御成功（已编码）"></a>场景 B：防御成功（已编码）</h4><p><strong>URL</strong>: <code>http://example.com/users/..%2Fadmin/profile</code></p>
+<ol>
+<li>服务器扫描 URL，寻找分隔符 <code>/</code>。</li>
+<li><strong>关键点</strong>：服务器<strong>不认识</strong> <code>%2F</code> 是分隔符。对服务器来说，<code>%2F</code> 只是三个普通的字符：<code>%</code>、<code>2</code>、<code>F</code>。它们和 <code>a</code>、<code>b</code>、<code>c</code> 没有任何区别。</li>
+<li>服务器的解析逻辑如下：<ul>
+<li><strong>第一段</strong>：<code>users</code>（进入该层级）。</li>
+<li><strong>第二段</strong>：读取下一个 <code>/</code> 之前的所有内容。这块内容是：<code>..%2Fadmin</code>。</li>
+</ul>
+</li>
+<li><strong>路由决策</strong>：<ul>
+<li>服务器会在 <code>users</code> 的上下文里，寻找一个名字叫 <code>..%2Fadmin</code> 的资源。</li>
+<li>注意：它<strong>不是</strong>寻找一个叫 <code>..</code> 的文件夹，也不是寻找一个叫 <code>admin</code> 的文件夹。</li>
+<li>它是在找<strong>单个</strong>文件/资源，这个资源的完整名字就叫 <code>..%2Fadmin</code>（或者解码后叫 <code>../admin</code>）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-为什么是-404？"><a href="#3-为什么是-404？" class="headerlink" title="3. 为什么是 404？"></a>3. 为什么是 404？</h3><p>因为在数据库或业务逻辑中，肯定不存在一个用户的名字叫 <code>../admin</code>。</p>
+<ul>
+<li>你的后端逻辑大概是这样的：<code>SELECT * FROM users WHERE username = ?</code></li>
+<li>传入的参数是：<code>&quot;../admin&quot;</code></li>
+<li>数据库查询结果：空。</li>
+<li>服务器返回：<strong>404 Not Found</strong>（用户不存在）。</li>
+</ul>
+<p><strong>最重要的是：请求依然是被路由到了 <code>getUser</code> 这个接口，而没有跳转到 <code>getAdmin</code> 接口。</strong></p>
+<h3 id="4-总结：买火车票的隐喻"><a href="#4-总结：买火车票的隐喻" class="headerlink" title="4. 总结：买火车票的隐喻"></a>4. 总结：买火车票的隐喻</h3><p>想象去火车站买票：</p>
+<ul>
+<li><p><strong>未编码（漏洞）</strong>：你递给售票员一张纸条，上面写着：“我要去<strong>上海/..</strong>”。</p>
+<ul>
+<li>售票员（服务器）看到 <code>/</code>，理解为分隔。</li>
+<li>先定位到“上海”，然后看到“..”，于是退回上一级。</li>
+<li>结果：可能卖给了你一张起步站的票，或者把你送到了错误的地方。</li>
+</ul>
+</li>
+<li><p><strong>已编码（安全）</strong>：你把 <code>/</code> 进行了打包（编码），装进一个盒子里。纸条写着：“我要去【<strong>上海%2F..</strong>】”。</p>
+<ul>
+<li>售票员看到这只是<strong>一个地名</strong>。</li>
+<li>他在系统里搜索名为“上海/..”的城市。</li>
+<li>系统提示：查无此地（404）。</li>
+<li><strong>安全</strong>：因为他没有执行“退回”这个动作，只是在傻傻地找一个名字很奇怪的城市。</li>
+</ul>
+</li>
+</ul>
+<p>这就是为什么 <code>%2F</code> 能够防御路径遍历的根本原因。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1391,95 +1534,6 @@
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/27/Java%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/27/Java%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">Java单元测试</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-27 22:21:48 / 修改时间：22:22:07" itemprop="dateCreated datePublished" datetime="2026-01-27T22:21:48+08:00">2026-01-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Java 的单元测试（Unit Test）是<strong>独立运行</strong>的，只需要通过构建工具（Maven）来触发它们，而不需要先把整个项目运行起来。</p>
-<p>可以把“测试”想象成是给代码做体检，不需要从头到尾全部检查一遍，只需要对某个器官（类或方法）进行单独检查。</p>
-<h3 id="如何运行测试"><a href="#如何运行测试" class="headerlink" title="如何运行测试"></a>如何运行测试</h3><p>以 Retrofit 为例，在当前的 Retrofit 项目中，我们主要使用 <strong>Maven</strong> 来运行测试。</p>
-<h4 id="1-运行所有测试"><a href="#1-运行所有测试" class="headerlink" title="1. 运行所有测试"></a>1. 运行所有测试</h4><p>如果想给整个项目做一次全身体检，运行所有测试用例：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在项目根目录 ./retrofit-parent-2.4.0/retrofit-parent-2.4.0 下</span></span><br><span class="line">mvn <span class="built_in">test</span></span><br></pre></td></tr></table></figure><br><em>这会花一些时间，因为它会跑完 <code>src/test/java</code> 下所有的测试文件。</em></p>
-<h4 id="2-运行单个测试文件（推荐）"><a href="#2-运行单个测试文件（推荐）" class="headerlink" title="2. 运行单个测试文件（推荐）"></a>2. 运行单个测试文件（推荐）</h4><p>如果只想测试某个特定的功能（比如漏洞验证脚本 <code>PathTraversalTest</code>），可以使用 <code>-Dtest</code> 参数：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 格式: mvn -pl &lt;子模块名&gt; test -Dtest=&lt;测试类名&gt;</span></span><br><span class="line"><span class="comment"># -pl retrofit: 指定只在 retrofit 子模块中运行，因为代码在那里</span></span><br><span class="line">mvn -pl retrofit <span class="built_in">test</span> -Dtest=PathTraversalTest</span><br></pre></td></tr></table></figure>
-<h4 id="3-运行某个测试文件中的单个方法"><a href="#3-运行某个测试文件中的单个方法" class="headerlink" title="3. 运行某个测试文件中的单个方法"></a>3. 运行某个测试文件中的单个方法</h4><p>如果只想跑某个具体的测试方法（例如只测 <code>pathTraversalWithEncodedTrue</code>）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn -pl retrofit <span class="built_in">test</span> -Dtest=PathTraversalTest#pathTraversalWithEncodedTrue</span><br></pre></td></tr></table></figure>
-<h3 id="实践操作"><a href="#实践操作" class="headerlink" title="实践操作"></a>实践操作</h3><p>尝试在终端（Terminal 11）中运行我们刚才创建的漏洞验证测试：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ./retrofit-parent-2.4.0/retrofit-parent-2.4.0</span><br><span class="line">mvn -pl retrofit <span class="built_in">test</span> -Dtest=PathTraversalTest</span><br></pre></td></tr></table></figure>
-<p><strong>观察输出结果：</strong><br>我们会在控制台中看到类似这样的输出：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">[INFO] </span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Building Retrofit 2.4.0</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-enforcer-plugin:1.0:enforce (enforce-maven) @ retrofit ---</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ retrofit ---</span><br><span class="line">[INFO] Using &#x27;UTF-8&#x27; encoding to copy filtered resources.</span><br><span class="line">[INFO] skip non existing resourceDirectory /home/zyu/java_vuln/retrofit-parent-2.4.0/retrofit-parent-2.4.0/retrofit/src/main/resources</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ retrofit ---</span><br><span class="line">[INFO] Changes detected - recompiling the module!</span><br><span class="line">[INFO] Compiling 42 source files to /home/zyu/java_vuln/retrofit-parent-2.4.0/retrofit-parent-2.4.0/retrofit/target/classes</span><br><span class="line">Note: Some input files use unchecked or unsafe operations.</span><br><span class="line">Note: Recompile with -Xlint:unchecked for details.</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ retrofit ---</span><br><span class="line">[INFO] Using &#x27;UTF-8&#x27; encoding to copy filtered resources.</span><br><span class="line">[INFO] skip non existing resourceDirectory /home/zyu/java_vuln/retrofit-parent-2.4.0/retrofit-parent-2.4.0/retrofit/src/test/resources</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ retrofit ---</span><br><span class="line">[INFO] Nothing to compile - all classes are up to date</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ retrofit ---</span><br><span class="line">[INFO] Surefire report directory: /home/zyu/java_vuln/retrofit-parent-2.4.0/retrofit-parent-2.4.0/retrofit/target/surefire-reports</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------</span><br><span class="line"> T E S T S</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">Running retrofit2.PathTraversalTest</span><br><span class="line">Resolved URL: http://example.com/attacker/profile</span><br><span class="line">Resolved URL (Safe): http://example.com/users/..%2Fattacker/profile</span><br><span class="line">Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.079 sec</span><br><span class="line"></span><br><span class="line">Results :</span><br><span class="line"></span><br><span class="line">Tests run: 2, Failures: 0, Errors: 0, Skipped: 0</span><br><span class="line"></span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- animal-sniffer-maven-plugin:1.14:check (default) @ retrofit ---</span><br><span class="line">[INFO] Checking unresolved references to org.codehaus.mojo.signature:java16:1.1</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time: 3.155 s</span><br><span class="line">[INFO] Finished at: 2026-01-27T18:06:49+08:00</span><br><span class="line">[INFO] Final Memory: 29M/2344M</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure><br>这就证明我们成功运行了测试，并且验证了漏洞的存在。不需要启动任何 Web 服务器或主程序，Maven 会自动编译并运行这些测试代码。</p>
-
       
     </div>
 
