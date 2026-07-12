@@ -1,64 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Apache JSPWiki CVE-2019-0225 漏洞研究</title>
-    <url>/2026/01/28/Apache-JSPWiki-CVE-2019-0225-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/</url>
-    <content><![CDATA[<p><strong>Apache JSPWiki 路径遍历漏洞 (CVE-2019-0225)</strong> 分析</p>
-<h3 id="1-漏洞背景"><a href="#1-漏洞背景" class="headerlink" title="1. 漏洞背景"></a>1. 漏洞背景</h3><ul>
-<li><strong>漏洞组件</strong>：Apache JSPWiki (一个基于 Java 的开源 Wiki 引擎)</li>
-<li><strong>漏洞编号</strong>：CVE-2019-0225</li>
-<li><strong>漏洞类型</strong>：路径遍历 (Path Traversal) / 访问控制绕过</li>
-<li><strong>漏洞位置</strong>：<code>org.apache.wiki.url.DefaultURLConstructor.java</code> 类中的 <code>getForwardPage</code> 方法。</li>
-<li><strong>漏洞版本</strong>：2.9.0 ~ 2.11.0.M2</li>
-</ul>
-<h3 id="2-漏洞成因分析"><a href="#2-漏洞成因分析" class="headerlink" title="2. 漏洞成因分析"></a>2. 漏洞成因分析</h3><h4 id="2-1-漏洞代码（修复前）"><a href="#2-1-漏洞代码（修复前）" class="headerlink" title="2.1. 漏洞代码（修复前）"></a>2.1. 漏洞代码（修复前）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">getForwardPage</span><span class="params">( HttpServletRequest request )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 漏洞点：直接返回用户请求路径中的 PathInfo</span></span><br><span class="line">    <span class="keyword">return</span> request.getPathInfo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里调用了 <code>request.getPathInfo()</code>。在 Java Servlet 中，这个方法返回的是请求 URL 中 Servlet 路径之后、查询字符串之前的部分。</p>
-<p><strong>场景假设</strong>：<br>假设 JSPWiki 的 Servlet 映射配置为 <code>/wiki/*</code>。</p>
-<ul>
-<li><p><strong>正常请求</strong>：用户访问 <code>http://site.com/wiki/Main</code></p>
-<ul>
-<li><code>getPathInfo()</code> 返回 <code>/Main</code>。</li>
-<li>系统内部可能将请求转发给 <code>/Main</code> 对应的处理逻辑。</li>
-</ul>
-</li>
-<li><p><strong>攻击请求</strong>：用户访问 <code>http://site.com/wiki/../../WEB-INF/web.xml</code></p>
-<ul>
-<li><code>getPathInfo()</code> 返回 <code>/../../WEB-INF/web.xml</code>。</li>
-<li><strong>关键点</strong>：<code>getForwardPage</code> 方法的返回值通常会被用于 <code>RequestDispatcher.forward(path)</code>。</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-2-为什么会有危害？"><a href="#2-2-为什么会有危害？" class="headerlink" title="2.2. 为什么会有危害？"></a>2.2. 为什么会有危害？</h4><p>当应用程序接收到 <code>/../../WEB-INF/web.xml</code> 并将其传入 <code>request.getRequestDispatcher(...).forward(...)</code> 时，由于没有对路径进行清洗或校验，Servlet 容器（如 Tomcat）会尝试解析这个路径。</p>
-<ol>
-<li><strong>目录穿越</strong>：<code>../</code> 会导致路径向上层跳转。</li>
-<li><strong>访问受保护资源</strong>：攻击者可以跳出 Wiki 的页面目录，直接访问 <code>WEB-INF</code> 目录下的敏感文件（如 <code>web.xml</code> 配置文件、<code>classes</code> 里的类文件等）。在 Java Web 规范中，<code>WEB-INF</code> 目录下的文件是禁止通过浏览器直接访问的，但<strong>内部转发 (Forward)</strong> 不受此限制，因此可以通过这种方式绕过安全检查。</li>
-<li><strong>执行意料之外的 JSP</strong>：攻击者甚至可能利用此漏洞去包含或执行某些不应该被直接访问的 JSP 文件。</li>
-</ol>
-<h3 id="3-修复方案分析"><a href="#3-修复方案分析" class="headerlink" title="3. 修复方案分析"></a>3. 修复方案分析</h3><h4 id="3-1-修复代码（修复后）"><a href="#3-1-修复代码（修复后）" class="headerlink" title="3.1. 修复代码（修复后）"></a>3.1. 修复代码（修复后）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">getForwardPage</span><span class="params">( HttpServletRequest request )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 修复方案：硬编码返回固定的页面，完全忽略用户的 PathInfo</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Wiki.jsp&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="3-2-修复逻辑解读"><a href="#3-2-修复逻辑解读" class="headerlink" title="3.2. 修复逻辑解读"></a>3.2. 修复逻辑解读</h4><p>开发者采取了<strong>最彻底的防御措施</strong>：</p>
-<ol>
-<li><strong>切断输入源</strong>：不再读取 <code>request.getPathInfo()</code>。无论用户在 URL 里输入什么花哨的 <code>../</code> 或恶意路径，这个方法现在只返回字符串 <code>&quot;Wiki.jsp&quot;</code>。</li>
-<li><strong>强制路由</strong>：这意味着该 URL 构造器现在强制所有相关的请求都由 <code>Wiki.jsp</code> 这个主入口文件来处理。</li>
-</ol>
-<p>这个修复表明，原本在这里使用 <code>getPathInfo()</code> 可能是一个设计上的疏忽或者过度灵活的设计。对于 <code>DefaultURLConstructor</code> 来说，将请求转发给统一的入口 <code>Wiki.jsp</code> 才是符合预期的行为，而不需要动态地根据 URL 路径去决定转发目标。</p>
-<h3 id="4-总结与启示"><a href="#4-总结与启示" class="headerlink" title="4. 总结与启示"></a>4. 总结与启示</h3><p>这个漏洞修复案例给开发者提供了两条重要的安全经验：</p>
-<ol>
-<li><p><strong>Input Validation (输入验证) vs. Hardcoding (硬编码)</strong>：<br>通常我们说要对输入做清洗（比如过滤 <code>..</code>），但在这个案例中，开发者发现<strong>根本不需要这个输入</strong>。<br><strong>启示</strong>：在修复漏洞时，首先思考“我们真的需要这个用户输入吗？”。如果可以用硬编码的白名单值（如 <code>&quot;Wiki.jsp&quot;</code>）代替动态输入，安全性得到保障。</p>
-</li>
-<li><p><strong><code>getPathInfo()</code> 的陷阱</strong>：<br>在 Java Web 开发中，<code>request.getRequestURI()</code> 和 <code>request.getPathInfo()</code> 都是攻击者可控的“污染源”。如果将它们直接传递给文件操作或 <code>RequestDispatcher</code>，极大概率会导致路径遍历或服务端请求伪造（SSRF）漏洞。</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Java Security</category>
-      </categories>
-      <tags>
-        <tag>Java Security</tag>
-        <tag>Java</tag>
-        <tag>漏洞研究</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>BLP机密性模型</title>
     <url>/2026/02/02/BLP%E6%9C%BA%E5%AF%86%E6%80%A7%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<p><strong>Bell-LaPadula (BLP) 模型</strong>，这是一种专注于<strong>机密性（Confidentiality）</strong>的安全模型。</p>
@@ -139,6 +81,64 @@
       </tags>
   </entry>
   <entry>
+    <title>Apache JSPWiki CVE-2019-0225 漏洞研究</title>
+    <url>/2026/01/28/Apache-JSPWiki-CVE-2019-0225-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/</url>
+    <content><![CDATA[<p><strong>Apache JSPWiki 路径遍历漏洞 (CVE-2019-0225)</strong> 分析</p>
+<h3 id="1-漏洞背景"><a href="#1-漏洞背景" class="headerlink" title="1. 漏洞背景"></a>1. 漏洞背景</h3><ul>
+<li><strong>漏洞组件</strong>：Apache JSPWiki (一个基于 Java 的开源 Wiki 引擎)</li>
+<li><strong>漏洞编号</strong>：CVE-2019-0225</li>
+<li><strong>漏洞类型</strong>：路径遍历 (Path Traversal) / 访问控制绕过</li>
+<li><strong>漏洞位置</strong>：<code>org.apache.wiki.url.DefaultURLConstructor.java</code> 类中的 <code>getForwardPage</code> 方法。</li>
+<li><strong>漏洞版本</strong>：2.9.0 ~ 2.11.0.M2</li>
+</ul>
+<h3 id="2-漏洞成因分析"><a href="#2-漏洞成因分析" class="headerlink" title="2. 漏洞成因分析"></a>2. 漏洞成因分析</h3><h4 id="2-1-漏洞代码（修复前）"><a href="#2-1-漏洞代码（修复前）" class="headerlink" title="2.1. 漏洞代码（修复前）"></a>2.1. 漏洞代码（修复前）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">getForwardPage</span><span class="params">( HttpServletRequest request )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 漏洞点：直接返回用户请求路径中的 PathInfo</span></span><br><span class="line">    <span class="keyword">return</span> request.getPathInfo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里调用了 <code>request.getPathInfo()</code>。在 Java Servlet 中，这个方法返回的是请求 URL 中 Servlet 路径之后、查询字符串之前的部分。</p>
+<p><strong>场景假设</strong>：<br>假设 JSPWiki 的 Servlet 映射配置为 <code>/wiki/*</code>。</p>
+<ul>
+<li><p><strong>正常请求</strong>：用户访问 <code>http://site.com/wiki/Main</code></p>
+<ul>
+<li><code>getPathInfo()</code> 返回 <code>/Main</code>。</li>
+<li>系统内部可能将请求转发给 <code>/Main</code> 对应的处理逻辑。</li>
+</ul>
+</li>
+<li><p><strong>攻击请求</strong>：用户访问 <code>http://site.com/wiki/../../WEB-INF/web.xml</code></p>
+<ul>
+<li><code>getPathInfo()</code> 返回 <code>/../../WEB-INF/web.xml</code>。</li>
+<li><strong>关键点</strong>：<code>getForwardPage</code> 方法的返回值通常会被用于 <code>RequestDispatcher.forward(path)</code>。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-为什么会有危害？"><a href="#2-2-为什么会有危害？" class="headerlink" title="2.2. 为什么会有危害？"></a>2.2. 为什么会有危害？</h4><p>当应用程序接收到 <code>/../../WEB-INF/web.xml</code> 并将其传入 <code>request.getRequestDispatcher(...).forward(...)</code> 时，由于没有对路径进行清洗或校验，Servlet 容器（如 Tomcat）会尝试解析这个路径。</p>
+<ol>
+<li><strong>目录穿越</strong>：<code>../</code> 会导致路径向上层跳转。</li>
+<li><strong>访问受保护资源</strong>：攻击者可以跳出 Wiki 的页面目录，直接访问 <code>WEB-INF</code> 目录下的敏感文件（如 <code>web.xml</code> 配置文件、<code>classes</code> 里的类文件等）。在 Java Web 规范中，<code>WEB-INF</code> 目录下的文件是禁止通过浏览器直接访问的，但<strong>内部转发 (Forward)</strong> 不受此限制，因此可以通过这种方式绕过安全检查。</li>
+<li><strong>执行意料之外的 JSP</strong>：攻击者甚至可能利用此漏洞去包含或执行某些不应该被直接访问的 JSP 文件。</li>
+</ol>
+<h3 id="3-修复方案分析"><a href="#3-修复方案分析" class="headerlink" title="3. 修复方案分析"></a>3. 修复方案分析</h3><h4 id="3-1-修复代码（修复后）"><a href="#3-1-修复代码（修复后）" class="headerlink" title="3.1. 修复代码（修复后）"></a>3.1. 修复代码（修复后）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">getForwardPage</span><span class="params">( HttpServletRequest request )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 修复方案：硬编码返回固定的页面，完全忽略用户的 PathInfo</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Wiki.jsp&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-修复逻辑解读"><a href="#3-2-修复逻辑解读" class="headerlink" title="3.2. 修复逻辑解读"></a>3.2. 修复逻辑解读</h4><p>开发者采取了<strong>最彻底的防御措施</strong>：</p>
+<ol>
+<li><strong>切断输入源</strong>：不再读取 <code>request.getPathInfo()</code>。无论用户在 URL 里输入什么花哨的 <code>../</code> 或恶意路径，这个方法现在只返回字符串 <code>&quot;Wiki.jsp&quot;</code>。</li>
+<li><strong>强制路由</strong>：这意味着该 URL 构造器现在强制所有相关的请求都由 <code>Wiki.jsp</code> 这个主入口文件来处理。</li>
+</ol>
+<p>这个修复表明，原本在这里使用 <code>getPathInfo()</code> 可能是一个设计上的疏忽或者过度灵活的设计。对于 <code>DefaultURLConstructor</code> 来说，将请求转发给统一的入口 <code>Wiki.jsp</code> 才是符合预期的行为，而不需要动态地根据 URL 路径去决定转发目标。</p>
+<h3 id="4-总结与启示"><a href="#4-总结与启示" class="headerlink" title="4. 总结与启示"></a>4. 总结与启示</h3><p>这个漏洞修复案例给开发者提供了两条重要的安全经验：</p>
+<ol>
+<li><p><strong>Input Validation (输入验证) vs. Hardcoding (硬编码)</strong>：<br>通常我们说要对输入做清洗（比如过滤 <code>..</code>），但在这个案例中，开发者发现<strong>根本不需要这个输入</strong>。<br><strong>启示</strong>：在修复漏洞时，首先思考“我们真的需要这个用户输入吗？”。如果可以用硬编码的白名单值（如 <code>&quot;Wiki.jsp&quot;</code>）代替动态输入，安全性得到保障。</p>
+</li>
+<li><p><strong><code>getPathInfo()</code> 的陷阱</strong>：<br>在 Java Web 开发中，<code>request.getRequestURI()</code> 和 <code>request.getPathInfo()</code> 都是攻击者可控的“污染源”。如果将它们直接传递给文件操作或 <code>RequestDispatcher</code>，极大概率会导致路径遍历或服务端请求伪造（SSRF）漏洞。</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Java Security</category>
+      </categories>
+      <tags>
+        <tag>Java Security</tag>
+        <tag>Java</tag>
+        <tag>漏洞研究</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CWE-Bench-Java：高效构建大规模漏洞挖掘数据集</title>
     <url>/2026/01/22/CWE-Bench-Java%EF%BC%9A%E9%AB%98%E6%95%88%E6%9E%84%E5%BB%BA%E5%A4%A7%E8%A7%84%E6%A8%A1%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E6%95%B0%E6%8D%AE%E9%9B%86/</url>
     <content><![CDATA[<p>在软件安全研究和漏洞挖掘（Vulnerability Mining）领域，构建高质量的数据集是第一步，也是最耗时的一步。我们需要从成千上万个开源项目（如 Apache Spark, Spring Framework）中，精准还原出几年前某个特定版本的“案发现场”。</p>
@@ -193,6 +193,291 @@
         <tag>Java Security</tag>
         <tag>CodeQL</tag>
         <tag>SAST</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CISP考试题简记</title>
+    <url>/2026/07/12/CISP%E8%80%83%E8%AF%95%E9%A2%98%E7%AE%80%E8%AE%B0/</url>
+    <content><![CDATA[<h2 id="一、信息安全保障"><a href="#一、信息安全保障" class="headerlink" title="一、信息安全保障"></a>一、信息安全保障</h2><p>安全保障目的：管理、技术、工程、人员；</p>
+<p>针对信息安全问题，美国已设立中央政府级专门机构；</p>
+<p>PDR：保护、检测、响应；</p>
+<p>P2DR：策略、保护、检测、响应；</p>
+<p>抗抵赖安全服务：数字签名；</p>
+<p>信息安全保障工作原则，不含保护公众利益，维护国家安全，这个是工作目标；</p>
+<p>信息化相关人员不能只基础培训，需要进行更专业的技术培训；</p>
+<p>信息安全保障工作方针和总体要求《国家信息化领导小组关于加强信息安全保障工作的意见》；</p>
+<p>2003年7月27号文发布，标志着我国信息案安全逐步展开和积极推进的态势；</p>
+<p>战略与规划、设计、逻辑设计、实施、管理与运营；</p>
+<p>自主创新是次要的，主要得实现自主可控；</p>
+<p>按照运营平台，恶意代码分为windows、Linux、工控系统；</p>
+<p>信息化发展战略全文6部分15000字，指定并实施了国家信息安全战略；</p>
+<p>加强信息安全保障工作意见：重点保障基础信息网络和重要信息系统安全；</p>
+<p>两份不同的ST可以同时满足同一份PP的要求；</p>
+<p>提高个人隐私意识不属于加强安全保障工作的总体要求；</p>
+<p>信息安全保障原则：立足国情、以我为主、坚持技术与管理并重；</p>
+<p>建立国家信息安全研究中心不是我国信息安全保障的主要内容；</p>
+<p>美国最早将网络安全上升为国家安全战略；</p>
+<p>“国家网络应急中心”是工业和信息化部牵头成立的；</p>
+<p>P2DR更强调控制和对抗，强调系统安全的动态性；</p>
+<p>不用非得和国际接轨，要遵循国内标准；</p>
+<p>信息系统安全保障图：保障要素、生命周期、安全特征；</p>
+<p>上海市卫生与计划生育委员会不属于关键信息基础设施；</p>
+<p>CNCI以风险为核心，三道防线首要任务是降低其网络所面临的风险；</p>
+<p>从内而外，自上而下，端到边界的防护能力；</p>
+<p>安全策略是宏观的原则性要求，描述基本原则即可；</p>
+<p>数据库安全维护不属于安全域的安全架构规划；</p>
+<p>简介和一般模型不是基于IATF模型的简单改进，也不是一味的强调自主性；</p>
+<h2 id="二、网络安全监管"><a href="#二、网络安全监管" class="headerlink" title="二、网络安全监管"></a>二、网络安全监管</h2><p>《中华人民共和国网络安全法（草案）》</p>
+<p>不正当手段获取商业秘密；</p>
+<p>电子签名归签名人所有，不归电子认证服务提供者所有；</p>
+<p>GB/T XXX-200X 推荐性国家标准；</p>
+<p>GB 国标强制标准；</p>
+<p>DB XX/T地方标准；</p>
+<p>GB/Z 国际指导标准；</p>
+<p>信息安全等级保护：重点保障基础网络和重要信息系统安全；</p>
+<p>《信息系统安全保护等级定级指南》</p>
+<p>等保三级：一定程度上涉及国家安全和社会秩序，破坏造成一般损害；</p>
+<p>等保四级：严重损害；</p>
+<p>等保五级：特别严重损害；</p>
+<p>二级以上可以投入使用；</p>
+<p>部委发布的政策性文件，不属于法律文件；</p>
+<p>一级系统只需要向公安机关备案即可，不需要上级或主管部门来测评检查；</p>
+<p>RFC系列标准建设由Internet工程任务组发布（IETF）；</p>
+<p>法律是公开的，内部的规定不能作为法律；</p>
+<p>等保三级系统每1年进行一次等级测评，四级系统每半年测评一次；</p>
+<p>绝密：国际领先；</p>
+<p>我国信息安全人才供不应求；</p>
+<p>国际标准化组织简称ISO；</p>
+<p>加密控制措施、密码策略、加密信息、秘钥管理；</p>
+<p>DDOS攻击会对网络运行安全造成影响；</p>
+<p>安全监控不属于安全管理规定和安全制度；</p>
+<p>全国信息安全标准化技术委员会TC260负责新国标申报的审核；</p>
+<p>《保密法》存储处理国家秘密的计算机信息系统；</p>
+<p>《网络空间安全战略》4个大章节；</p>
+<p>定级、运行维护；定级、等级保护；</p>
+<p>等级保护测评体系建设和开展等级测评工作的通知；</p>
+<p>红黑电源插座；</p>
+<p>《关于加强信息安全保障工作的意见》</p>
+<p>网络安全法包括7章79条；</p>
+<p>SSE-CMM11个，三个、风险过程；</p>
+<p>网络安全法2017年6月1正式实施；</p>
+<p>NIST-SP800-37；</p>
+<h2 id="三、信息安全管理"><a href="#三、信息安全管理" class="headerlink" title="三、信息安全管理"></a>三、信息安全管理</h2><p>协调内外部组织机构风险管理活动属于沟通咨询工作，不属于风险管理的监控审查工作；</p>
+<p>提供工作必须的资源：由管理层提供，而不是信安部门主管；</p>
+<p>ISMS金字塔，一级为安全方针、策略文件；</p>
+<p>监视和评审 即PDCA中的c：check；</p>
+<p>COBIT包含框架、流程描述、控制目标、管理指南和成熟度模型；</p>
+<p>背景建立是根据政策、法律、标准等，而不是经验；</p>
+<p>管理者不需要实施安全风险评估过程；</p>
+<p>管理评审的实施主体由管理者进行选择；</p>
+<p>BS7799-2发展为ISO27001；（BS7799英国）</p>
+<p>ISO17799发展为ISO27002；</p>
+<p>安全产品选择是为了风险处理；</p>
+<p>不存在基于经验的风险评估与管理工具；</p>
+<p>安全方针由高层（决策层）进行定义；</p>
+<p>ISMS不可以与其他管理体系联合形成一体化管理目标；</p>
+<p>规划与建立ISMS不属于常规控制；</p>
+<p>ISO9001是质量体系认证，不是安全体系认证；</p>
+<p>人力资源不包含任用后；</p>
+<p>物理和环境安全与人力资源安全属于不同的安全控制章节；</p>
+<p>风险评估→风险处理；</p>
+<p>“基础是技术，管理是拔高”表述错误，技管并重，三分技术，七分管理正确；</p>
+<p>监控审查和沟通咨询；</p>
+<p>信息安全是通过实施一组合适的控制措施而达到的；</p>
+<p>敏感性和关键性予以分类，分类结果表明了资产的价值；</p>
+<p>网络安全审计不能发现感染得我恶意代码类型及名称；</p>
+<p>实施内部审核属于监视和评审阶段，而不是维护和改进阶段；</p>
+<p>1-7实施，89属于检查阶段；</p>
+<p>信息安全、信息安全控制、基础；</p>
+<p>信息分类：分类指南，信息的标记和资产处理；</p>
+<p>P是Plan规划；</p>
+<h2 id="四、业务连续性"><a href="#四、业务连续性" class="headerlink" title="四、业务连续性"></a>四、业务连续性</h2><p>云上对象存储桶：文件映像处理；</p>
+<p>灾备恢复能力级别有6个；</p>
+<p>电子取证围绕两方面：证据的获取和分析；</p>
+<p>评估事件的影响范围不属于应急相应准备阶段工作；</p>
+<p>灾备工作原则：统筹规划、资源共享、平战结合；</p>
+<p>信息安全事件分为：<strong>有害程序事件、网络攻击事件</strong>、信息破坏事件、信息内容安全事件、设备设施故障、灾害性事件和其他信息安全事件；</p>
+<p>灾备项目需要考虑前期成本和定期演练成本，所以成本提高；</p>
+<p>RPO意味着系统最多能丢失3小时的业务数据；</p>
+<p>完整PDCERF：准备阶段→检测阶段→遏制阶段→跟踪总结阶段→恢复阶段→根除阶段；</p>
+<p>preparation，detection，containment，eradication，recovery，Follewup；</p>
+<p>数据恢复速度方面由快到慢：完全、差异、增量；</p>
+<p>在管理上没有风险意识是最危险的：没有使用灾难计划恢复文档DRP最应引起关注；</p>
+<p>计算机取证，不建议本地恢复日志，会破坏证据；</p>
+<p>校园网整体瘫痪属于一般事件；</p>
+<p>业务连续连续性包含2个控制目标和4个控制措施；</p>
+<p>应急响应：安全事件发生前充分准备，发生后响应处理；</p>
+<p>DAS数据分散、风险分散、存储空间利用率低；</p>
+<p>在标准的分级体系中，级别从高到低一般为：I级（特别重大）、II级（重大）、III级（较大）、IV级（一般）。</p>
+<h2 id="五、安全工程与运营"><a href="#五、安全工程与运营" class="headerlink" title="五、安全工程与运营"></a>五、安全工程与运营</h2><p>项目进度不能随机确定，根据项目范围、成本、质量综合确定；</p>
+<p>系统工程是一种对所有系统都具有普遍意义的科学方法；</p>
+<p>霍尔三维模型是一种系统思想，无法实现严格对应；</p>
+<p>信息安全保障的工程保障要素，保障的是信息系统生命周期的过程安全问题；</p>
+<p>系统安全工程能力成熟度模型SSE-CMM不是面向开发的方法，是面向工程过程质量控制的一套方法；</p>
+<h2 id="六、信息安全评估"><a href="#六、信息安全评估" class="headerlink" title="六、信息安全评估"></a>六、信息安全评估</h2><p>信息安全风险评估以自评估（自查）为主；</p>
+<p>检查评估要由上级管理部门发起，本级单位发起的为自评估；</p>
+<p>风险要素包括：资产、威胁、脆弱性、安全措施，关联《需要保护的资产清单》；</p>
+<p>满足强制保护要求的最低级别：B1；</p>
+<p>EAL评估保障级分7级；</p>
+<p>IATF由美国发布；</p>
+<h2 id="七-信息安全支撑技术"><a href="#七-信息安全支撑技术" class="headerlink" title="七.信息安全支撑技术"></a>七.信息安全支撑技术</h2><p>安全登录会涉及到账号密码为实体所知，智能卡和短信是实体所有；</p>
+<p>令牌是基于实体所有的鉴别方式；</p>
+<p>Kerberos使用对称密码；密钥分发中心不包含客户机；协议需要时钟同步；</p>
+<p>Kerberos三个步骤：1.身份鉴权 2.获得服务许可票据 3.获得服务；</p>
+<p>分组密码算法不同于序列算法；</p>
+<p>序列算法：像一位逐字翻译的翻译官。它把明文（原始信息）拆成一个个独立的字符（通常是位或字节），对每个字符逐个进行加密，生成等长的密文；</p>
+<p>分组算法：像一位整段翻译的翻译官。它先把明文切割成固定长度的大块（比如128位），然后对每一整块数据同时进行复杂的数学变换，生成相同长度的密文块；</p>
+<p>定义主体访问客体的权限叫作CL（Capability能力）。定义客体被主体访问的权限叫ACL（Access Control）；</p>
+<p>BLP模型，军事领域（上层能看到下层，下层能给上层添加，但看不到上层），向下读，向上写；</p>
+<p>Biba模型，完整性保护（不允许向上写，可以向上读；向下写）；</p>
+<p>对于数字证书，一般采用标准：X.509；</p>
+<p>Engmia密码机属于古典密码阶段；</p>
+<p>ACL是基于客体的访问控制（适用人多），CL是基于主体的访问控制（适用人少）；</p>
+<p>Kerberos跨域访问时在本地域进行认证和授权，本地用户向本地TGS请求拿到票据，再发送给需要访问的远程应用服务器，获得验证票据TGT并被授权访问；</p>
+<p>Kerberos认证协议是身份鉴别协议，支持双向认证；</p>
+<p>基于角色的访问控制不是对用户一个一个授权，而是对某个角色或岗位进行授权；</p>
+<p>自主访问控制：针对每个用户指明能够访问的资源，属于CL；</p>
+<p>DES算法密钥长度64bit；</p>
+<p>DSA是一种签名技术，可实现完整性、真实性、认证功能；</p>
+<p>RSA是第一个能同时用于加密和数字签名的算法；</p>
+<p>消息发送者使用自己的私钥进行数字签名；</p>
+<p>MAC需要密钥，哈希不需要密钥；</p>
+<p>1875年贝尔发明电话机，1878年首次长途电话实验；</p>
+<p>DAC的主体权限较容易被更改，不能抵御特洛伊木马的攻击；</p>
+<p>单点登录技术实质是安全凭证在多个系统而不是用户之间传递或共享；</p>
+<p>TACACS+协议分为认证和授权两个过程；</p>
+<p>START包只在一个认证会话开始时使用一个，序列号永远为1；</p>
+<p>ACL文件和文件夹权限与客体关联，文件和文件夹访问权限信息写在客体的文件文件夹属性数据库中；</p>
+<h2 id="八-物理与网络通信安全"><a href="#八-物理与网络通信安全" class="headerlink" title="八.物理与网络通信安全"></a>八.物理与网络通信安全</h2><p>网络层和应用层可以提供保密性、身份鉴别、完整性、抗抵赖和访问控制；</p>
+<p>L2F、PPTP、L2TP均为二层隧道协议，而VTP不是第二层的隧道协议。VTP，VLAN TRUNKING PROTOCOL（VLAN中继协议），是CISCO专用协议，大多数交换机都支持该协议。VTP是一种消息协议，使用第2层帧，在全网的基础上管理VLAN的添加、删除和重命名，以实现VLAN配置的一致性。</p>
+<p>L2F：Layer 2 Forwarding（第二层转发）早期VPN隧道协议，由Cisco提出，用于在PPP链路基础上建立隧道；</p>
+<p>PPTP：Point-to-Point Tunneling Protocol（点对点隧道协议）微软主导的VPN协议，基于PPP，工作在二层；</p>
+<p>L2TP：Layer 2 Tunneling Protocol（第二层隧道协议）L2F和PPTP的结合体，标准化二层隧道协议，用于VPN；</p>
+<p>散热方式为下送风，上回风，侧送风，侧回风；</p>
+<p>WPA与WPA2：WPA是根据IEEE802.11i标准草案制定，WPA2根据802.11i正式标准制定；</p>
+<p>防火墙不能物理隔离，但能逻辑隔离；</p>
+<p>物理安全包括环境安全、设施安全、和传媒介质安全；</p>
+<p>SSL是依附于传输层的，可在会话层、表示层、应用层；</p>
+<p>ZigBee，紫蜂，低速短距离无线网传输协议，信息安全服务：访问控制、数据加密、数据完整性、序列抗重播保护；</p>
+<p>双路供电是防止电力中断，而不是强调供电稳定性；</p>
+<p>UPS中有电子元器件，一样会受到电涌的影响；</p>
+<p>电涌保护器的作用是确保电力供应平稳，UPS更多确保是电力不中断；</p>
+<p>UPS是目前电力防护最主要的技术措施；</p>
+<p>防火墙的访问控制策略不能防病毒。</p>
+<h2 id="九-计算环境安全"><a href="#九-计算环境安全" class="headerlink" title="九.计算环境安全"></a>九.计算环境安全</h2><p>S/MIME是邮件安全协议，不是防火墙技术；</p>
+<p>S/MIME采用非对称密码学机制、支持数字证书、支持用户身份验证和邮件加密；</p>
+<p>NTFS不能兼容Linux的ext文件系统；</p>
+<p>NTFS支持文件加密；</p>
+<p>快速格式化删除存储介质中的保密文件不能防止信息泄露；</p>
+<p>文本文件不具有可执行性，不属于恶意代码传播；</p>
+<p>系统层用户：包括SYSTEM、LOCAL SERVICE等，可以访问注册表中的账号数据；</p>
+<p>安全管理：认证与授权、访问控制与权限管理；</p>
+<p>FAT32不支持EFS加密；</p>
+<p>SSL属于数据传输加密，确保数据的保密性；</p>
+<p>通常是基于IMAP协议客户端来实现邮件的远程管理，而不是SMTP和POP3；</p>
+<p>SMTP和POP3：基于ASCII码，明文传输数据（数据泄露），缺乏严格的用户校验（垃圾邮件）；</p>
+<p>CSRF不是迫使，而是欺骗或诱导；</p>
+<p>Linux中超级用户的权限不可更改，因为他就是操作系统本身的权限；</p>
+<p>先用户user，再组admin；</p>
+<p>Apache目录配置文件：/usr/local/apache/conf/httpd.conf；</p>
+<p>setuid提权提的是文件属主的权限；</p>
+<p>Windows系统采用SID标识用户对文件或文件夹的权限；</p>
+<p>administrator账号可以改名。guest账号可以删除；</p>
+<p>Windows系统服务需要用户权限，但很多服务不需要用户登录就能启动；</p>
+<p>Windows服务可能包括动态链接库，所以不一定是一个独立可执行程序；</p>
+<p>注册表编辑器regedit；</p>
+<p>WinXP SP2开始引入安全中心的概念；</p>
+<p>windows NT提供的分布式安全环境又被称为域 domain；</p>
+<p>打开Windows管理控制台：mmc；</p>
+<p>显示本机各网络端口详情的命令：netstat；</p>
+<p>登录sql server混合模式是指根据已在Windows网络中登录的用户的安全属性，对用户进行身份验证，并决定其是否能够访问数据库；</p>
+<p>搜索引擎：搜索器（抓取或下载原始网页内容）索引器（理解搜索器拿回来的内容，提取关键词）；</p>
+<p>检索器根据用户输入，去索引里找结果，最后向用户显示查询结果；</p>
+<p>通过搜索引擎实现信息泄露挖掘，属于内容安全管理，就是定点挖掘；</p>
+<p>字典攻击：利用用户相关信息去猜测密码；</p>
+<p>仅留下加密后的二进制代码是不可以躲过安全检测的；</p>
+<p>S-1-5-21-1534169462-1651380828-111620651-500，SID以500结尾，表示是administrator账户，501结尾表示内置guest账户；</p>
+<p>S-1-5表示是由WindowsNT颁发的，第四位第一个子颁发机构是21，三个子颁发机构分别是第5、6、7位。</p>
+<h2 id="十-软件安全开发"><a href="#十-软件安全开发" class="headerlink" title="十.软件安全开发"></a>十.软件安全开发</h2><p>STRIDE代表了六大类安全威胁，具体如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>威胁类别 (STRIDE)</th>
+<th>核心含义</th>
+<th>简单举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S - 欺骗 (Spoofing)</td>
+<td>攻击者伪装成其他用户或系统</td>
+<td>伪造身份验证令牌来模拟合法用户</td>
+</tr>
+<tr>
+<td>T - 篡改 (Tampering)</td>
+<td>对数据或代码进行未经授权的修改</td>
+<td>修改网络传输中的API请求数据</td>
+</tr>
+<tr>
+<td>R - 否认 (Repudiation)</td>
+<td>用户否认执行了某操作，而系统无法证明其行为</td>
+<td>用户否认下过订单，但审计日志并未记录该操作</td>
+</tr>
+<tr>
+<td>I - 信息泄露 (Information Disclosure)</td>
+<td>将敏感信息暴露给未授权的实体</td>
+<td>API返回了比用户所需更多的数据字段</td>
+</tr>
+<tr>
+<td>D - 拒绝服务 (Denial of Service)</td>
+<td>耗尽系统资源，导致合法用户无法使用</td>
+<td>用大量请求轰炸公共API，耗尽后端连接池</td>
+</tr>
+<tr>
+<td>E - 权限提升 (Elevation of Privilege)</td>
+<td>攻击者获得了超越其应有级别的访问权限</td>
+<td>利用错误配置的角色分配来获取管理权限</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>KLOC是每千行代码的意思，29.6万行代码计算时x10即可，145/296=0.49；</p>
+<p>模糊测试是模拟异常输入，不是正常输入；</p>
+<p>Fuzz入口与边界点是测试对象；</p>
+<p>Fuzz记录和检测异常运行情况；</p>
+<p>SA是数据库的最大用户权限，不能用此执行某些特定存储过程，所以是最小特权原则；</p>
+<p>STRIDE代表六种威胁的简称，无严重程度之分；</p>
+<p>允许匿名访问，就是允许更多的用户访问，因此安全风险也会增加；</p>
+<p>OA系统中使用FTP造成被攻击，是没有遵循降低攻击面原则；</p>
+<p>验收测试不仅关注功性能，也关注功性能之外的指标；</p>
+<p>监理工程师应按照有关标准审查提交的测试计划，并提交审查意见；</p>
+<p>实施阶段是按照既定计划，而不是领导的要求；</p>
+<p>安全需求阶段不需要向组织和领导人宣贯风险评估准则；</p>
+<p>BSI三根支柱：风险管理、安全接触点、安全知识；</p>
+<p>瀑布模型中没有总体设计，所以总体设计不属于软件的开发全生命周期；</p>
+<p>所有与需求直接相关的被称为需求工程；</p>
+<p>需求工程活动可以分为需求开发和需求管理</p>
+<p>需求开发的目的是通过调查与分析，获取用户需求并定义产品需求；</p>
+<p>需求开发主要有需求获取、需求分析、需求定义和需求验证等4个过程。</p>
+<p>需求管理的目的是确保各方对需求的一致理解、管理和控制需求的变更，从需求到最终产品的双向跟踪。</p>
+<p>在需求管理中，要收集需求的变更和变更的理由，并且维持对原有需求和产品及构件需求的双向跟踪。</p>
+<p>瑕疵Flaw不一定是一种更深层次的缺陷，但往往是设计缺陷造成；</p>
+<p>可理解性与可测试性相互促进；</p>
+<p>螺旋模型：需求不明确、大型软件系统开发、多种软件开发方法；</p>
+<p>软件工程方法学三要素：方法、过程、工具；</p>
+<p>软件工程方法提出最终要解决的是软件生产工程化；</p>
+<p>开展软件安全开发必要性：软件危机与安全问题；</p>
+<p>SSAM软件成熟度保障模型；</p>
+<p>SSAM主要工作产品：调查结果简报和评估报告。调查结果简报包含资料和评估结果清单；</p>
+<p>SSE-CMM系统安全工程能力成熟度模型；</p>
+<p>极限测试贯穿始终的是单元测试和系统测试。</p>
+]]></content>
+      <categories>
+        <category>CISP</category>
+      </categories>
+      <tags>
+        <tag>CISP</tag>
       </tags>
   </entry>
   <entry>
@@ -965,6 +1250,52 @@
       </tags>
   </entry>
   <entry>
+    <title>HEXO使用记录</title>
+    <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
+<p>官方文档：<a href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
+<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
+<span id="more"></span>
+<h2 id="一、Hexo-安装"><a href="#一、Hexo-安装" class="headerlink" title="一、Hexo 安装"></a>一、Hexo 安装</h2><p>Hexo 是一个快速、简单且功能强大的博客框架，可以使用 Markdown （或其他标记语言）编写文章，Hexo 会在几秒钟内生成带有对应主题的静态文件。</p>
+<p>安装 Hexo 需要 Node.js 以及 Git 环境。</p>
+<p>Node.js 下载地址 <a href="https://nodejs.org/en/download">Node.js Download</a></p>
+<p>Git 下载地址 <a href="https://git-scm.com/install/windows">Git Download</a></p>
+<p>所有必需组件安装完毕后，即可使用 npm 安装 Hexo：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<p>初始化 Hexo 站点：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br></pre></td></tr></table></figure>
+<p>hexo-site 也可以替换为其他路径名，以 hexo-site 为例，网站根目录被称为 <code>hexo-site</code>。 </p>
+<p>初始化完成后，可以到网站根目录下，下载对应主题并进行升级：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next@latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>注意事项：</p>
+<p>运行 npm install 时，对 node_modules 目录下主题所做的任何本地更改都将丢失。如果对主题进行了更改，则应在运行 npm install 之前备份这些更改，然后在安装完成后恢复这些更改。</p>
+<p>安装完 Hexo 和 NexT 主题后，可以通过修改配置文件来自定义博客。安装 Hexo 时，配套的配置文件位于网站根目录。博客配置文件名为 _config.yml ；我们称之为 Hexo 配置文件 NexT 主题的配置文件需要您自行创建；请在目录下创建一个 _config.next.yml 文件。 网站根目录我们将其称为 Next 配置文件在以下文本中。</p>
+<p>创建空的 _config.next.yml 文件后，可以将主题文件夹中的默认配置选项复制到该文件中，以便进行修改和自定义。根据安装方式，NexT 主题的默认配置文件可能位于 themes/next/_config.yml 或 node_modules/hexo-theme-next/_config.yml 中。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure>
+<h2 id="二、Hexo-个性化设置"><a href="#二、Hexo-个性化设置" class="headerlink" title="二、Hexo 个性化设置"></a>二、Hexo 个性化设置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Allow to cache content generation.</span></span><br><span class="line">cache:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove unnecessary files after hexo generate.</span></span><br><span class="line">minify: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Schemes</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="comment">#scheme: Pisces</span></span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line">darkmode: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:zyufoye/zyufoye.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="三、Hexo-新建发布文章"><a href="#三、Hexo-新建发布文章" class="headerlink" title="三、Hexo 新建发布文章"></a>三、Hexo 新建发布文章</h2><p>新建发布文章：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post <span class="string">&quot;文章名称&quot;</span></span><br></pre></td></tr></table></figure>
+<p>生成并部署：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp;  hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
+<p>同步更新部署到github：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+<p>博客侧边栏添加 menu 菜单，以 tags 和 categories 为例：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
+<p>同时在index.md 中设置类别，不然点击跳转后不显示任何内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: categories</span><br></pre></td></tr></table></figure>
+<p>设置文章想要显示的内容时，可以用 more 进行切分， more以上的作为显示内容。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
+<p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HEXO链接站内文章方法</title>
     <url>/2025/12/11/HEXO%E9%93%BE%E6%8E%A5%E7%AB%99%E5%86%85%E6%96%87%E7%AB%A0%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>Hexo链接站内文章方法：</p>
@@ -1118,52 +1449,6 @@
         <tag>ftp</tag>
         <tag>SMB</tag>
         <tag>Redis</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>HEXO使用记录</title>
-    <url>/2025/12/04/HEXO%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h1 id="Hexo-使用记录"><a href="#Hexo-使用记录" class="headerlink" title="Hexo 使用记录"></a>Hexo 使用记录</h1><p>参考文献： <a href="https://theme-next.js.org/docs/getting-started/">https://theme-next.js.org/docs/getting-started/</a></p>
-<p>官方文档：<a href="https://hexo.io/zh-cn/">https://hexo.io/zh-cn/</a></p>
-<h2 id="HEXO-简介"><a href="#HEXO-简介" class="headerlink" title="HEXO 简介"></a>HEXO 简介</h2><p>Hexo 是一个基于 Node.js 的快速、简洁且高效的静态博客框架。它拥有超快的渲染速度、灵活的配置方式，以及丰富的主题与插件生态。借助 Markdown 写作，可以轻松生成优雅的静态网页，并部署到 GitHub Pages、Vercel、Netlify 等任意静态托管平台。无论是想建立个人博客、文档站点，还是打造独特的技术分享空间，Hexo 都能提供流畅而高效的创作体验。</p>
-<span id="more"></span>
-<h2 id="一、Hexo-安装"><a href="#一、Hexo-安装" class="headerlink" title="一、Hexo 安装"></a>一、Hexo 安装</h2><p>Hexo 是一个快速、简单且功能强大的博客框架，可以使用 Markdown （或其他标记语言）编写文章，Hexo 会在几秒钟内生成带有对应主题的静态文件。</p>
-<p>安装 Hexo 需要 Node.js 以及 Git 环境。</p>
-<p>Node.js 下载地址 <a href="https://nodejs.org/en/download">Node.js Download</a></p>
-<p>Git 下载地址 <a href="https://git-scm.com/install/windows">Git Download</a></p>
-<p>所有必需组件安装完毕后，即可使用 npm 安装 Hexo：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-<p>初始化 Hexo 站点：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init hexo-site</span><br></pre></td></tr></table></figure>
-<p>hexo-site 也可以替换为其他路径名，以 hexo-site 为例，网站根目录被称为 <code>hexo-site</code>。 </p>
-<p>初始化完成后，可以到网站根目录下，下载对应主题并进行升级：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> hexo-site</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next</span><br><span class="line"></span><br><span class="line">npm install hexo-theme-next@latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>注意事项：</p>
-<p>运行 npm install 时，对 node_modules 目录下主题所做的任何本地更改都将丢失。如果对主题进行了更改，则应在运行 npm install 之前备份这些更改，然后在安装完成后恢复这些更改。</p>
-<p>安装完 Hexo 和 NexT 主题后，可以通过修改配置文件来自定义博客。安装 Hexo 时，配套的配置文件位于网站根目录。博客配置文件名为 _config.yml ；我们称之为 Hexo 配置文件 NexT 主题的配置文件需要您自行创建；请在目录下创建一个 _config.next.yml 文件。 网站根目录我们将其称为 Next 配置文件在以下文本中。</p>
-<p>创建空的 _config.next.yml 文件后，可以将主题文件夹中的默认配置选项复制到该文件中，以便进行修改和自定义。根据安装方式，NexT 主题的默认配置文件可能位于 themes/next/_config.yml 或 node_modules/hexo-theme-next/_config.yml 中。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> node_modules/hexo-theme-next/_config.yml _config.next.yml</span><br></pre></td></tr></table></figure>
-<h2 id="二、Hexo-个性化设置"><a href="#二、Hexo-个性化设置" class="headerlink" title="二、Hexo 个性化设置"></a>二、Hexo 个性化设置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Allow to cache content generation.</span></span><br><span class="line">cache:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Remove unnecessary files after hexo generate.</span></span><br><span class="line">minify: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Schemes</span></span><br><span class="line"><span class="comment"># scheme: Muse</span></span><br><span class="line"><span class="comment">#scheme: Mist</span></span><br><span class="line"><span class="comment">#scheme: Pisces</span></span><br><span class="line">scheme: Gemini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dark Mode</span></span><br><span class="line">darkmode: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.com:zyufoye/zyufoye.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="三、Hexo-新建发布文章"><a href="#三、Hexo-新建发布文章" class="headerlink" title="三、Hexo 新建发布文章"></a>三、Hexo 新建发布文章</h2><p>新建发布文章：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post <span class="string">&quot;文章名称&quot;</span></span><br></pre></td></tr></table></figure>
-<p>生成并部署：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp;  hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
-<p>同步更新部署到github：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-<p>博客侧边栏添加 menu 菜单，以 tags 和 categories 为例：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
-<p>同时在index.md 中设置类别，不然点击跳转后不显示任何内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: categories</span><br></pre></td></tr></table></figure>
-<p>设置文章想要显示的内容时，可以用 more 进行切分， more以上的作为显示内容。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></table></figure>
-<p>以上基本配置和简单使用记录完毕，后续有更多需要再持续更新记录。  </p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -2555,6 +2840,139 @@
       </tags>
   </entry>
   <entry>
+    <title>Java项目标准目录布局</title>
+    <url>/2026/01/27/Java%E9%A1%B9%E7%9B%AE%E6%A0%87%E5%87%86%E7%9B%AE%E5%BD%95%E5%B8%83%E5%B1%80/</url>
+    <content><![CDATA[<p>Java 生态系统中（特别是基于 <strong>Maven</strong> 和 <strong>Gradle</strong> 构建工具）通用的<strong>标准目录布局（Standard Directory Layout）</strong>是通用的，这里简单记录一下。</p>
+<p>这种“约定优于配置”（Convention over Configuration）的设计，使得任何接手项目的 Java 程序员都能第一时间知道代码在哪里，配置文件在哪里。</p>
+<h3 id="1-main-和-test-的核心区别"><a href="#1-main-和-test-的核心区别" class="headerlink" title="1. main 和 test 的核心区别"></a>1. <code>main</code> 和 <code>test</code> 的核心区别</h3><p>简单来说：<strong><code>main</code> 是给用户用的（生产环境），<code>test</code> 是给你自己用的（开发验证环境）。</strong></p>
+<h4 id="📂-src-main-主程序目录"><a href="#📂-src-main-主程序目录" class="headerlink" title="📂 src/main (主程序目录)"></a>📂 <code>src/main</code> (主程序目录)</h4><p>这是项目的<strong>核心</strong>。这里的代码和资源最终会被编译、打包（成 JAR 或 WAR 包），并部署到服务器或交付给客户。</p>
+<ul>
+<li><strong>作用</strong>：存放业务逻辑、应用程序配置、网页静态资源等。</li>
+<li><strong>后果</strong>：如果你在这里写了 bug，用户就会遇到 bug。</li>
+</ul>
+<h4 id="📂-src-test-测试程序目录"><a href="#📂-src-test-测试程序目录" class="headerlink" title="📂 src/test (测试程序目录)"></a>📂 <code>src/test</code> (测试程序目录)</h4><p>这是项目的<strong>质检部门</strong>。这里的代码是用来验证 <code>main</code> 里面的代码是否正确的。</p>
+<ul>
+<li><strong>作用</strong>：存放单元测试（Unit Tests）、集成测试、测试用的模拟数据等。</li>
+<li><strong>后果</strong>：这里的代码<strong>不会</strong>被打包到最终的发布版本中。它只在构建（Build）阶段运行。如果测试失败，项目通常会打包失败，从而防止 bug 上线。</li>
+</ul>
+<h3 id="2-标准-Maven-项目结构图"><a href="#2-标准-Maven-项目结构图" class="headerlink" title="2. 标准 Maven 项目结构图"></a>2. 标准 Maven 项目结构图</h3><p>一个标准的 Maven 项目结构通常如下所示：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">MyJavaProject/  (项目根目录)</span><br><span class="line">├── pom.xml                   &lt;-- 项目的身份证 (依赖管理、构建配置)</span><br><span class="line">├── src/</span><br><span class="line">│   ├── main/                 &lt;-- 【生产代码】</span><br><span class="line">│   │   ├── java/             &lt;-- 存放 .java 源代码</span><br><span class="line">│   │   │   └── com/</span><br><span class="line">│   │   │       └── example/</span><br><span class="line">│   │   │           └── MyApp.java</span><br><span class="line">│   │   │</span><br><span class="line">│   │   ├── resources/        &lt;-- 存放配置文件、静态资源</span><br><span class="line">│   │   │   ├── application.properties</span><br><span class="line">│   │   │   ├── my-config.xml</span><br><span class="line">│   │   │   └── static/       (如果是Web项目，可能放图片/js)</span><br><span class="line">│   │   │</span><br><span class="line">│   │   └── webapp/           &lt;-- (可选) 传统Web项目存放JSP/HTML的地方</span><br><span class="line">│   │</span><br><span class="line">│   └── test/                 &lt;-- 【测试代码】</span><br><span class="line">│       ├── java/             &lt;-- 存放测试用的 .java 代码</span><br><span class="line">│       │   └── com/</span><br><span class="line">│       │       └── example/</span><br><span class="line">│       │           └── MyAppTest.java</span><br><span class="line">│       │</span><br><span class="line">│       └── resources/        &lt;-- 存放测试专用的配置文件</span><br><span class="line">│           └── test-config.properties</span><br><span class="line">│</span><br><span class="line">└── target/                   &lt;-- 【自动生成】 构建输出目录</span><br><span class="line">    ├── classes/              (编译后的 main .class 文件)</span><br><span class="line">    ├── test-classes/         (编译后的 test .class 文件)</span><br><span class="line">    └── MyJavaProject.jar     (最终打包好的文件)</span><br></pre></td></tr></table></figure>
+<h3 id="3-详细目录解读"><a href="#3-详细目录解读" class="headerlink" title="3. 详细目录解读"></a>3. 详细目录解读</h3><h4 id="A-src-main-java"><a href="#A-src-main-java" class="headerlink" title="A. src/main/java"></a>A. <code>src/main/java</code></h4><ul>
+<li>这是你写 Java 业务代码的地方。</li>
+<li>通常需要按照包名（Package）建立文件夹结构，例如 <code>com.company.project</code>。</li>
+</ul>
+<h4 id="B-src-main-resources"><a href="#B-src-main-resources" class="headerlink" title="B. src/main/resources"></a>B. <code>src/main/resources</code></h4><ul>
+<li>存放<strong>非 Java 代码</strong>的文件。</li>
+<li><strong>常见内容</strong>：<ul>
+<li><code>application.properties</code> 或 <code>application.yml</code> (Spring Boot 配置文件)。</li>
+<li><code>log4j2.xml</code> / <code>logback.xml</code> (日志配置)。</li>
+<li>MyBatis 的 Mapper XML 文件。</li>
+<li>SSL 证书、国际化文件等。</li>
+</ul>
+</li>
+<li><strong>打包后</strong>：这些文件会被直接复制到 CLASSPATH 的根目录下。</li>
+</ul>
+<h4 id="C-src-test-java"><a href="#C-src-test-java" class="headerlink" title="C. src/test/java"></a>C. <code>src/test/java</code></h4><ul>
+<li>存放 JUnit 或 TestNG 的测试类。</li>
+<li><strong>最佳实践</strong>：这里的包路径通常与 <code>src/main/java</code> <strong>保持一致</strong>。<ul>
+<li>例如：主代码在 <code>com.example.service.UserService</code></li>
+<li>测试代码在 <code>com.example.service.UserServiceTest</code></li>
+<li>这样测试类可以直接访问主类中 <code>protected</code> 修饰的方法（包级私有）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="D-src-test-resources"><a href="#D-src-test-resources" class="headerlink" title="D. src/test/resources"></a>D. <code>src/test/resources</code></h4><ul>
+<li>存放<strong>只在测试时生效</strong>的配置。</li>
+<li><strong>场景</strong>：<ul>
+<li>生产环境（<code>main/resources</code>）用的是 Oracle 数据库配置。</li>
+<li>测试环境（<code>test/resources</code>）为了速度，配置一个 H2 内存数据库。</li>
+</ul>
+</li>
+<li>测试运行时，这里的配置优先级通常会覆盖 main 里的配置，或者专门用于测试环境读取。</li>
+</ul>
+<h4 id="E-pom-xml-Project-Object-Model"><a href="#E-pom-xml-Project-Object-Model" class="headerlink" title="E. pom.xml (Project Object Model)"></a>E. <code>pom.xml</code> (Project Object Model)</h4><ul>
+<li>这是 Maven 项目的核心配置文件。</li>
+<li>它定义了：<ul>
+<li>项目的基本信息（groupId, artifactId, version）。</li>
+<li><strong>依赖（Dependencies）</strong>：你需要用到的第三方库（如 Spring, MySQL Driver, JUnit）。</li>
+<li><strong>插件（Plugins）</strong>：如何编译、如何打包、如何运行测试。</li>
+</ul>
+</li>
+</ul>
+<h4 id="F-target"><a href="#F-target" class="headerlink" title="F. target/"></a>F. <code>target/</code></h4><ul>
+<li>这是 Maven 自动生成的目录，<strong>不要手动去改里面的文件</strong>，也<strong>不要</strong>提交到 Git 仓库（应该在 <code>.gitignore</code> 中忽略它）。</li>
+<li>当你运行 <code>mvn clean</code> 时，这个文件夹会被删除。</li>
+<li>当你运行 <code>mvn package</code> 时，编译好的 <code>.class</code> 文件和最终的 <code>.jar</code> 包会出现在这里。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><strong><code>main</code></strong> 是为了<strong>“跑起来”</strong></li>
+<li><strong><code>test</code></strong> 是为了<strong>“跑得稳”</strong></li>
+<li><strong>Maven 结构</strong> 是一种全行业通用的“收纳整理术”，遵守这个结构，你的项目在任何 IDE（IntelliJ IDEA, Eclipse, VS Code）里都能被自动识别并正确运行。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux服务器系统资源查看</title>
+    <url>/2025/12/17/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E6%9F%A5%E7%9C%8B/</url>
+    <content><![CDATA[<h2 id="Linux服务器系统资源查看"><a href="#Linux服务器系统资源查看" class="headerlink" title="Linux服务器系统资源查看"></a>Linux服务器系统资源查看</h2><p>系统性地查看 Linux 服务器资源，也就是看CPU、内存、磁盘、网络、负载、系统等这几个层面，就能了解服务器性能以及运行情况。</p>
+<h3 id="uptime"><a href="#uptime" class="headerlink" title="uptime"></a>uptime</h3><p>查看系统负载和运行时间</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">uptime</span></span><br><span class="line"></span><br><span class="line">10:35:15 up  1:34, 13 <span class="built_in">users</span>,  load average: 0.41, 0.30, 0.25</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>10:35:15</code> 表示当前系统时间是 10 点 35 分 15 秒，<code>up 1:34</code> 表示系统已经连续运行了 1 小时 34 分钟，<code>13 users</code>表示当前有 13 个用户会话登录到系统中，<code>load average: 0.41, 0.30, 0.25</code> 表示系统负载均值（Load Average），表示正在运行 + 等待运行的进程数量的平均值，三个数字分别表示最近1/5/15 分钟的平均负载。</p>
+<blockquote>
+<p><strong>Load Average = 在某段时间内，处于「可运行状态」和「不可中断睡眠状态」进程数量的指数加权移动平均（EWMA），统计的是想用 CPU 的进程有多少。</strong></p>
+</blockquote>
+<h3 id="top"><a href="#top" class="headerlink" title="top"></a>top</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">top</span><br><span class="line"></span><br><span class="line">top - 10:52:33 up  1:52, 11 <span class="built_in">users</span>,  load average: 1.14, 0.57, 0.32</span><br><span class="line">Tasks: 2645 total,   2 running, 2643 sleeping,   0 stopped,   0 zombie</span><br><span class="line">%Cpu(s):  0.1 us,  0.0 sy,  0.0 ni, 99.8 <span class="built_in">id</span>,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span><br><span class="line">MiB Mem : 10 total, 8 free,  6 used,  4 buff/cache</span><br><span class="line">MiB Swap:  3 total, 2 free,  1 used.  2 avail Mem</span><br><span class="line"></span><br><span class="line">    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND</span><br><span class="line">  77552 xrdp      20   0   50360  20344   6856 R  18.0   0.0   0:30.70 xrdp</span><br><span class="line">  77960 mark      20   0 9361988 422920 185124 S  14.1   0.1   0:59.67 gnome-shell</span><br><span class="line">  77569 mark      20   0  382544 138588  80324 S   5.6   0.0   0:11.17 Xorg</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>详解 top 输出命令内容：</p>
+<p>第一行表示时间、运行时长、登录用户、平均负载；</p>
+<p>第二行展示了任务数和进程状态，包含进程/线程统计总数、正在 CPU 上运行的（或准备运行的）任务数、睡眠、进程和僵尸进程数量；</p>
+<p>第三行展示了 CPU 使用构成，us用户态、sy内核态、ni被nice调整过优先级的用户态进程、id (idle) CPU空闲率、wa CPU在等 IO（磁盘/网络存储）导致空转等待率，hi硬中断消耗，si软中断消耗；</p>
+<p>第四行展示了内存：total总内存、free完全空闲内存、used真正被进程使用的内存、buff/cache文件缓存块设备缓存；</p>
+<p>第五行展示了 Swap 交换分区，Swap（交换分区/交换文件）是内存不足时的“备用空间”，当 物理内存（RAM）不够用 时，Linux 会把暂时不用的内存页交换到磁盘上的 swap 中，从而防止系统因内存耗尽而直接崩溃（OOM），让系统还能继续运行；</p>
+<p>下面展示了系统进程的详细信息：</p>
+<p>表头：</p>
+<p><code>PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND</code></p>
+<p>PID：进程号</p>
+<p>USER：所属用户</p>
+<p>PR：动态优先级（数值越小优先级越高；20 常见）</p>
+<p>NI：nice 值（-20 到 19，越小越“抢”CPU；0 默认）</p>
+<p>VIRT：虚拟内存占用（进程可见的地址空间总量，包含映射文件、共享库、未实际用到的保留空间等）</p>
+<p>RES：常驻内存（实际占用物理内存，最值得关注）</p>
+<p>SHR：共享内存部分（共享库等）</p>
+<p>S：状态</p>
+<p>R=运行，S=睡眠，D=不可中断睡眠(常见 IO 卡住)，Z=僵尸</p>
+<p>%CPU：CPU 占比（注意：多核时可能 &gt;100%）</p>
+<p>%MEM：内存占比</p>
+<p>TIME+：累计消耗 CPU 时间</p>
+<p>COMMAND：命令名</p>
+<h3 id="lscpu"><a href="#lscpu" class="headerlink" title="lscpu"></a>lscpu</h3><p>查看 cpu 架构，重点关注 CPU 型号、数量、解构等信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Architecture: x86_64</span><br><span class="line"></span><br><span class="line">Model name: AMD</span><br><span class="line"></span><br><span class="line">CPU(s):                2</span><br><span class="line">Thread(s) per core:    2</span><br><span class="line">Core(s) per socket:    1</span><br><span class="line">Socket(s):             1</span><br></pre></td></tr></table></figure>
+<h3 id="free-h"><a href="#free-h" class="headerlink" title="free -h"></a>free -h</h3><p>查看内存资源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">free -h</span><br><span class="line">             total       used      free      shared  buff/cache   available</span><br><span class="line">Mem:           5Gi        1Gi       4Gi        87Mi         1Gi         3Gi</span><br><span class="line">Swap:          1Gi         0B       1Gi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="df-h"><a href="#df-h" class="headerlink" title="df -h"></a>df -h</h3><p>查看磁盘资源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br><span class="line"></span><br><span class="line">Filesystem      Size  Used Avail  Use%  Mounted on</span><br><span class="line">tmpfs             2G  3.9M    1G   50%  /run</span><br><span class="line">/dev/nvme        10G    5G    5G   50%  /</span><br><span class="line">......</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="ip-s-link"><a href="#ip-s-link" class="headerlink" title="ip -s link"></a>ip -s link</h3><p>查看网络资源，这个要视情况而定，还有ss、netstat等命令。</p>
+<h3 id="uname-a"><a href="#uname-a" class="headerlink" title="uname -a"></a>uname -a</h3><p>查看系统及内核版本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> /etc/os-release</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="lspci"><a href="#lspci" class="headerlink" title="lspci"></a>lspci</h3><p>查看系统中安装的所有PCI设备。</p>
+<h3 id="nvidia-smi"><a href="#nvidia-smi" class="headerlink" title="nvidia-smi"></a>nvidia-smi</h3><p>查看显卡型号。</p>
+<h2 id="服务器使用规范"><a href="#服务器使用规范" class="headerlink" title="服务器使用规范"></a>服务器使用规范</h2><p>w 或 who 查看当前在线登录的用户</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 查看当前系统下的所有用户</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建用户</span></span><br><span class="line"><span class="built_in">sudo</span> useradd name</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> useradd -m -s /bin/bash name</span><br><span class="line"></span><br><span class="line"><span class="comment"># -m 自动创建家目录，-s指定shell</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为新用户指定密码</span></span><br><span class="line"><span class="built_in">sudo</span> passwd name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给新用户追加到 sudo 组</span></span><br><span class="line"><span class="built_in">sudo</span> usermod -aG <span class="built_in">sudo</span> name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 简化版，添加用户时即指定其加入sudo组</span></span><br><span class="line"><span class="built_in">sudo</span> useradd -m -s /bin/bash -G <span class="built_in">sudo</span> name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换用户环境 - 表示加载用户环境</span></span><br><span class="line">su - name </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java漏洞靶场搭建学习(一)：环境搭建与Springboot架构</title>
     <url>/2025/12/09/Java%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8ESpringboot%E6%9E%B6%E6%9E%84/</url>
     <content><![CDATA[<h1 id="Java漏洞靶场搭建学习"><a href="#Java漏洞靶场搭建学习" class="headerlink" title="Java漏洞靶场搭建学习"></a>Java漏洞靶场搭建学习</h1><p>在学习 Java Web 安全的过程中，目前状态是只能理解相关的漏洞原理，根据 PoC 做题或者复现漏洞，但是这些对于 <strong>代码审计、漏洞挖掘、SDL</strong> 等都没有实质性帮助，想要在学习或工作过程中提升相关能力，计划实现以下目标：</p>
@@ -2665,84 +3083,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java项目标准目录布局</title>
-    <url>/2026/01/27/Java%E9%A1%B9%E7%9B%AE%E6%A0%87%E5%87%86%E7%9B%AE%E5%BD%95%E5%B8%83%E5%B1%80/</url>
-    <content><![CDATA[<p>Java 生态系统中（特别是基于 <strong>Maven</strong> 和 <strong>Gradle</strong> 构建工具）通用的<strong>标准目录布局（Standard Directory Layout）</strong>是通用的，这里简单记录一下。</p>
-<p>这种“约定优于配置”（Convention over Configuration）的设计，使得任何接手项目的 Java 程序员都能第一时间知道代码在哪里，配置文件在哪里。</p>
-<h3 id="1-main-和-test-的核心区别"><a href="#1-main-和-test-的核心区别" class="headerlink" title="1. main 和 test 的核心区别"></a>1. <code>main</code> 和 <code>test</code> 的核心区别</h3><p>简单来说：<strong><code>main</code> 是给用户用的（生产环境），<code>test</code> 是给你自己用的（开发验证环境）。</strong></p>
-<h4 id="📂-src-main-主程序目录"><a href="#📂-src-main-主程序目录" class="headerlink" title="📂 src/main (主程序目录)"></a>📂 <code>src/main</code> (主程序目录)</h4><p>这是项目的<strong>核心</strong>。这里的代码和资源最终会被编译、打包（成 JAR 或 WAR 包），并部署到服务器或交付给客户。</p>
-<ul>
-<li><strong>作用</strong>：存放业务逻辑、应用程序配置、网页静态资源等。</li>
-<li><strong>后果</strong>：如果你在这里写了 bug，用户就会遇到 bug。</li>
-</ul>
-<h4 id="📂-src-test-测试程序目录"><a href="#📂-src-test-测试程序目录" class="headerlink" title="📂 src/test (测试程序目录)"></a>📂 <code>src/test</code> (测试程序目录)</h4><p>这是项目的<strong>质检部门</strong>。这里的代码是用来验证 <code>main</code> 里面的代码是否正确的。</p>
-<ul>
-<li><strong>作用</strong>：存放单元测试（Unit Tests）、集成测试、测试用的模拟数据等。</li>
-<li><strong>后果</strong>：这里的代码<strong>不会</strong>被打包到最终的发布版本中。它只在构建（Build）阶段运行。如果测试失败，项目通常会打包失败，从而防止 bug 上线。</li>
-</ul>
-<h3 id="2-标准-Maven-项目结构图"><a href="#2-标准-Maven-项目结构图" class="headerlink" title="2. 标准 Maven 项目结构图"></a>2. 标准 Maven 项目结构图</h3><p>一个标准的 Maven 项目结构通常如下所示：</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">MyJavaProject/  (项目根目录)</span><br><span class="line">├── pom.xml                   &lt;-- 项目的身份证 (依赖管理、构建配置)</span><br><span class="line">├── src/</span><br><span class="line">│   ├── main/                 &lt;-- 【生产代码】</span><br><span class="line">│   │   ├── java/             &lt;-- 存放 .java 源代码</span><br><span class="line">│   │   │   └── com/</span><br><span class="line">│   │   │       └── example/</span><br><span class="line">│   │   │           └── MyApp.java</span><br><span class="line">│   │   │</span><br><span class="line">│   │   ├── resources/        &lt;-- 存放配置文件、静态资源</span><br><span class="line">│   │   │   ├── application.properties</span><br><span class="line">│   │   │   ├── my-config.xml</span><br><span class="line">│   │   │   └── static/       (如果是Web项目，可能放图片/js)</span><br><span class="line">│   │   │</span><br><span class="line">│   │   └── webapp/           &lt;-- (可选) 传统Web项目存放JSP/HTML的地方</span><br><span class="line">│   │</span><br><span class="line">│   └── test/                 &lt;-- 【测试代码】</span><br><span class="line">│       ├── java/             &lt;-- 存放测试用的 .java 代码</span><br><span class="line">│       │   └── com/</span><br><span class="line">│       │       └── example/</span><br><span class="line">│       │           └── MyAppTest.java</span><br><span class="line">│       │</span><br><span class="line">│       └── resources/        &lt;-- 存放测试专用的配置文件</span><br><span class="line">│           └── test-config.properties</span><br><span class="line">│</span><br><span class="line">└── target/                   &lt;-- 【自动生成】 构建输出目录</span><br><span class="line">    ├── classes/              (编译后的 main .class 文件)</span><br><span class="line">    ├── test-classes/         (编译后的 test .class 文件)</span><br><span class="line">    └── MyJavaProject.jar     (最终打包好的文件)</span><br></pre></td></tr></table></figure>
-<h3 id="3-详细目录解读"><a href="#3-详细目录解读" class="headerlink" title="3. 详细目录解读"></a>3. 详细目录解读</h3><h4 id="A-src-main-java"><a href="#A-src-main-java" class="headerlink" title="A. src/main/java"></a>A. <code>src/main/java</code></h4><ul>
-<li>这是你写 Java 业务代码的地方。</li>
-<li>通常需要按照包名（Package）建立文件夹结构，例如 <code>com.company.project</code>。</li>
-</ul>
-<h4 id="B-src-main-resources"><a href="#B-src-main-resources" class="headerlink" title="B. src/main/resources"></a>B. <code>src/main/resources</code></h4><ul>
-<li>存放<strong>非 Java 代码</strong>的文件。</li>
-<li><strong>常见内容</strong>：<ul>
-<li><code>application.properties</code> 或 <code>application.yml</code> (Spring Boot 配置文件)。</li>
-<li><code>log4j2.xml</code> / <code>logback.xml</code> (日志配置)。</li>
-<li>MyBatis 的 Mapper XML 文件。</li>
-<li>SSL 证书、国际化文件等。</li>
-</ul>
-</li>
-<li><strong>打包后</strong>：这些文件会被直接复制到 CLASSPATH 的根目录下。</li>
-</ul>
-<h4 id="C-src-test-java"><a href="#C-src-test-java" class="headerlink" title="C. src/test/java"></a>C. <code>src/test/java</code></h4><ul>
-<li>存放 JUnit 或 TestNG 的测试类。</li>
-<li><strong>最佳实践</strong>：这里的包路径通常与 <code>src/main/java</code> <strong>保持一致</strong>。<ul>
-<li>例如：主代码在 <code>com.example.service.UserService</code></li>
-<li>测试代码在 <code>com.example.service.UserServiceTest</code></li>
-<li>这样测试类可以直接访问主类中 <code>protected</code> 修饰的方法（包级私有）。</li>
-</ul>
-</li>
-</ul>
-<h4 id="D-src-test-resources"><a href="#D-src-test-resources" class="headerlink" title="D. src/test/resources"></a>D. <code>src/test/resources</code></h4><ul>
-<li>存放<strong>只在测试时生效</strong>的配置。</li>
-<li><strong>场景</strong>：<ul>
-<li>生产环境（<code>main/resources</code>）用的是 Oracle 数据库配置。</li>
-<li>测试环境（<code>test/resources</code>）为了速度，配置一个 H2 内存数据库。</li>
-</ul>
-</li>
-<li>测试运行时，这里的配置优先级通常会覆盖 main 里的配置，或者专门用于测试环境读取。</li>
-</ul>
-<h4 id="E-pom-xml-Project-Object-Model"><a href="#E-pom-xml-Project-Object-Model" class="headerlink" title="E. pom.xml (Project Object Model)"></a>E. <code>pom.xml</code> (Project Object Model)</h4><ul>
-<li>这是 Maven 项目的核心配置文件。</li>
-<li>它定义了：<ul>
-<li>项目的基本信息（groupId, artifactId, version）。</li>
-<li><strong>依赖（Dependencies）</strong>：你需要用到的第三方库（如 Spring, MySQL Driver, JUnit）。</li>
-<li><strong>插件（Plugins）</strong>：如何编译、如何打包、如何运行测试。</li>
-</ul>
-</li>
-</ul>
-<h4 id="F-target"><a href="#F-target" class="headerlink" title="F. target/"></a>F. <code>target/</code></h4><ul>
-<li>这是 Maven 自动生成的目录，<strong>不要手动去改里面的文件</strong>，也<strong>不要</strong>提交到 Git 仓库（应该在 <code>.gitignore</code> 中忽略它）。</li>
-<li>当你运行 <code>mvn clean</code> 时，这个文件夹会被删除。</li>
-<li>当你运行 <code>mvn package</code> 时，编译好的 <code>.class</code> 文件和最终的 <code>.jar</code> 包会出现在这里。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li><strong><code>main</code></strong> 是为了<strong>“跑起来”</strong></li>
-<li><strong><code>test</code></strong> 是为了<strong>“跑得稳”</strong></li>
-<li><strong>Maven 结构</strong> 是一种全行业通用的“收纳整理术”，遵守这个结构，你的项目在任何 IDE（IntelliJ IDEA, Eclipse, VS Code）里都能被自动识别并正确运行。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MCP stdio与sse模式的区别</title>
     <url>/2025/12/15/MCP-stdio%E4%B8%8Esse%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<h2 id="SSE-和-stdio-模式对比"><a href="#SSE-和-stdio-模式对比" class="headerlink" title="SSE 和 stdio 模式对比"></a>SSE 和 stdio 模式对比</h2><h3 id="架构差异"><a href="#架构差异" class="headerlink" title="架构差异"></a>架构差异</h3><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">stdio 模式：</span><br><span class="line">Cursor/Claude Desktop</span><br><span class="line">    └─ 启动子进程：python server.py</span><br><span class="line">        └─ stdin/stdout 通信</span><br><span class="line">        └─ 服务器生命周期由客户端管理</span><br><span class="line"></span><br><span class="line">SSE 模式：</span><br><span class="line">独立运行：python server.py (后台持续运行)</span><br><span class="line">    ↑</span><br><span class="line">    └─ HTTP SSE 连接</span><br><span class="line">    ↑</span><br><span class="line">Cursor/Claude Desktop (通过 HTTP 连接)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -2811,61 +3151,6 @@
       </categories>
       <tags>
         <tag>MCP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux服务器系统资源查看</title>
-    <url>/2025/12/17/Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E6%9F%A5%E7%9C%8B/</url>
-    <content><![CDATA[<h2 id="Linux服务器系统资源查看"><a href="#Linux服务器系统资源查看" class="headerlink" title="Linux服务器系统资源查看"></a>Linux服务器系统资源查看</h2><p>系统性地查看 Linux 服务器资源，也就是看CPU、内存、磁盘、网络、负载、系统等这几个层面，就能了解服务器性能以及运行情况。</p>
-<h3 id="uptime"><a href="#uptime" class="headerlink" title="uptime"></a>uptime</h3><p>查看系统负载和运行时间</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">uptime</span></span><br><span class="line"></span><br><span class="line">10:35:15 up  1:34, 13 <span class="built_in">users</span>,  load average: 0.41, 0.30, 0.25</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><code>10:35:15</code> 表示当前系统时间是 10 点 35 分 15 秒，<code>up 1:34</code> 表示系统已经连续运行了 1 小时 34 分钟，<code>13 users</code>表示当前有 13 个用户会话登录到系统中，<code>load average: 0.41, 0.30, 0.25</code> 表示系统负载均值（Load Average），表示正在运行 + 等待运行的进程数量的平均值，三个数字分别表示最近1/5/15 分钟的平均负载。</p>
-<blockquote>
-<p><strong>Load Average = 在某段时间内，处于「可运行状态」和「不可中断睡眠状态」进程数量的指数加权移动平均（EWMA），统计的是想用 CPU 的进程有多少。</strong></p>
-</blockquote>
-<h3 id="top"><a href="#top" class="headerlink" title="top"></a>top</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">top</span><br><span class="line"></span><br><span class="line">top - 10:52:33 up  1:52, 11 <span class="built_in">users</span>,  load average: 1.14, 0.57, 0.32</span><br><span class="line">Tasks: 2645 total,   2 running, 2643 sleeping,   0 stopped,   0 zombie</span><br><span class="line">%Cpu(s):  0.1 us,  0.0 sy,  0.0 ni, 99.8 <span class="built_in">id</span>,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span><br><span class="line">MiB Mem : 10 total, 8 free,  6 used,  4 buff/cache</span><br><span class="line">MiB Swap:  3 total, 2 free,  1 used.  2 avail Mem</span><br><span class="line"></span><br><span class="line">    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND</span><br><span class="line">  77552 xrdp      20   0   50360  20344   6856 R  18.0   0.0   0:30.70 xrdp</span><br><span class="line">  77960 mark      20   0 9361988 422920 185124 S  14.1   0.1   0:59.67 gnome-shell</span><br><span class="line">  77569 mark      20   0  382544 138588  80324 S   5.6   0.0   0:11.17 Xorg</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>详解 top 输出命令内容：</p>
-<p>第一行表示时间、运行时长、登录用户、平均负载；</p>
-<p>第二行展示了任务数和进程状态，包含进程/线程统计总数、正在 CPU 上运行的（或准备运行的）任务数、睡眠、进程和僵尸进程数量；</p>
-<p>第三行展示了 CPU 使用构成，us用户态、sy内核态、ni被nice调整过优先级的用户态进程、id (idle) CPU空闲率、wa CPU在等 IO（磁盘/网络存储）导致空转等待率，hi硬中断消耗，si软中断消耗；</p>
-<p>第四行展示了内存：total总内存、free完全空闲内存、used真正被进程使用的内存、buff/cache文件缓存块设备缓存；</p>
-<p>第五行展示了 Swap 交换分区，Swap（交换分区/交换文件）是内存不足时的“备用空间”，当 物理内存（RAM）不够用 时，Linux 会把暂时不用的内存页交换到磁盘上的 swap 中，从而防止系统因内存耗尽而直接崩溃（OOM），让系统还能继续运行；</p>
-<p>下面展示了系统进程的详细信息：</p>
-<p>表头：</p>
-<p><code>PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND</code></p>
-<p>PID：进程号</p>
-<p>USER：所属用户</p>
-<p>PR：动态优先级（数值越小优先级越高；20 常见）</p>
-<p>NI：nice 值（-20 到 19，越小越“抢”CPU；0 默认）</p>
-<p>VIRT：虚拟内存占用（进程可见的地址空间总量，包含映射文件、共享库、未实际用到的保留空间等）</p>
-<p>RES：常驻内存（实际占用物理内存，最值得关注）</p>
-<p>SHR：共享内存部分（共享库等）</p>
-<p>S：状态</p>
-<p>R=运行，S=睡眠，D=不可中断睡眠(常见 IO 卡住)，Z=僵尸</p>
-<p>%CPU：CPU 占比（注意：多核时可能 &gt;100%）</p>
-<p>%MEM：内存占比</p>
-<p>TIME+：累计消耗 CPU 时间</p>
-<p>COMMAND：命令名</p>
-<h3 id="lscpu"><a href="#lscpu" class="headerlink" title="lscpu"></a>lscpu</h3><p>查看 cpu 架构，重点关注 CPU 型号、数量、解构等信息</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Architecture: x86_64</span><br><span class="line"></span><br><span class="line">Model name: AMD</span><br><span class="line"></span><br><span class="line">CPU(s):                2</span><br><span class="line">Thread(s) per core:    2</span><br><span class="line">Core(s) per socket:    1</span><br><span class="line">Socket(s):             1</span><br></pre></td></tr></table></figure>
-<h3 id="free-h"><a href="#free-h" class="headerlink" title="free -h"></a>free -h</h3><p>查看内存资源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">free -h</span><br><span class="line">             total       used      free      shared  buff/cache   available</span><br><span class="line">Mem:           5Gi        1Gi       4Gi        87Mi         1Gi         3Gi</span><br><span class="line">Swap:          1Gi         0B       1Gi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="df-h"><a href="#df-h" class="headerlink" title="df -h"></a>df -h</h3><p>查看磁盘资源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br><span class="line"></span><br><span class="line">Filesystem      Size  Used Avail  Use%  Mounted on</span><br><span class="line">tmpfs             2G  3.9M    1G   50%  /run</span><br><span class="line">/dev/nvme        10G    5G    5G   50%  /</span><br><span class="line">......</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="ip-s-link"><a href="#ip-s-link" class="headerlink" title="ip -s link"></a>ip -s link</h3><p>查看网络资源，这个要视情况而定，还有ss、netstat等命令。</p>
-<h3 id="uname-a"><a href="#uname-a" class="headerlink" title="uname -a"></a>uname -a</h3><p>查看系统及内核版本</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> /etc/os-release</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="lspci"><a href="#lspci" class="headerlink" title="lspci"></a>lspci</h3><p>查看系统中安装的所有PCI设备。</p>
-<h3 id="nvidia-smi"><a href="#nvidia-smi" class="headerlink" title="nvidia-smi"></a>nvidia-smi</h3><p>查看显卡型号。</p>
-<h2 id="服务器使用规范"><a href="#服务器使用规范" class="headerlink" title="服务器使用规范"></a>服务器使用规范</h2><p>w 或 who 查看当前在线登录的用户</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 查看当前系统下的所有用户</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建用户</span></span><br><span class="line"><span class="built_in">sudo</span> useradd name</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> useradd -m -s /bin/bash name</span><br><span class="line"></span><br><span class="line"><span class="comment"># -m 自动创建家目录，-s指定shell</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为新用户指定密码</span></span><br><span class="line"><span class="built_in">sudo</span> passwd name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给新用户追加到 sudo 组</span></span><br><span class="line"><span class="built_in">sudo</span> usermod -aG <span class="built_in">sudo</span> name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 简化版，添加用户时即指定其加入sudo组</span></span><br><span class="line"><span class="built_in">sudo</span> useradd -m -s /bin/bash -G <span class="built_in">sudo</span> name</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换用户环境 - 表示加载用户环境</span></span><br><span class="line">su - name </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -3102,28 +3387,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Miniconda安装</title>
-    <url>/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p>Miniconda 是 Conda 的精简发行版，只包含最核心的包管理系统与 Python，可以快速搭建独立的 Python 环境。在进行数据分析、机器学习或科研开发时，相比于 Anaconda 更轻量、更灵活。</p>
-<h2 id="一、Miniconda-安装"><a href="#一、Miniconda-安装" class="headerlink" title="一、Miniconda 安装"></a>一、Miniconda 安装</h2><p>Windows 命令行安装方式，可以快速且安静地下载最新的 64 位 Windows 安装程序，将其重命名为较短的文件名，执行静默安装，然后删除安装程序：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe</span><br><span class="line">start /wait &quot;&quot; .\miniconda.exe /S</span><br><span class="line">del .\miniconda.exe</span><br></pre></td></tr></table></figure>
-<span id="more"></span>
-<p>Windows Powershell：</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Invoke-WebRequest</span> <span class="literal">-Uri</span> <span class="string">&quot;https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe&quot;</span> <span class="literal">-outfile</span> <span class="string">&quot;.\miniconda.exe&quot;</span></span><br><span class="line"><span class="built_in">Start-Process</span> <span class="literal">-FilePath</span> <span class="string">&quot;.\miniconda.exe&quot;</span> <span class="literal">-ArgumentList</span> <span class="string">&quot;/S&quot;</span> <span class="literal">-Wait</span></span><br><span class="line"><span class="built_in">del</span> .\miniconda.exe</span><br></pre></td></tr></table></figure>
-<p>Linux 64位：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/miniconda3</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line"><span class="built_in">rm</span> ~/miniconda3/miniconda.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/miniconda3/bin/activate</span><br><span class="line"></span><br><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
-<h2 id="二、快速使用"><a href="#二、快速使用" class="headerlink" title="二、快速使用"></a>二、快速使用</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda create -n environment python=3.12</span><br><span class="line"></span><br><span class="line">conda activate environment</span><br><span class="line"></span><br><span class="line">conda deactivate environment</span><br></pre></td></tr></table></figure>
-<p>参考文献：<a href="https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt">https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt</a></p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Miniconda</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>OSCP学习心得</title>
     <url>/2025/12/12/OSCP%E5%AD%A6%E4%B9%A0%E5%BF%83%E5%BE%97/</url>
     <content><![CDATA[<p>在 OSCP 的学习和练习以及打靶场或者渗透测试过程中，我认为本质上不是掌握了多少工具，而是在规定时间内，能不能把渗透的全流程跑完，关键步骤上思维能否发散，能否有较为全面的思考和枚举，所以重心还是在思路上，渗透的思路和应对关键点时的经验，所以记录一些自己的思考。</p>
@@ -3153,6 +3416,28 @@
       <tags>
         <tag>OSCP</tag>
         <tag>Penetration Test</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Miniconda安装</title>
+    <url>/2025/12/07/Miniconda%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Miniconda 是 Conda 的精简发行版，只包含最核心的包管理系统与 Python，可以快速搭建独立的 Python 环境。在进行数据分析、机器学习或科研开发时，相比于 Anaconda 更轻量、更灵活。</p>
+<h2 id="一、Miniconda-安装"><a href="#一、Miniconda-安装" class="headerlink" title="一、Miniconda 安装"></a>一、Miniconda 安装</h2><p>Windows 命令行安装方式，可以快速且安静地下载最新的 64 位 Windows 安装程序，将其重命名为较短的文件名，执行静默安装，然后删除安装程序：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe</span><br><span class="line">start /wait &quot;&quot; .\miniconda.exe /S</span><br><span class="line">del .\miniconda.exe</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p>Windows Powershell：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Invoke-WebRequest</span> <span class="literal">-Uri</span> <span class="string">&quot;https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe&quot;</span> <span class="literal">-outfile</span> <span class="string">&quot;.\miniconda.exe&quot;</span></span><br><span class="line"><span class="built_in">Start-Process</span> <span class="literal">-FilePath</span> <span class="string">&quot;.\miniconda.exe&quot;</span> <span class="literal">-ArgumentList</span> <span class="string">&quot;/S&quot;</span> <span class="literal">-Wait</span></span><br><span class="line"><span class="built_in">del</span> .\miniconda.exe</span><br></pre></td></tr></table></figure>
+<p>Linux 64位：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/miniconda3</span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line"><span class="built_in">rm</span> ~/miniconda3/miniconda.sh</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> ~/miniconda3/bin/activate</span><br><span class="line"></span><br><span class="line">conda init --all</span><br></pre></td></tr></table></figure>
+<h2 id="二、快速使用"><a href="#二、快速使用" class="headerlink" title="二、快速使用"></a>二、快速使用</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda create -n environment python=3.12</span><br><span class="line"></span><br><span class="line">conda activate environment</span><br><span class="line"></span><br><span class="line">conda deactivate environment</span><br></pre></td></tr></table></figure>
+<p>参考文献：<a href="https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt">https://www.anaconda.com/docs/getting-started/miniconda/install#windows-command-prompt</a></p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Miniconda</tag>
       </tags>
   </entry>
   <entry>
@@ -3410,6 +3695,28 @@
       </tags>
   </entry>
   <entry>
+    <title>SSH私钥连接服务器及VScode配置</title>
+    <url>/2026/01/10/SSH%E7%A7%81%E9%92%A5%E8%BF%9E%E6%8E%A5%E5%8F%8AVScode%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<p>SSH 指定密钥登录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh -i /home/test/.ssh/id_rsa -p 22 test@10.10.10.1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>i 指定密钥文件路径</li>
+<li>p 指定端口号</li>
+</ul>
+<p>Trae 中进行配置，使用私钥登录，首先在扩展处搜索 <code>Remote-SSH</code> ，安装完成后，在远程资源管理器模块，选择SSH连接目标的设置按钮</p>
+<p><img src="../uploads/ssh_1.png" alt=""></p>
+<p>添加以下配置信息，路径、用户、端口号等信息对应修改即可，这里记录了Windows操作系统的路径写法：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">Host</span> <span class="string">Ubuntu-server</span></span><br><span class="line">    <span class="string">HostName</span> <span class="number">10.10</span><span class="number">.10</span><span class="number">.1</span></span><br><span class="line">    <span class="string">User</span> <span class="string">username</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">C:\Users\test/.ssh/id_rsa</span></span><br><span class="line">    <span class="string">Port</span> <span class="number">22</span></span><br></pre></td></tr></table></figure>
+<p>相关配置 VScode 同理。</p>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SSH安全协议</title>
     <url>/2026/01/18/SSH%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE/</url>
     <content><![CDATA[<h3 id="基础理论：Diffie-Hellman-DH-密钥交换协议"><a href="#基础理论：Diffie-Hellman-DH-密钥交换协议" class="headerlink" title="基础理论：Diffie-Hellman (DH) 密钥交换协议"></a>基础理论：Diffie-Hellman (DH) 密钥交换协议</h3><p>在介绍SSH之前，首先了解DH协议，因为它是SSH能够安全协商密钥的基石。</p>
@@ -3495,28 +3802,6 @@
       <tags>
         <tag>Config</tag>
         <tag>密码学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SSH私钥连接服务器及VScode配置</title>
-    <url>/2026/01/10/SSH%E7%A7%81%E9%92%A5%E8%BF%9E%E6%8E%A5%E5%8F%8AVScode%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<p>SSH 指定密钥登录</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ssh -i /home/test/.ssh/id_rsa -p 22 test@10.10.10.1</span><br></pre></td></tr></table></figure>
-<ul>
-<li>i 指定密钥文件路径</li>
-<li>p 指定端口号</li>
-</ul>
-<p>Trae 中进行配置，使用私钥登录，首先在扩展处搜索 <code>Remote-SSH</code> ，安装完成后，在远程资源管理器模块，选择SSH连接目标的设置按钮</p>
-<p><img src="../uploads/ssh_1.png" alt=""></p>
-<p>添加以下配置信息，路径、用户、端口号等信息对应修改即可，这里记录了Windows操作系统的路径写法：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">Host</span> <span class="string">Ubuntu-server</span></span><br><span class="line">    <span class="string">HostName</span> <span class="number">10.10</span><span class="number">.10</span><span class="number">.1</span></span><br><span class="line">    <span class="string">User</span> <span class="string">username</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">C:\Users\test/.ssh/id_rsa</span></span><br><span class="line">    <span class="string">Port</span> <span class="number">22</span></span><br></pre></td></tr></table></figure>
-<p>相关配置 VScode 同理。</p>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
       </tags>
   </entry>
   <entry>
@@ -4428,6 +4713,79 @@
       </tags>
   </entry>
   <entry>
+    <title>WebGoat靶场搭建</title>
+    <url>/2026/01/05/WebGoat%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 SAST 和 CodeQL 的学习过程中，需要找到一个比较有价值的测试目标，目前考虑到的关键点是代码不能过于简单，否则不具备测试深度，提出的方法不具备应用价值，这里选择 WebGoat 作为初步测试目标，结合 CodeQL-Community-Packs 进行学习、分析和测试。</p>
+<p>靶场地址下载地址：<a href="https://github.com/WebGoat/WebGoat/releases">https://github.com/WebGoat/WebGoat/releases</a></p>
+<p>也可以直接下载 jar 包：<a href="https://github.com/WebGoat/WebGoat/releases/download/v2025.3/webgoat-2025.3.jar">https://github.com/WebGoat/WebGoat/releases/download/v2025.3/webgoat-2025.3.jar</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export TZ=Asia/Shanghai # or your timezone</span><br><span class="line">java -Dfile.encoding=UTF-8 -jar webgoat-2025.3.jar</span><br></pre></td></tr></table></figure>
+<p>export TZ 用来设置时区，java 启动WebGoat应用程序，-Dfile.encoding=UTF-8 设置Java虚拟机的文件编码为UTF-8，-jar webgoat-2023.8.jar 运行名为webgoat-2023.8.jar的可执行JAR文件。</p>
+<h2 id="漏洞代码分析"><a href="#漏洞代码分析" class="headerlink" title="漏洞代码分析"></a>漏洞代码分析</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/SqlInjection/attack2&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> AttackResult <span class="title function_">completed</span><span class="params">(<span class="meta">@RequestParam</span> String query)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> injectableQuery(query);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码定义了一个<strong>Spring MVC 控制器方法（Controller Method）</strong>，它是后端处理前端请求的入口点。</p>
+<h3 id="代码逐行详细解读"><a href="#代码逐行详细解读" class="headerlink" title="代码逐行详细解读"></a>代码逐行详细解读</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/SqlInjection/attack2&quot;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>功能</strong>：这是一个<strong>路由映射</strong>注解。</li>
+<li><strong>含义</strong>：它告诉 Spring 框架，当服务器收到一个 <strong>HTTP POST</strong> 请求，且请求的路径（URL）是 <strong>/SqlInjection/attack2</strong> 时，请把这个请求交给下面定义的 <code>completed</code> 方法来处理。</li>
+<li><strong>对应前端行为</strong>：用户在浏览器点击“提交”按钮时，浏览器会向这个地址发送数据。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>功能</strong>：这是一个<strong>响应处理</strong>注解。</li>
+<li><strong>含义</strong>：它告诉 Spring，这个方法的<strong>返回值</strong>（<code>AttackResult</code> 对象）应该直接被序列化（通常转为 JSON 格式）并写入 HTTP 响应体（Body）中返回给浏览器，而不是被解析为 JSP 或 HTML 页面模板。</li>
+<li><strong>对应前端行为</strong>：浏览器收到的不是一个新网页，而是一段 JSON 数据（如 <code>&#123;&quot;lessonCompleted&quot;: true, &quot;feedback&quot;: &quot;...&quot;&#125;</code>），前端 JS 脚本会读取这个 JSON 并弹窗提示结果。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> AttackResult <span class="title function_">completed</span><span class="params">(<span class="meta">@RequestParam</span> String query)</span> &#123;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>方法签名</strong>：定义了一个名为 <code>completed</code> 的公共方法。</li>
+<li><strong><code>@RequestParam String query</code></strong>：<ul>
+<li>这是<strong>参数绑定</strong>。它告诉 Spring 从 HTTP 请求的参数中提取名为 <strong>“query”</strong> 的值，并将其赋值给方法参数 <code>query</code>。</li>
+<li>如果请求是 <code>POST /SqlInjection/attack2?query=SELECT...</code> 或者表单数据中包含 <code>query=SELECT...</code>，那么这里的 <code>String query</code> 就会得到那个 SQL 字符串。</li>
+</ul>
+</li>
+<li><strong>返回值类型 <code>AttackResult</code></strong>：这是 WebGoat 自定义的一个类，用来封装“练习结果”，包含是否通关、反馈信息等。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">  <span class="keyword">return</span> injectableQuery(query);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>逻辑</strong>：它没有自己处理业务逻辑，而是直接调用了同一个类中的辅助方法 <code>injectableQuery(query)</code>，并将结果直接返回。</li>
+<li><strong>作用</strong>：这是一个简单的<strong>入口转发</strong>。真正执行 SQL 查询和判定是否通关的逻辑都在 <code>injectableQuery</code> 方法里（也就是下面那段有漏洞的代码）。</li>
+</ul>
+<h3 id="总结功能"><a href="#总结功能" class="headerlink" title="总结功能"></a>总结功能</h3><p>这段代码的作用是在服务器上开放了一个名为 <code>/SqlInjection/attack2</code> 的接口，专门接收用户 POST 过来的 <code>query</code> 参数，然后把这个参数扔给内部逻辑去执行，最后把执行结果（成功或失败的消息）以 JSON 格式扔回给用户。</p>
+<h2 id="CodeQL-分析"><a href="#CodeQL-分析" class="headerlink" title="CodeQL 分析"></a>CodeQL 分析</h2><p>如果使用 CodeQL 进行静态分析，它识别到的<strong>Source（污染源/用户输入点）</strong> 就是：</p>
+<p><strong><code>@RequestParam String query</code></strong></p>
+<p>具体来说，CodeQL 的污点跟踪（Taint Tracking）分析会标记以下位置为 Source：</p>
+<ol>
+<li><strong>位置</strong>：第 42 行的参数声明 <code>String query</code>。</li>
+<li><strong>原因</strong>：<ul>
+<li>该方法被注解 <code>@PostMapping</code> 标记，表明这是一个处理 HTTP 请求的 Handler 方法。</li>
+<li>参数被注解 <code>@RequestParam</code> 标记（即使没有显式标记，Spring Boot 中默认非简单类型或特定配置下也会被视为输入）。</li>
+<li>CodeQL 的 <code>RemoteFlowSource</code> 库（尤其是针对 Spring MVC 的建模）明确定义了被 <code>@RequestParam</code>、<code>@RequestBody</code>、<code>@PathVariable</code> 等注解修饰的控制器方法参数均视为不可信的外部输入（Untrusted User Input）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="CodeQL-视角的污点路径（Data-Flow-Path）"><a href="#CodeQL-视角的污点路径（Data-Flow-Path）" class="headerlink" title="CodeQL 视角的污点路径（Data Flow Path）"></a>CodeQL 视角的污点路径（Data Flow Path）</h3><p>CodeQL 会追踪数据流，构建如下的路径：</p>
+<ol>
+<li><strong>Source (源头)</strong>: 第 42 行 <code>completed(@RequestParam String query)</code> 中的 <strong><code>query</code></strong> 变量。<ul>
+<li><em>标记：Remote user input source</em></li>
+</ul>
+</li>
+<li><strong>Flow (传递)</strong>: 第 43 行 <code>return injectableQuery(query);</code>，<code>query</code> 被传递给 <code>injectableQuery</code> 方法。</li>
+<li><strong>Flow (传递)</strong>: 第 46 行 <code>protected AttackResult injectableQuery(String query)</code>，参数 <code>query</code> 接收了污点。</li>
+<li><strong>Sink (汇聚点/漏洞点)</strong>: 第 49 行 <code>statement.executeQuery(query);</code>。<ul>
+<li><em>标记：SQL Injection Sink (java.sql.Statement.executeQuery)</em></li>
+</ul>
+</li>
+</ol>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>CodeQL 会准确地将 <strong>第 42 行的 <code>query</code> 参数</strong> 识别为用户输入的源头。</p>
+]]></content>
+      <categories>
+        <category>Java Security</category>
+      </categories>
+      <tags>
+        <tag>Java Security</tag>
+        <tag>漏洞研究</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Wildfly CVE-2018-1047 漏洞研究</title>
     <url>/2026/01/28/Wildfly-CVE-2018-1047-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/</url>
     <content><![CDATA[<p><strong>CVE-2018-1047</strong> 是一个存在于 <strong>WildFly</strong>（JBoss EAP 的上游项目）中关于 <strong>Undertow</strong> 子系统的路径遍历漏洞。</p>
@@ -4500,79 +4858,6 @@
       <tags>
         <tag>Java Security</tag>
         <tag>Java</tag>
-        <tag>漏洞研究</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>WebGoat靶场搭建</title>
-    <url>/2026/01/05/WebGoat%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 SAST 和 CodeQL 的学习过程中，需要找到一个比较有价值的测试目标，目前考虑到的关键点是代码不能过于简单，否则不具备测试深度，提出的方法不具备应用价值，这里选择 WebGoat 作为初步测试目标，结合 CodeQL-Community-Packs 进行学习、分析和测试。</p>
-<p>靶场地址下载地址：<a href="https://github.com/WebGoat/WebGoat/releases">https://github.com/WebGoat/WebGoat/releases</a></p>
-<p>也可以直接下载 jar 包：<a href="https://github.com/WebGoat/WebGoat/releases/download/v2025.3/webgoat-2025.3.jar">https://github.com/WebGoat/WebGoat/releases/download/v2025.3/webgoat-2025.3.jar</a></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export TZ=Asia/Shanghai # or your timezone</span><br><span class="line">java -Dfile.encoding=UTF-8 -jar webgoat-2025.3.jar</span><br></pre></td></tr></table></figure>
-<p>export TZ 用来设置时区，java 启动WebGoat应用程序，-Dfile.encoding=UTF-8 设置Java虚拟机的文件编码为UTF-8，-jar webgoat-2023.8.jar 运行名为webgoat-2023.8.jar的可执行JAR文件。</p>
-<h2 id="漏洞代码分析"><a href="#漏洞代码分析" class="headerlink" title="漏洞代码分析"></a>漏洞代码分析</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/SqlInjection/attack2&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> AttackResult <span class="title function_">completed</span><span class="params">(<span class="meta">@RequestParam</span> String query)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> injectableQuery(query);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这段代码定义了一个<strong>Spring MVC 控制器方法（Controller Method）</strong>，它是后端处理前端请求的入口点。</p>
-<h3 id="代码逐行详细解读"><a href="#代码逐行详细解读" class="headerlink" title="代码逐行详细解读"></a>代码逐行详细解读</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/SqlInjection/attack2&quot;)</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>功能</strong>：这是一个<strong>路由映射</strong>注解。</li>
-<li><strong>含义</strong>：它告诉 Spring 框架，当服务器收到一个 <strong>HTTP POST</strong> 请求，且请求的路径（URL）是 <strong>/SqlInjection/attack2</strong> 时，请把这个请求交给下面定义的 <code>completed</code> 方法来处理。</li>
-<li><strong>对应前端行为</strong>：用户在浏览器点击“提交”按钮时，浏览器会向这个地址发送数据。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>功能</strong>：这是一个<strong>响应处理</strong>注解。</li>
-<li><strong>含义</strong>：它告诉 Spring，这个方法的<strong>返回值</strong>（<code>AttackResult</code> 对象）应该直接被序列化（通常转为 JSON 格式）并写入 HTTP 响应体（Body）中返回给浏览器，而不是被解析为 JSP 或 HTML 页面模板。</li>
-<li><strong>对应前端行为</strong>：浏览器收到的不是一个新网页，而是一段 JSON 数据（如 <code>&#123;&quot;lessonCompleted&quot;: true, &quot;feedback&quot;: &quot;...&quot;&#125;</code>），前端 JS 脚本会读取这个 JSON 并弹窗提示结果。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> AttackResult <span class="title function_">completed</span><span class="params">(<span class="meta">@RequestParam</span> String query)</span> &#123;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>方法签名</strong>：定义了一个名为 <code>completed</code> 的公共方法。</li>
-<li><strong><code>@RequestParam String query</code></strong>：<ul>
-<li>这是<strong>参数绑定</strong>。它告诉 Spring 从 HTTP 请求的参数中提取名为 <strong>“query”</strong> 的值，并将其赋值给方法参数 <code>query</code>。</li>
-<li>如果请求是 <code>POST /SqlInjection/attack2?query=SELECT...</code> 或者表单数据中包含 <code>query=SELECT...</code>，那么这里的 <code>String query</code> 就会得到那个 SQL 字符串。</li>
-</ul>
-</li>
-<li><strong>返回值类型 <code>AttackResult</code></strong>：这是 WebGoat 自定义的一个类，用来封装“练习结果”，包含是否通关、反馈信息等。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">  <span class="keyword">return</span> injectableQuery(query);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>逻辑</strong>：它没有自己处理业务逻辑，而是直接调用了同一个类中的辅助方法 <code>injectableQuery(query)</code>，并将结果直接返回。</li>
-<li><strong>作用</strong>：这是一个简单的<strong>入口转发</strong>。真正执行 SQL 查询和判定是否通关的逻辑都在 <code>injectableQuery</code> 方法里（也就是下面那段有漏洞的代码）。</li>
-</ul>
-<h3 id="总结功能"><a href="#总结功能" class="headerlink" title="总结功能"></a>总结功能</h3><p>这段代码的作用是在服务器上开放了一个名为 <code>/SqlInjection/attack2</code> 的接口，专门接收用户 POST 过来的 <code>query</code> 参数，然后把这个参数扔给内部逻辑去执行，最后把执行结果（成功或失败的消息）以 JSON 格式扔回给用户。</p>
-<h2 id="CodeQL-分析"><a href="#CodeQL-分析" class="headerlink" title="CodeQL 分析"></a>CodeQL 分析</h2><p>如果使用 CodeQL 进行静态分析，它识别到的<strong>Source（污染源/用户输入点）</strong> 就是：</p>
-<p><strong><code>@RequestParam String query</code></strong></p>
-<p>具体来说，CodeQL 的污点跟踪（Taint Tracking）分析会标记以下位置为 Source：</p>
-<ol>
-<li><strong>位置</strong>：第 42 行的参数声明 <code>String query</code>。</li>
-<li><strong>原因</strong>：<ul>
-<li>该方法被注解 <code>@PostMapping</code> 标记，表明这是一个处理 HTTP 请求的 Handler 方法。</li>
-<li>参数被注解 <code>@RequestParam</code> 标记（即使没有显式标记，Spring Boot 中默认非简单类型或特定配置下也会被视为输入）。</li>
-<li>CodeQL 的 <code>RemoteFlowSource</code> 库（尤其是针对 Spring MVC 的建模）明确定义了被 <code>@RequestParam</code>、<code>@RequestBody</code>、<code>@PathVariable</code> 等注解修饰的控制器方法参数均视为不可信的外部输入（Untrusted User Input）。</li>
-</ul>
-</li>
-</ol>
-<h3 id="CodeQL-视角的污点路径（Data-Flow-Path）"><a href="#CodeQL-视角的污点路径（Data-Flow-Path）" class="headerlink" title="CodeQL 视角的污点路径（Data Flow Path）"></a>CodeQL 视角的污点路径（Data Flow Path）</h3><p>CodeQL 会追踪数据流，构建如下的路径：</p>
-<ol>
-<li><strong>Source (源头)</strong>: 第 42 行 <code>completed(@RequestParam String query)</code> 中的 <strong><code>query</code></strong> 变量。<ul>
-<li><em>标记：Remote user input source</em></li>
-</ul>
-</li>
-<li><strong>Flow (传递)</strong>: 第 43 行 <code>return injectableQuery(query);</code>，<code>query</code> 被传递给 <code>injectableQuery</code> 方法。</li>
-<li><strong>Flow (传递)</strong>: 第 46 行 <code>protected AttackResult injectableQuery(String query)</code>，参数 <code>query</code> 接收了污点。</li>
-<li><strong>Sink (汇聚点/漏洞点)</strong>: 第 49 行 <code>statement.executeQuery(query);</code>。<ul>
-<li><em>标记：SQL Injection Sink (java.sql.Statement.executeQuery)</em></li>
-</ul>
-</li>
-</ol>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>CodeQL 会准确地将 <strong>第 42 行的 <code>query</code> 参数</strong> 识别为用户输入的源头。</p>
-]]></content>
-      <categories>
-        <category>Java Security</category>
-      </categories>
-      <tags>
-        <tag>Java Security</tag>
         <tag>漏洞研究</tag>
       </tags>
   </entry>
@@ -4715,6 +5000,52 @@
       </tags>
   </entry>
   <entry>
+    <title>uv使用</title>
+    <url>/2025/12/10/uv%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>uv是一个用 Rust 编写的极快的 Python 包和项目管理工具。</p>
+<p>官方文档参考：<a href="https://docs.astral.sh/uv/">https://docs.astral.sh/uv/</a></p>
+<h2 id="uv安装"><a href="#uv安装" class="headerlink" title="uv安装"></a>uv安装</h2><p>Linux &amp; MacOS 安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -LsSf https://astral.sh/uv/install.sh | sh</span><br></pre></td></tr></table></figure>
+<p>Windows powershell 安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">powershell -ExecutionPolicy ByPass -c <span class="string">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p>以Windows为例，下载uv并配置环境变量，在powershell中。</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">(base) <span class="built_in">PS</span> C:\Users\<span class="number">77319</span>&gt; powershell <span class="literal">-ExecutionPolicy</span> ByPass <span class="literal">-c</span> <span class="string">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></span><br><span class="line">Downloading uv <span class="number">0.9</span>.<span class="number">17</span> (x86_64<span class="literal">-pc-windows-msvc</span>)</span><br><span class="line">Installing to C:\Users\<span class="number">77319</span>\.local\bin</span><br><span class="line">  uv.exe</span><br><span class="line">  uvx.exe</span><br><span class="line">  uvw.exe</span><br><span class="line">everything<span class="string">&#x27;s installed!</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">To add C:\Users\77319\.local\bin to your PATH, either restart your shell or run:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    set Path=C:\Users\77319\.local\bin;%Path%   (cmd)</span></span><br><span class="line"><span class="string">    $env:Path = &quot;C:\Users\77319\.local\bin;$env:Path&quot;   (powershell)</span></span><br><span class="line"><span class="string">(base) PS C:\Users\77319&gt; $env:Path = &quot;C:\Users\77319\.local\bin;$env:Path&quot;</span></span><br></pre></td></tr></table></figure>
+<p>输入uv -h</p>
+<p><img src="../uploads/uv.png" alt=""></p>
+<p>即表示安全成功。</p>
+<h2 id="uv使用"><a href="#uv使用" class="headerlink" title="uv使用"></a>uv使用</h2><p>以官方实践为例，展示uv如何初始化一个 Python 项目、添加依赖、运行工具、生成锁文件并同步环境。  </p>
+<p><code>uv init example</code> — 创建一个新的 Python 项目模板  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~$ uv init myproject_test</span><br><span class="line">Initialized project `myproject-test` at `/home/zyu/myproject_test`</span><br><span class="line">(base) zyu@zyu-virtual-machine:~$ <span class="built_in">cd</span> myproject_test/</span><br><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ tree .</span><br><span class="line">.</span><br><span class="line">├── main.py</span><br><span class="line">├── pyproject.toml</span><br><span class="line">└── README.md</span><br><span class="line"></span><br><span class="line">0 directories, 3 files</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>uv add ruff</code> — 安装依赖并更新 pyproject  </p>
+<p>自动创建项目虚拟环境，安装依赖包ruff，把依赖写入pyproject.toml：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv add ruff</span><br><span class="line">Using CPython 3.13.9 interpreter at: /home/zyu/miniconda3/bin/python3</span><br><span class="line">Creating virtual environment at: .venv</span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 864ms</span><br><span class="line">Prepared 1 package <span class="keyword">in</span> 1.30s</span><br><span class="line">Installed 1 package <span class="keyword">in</span> 1ms</span><br><span class="line"> + ruff==0.14.8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>uv run ruff check</code> — 运行 ruff 检查代码  </p>
+<p> 使用项目虚拟环境里的 ruff 执行代码风格检查 :</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv run ruff check</span><br><span class="line">All checks passed!</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>uv lock</code> — 生成锁文件 : 解析所有依赖版本  , 生成 <code>uv.lock</code>（类似 Pipfile.lock / poetry.lock），保证这个项目未来依赖安装一致、可复现。  </p>
+<p><code>uv sync</code> — 按锁文件同步虚拟环境 ： 根据 <code>uv.lock</code> 安装或更新依赖  ， 确保 <code>.venv/</code> 完全匹配锁文件。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv lock</span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 0.84ms</span><br><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv <span class="built_in">sync</span></span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 0.70ms</span><br><span class="line">Audited 1 package <span class="keyword">in</span> 0.09ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>uvx pycowsay &#39;hello world!&#39;</code> uvx 等价于 <code>uv tool run</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uvx pycowsay <span class="string">&#x27;hello world!&#x27;</span></span><br><span class="line">Installed 1 package <span class="keyword">in</span> 5ms</span><br><span class="line">/home/zyu/.cache/uv/archive-v0/nYZiOnUm3DMddg7I9DLwr/lib/python3.13/site-packages/pycowsay/main.py:27: SyntaxWarning: invalid escape sequence <span class="string">&#x27;\ &#x27;</span></span><br><span class="line">  \   ^__^</span><br><span class="line"></span><br><span class="line">  ------------</span><br><span class="line">&lt; hello world! &gt;</span><br><span class="line">  ------------</span><br><span class="line">   \   ^__^</span><br><span class="line">    \  (oo)\_______</span><br><span class="line">       (__)\       )\/\</span><br><span class="line">           ||----w |</span><br><span class="line">           ||     ||</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>以上就是官方提供的示例Demo。</p>
+<p>在实际项目中使用（以<a href="https://github.com/JordyZomer/codeql-mcp#">https://github.com/JordyZomer/codeql-mcp#</a>为例）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install -r .\requirements.txt</span><br><span class="line">error: No virtual environment found; run `uv venv` to create an environment, or pass `--system` to install into a non-virtual environment</span><br></pre></td></tr></table></figure>
+<p> 使用 <code>uv pip</code> 安装依赖，但当前目录没有虚拟环境，所以 uv 不知道该把包装到哪里。  uv 的原则是如果不指定装到哪里，它默认要找一个虚拟环境（.venv），如果找不到就报错。所以需要先创建虚拟环境：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv venv</span><br><span class="line">Using CPython 3.11.7 interpreter at: C:\Users\77319\anaconda3\python.exe</span><br><span class="line">Creating virtual environment at: .venv</span><br><span class="line">Activate with: .venv\Scripts\activate</span><br><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install -r .\requirements.txt</span><br><span class="line">Resolved 60 packages <span class="keyword">in</span> 1.61s</span><br><span class="line">Prepared 60 packages <span class="keyword">in</span> 3.56s</span><br><span class="line">░░░░░░░░░░░░░░░░░░░░ [0/60] Installing wheels...                                                warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.                                                                                            </span><br><span class="line">         If the cache and target directories are on different filesystems, hardlinking may not be supported.                                                                                    </span><br><span class="line">         If this is intentional, <span class="built_in">set</span> `<span class="built_in">export</span> UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.                                                                             </span><br><span class="line">Installed 60 packages <span class="keyword">in</span> 4.17s</span><br><span class="line"> + annotated-types==0.7.0                                                                       </span><br><span class="line"> + anyio==4.12.0                                                                                </span><br><span class="line"> + attrs==25.4.0                                                                                </span><br><span class="line"> + authlib==1.6.5                                                                               </span><br><span class="line"> + beartype==0.22.8                                                                             </span><br><span class="line"> + cachetools==6.2.2</span><br><span class="line"> + certifi==2025.11.12</span><br><span class="line"> + cffi==2.0.0</span><br><span class="line"> + charset-normalizer==3.4.4</span><br><span class="line"> + click==8.3.1</span><br><span class="line"> + colorama==0.4.6</span><br><span class="line"> + cryptography==46.0.3</span><br><span class="line"> + cyclopts==4.3.0</span><br><span class="line"> + diskcache==5.6.3</span><br><span class="line"> + dnspython==2.8.0</span><br><span class="line"> + docstring-parser==0.17.0</span><br><span class="line"> + docutils==0.22.3</span><br><span class="line"> + email-validator==2.3.0</span><br><span class="line"> + exceptiongroup==1.3.1</span><br><span class="line"> + fastmcp==2.13.3</span><br><span class="line"> + h11==0.16.0</span><br><span class="line"> + httpcore==1.0.9</span><br><span class="line"> + httpx==0.28.1</span><br><span class="line"> + httpx-sse==0.4.3</span><br><span class="line"> + idna==3.11</span><br><span class="line"> + jsonschema==4.25.1</span><br><span class="line"> + jsonschema-path==0.3.4</span><br><span class="line"> + jsonschema-specifications==2025.9.1</span><br><span class="line"> + markdown-it-py==4.0.0</span><br><span class="line"> + mcp==1.22.0</span><br><span class="line"> + mdurl==0.1.2</span><br><span class="line"> + openapi-pydantic==0.5.1</span><br><span class="line"> + pathable==0.4.4</span><br><span class="line"> + pathvalidate==3.3.1</span><br><span class="line"> + platformdirs==4.5.1</span><br><span class="line"> + py-key-value-aio==0.3.0</span><br><span class="line"> + py-key-value-shared==0.3.0</span><br><span class="line"> + pycparser==2.23</span><br><span class="line"> + pydantic==2.12.5</span><br><span class="line"> + pydantic-core==2.41.5</span><br><span class="line"> + pydantic-settings==2.12.0</span><br><span class="line"> + pygments==2.19.2</span><br><span class="line"> + pyjwt==2.10.1</span><br><span class="line"> + pyperclip==1.11.0</span><br><span class="line"> + python-dotenv==1.2.1</span><br><span class="line"> + python-multipart==0.0.20</span><br><span class="line"> + pywin32==311</span><br><span class="line"> + pyyaml==6.0.3</span><br><span class="line"> + referencing==0.36.2</span><br><span class="line"> + requests==2.32.5</span><br><span class="line"> + rich==14.2.0</span><br><span class="line"> + rich-rst==1.3.2</span><br><span class="line"> + rpds-py==0.30.0</span><br><span class="line"> + sse-starlette==3.0.3</span><br><span class="line"> + starlette==0.50.0</span><br><span class="line"> + typing-extensions==4.15.0</span><br><span class="line"> + typing-inspection==0.4.2</span><br><span class="line"> + urllib3==2.6.1</span><br><span class="line"> + uvicorn==0.38.0</span><br><span class="line"> + websockets==15.0.1</span><br></pre></td></tr></table></figure>
+<p>关于报错信息可以忽略，大致意思是： uv 想用硬链接（hardlink）加速依赖安装，但我们的缓存目录和安装目录不在同一个文件系统上 → 无法硬链接 → 只能退回到“完整复制”文件，性能稍慢一点。  应该缓存目录在C盘，但是安装目录在D盘。</p>
+<p>运行mcp服务器：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv run mcp run server.py -t sse</span><br><span class="line">Error: typer is required. Install with <span class="string">&#x27;pip install mcp[cli]&#x27;</span></span><br><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install mcp[cli]</span><br><span class="line">Resolved 37 packages <span class="keyword">in</span> 710ms</span><br><span class="line">Prepared 2 packages <span class="keyword">in</span> 138ms</span><br><span class="line">░░░░░░░░░░░░░░░░░░░░ [0/2] Installing wheels...                                                 warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.</span><br><span class="line">         If the cache and target directories are on different filesystems, hardlinking may not be supported.</span><br><span class="line">         If this is intentional, <span class="built_in">set</span> `<span class="built_in">export</span> UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.</span><br><span class="line">Installed 2 packages <span class="keyword">in</span> 56ms</span><br><span class="line"> + shellingham==1.5.4</span><br><span class="line"> + typer==0.20.0</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>uv</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>主动防御技术</title>
     <url>/2026/03/10/%E4%B8%BB%E5%8A%A8%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/</url>
     <content><![CDATA[<h2 id="主动防御技术"><a href="#主动防御技术" class="headerlink" title="主动防御技术"></a>主动防御技术</h2><h3 id="1-入侵阻断技术与应用-IPS-SPS"><a href="#1-入侵阻断技术与应用-IPS-SPS" class="headerlink" title="1. 入侵阻断技术与应用 (IPS/SPS)"></a>1. 入侵阻断技术与应用 (IPS/SPS)</h3><ul>
@@ -4806,52 +5137,6 @@
       </categories>
       <tags>
         <tag>软考</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>uv使用</title>
-    <url>/2025/12/10/uv%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<p>uv是一个用 Rust 编写的极快的 Python 包和项目管理工具。</p>
-<p>官方文档参考：<a href="https://docs.astral.sh/uv/">https://docs.astral.sh/uv/</a></p>
-<h2 id="uv安装"><a href="#uv安装" class="headerlink" title="uv安装"></a>uv安装</h2><p>Linux &amp; MacOS 安装</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -LsSf https://astral.sh/uv/install.sh | sh</span><br></pre></td></tr></table></figure>
-<p>Windows powershell 安装</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">powershell -ExecutionPolicy ByPass -c <span class="string">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></span><br></pre></td></tr></table></figure>
-<span id="more"></span>
-<p>以Windows为例，下载uv并配置环境变量，在powershell中。</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">(base) <span class="built_in">PS</span> C:\Users\<span class="number">77319</span>&gt; powershell <span class="literal">-ExecutionPolicy</span> ByPass <span class="literal">-c</span> <span class="string">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span></span><br><span class="line">Downloading uv <span class="number">0.9</span>.<span class="number">17</span> (x86_64<span class="literal">-pc-windows-msvc</span>)</span><br><span class="line">Installing to C:\Users\<span class="number">77319</span>\.local\bin</span><br><span class="line">  uv.exe</span><br><span class="line">  uvx.exe</span><br><span class="line">  uvw.exe</span><br><span class="line">everything<span class="string">&#x27;s installed!</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">To add C:\Users\77319\.local\bin to your PATH, either restart your shell or run:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    set Path=C:\Users\77319\.local\bin;%Path%   (cmd)</span></span><br><span class="line"><span class="string">    $env:Path = &quot;C:\Users\77319\.local\bin;$env:Path&quot;   (powershell)</span></span><br><span class="line"><span class="string">(base) PS C:\Users\77319&gt; $env:Path = &quot;C:\Users\77319\.local\bin;$env:Path&quot;</span></span><br></pre></td></tr></table></figure>
-<p>输入uv -h</p>
-<p><img src="../uploads/uv.png" alt=""></p>
-<p>即表示安全成功。</p>
-<h2 id="uv使用"><a href="#uv使用" class="headerlink" title="uv使用"></a>uv使用</h2><p>以官方实践为例，展示uv如何初始化一个 Python 项目、添加依赖、运行工具、生成锁文件并同步环境。  </p>
-<p><code>uv init example</code> — 创建一个新的 Python 项目模板  </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~$ uv init myproject_test</span><br><span class="line">Initialized project `myproject-test` at `/home/zyu/myproject_test`</span><br><span class="line">(base) zyu@zyu-virtual-machine:~$ <span class="built_in">cd</span> myproject_test/</span><br><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ tree .</span><br><span class="line">.</span><br><span class="line">├── main.py</span><br><span class="line">├── pyproject.toml</span><br><span class="line">└── README.md</span><br><span class="line"></span><br><span class="line">0 directories, 3 files</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><code>uv add ruff</code> — 安装依赖并更新 pyproject  </p>
-<p>自动创建项目虚拟环境，安装依赖包ruff，把依赖写入pyproject.toml：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv add ruff</span><br><span class="line">Using CPython 3.13.9 interpreter at: /home/zyu/miniconda3/bin/python3</span><br><span class="line">Creating virtual environment at: .venv</span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 864ms</span><br><span class="line">Prepared 1 package <span class="keyword">in</span> 1.30s</span><br><span class="line">Installed 1 package <span class="keyword">in</span> 1ms</span><br><span class="line"> + ruff==0.14.8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><code>uv run ruff check</code> — 运行 ruff 检查代码  </p>
-<p> 使用项目虚拟环境里的 ruff 执行代码风格检查 :</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv run ruff check</span><br><span class="line">All checks passed!</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><code>uv lock</code> — 生成锁文件 : 解析所有依赖版本  , 生成 <code>uv.lock</code>（类似 Pipfile.lock / poetry.lock），保证这个项目未来依赖安装一致、可复现。  </p>
-<p><code>uv sync</code> — 按锁文件同步虚拟环境 ： 根据 <code>uv.lock</code> 安装或更新依赖  ， 确保 <code>.venv/</code> 完全匹配锁文件。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv lock</span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 0.84ms</span><br><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uv <span class="built_in">sync</span></span><br><span class="line">Resolved 2 packages <span class="keyword">in</span> 0.70ms</span><br><span class="line">Audited 1 package <span class="keyword">in</span> 0.09ms</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><code>uvx pycowsay &#39;hello world!&#39;</code> uvx 等价于 <code>uv tool run</code>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) zyu@zyu-virtual-machine:~/myproject_test$ uvx pycowsay <span class="string">&#x27;hello world!&#x27;</span></span><br><span class="line">Installed 1 package <span class="keyword">in</span> 5ms</span><br><span class="line">/home/zyu/.cache/uv/archive-v0/nYZiOnUm3DMddg7I9DLwr/lib/python3.13/site-packages/pycowsay/main.py:27: SyntaxWarning: invalid escape sequence <span class="string">&#x27;\ &#x27;</span></span><br><span class="line">  \   ^__^</span><br><span class="line"></span><br><span class="line">  ------------</span><br><span class="line">&lt; hello world! &gt;</span><br><span class="line">  ------------</span><br><span class="line">   \   ^__^</span><br><span class="line">    \  (oo)\_______</span><br><span class="line">       (__)\       )\/\</span><br><span class="line">           ||----w |</span><br><span class="line">           ||     ||</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>以上就是官方提供的示例Demo。</p>
-<p>在实际项目中使用（以<a href="https://github.com/JordyZomer/codeql-mcp#">https://github.com/JordyZomer/codeql-mcp#</a>为例）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install -r .\requirements.txt</span><br><span class="line">error: No virtual environment found; run `uv venv` to create an environment, or pass `--system` to install into a non-virtual environment</span><br></pre></td></tr></table></figure>
-<p> 使用 <code>uv pip</code> 安装依赖，但当前目录没有虚拟环境，所以 uv 不知道该把包装到哪里。  uv 的原则是如果不指定装到哪里，它默认要找一个虚拟环境（.venv），如果找不到就报错。所以需要先创建虚拟环境：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv venv</span><br><span class="line">Using CPython 3.11.7 interpreter at: C:\Users\77319\anaconda3\python.exe</span><br><span class="line">Creating virtual environment at: .venv</span><br><span class="line">Activate with: .venv\Scripts\activate</span><br><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install -r .\requirements.txt</span><br><span class="line">Resolved 60 packages <span class="keyword">in</span> 1.61s</span><br><span class="line">Prepared 60 packages <span class="keyword">in</span> 3.56s</span><br><span class="line">░░░░░░░░░░░░░░░░░░░░ [0/60] Installing wheels...                                                warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.                                                                                            </span><br><span class="line">         If the cache and target directories are on different filesystems, hardlinking may not be supported.                                                                                    </span><br><span class="line">         If this is intentional, <span class="built_in">set</span> `<span class="built_in">export</span> UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.                                                                             </span><br><span class="line">Installed 60 packages <span class="keyword">in</span> 4.17s</span><br><span class="line"> + annotated-types==0.7.0                                                                       </span><br><span class="line"> + anyio==4.12.0                                                                                </span><br><span class="line"> + attrs==25.4.0                                                                                </span><br><span class="line"> + authlib==1.6.5                                                                               </span><br><span class="line"> + beartype==0.22.8                                                                             </span><br><span class="line"> + cachetools==6.2.2</span><br><span class="line"> + certifi==2025.11.12</span><br><span class="line"> + cffi==2.0.0</span><br><span class="line"> + charset-normalizer==3.4.4</span><br><span class="line"> + click==8.3.1</span><br><span class="line"> + colorama==0.4.6</span><br><span class="line"> + cryptography==46.0.3</span><br><span class="line"> + cyclopts==4.3.0</span><br><span class="line"> + diskcache==5.6.3</span><br><span class="line"> + dnspython==2.8.0</span><br><span class="line"> + docstring-parser==0.17.0</span><br><span class="line"> + docutils==0.22.3</span><br><span class="line"> + email-validator==2.3.0</span><br><span class="line"> + exceptiongroup==1.3.1</span><br><span class="line"> + fastmcp==2.13.3</span><br><span class="line"> + h11==0.16.0</span><br><span class="line"> + httpcore==1.0.9</span><br><span class="line"> + httpx==0.28.1</span><br><span class="line"> + httpx-sse==0.4.3</span><br><span class="line"> + idna==3.11</span><br><span class="line"> + jsonschema==4.25.1</span><br><span class="line"> + jsonschema-path==0.3.4</span><br><span class="line"> + jsonschema-specifications==2025.9.1</span><br><span class="line"> + markdown-it-py==4.0.0</span><br><span class="line"> + mcp==1.22.0</span><br><span class="line"> + mdurl==0.1.2</span><br><span class="line"> + openapi-pydantic==0.5.1</span><br><span class="line"> + pathable==0.4.4</span><br><span class="line"> + pathvalidate==3.3.1</span><br><span class="line"> + platformdirs==4.5.1</span><br><span class="line"> + py-key-value-aio==0.3.0</span><br><span class="line"> + py-key-value-shared==0.3.0</span><br><span class="line"> + pycparser==2.23</span><br><span class="line"> + pydantic==2.12.5</span><br><span class="line"> + pydantic-core==2.41.5</span><br><span class="line"> + pydantic-settings==2.12.0</span><br><span class="line"> + pygments==2.19.2</span><br><span class="line"> + pyjwt==2.10.1</span><br><span class="line"> + pyperclip==1.11.0</span><br><span class="line"> + python-dotenv==1.2.1</span><br><span class="line"> + python-multipart==0.0.20</span><br><span class="line"> + pywin32==311</span><br><span class="line"> + pyyaml==6.0.3</span><br><span class="line"> + referencing==0.36.2</span><br><span class="line"> + requests==2.32.5</span><br><span class="line"> + rich==14.2.0</span><br><span class="line"> + rich-rst==1.3.2</span><br><span class="line"> + rpds-py==0.30.0</span><br><span class="line"> + sse-starlette==3.0.3</span><br><span class="line"> + starlette==0.50.0</span><br><span class="line"> + typing-extensions==4.15.0</span><br><span class="line"> + typing-inspection==0.4.2</span><br><span class="line"> + urllib3==2.6.1</span><br><span class="line"> + uvicorn==0.38.0</span><br><span class="line"> + websockets==15.0.1</span><br></pre></td></tr></table></figure>
-<p>关于报错信息可以忽略，大致意思是： uv 想用硬链接（hardlink）加速依赖安装，但我们的缓存目录和安装目录不在同一个文件系统上 → 无法硬链接 → 只能退回到“完整复制”文件，性能稍慢一点。  应该缓存目录在C盘，但是安装目录在D盘。</p>
-<p>运行mcp服务器：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv run mcp run server.py -t sse</span><br><span class="line">Error: typer is required. Install with <span class="string">&#x27;pip install mcp[cli]&#x27;</span></span><br><span class="line">(base) PS D:\Code\codeql-mcp&gt; uv pip install mcp[cli]</span><br><span class="line">Resolved 37 packages <span class="keyword">in</span> 710ms</span><br><span class="line">Prepared 2 packages <span class="keyword">in</span> 138ms</span><br><span class="line">░░░░░░░░░░░░░░░░░░░░ [0/2] Installing wheels...                                                 warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.</span><br><span class="line">         If the cache and target directories are on different filesystems, hardlinking may not be supported.</span><br><span class="line">         If this is intentional, <span class="built_in">set</span> `<span class="built_in">export</span> UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.</span><br><span class="line">Installed 2 packages <span class="keyword">in</span> 56ms</span><br><span class="line"> + shellingham==1.5.4</span><br><span class="line"> + typer==0.20.0</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>uv</tag>
       </tags>
   </entry>
   <entry>
@@ -7361,98 +7646,6 @@
       </tags>
   </entry>
   <entry>
-    <title>网站安全</title>
-    <url>/2026/03/08/%E7%BD%91%E7%AB%99%E5%AE%89%E5%85%A8/</url>
-    <content><![CDATA[<h2 id="网站安全"><a href="#网站安全" class="headerlink" title="网站安全"></a>网站安全</h2><p>文档详细讲解了<strong>网站安全需求分析与安全保护工程</strong>，从理论分析到具体软件（Apache、IIS）的加固，再到Web应用漏洞及综合防护方案，形成了一个完整的网站安全建设框架。</p>
-<h3 id="一、-网站安全威胁与需求分析"><a href="#一、-网站安全威胁与需求分析" class="headerlink" title="一、 网站安全威胁与需求分析"></a>一、 网站安全威胁与需求分析</h3><p>网站是基于B/S技术架构的综合信息服务平台，提供网页信息和业务后台对外接口服务。</p>
-<ul>
-<li><strong>网站安全核心属性</strong>：机密性（防泄露）、完整性（防篡改）、可用性（防中断）、可控性（防滥用）。</li>
-<li><strong>主要安全威胁</strong>：<ol>
-<li><strong>非授权访问</strong>：撞库、口令猜测。</li>
-<li><strong>网页篡改与恶意代码</strong>：植入网页木马，控制终端。</li>
-<li><strong>数据泄露</strong>：敏感信息被窃取。</li>
-<li><strong>网站假冒</strong>：域名欺骗、劫持、中间人攻击（钓鱼网站）。</li>
-<li><strong>拒绝服务（DoS/DDoS）</strong>：如UDP、ICMP、SYN、HTTP Flood。</li>
-<li><strong>后台管理威胁</strong>：管理员密码被窃、权限分配不当。</li>
-</ol>
-</li>
-</ul>
-<p>网站安全需求涉及多个方面：物理环境、网络通信、操作系统、数据库、应用服务器、Web服务/应用、数据库安全等。</p>
-<h3 id="二、-Apache-Web-安全分析与增强"><a href="#二、-Apache-Web-安全分析与增强" class="headerlink" title="二、 Apache Web 安全分析与增强"></a>二、 Apache Web 安全分析与增强</h3><p>Apache httpd 是一个搭建Web服务器的开源软件。配置文件如下：</p>
-<ul>
-<li>httpd.conf 主配置文件</li>
-<li>conf/srm.conf 数据配置文件</li>
-<li>conf/access.conf 基本读取文件控制/f访问控制</li>
-<li>conf/mime.conf 设定能识别的MIME格式</li>
-</ul>
-<p><strong>常见威胁</strong>：软件程序漏洞（缓冲区溢出）、配置不当（目录索引泄露）、认证机制薄弱、通信未加密、全连接耗尽攻击等。</p>
-<p>Apache Web 主要面临以下以下安全威胁：软件程序、软件配置威胁，安全机制威胁，应用程序威胁，服务通信、服务内容‘拒绝服务威胁。</p>
-<p>Apache Web 安全机制：本地文件安全，认证机制，模块管理，连接耗尽应对机制。</p>
-<p>应对连接耗尽攻击，Apache 可以：<br>（1）减少超时设置，减少 Timeout，增大 Maxclients；<br>（2）限制同一IP最大连接数；<br>（3）多线程下载保护机制；<br>（4）自带访问控制，审计与日志（access.log error.log）,防DDoS；</p>
-<p><strong>安全增强与加固方案</strong>：</p>
-<pre><code>1.  **打补丁**：及时更新Apache软件。
-2.  **权限控制**：遵循最小特权原则，为Apache分配专门的用户和组（不使用预定义的nobody）。 
-3.  **信息隐藏**：隐藏Apache软件版本号（修改`ServerSignature`和`ServerTokens`）。
-4.  **目录保护**：禁止显示动态目录索引（`-Indexes`），禁止默认访问，启用`.htaccess`保护网页。.htaccess配置文件保护，设置网页密码，重定向文件，禁止读取文件名等。
-5.  **抗DoS攻击**：减少超时设置（Timeout）、限制同一IP连接数、使用防多线程下载机制或第三方防DoS模块。
-6.  **环境隔离**：构建“安全沙箱”（chroot机制），限制软件运行范围。
-7.  **通信加密**：配置Open SSL实现HTTPS加密传输。
-</code></pre><h3 id="三、-IIS-Web-安全分析与增强"><a href="#三、-IIS-Web-安全分析与增强" class="headerlink" title="三、 IIS Web 安全分析与增强"></a>三、 IIS Web 安全分析与增强</h3><ul>
-<li><strong>常见威胁</strong>：非授权访问、网络蠕虫（利用缓冲区溢出）、CVE软件漏洞（XSS、代码执行等）、拒绝服务。</li>
-<li><strong>IIS内置安全机制</strong>：<ul>
-<li><strong>认证</strong>：匿名、基本验证、证书认证、数字签名、Windows NTLM认证。</li>
-<li><strong>访问控制流程</strong>：IP地址限制检查 -&gt; 用户身份验证 -&gt; Web权限检查 -&gt; NTFS文件许可权限检查。</li>
-</ul>
-</li>
-<li><strong>安全增强方案</strong>：及时安装IIS补丁、启用动态IP限制（防暴力破解和DoS）、启用URLScan过滤危险请求、部署IIS WAF（Web应用防火墙）、启用SSL服务。</li>
-</ul>
-<h3 id="四、-Web应用漏洞分析与防护-基于OWASP-Top-10"><a href="#四、-Web应用漏洞分析与防护-基于OWASP-Top-10" class="headerlink" title="四、 Web应用漏洞分析与防护 (基于OWASP Top 10)"></a>四、 Web应用漏洞分析与防护 (基于OWASP Top 10)</h3><ul>
-<li><strong>两类漏洞</strong>：技术安全漏洞（SQL注入、XSS等）与业务逻辑漏洞（如密码找回缺陷、短信炸弹）。</li>
-<li><strong>常见漏洞及防护</strong>：<ol>
-<li><strong>SQL注入漏洞</strong>：<ul>
-<li>防护：对输入进行安全过滤（建立黑白名单）、设置数据库最小化权限（避免使用DBA权限连接）、屏蔽应用程序报错信息回显，对开源 Web应用做安全适应性改造。</li>
-</ul>
-</li>
-<li><strong>文件上传漏洞</strong>：<ul>
-<li>防护：将上传目录设置为<strong>不可执行</strong>，严格检查上传文件安全性。</li>
-</ul>
-</li>
-<li><strong>跨站脚本攻击 (XSS)</strong>：<ul>
-<li>攻击模式包括HTML内容替换、嵌入脚本代码等（需对输入输出做转义和验证）。</li>
-</ul>
-</li>
-<li><strong>其他OWASP高危漏洞</strong>：受破坏的认证、敏感数据暴露、XXE（外部实体注入）、失效的访问控制、安全配置错误、不安全的反序列化、使用带已知漏洞的组件、日志监控不足。</li>
-</ol>
-</li>
-</ul>
-<h3 id="五、-网站安全保护机制与技术方案"><a href="#五、-网站安全保护机制与技术方案" class="headerlink" title="五、 网站安全保护机制与技术方案"></a>五、 网站安全保护机制与技术方案</h3><p>构建网站整体安全的综合保护体系，包含以下技术机制：</p>
-<ol>
-<li><strong>身份鉴别与访问控制</strong>：用户名/口令、U盾、生物识别；防火墙拦截。</li>
-<li><strong>数据与内容安全</strong>：网页防篡改（文件底层监控或密码学哈希校验）、敏感词过滤、数据隔离与SSL加密。</li>
-<li><strong>攻击防护与流量清洗</strong>：部署WAF拦截Webshell、SQL注入等；部署抗DDoS清洗设备。</li>
-<li><strong>安全监测与扫描</strong>：定期漏洞扫描、网页挂马监测、合规性与备案监测、性能与DNS监测。</li>
-<li><strong>审计与应急响应</strong>：SysLog收集、网络/数据库审计；建立灾备中心、制定应急预案并开展等级保护测评。</li>
-</ol>
-<h3 id="六、-网站安全综合应用案例-政务网站"><a href="#六、-网站安全综合应用案例-政务网站" class="headerlink" title="六、 网站安全综合应用案例 (政务网站)"></a>六、 网站安全综合应用案例 (政务网站)</h3><ul>
-<li><strong>合规要求</strong>：政府网站信息安全等级原则上<strong>不低于二级</strong>（二级每两年测评，三级每年测评一次）。</li>
-<li><strong>整体架构方案部署</strong>：<ul>
-<li><strong>网络边界</strong>：防DDoS系统 + 防火墙（访问控制）。</li>
-<li><strong>应用层</strong>：Web应用防火墙 (WAF) 清洗异常流量 + IPS/防病毒网关检测阻断。</li>
-<li><strong>服务器端</strong>：防篡改监控代理（保护文件）。</li>
-<li><strong>后端支撑</strong>：网络/数据库审计系统（监控后台数据操作）。</li>
-<li><strong>管理面</strong>：网站安全监控系统。</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>软考</category>
-      </categories>
-      <tags>
-        <tag>软考</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>移动应用安全</title>
     <url>/2026/03/03/%E7%A7%BB%E5%8A%A8%E5%BA%94%E7%94%A8%E5%AE%89%E5%85%A8/</url>
     <content><![CDATA[<h2 id="移动应用安全"><a href="#移动应用安全" class="headerlink" title="移动应用安全"></a>移动应用安全</h2><p>文档记录了<strong>移动应用（App）安全</strong>的威胁形势、Android/iOS 两大主流系统的安全机制、安全防护技术方案以及金融、运营商、移动办公三大典型场景的实战案例。</p>
@@ -7573,6 +7766,98 @@
       </tags>
   </entry>
   <entry>
+    <title>网站安全</title>
+    <url>/2026/03/08/%E7%BD%91%E7%AB%99%E5%AE%89%E5%85%A8/</url>
+    <content><![CDATA[<h2 id="网站安全"><a href="#网站安全" class="headerlink" title="网站安全"></a>网站安全</h2><p>文档详细讲解了<strong>网站安全需求分析与安全保护工程</strong>，从理论分析到具体软件（Apache、IIS）的加固，再到Web应用漏洞及综合防护方案，形成了一个完整的网站安全建设框架。</p>
+<h3 id="一、-网站安全威胁与需求分析"><a href="#一、-网站安全威胁与需求分析" class="headerlink" title="一、 网站安全威胁与需求分析"></a>一、 网站安全威胁与需求分析</h3><p>网站是基于B/S技术架构的综合信息服务平台，提供网页信息和业务后台对外接口服务。</p>
+<ul>
+<li><strong>网站安全核心属性</strong>：机密性（防泄露）、完整性（防篡改）、可用性（防中断）、可控性（防滥用）。</li>
+<li><strong>主要安全威胁</strong>：<ol>
+<li><strong>非授权访问</strong>：撞库、口令猜测。</li>
+<li><strong>网页篡改与恶意代码</strong>：植入网页木马，控制终端。</li>
+<li><strong>数据泄露</strong>：敏感信息被窃取。</li>
+<li><strong>网站假冒</strong>：域名欺骗、劫持、中间人攻击（钓鱼网站）。</li>
+<li><strong>拒绝服务（DoS/DDoS）</strong>：如UDP、ICMP、SYN、HTTP Flood。</li>
+<li><strong>后台管理威胁</strong>：管理员密码被窃、权限分配不当。</li>
+</ol>
+</li>
+</ul>
+<p>网站安全需求涉及多个方面：物理环境、网络通信、操作系统、数据库、应用服务器、Web服务/应用、数据库安全等。</p>
+<h3 id="二、-Apache-Web-安全分析与增强"><a href="#二、-Apache-Web-安全分析与增强" class="headerlink" title="二、 Apache Web 安全分析与增强"></a>二、 Apache Web 安全分析与增强</h3><p>Apache httpd 是一个搭建Web服务器的开源软件。配置文件如下：</p>
+<ul>
+<li>httpd.conf 主配置文件</li>
+<li>conf/srm.conf 数据配置文件</li>
+<li>conf/access.conf 基本读取文件控制/f访问控制</li>
+<li>conf/mime.conf 设定能识别的MIME格式</li>
+</ul>
+<p><strong>常见威胁</strong>：软件程序漏洞（缓冲区溢出）、配置不当（目录索引泄露）、认证机制薄弱、通信未加密、全连接耗尽攻击等。</p>
+<p>Apache Web 主要面临以下以下安全威胁：软件程序、软件配置威胁，安全机制威胁，应用程序威胁，服务通信、服务内容‘拒绝服务威胁。</p>
+<p>Apache Web 安全机制：本地文件安全，认证机制，模块管理，连接耗尽应对机制。</p>
+<p>应对连接耗尽攻击，Apache 可以：<br>（1）减少超时设置，减少 Timeout，增大 Maxclients；<br>（2）限制同一IP最大连接数；<br>（3）多线程下载保护机制；<br>（4）自带访问控制，审计与日志（access.log error.log）,防DDoS；</p>
+<p><strong>安全增强与加固方案</strong>：</p>
+<pre><code>1.  **打补丁**：及时更新Apache软件。
+2.  **权限控制**：遵循最小特权原则，为Apache分配专门的用户和组（不使用预定义的nobody）。 
+3.  **信息隐藏**：隐藏Apache软件版本号（修改`ServerSignature`和`ServerTokens`）。
+4.  **目录保护**：禁止显示动态目录索引（`-Indexes`），禁止默认访问，启用`.htaccess`保护网页。.htaccess配置文件保护，设置网页密码，重定向文件，禁止读取文件名等。
+5.  **抗DoS攻击**：减少超时设置（Timeout）、限制同一IP连接数、使用防多线程下载机制或第三方防DoS模块。
+6.  **环境隔离**：构建“安全沙箱”（chroot机制），限制软件运行范围。
+7.  **通信加密**：配置Open SSL实现HTTPS加密传输。
+</code></pre><h3 id="三、-IIS-Web-安全分析与增强"><a href="#三、-IIS-Web-安全分析与增强" class="headerlink" title="三、 IIS Web 安全分析与增强"></a>三、 IIS Web 安全分析与增强</h3><ul>
+<li><strong>常见威胁</strong>：非授权访问、网络蠕虫（利用缓冲区溢出）、CVE软件漏洞（XSS、代码执行等）、拒绝服务。</li>
+<li><strong>IIS内置安全机制</strong>：<ul>
+<li><strong>认证</strong>：匿名、基本验证、证书认证、数字签名、Windows NTLM认证。</li>
+<li><strong>访问控制流程</strong>：IP地址限制检查 -&gt; 用户身份验证 -&gt; Web权限检查 -&gt; NTFS文件许可权限检查。</li>
+</ul>
+</li>
+<li><strong>安全增强方案</strong>：及时安装IIS补丁、启用动态IP限制（防暴力破解和DoS）、启用URLScan过滤危险请求、部署IIS WAF（Web应用防火墙）、启用SSL服务。</li>
+</ul>
+<h3 id="四、-Web应用漏洞分析与防护-基于OWASP-Top-10"><a href="#四、-Web应用漏洞分析与防护-基于OWASP-Top-10" class="headerlink" title="四、 Web应用漏洞分析与防护 (基于OWASP Top 10)"></a>四、 Web应用漏洞分析与防护 (基于OWASP Top 10)</h3><ul>
+<li><strong>两类漏洞</strong>：技术安全漏洞（SQL注入、XSS等）与业务逻辑漏洞（如密码找回缺陷、短信炸弹）。</li>
+<li><strong>常见漏洞及防护</strong>：<ol>
+<li><strong>SQL注入漏洞</strong>：<ul>
+<li>防护：对输入进行安全过滤（建立黑白名单）、设置数据库最小化权限（避免使用DBA权限连接）、屏蔽应用程序报错信息回显，对开源 Web应用做安全适应性改造。</li>
+</ul>
+</li>
+<li><strong>文件上传漏洞</strong>：<ul>
+<li>防护：将上传目录设置为<strong>不可执行</strong>，严格检查上传文件安全性。</li>
+</ul>
+</li>
+<li><strong>跨站脚本攻击 (XSS)</strong>：<ul>
+<li>攻击模式包括HTML内容替换、嵌入脚本代码等（需对输入输出做转义和验证）。</li>
+</ul>
+</li>
+<li><strong>其他OWASP高危漏洞</strong>：受破坏的认证、敏感数据暴露、XXE（外部实体注入）、失效的访问控制、安全配置错误、不安全的反序列化、使用带已知漏洞的组件、日志监控不足。</li>
+</ol>
+</li>
+</ul>
+<h3 id="五、-网站安全保护机制与技术方案"><a href="#五、-网站安全保护机制与技术方案" class="headerlink" title="五、 网站安全保护机制与技术方案"></a>五、 网站安全保护机制与技术方案</h3><p>构建网站整体安全的综合保护体系，包含以下技术机制：</p>
+<ol>
+<li><strong>身份鉴别与访问控制</strong>：用户名/口令、U盾、生物识别；防火墙拦截。</li>
+<li><strong>数据与内容安全</strong>：网页防篡改（文件底层监控或密码学哈希校验）、敏感词过滤、数据隔离与SSL加密。</li>
+<li><strong>攻击防护与流量清洗</strong>：部署WAF拦截Webshell、SQL注入等；部署抗DDoS清洗设备。</li>
+<li><strong>安全监测与扫描</strong>：定期漏洞扫描、网页挂马监测、合规性与备案监测、性能与DNS监测。</li>
+<li><strong>审计与应急响应</strong>：SysLog收集、网络/数据库审计；建立灾备中心、制定应急预案并开展等级保护测评。</li>
+</ol>
+<h3 id="六、-网站安全综合应用案例-政务网站"><a href="#六、-网站安全综合应用案例-政务网站" class="headerlink" title="六、 网站安全综合应用案例 (政务网站)"></a>六、 网站安全综合应用案例 (政务网站)</h3><ul>
+<li><strong>合规要求</strong>：政府网站信息安全等级原则上<strong>不低于二级</strong>（二级每两年测评，三级每年测评一次）。</li>
+<li><strong>整体架构方案部署</strong>：<ul>
+<li><strong>网络边界</strong>：防DDoS系统 + 防火墙（访问控制）。</li>
+<li><strong>应用层</strong>：Web应用防火墙 (WAF) 清洗异常流量 + IPS/防病毒网关检测阻断。</li>
+<li><strong>服务器端</strong>：防篡改监控代理（保护文件）。</li>
+<li><strong>后端支撑</strong>：网络/数据库审计系统（监控后台数据操作）。</li>
+<li><strong>管理面</strong>：网站安全监控系统。</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>软考</category>
+      </categories>
+      <tags>
+        <tag>软考</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>网络信息安全概述</title>
     <url>/2026/01/06/%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%A6%82%E8%BF%B0/</url>
     <content><![CDATA[<p>网络发展趋势——数字化、网络化、智能化</p>
@@ -7669,81 +7954,6 @@
       </tags>
   </entry>
   <entry>
-    <title>网络安全体系相关安全模型</title>
-    <url>/2026/02/02/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E7%9B%B8%E5%85%B3%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<p>网络安全体系特征：整体、协同、过程、全面、适应性；</p>
-<p>网络安全体系相关安全模型包含了BLP机密性模型、Biba完整性模型、信息流模型等。</p>
-<p>BLP完整性模型在文章中 <a href="/2026/02/02/BLP%E6%9C%BA%E5%AF%86%E6%80%A7%E6%A8%A1%E5%9E%8B/" title="BLP机密性模型">BLP机密性模型</a> ，BLP 关注“保密”（不让人看），而 Biba 关注“完整”（不让人改）。</p>
-<h3 id="一、-Biba-完整性模型-Biba-Integrity-Model"><a href="#一、-Biba-完整性模型-Biba-Integrity-Model" class="headerlink" title="一、 Biba 完整性模型 (Biba Integrity Model)"></a>一、 Biba 完整性模型 (Biba Integrity Model)</h3><p>如果说 BLP 模型是为了防止“泄密”，那么 Biba 模型就是为了防止“篡改”。它的核心目的是<strong>保护系统信息的完整性</strong>。</p>
-<p><strong>核心逻辑</strong>：你可以把“完整性级别”想象成<strong>“纯净度”</strong>或<strong>“可信度”</strong>。</p>
-<ul>
-<li>级别高 = 非常纯净、可信（如：操作系统核心文件）。</li>
-<li>级别低 = 脏、不可信（如：从互联网下载的未知文件）。</li>
-</ul>
-<h4 id="三个安全特性解读："><a href="#三个安全特性解读：" class="headerlink" title="三个安全特性解读："></a>三个安全特性解读：</h4><ol>
-<li><p><strong>简单安全特性 (Simple Integrity Axiom) —— 核心是“防污染”</strong></p>
-<ul>
-<li><strong>规则</strong>：主体（用户）的完整性级别必须 ≤ 客体（数据）的完整性级别，才能读取。</li>
-<li><strong>口诀</strong>：<strong>“不可向下读” (No Read Down)</strong></li>
-<li><strong>通俗解释</strong>：一个“干净”的高级别用户，不应该去读取“脏”的低级别数据。因为一旦读了不可信的数据，用户自己也被污染了，完整性就降低了。</li>
-<li><em>(注：图片中第一点文字描述稍显混乱，提到“修改”却结论为“不可向下读”。但在标准 Biba 理论中，简单安全性主要约束“读取”行为，防止主体被低级信息污染)</em>。</li>
-</ul>
-</li>
-<li><p><strong><em>特性 (\</em>-Property) —— 核心是“防破坏”</strong></p>
-<ul>
-<li><strong>规则</strong>：主体（用户）的完整性级别必须 ≥ 客体（数据）的完整性级别，才能修改（写入）。</li>
-<li><strong>口诀</strong>：<strong>“不可向上写” (No Write Up)</strong></li>
-<li><strong>通俗解释</strong>：一个“不可信”的低级别用户，不能去修改“可信”的高级别文件。比如，普通用户不能修改系统内核文件，否则会破坏系统的完整性。</li>
-</ul>
-</li>
-<li><p><strong>调用特性 (Invocation Property)</strong></p>
-<ul>
-<li><strong>规则</strong>：完整性级别低的主体，不能调用（激活）完整性级别高的主体。</li>
-<li><strong>解释</strong>：这是为了防止低权限的恶意程序去操控高权限的程序来执行破坏操作。</li>
-</ul>
-</li>
-</ol>
-<p><strong>⚡️ Biba 与 BLP 的对比记忆（考试常考点）：</strong></p>
-<ul>
-<li><strong>BLP (保密)</strong>：不可向上读，不可向下写。（目的是把秘密锁在上面）</li>
-<li><strong>Biba (完整)</strong>：不可向下读，不可向上写。（目的是防止下面的脏数据污染上面）</li>
-<li><strong>两者方向完全相反。</strong></li>
-</ul>
-<h3 id="二、-信息流模型-Information-Flow-Model-FM"><a href="#二、-信息流模型-Information-Flow-Model-FM" class="headerlink" title="二、 信息流模型 (Information Flow Model / FM)"></a>二、 信息流模型 (Information Flow Model / FM)</h3><p>这是一个更抽象的模型，它不仅仅关注“谁访问了谁”，而是关注<strong>数据流动的方向</strong>。</p>
-<ol>
-<li><p><strong>核心概念</strong>：</p>
-<ul>
-<li>它不仅检查简单的读写权限，而是检查信息是否通过各种操作从一个客体<strong>流向</strong>了另一个客体。</li>
-<li><strong>基本原则</strong>：基于安全属性（安全级），控制信息从客体 A 到客体 B 的传输。如果这种流动违反了安全策略（例如秘密信息流向了公开区域），就被禁止。</li>
-</ul>
-</li>
-<li><p><strong>数学表示</strong>（图中公式部分）：</p>
-<ul>
-<li>模型通过集合论来描述：包括客体集、进程集、安全类型集以及流关系（Flow Relation）。</li>
-<li>一个安全的系统，要求所有的操作序列执行后，都不会产生与规定的“流关系”相冲突的结果。</li>
-</ul>
-</li>
-<li><p><strong>关键应用：隐蔽通道 (Covert Channels) 分析</strong></p>
-<ul>
-<li>这是信息流模型最著名的应用场景。</li>
-<li><strong>什么是隐蔽通道？</strong><br>图片中解释得很清楚：<strong>“低安全等级主体对高安全等级主体所产生信息的间接读取”</strong>。</li>
-<li><strong>通俗例子</strong>：<br>假设 BLP 模型禁止 User A（低级）读取 File B（高级）。<br>但如果 File B 的持有者通过“占用 CPU 100%”表示“1”，“占用 CPU 0%”表示“0”来发送摩斯密码，User A 虽然读不到文件，但可以通过观察 CPU 占用率来推测出信息。<br>这就是<strong>隐蔽通道</strong>。信息流模型就是用来分析和阻断这种非正常的泄密路径的。</li>
-</ul>
-</li>
-</ol>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li><strong>Biba 模型</strong>：保护数据不被篡改（不可向下读，不可向上写）。</li>
-<li><strong>信息流模型</strong>：关注数据的整体流动方向，专门用于发现那些绕过常规访问控制的“隐蔽通道”。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>软考</category>
-      </categories>
-      <tags>
-        <tag>软考</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>网络安全体系建设</title>
     <url>/2026/02/02/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E5%BB%BA%E8%AE%BE/</url>
     <content><![CDATA[<h3 id="一、-国内核心标准：网络安全等级保护-2-0-MLPS-2-0"><a href="#一、-国内核心标准：网络安全等级保护-2-0-MLPS-2-0" class="headerlink" title="一、 国内核心标准：网络安全等级保护 2.0 (MLPS 2.0)"></a>一、 国内核心标准：网络安全等级保护 2.0 (MLPS 2.0)</h3><p>这是中国网络安全工作的“基本法”和最核心的合规要求。</p>
@@ -7817,6 +8027,81 @@
 <li><strong>重管理</strong>：利用 <strong>ISO 27000 (PDCA)</strong> 确保流程不断优化。</li>
 <li><strong>强实战</strong>：利用 <strong>NIST (IPDRR)</strong> 提升从识别到恢复的闭环作战能力。</li>
 </ol>
+]]></content>
+      <categories>
+        <category>软考</category>
+      </categories>
+      <tags>
+        <tag>软考</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络安全体系相关安全模型</title>
+    <url>/2026/02/02/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E7%9B%B8%E5%85%B3%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p>网络安全体系特征：整体、协同、过程、全面、适应性；</p>
+<p>网络安全体系相关安全模型包含了BLP机密性模型、Biba完整性模型、信息流模型等。</p>
+<p>BLP完整性模型在文章中 <a href="/2026/02/02/BLP%E6%9C%BA%E5%AF%86%E6%80%A7%E6%A8%A1%E5%9E%8B/" title="BLP机密性模型">BLP机密性模型</a> ，BLP 关注“保密”（不让人看），而 Biba 关注“完整”（不让人改）。</p>
+<h3 id="一、-Biba-完整性模型-Biba-Integrity-Model"><a href="#一、-Biba-完整性模型-Biba-Integrity-Model" class="headerlink" title="一、 Biba 完整性模型 (Biba Integrity Model)"></a>一、 Biba 完整性模型 (Biba Integrity Model)</h3><p>如果说 BLP 模型是为了防止“泄密”，那么 Biba 模型就是为了防止“篡改”。它的核心目的是<strong>保护系统信息的完整性</strong>。</p>
+<p><strong>核心逻辑</strong>：你可以把“完整性级别”想象成<strong>“纯净度”</strong>或<strong>“可信度”</strong>。</p>
+<ul>
+<li>级别高 = 非常纯净、可信（如：操作系统核心文件）。</li>
+<li>级别低 = 脏、不可信（如：从互联网下载的未知文件）。</li>
+</ul>
+<h4 id="三个安全特性解读："><a href="#三个安全特性解读：" class="headerlink" title="三个安全特性解读："></a>三个安全特性解读：</h4><ol>
+<li><p><strong>简单安全特性 (Simple Integrity Axiom) —— 核心是“防污染”</strong></p>
+<ul>
+<li><strong>规则</strong>：主体（用户）的完整性级别必须 ≤ 客体（数据）的完整性级别，才能读取。</li>
+<li><strong>口诀</strong>：<strong>“不可向下读” (No Read Down)</strong></li>
+<li><strong>通俗解释</strong>：一个“干净”的高级别用户，不应该去读取“脏”的低级别数据。因为一旦读了不可信的数据，用户自己也被污染了，完整性就降低了。</li>
+<li><em>(注：图片中第一点文字描述稍显混乱，提到“修改”却结论为“不可向下读”。但在标准 Biba 理论中，简单安全性主要约束“读取”行为，防止主体被低级信息污染)</em>。</li>
+</ul>
+</li>
+<li><p><strong><em>特性 (\</em>-Property) —— 核心是“防破坏”</strong></p>
+<ul>
+<li><strong>规则</strong>：主体（用户）的完整性级别必须 ≥ 客体（数据）的完整性级别，才能修改（写入）。</li>
+<li><strong>口诀</strong>：<strong>“不可向上写” (No Write Up)</strong></li>
+<li><strong>通俗解释</strong>：一个“不可信”的低级别用户，不能去修改“可信”的高级别文件。比如，普通用户不能修改系统内核文件，否则会破坏系统的完整性。</li>
+</ul>
+</li>
+<li><p><strong>调用特性 (Invocation Property)</strong></p>
+<ul>
+<li><strong>规则</strong>：完整性级别低的主体，不能调用（激活）完整性级别高的主体。</li>
+<li><strong>解释</strong>：这是为了防止低权限的恶意程序去操控高权限的程序来执行破坏操作。</li>
+</ul>
+</li>
+</ol>
+<p><strong>⚡️ Biba 与 BLP 的对比记忆（考试常考点）：</strong></p>
+<ul>
+<li><strong>BLP (保密)</strong>：不可向上读，不可向下写。（目的是把秘密锁在上面）</li>
+<li><strong>Biba (完整)</strong>：不可向下读，不可向上写。（目的是防止下面的脏数据污染上面）</li>
+<li><strong>两者方向完全相反。</strong></li>
+</ul>
+<h3 id="二、-信息流模型-Information-Flow-Model-FM"><a href="#二、-信息流模型-Information-Flow-Model-FM" class="headerlink" title="二、 信息流模型 (Information Flow Model / FM)"></a>二、 信息流模型 (Information Flow Model / FM)</h3><p>这是一个更抽象的模型，它不仅仅关注“谁访问了谁”，而是关注<strong>数据流动的方向</strong>。</p>
+<ol>
+<li><p><strong>核心概念</strong>：</p>
+<ul>
+<li>它不仅检查简单的读写权限，而是检查信息是否通过各种操作从一个客体<strong>流向</strong>了另一个客体。</li>
+<li><strong>基本原则</strong>：基于安全属性（安全级），控制信息从客体 A 到客体 B 的传输。如果这种流动违反了安全策略（例如秘密信息流向了公开区域），就被禁止。</li>
+</ul>
+</li>
+<li><p><strong>数学表示</strong>（图中公式部分）：</p>
+<ul>
+<li>模型通过集合论来描述：包括客体集、进程集、安全类型集以及流关系（Flow Relation）。</li>
+<li>一个安全的系统，要求所有的操作序列执行后，都不会产生与规定的“流关系”相冲突的结果。</li>
+</ul>
+</li>
+<li><p><strong>关键应用：隐蔽通道 (Covert Channels) 分析</strong></p>
+<ul>
+<li>这是信息流模型最著名的应用场景。</li>
+<li><strong>什么是隐蔽通道？</strong><br>图片中解释得很清楚：<strong>“低安全等级主体对高安全等级主体所产生信息的间接读取”</strong>。</li>
+<li><strong>通俗例子</strong>：<br>假设 BLP 模型禁止 User A（低级）读取 File B（高级）。<br>但如果 File B 的持有者通过“占用 CPU 100%”表示“1”，“占用 CPU 0%”表示“0”来发送摩斯密码，User A 虽然读不到文件，但可以通过观察 CPU 占用率来推测出信息。<br>这就是<strong>隐蔽通道</strong>。信息流模型就是用来分析和阻断这种非正常的泄密路径的。</li>
+</ul>
+</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><strong>Biba 模型</strong>：保护数据不被篡改（不可向下读，不可向上写）。</li>
+<li><strong>信息流模型</strong>：关注数据的整体流动方向，专门用于发现那些绕过常规访问控制的“隐蔽通道”。</li>
+</ul>
 ]]></content>
       <categories>
         <category>软考</category>
@@ -8430,6 +8715,27 @@
       </tags>
   </entry>
   <entry>
+    <title>解决Microsoft官网无法下载Win10-iso问题</title>
+    <url>/2026/01/07/%E8%A7%A3%E5%86%B3Microsoft%E5%AE%98%E7%BD%91%E6%97%A0%E6%B3%95%E4%B8%8B%E8%BD%BDWin10-iso%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>在使用Windows系统访问微软官网时，无法直接下载到 Windows 10 iso 镜像，只提供MediaCreationTool_22H2.exe工具，修改浏览器 UA 即可，如果没有改包插件或者burp，可以用 Chrome 自带的 Devtools。</p>
+<p>F12 -&gt; More tools -&gt; Network conditions -&gt; User Agent</p>
+<p>随便输入其他系统的 UA，以 Linux 为例，输入以下内容即可：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36</span><br></pre></td></tr></table></figure>
+<p>操作步骤如下：</p>
+<p><img src="../uploads/UA_1.png" alt=""></p>
+<p><img src="../uploads/UA_2.png" alt=""></p>
+<p><img src="../uploads/UA_3.png" alt=""></p>
+<p>参考链接：<a href="https://github.com/hosxy/Settings/blob/master/Firefox/Windows%E4%B8%8B%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BD%BDWindows10%20ISO%E9%95%9C%E5%83%8F.md">https://github.com/hosxy/Settings/blob/master/Firefox/Windows%E4%B8%8B%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BD%BDWindows10%20ISO%E9%95%9C%E5%83%8F.md</a></p>
+]]></content>
+      <categories>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>Config</tag>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>解决HEXO无法渲染LaTeX数学公式的问题</title>
     <url>/2026/01/17/%E8%A7%A3%E5%86%B3HEXO%E6%97%A0%E6%B3%95%E6%B8%B2%E6%9F%93LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p><strong>Hexo 默认的 Markdown 渲染引擎不支持 LaTeX 数学公式语法（即 <script type="math/tex">...</script> 和 $$$ … $$$），或者在渲染时将公式中的特殊字符（如 <code>_</code>、<code>\</code>）错误地转义了。</strong></p>
@@ -8476,27 +8782,6 @@
       <tags>
         <tag>Config</tag>
         <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决Microsoft官网无法下载Win10-iso问题</title>
-    <url>/2026/01/07/%E8%A7%A3%E5%86%B3Microsoft%E5%AE%98%E7%BD%91%E6%97%A0%E6%B3%95%E4%B8%8B%E8%BD%BDWin10-iso%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>在使用Windows系统访问微软官网时，无法直接下载到 Windows 10 iso 镜像，只提供MediaCreationTool_22H2.exe工具，修改浏览器 UA 即可，如果没有改包插件或者burp，可以用 Chrome 自带的 Devtools。</p>
-<p>F12 -&gt; More tools -&gt; Network conditions -&gt; User Agent</p>
-<p>随便输入其他系统的 UA，以 Linux 为例，输入以下内容即可：</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36</span><br></pre></td></tr></table></figure>
-<p>操作步骤如下：</p>
-<p><img src="../uploads/UA_1.png" alt=""></p>
-<p><img src="../uploads/UA_2.png" alt=""></p>
-<p><img src="../uploads/UA_3.png" alt=""></p>
-<p>参考链接：<a href="https://github.com/hosxy/Settings/blob/master/Firefox/Windows%E4%B8%8B%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BD%BDWindows10%20ISO%E9%95%9C%E5%83%8F.md">https://github.com/hosxy/Settings/blob/master/Firefox/Windows%E4%B8%8B%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BD%BDWindows10%20ISO%E9%95%9C%E5%83%8F.md</a></p>
-]]></content>
-      <categories>
-        <category>Windows</category>
-      </categories>
-      <tags>
-        <tag>Config</tag>
-        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -10089,167 +10374,6 @@
       </tags>
   </entry>
   <entry>
-    <title>软考信息安全工程师考点概述</title>
-    <url>/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/</url>
-    <content><![CDATA[<p>软考信息安全工程师涉及到的考试章节和具体考点如下，科目一考点：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th><strong>章节名称</strong></th>
-<th><strong>章节内容</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1. 网络信息安全概述</td>
-<td>网络发展现状、安全属性、安全管理、生命周期</td>
-</tr>
-<tr>
-<td>2. 网络攻击原理与常用方法</td>
-<td>攻击概述、常见攻击方法、黑客常用工具、攻击案例</td>
-</tr>
-<tr>
-<td>3. 密码学基本理论</td>
-<td>概况、密码学体制、常见密码算法、数字签名、安全协议</td>
-</tr>
-<tr>
-<td>4. 网络安全体系与网络安全模型</td>
-<td>概述、网络安全体系模型、建设原则、建设内容、参考案例</td>
-</tr>
-<tr>
-<td>5. 物理与环境安全技术</td>
-<td>物理安全、环境安全、机房安全、通信安全、设备安全、介质安全</td>
-</tr>
-<tr>
-<td>6. 认证技术原理与应用</td>
-<td>概述、认证类型与认证过程、认证技术、认证产品和技术指标</td>
-</tr>
-<tr>
-<td>7. 访问控制技术原理与应用</td>
-<td>访问控制原理、模型、类型、策略设计与实现、安全管理、产品</td>
-</tr>
-<tr>
-<td>8. 防火墙技术原理与应用</td>
-<td>防火墙原理、类型与实现技术、产品与技术指标、体系结构</td>
-</tr>
-<tr>
-<td>9. VPN 技术原理与应用</td>
-<td>概述、类型和实现技术、产品与技术指标、技术应用</td>
-</tr>
-<tr>
-<td>10. 入侵检测技术原理与应用</td>
-<td>概述、入侵检测技术、组成与分类、产品与技术指标、应用</td>
-</tr>
-<tr>
-<td>11. 网络物理隔离技术原理与应用</td>
-<td>网络物理隔离概述、系统与类型、机制与技术、产品与指标</td>
-</tr>
-<tr>
-<td>12. 网络安全审计技术原理与应用</td>
-<td>安全审计概述、组成与类型、机制与实现技术、产品与技术</td>
-</tr>
-<tr>
-<td>13. 网络安全漏洞防护技术原理与应用</td>
-<td>网络安全漏洞概述、分类与管理、漏洞扫描技术、处置技术、产品</td>
-</tr>
-<tr>
-<td>14. 恶意代码防范技术原理</td>
-<td>计算机病毒、特洛伊木马、网络蠕虫、僵尸网络等</td>
-</tr>
-<tr>
-<td>15. 网络安全主动防御技术与应用</td>
-<td>入侵阻断、软件白名单、网络流量清洗、可信计算、数字水印等</td>
-</tr>
-<tr>
-<td>16. 网络安全风险评估技术原理与应用</td>
-<td>风险评估概述、评估过程、评估技术、工作流程</td>
-</tr>
-<tr>
-<td>17. 网络安全应急响应技术原理与应用</td>
-<td>网络安全应急响应概述、工作机制、预案内容、应急处理</td>
-</tr>
-<tr>
-<td>18. 网络安全测评技术与标准</td>
-<td>网络安全测评概述、类型、流程与内容、技术工具、标准</td>
-</tr>
-<tr>
-<td>19. 操作系统安全保护</td>
-<td>概述、Windows / Linux 操作系统安全、国产操作系统安全</td>
-</tr>
-<tr>
-<td>20. 数据库系统安全</td>
-<td>概述、安全机制和技术、Oracle、MS SQL、MySQL、国产数据库安全</td>
-</tr>
-<tr>
-<td>21. 网络设备安全</td>
-<td>网络设备安全概述、机制与技术、增强技术、漏洞和解决方法</td>
-</tr>
-<tr>
-<td>22. 网站安全需求分析与安全保护</td>
-<td>网络安全威胁、Apache Web 安全、IIS 安全、Web 漏洞、网站安全</td>
-</tr>
-<tr>
-<td>23. 云计算安全需求分析与安全保护</td>
-<td>云计算安全威胁、安全需求、安全保护机制与技术、案例</td>
-</tr>
-<tr>
-<td>24. 工控安全需求分析与安全保护</td>
-<td>工控系统安全威胁、安全需求、安全保护机制与技术、案例</td>
-</tr>
-<tr>
-<td>25. 移动应用安全需求分析与安全保护</td>
-<td>移动应用安全威胁、Android、iOS 安全、保护机制和技术、案例</td>
-</tr>
-<tr>
-<td>26. 大数据安全需求分析与安全保护</td>
-<td>大数据安全威胁、安全需求、安全保护机制与技术、案例</td>
-</tr>
-<tr>
-<td>专业英语</td>
-<td>专业英语</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>科目二考点：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th><strong>考试专题</strong></th>
-<th><strong>知识点</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>密码学</td>
-<td>1. 安全目标等基础概念。<br>2. RSA 加解密详细过程，其他加密算法概述。<br>3. 公钥私钥加解密、数字签名过程，文字表示及识图。<br>4. 密钥管理技术、安全认证协议等。</td>
-</tr>
-<tr>
-<td>网络安全</td>
-<td>1. 防火墙概念（iptables 过滤规则及配置命令）、体系结构、包过滤规则填表，Windows / Linux 配置。<br>2. 各种网络攻击和威胁，数据敏感度、隐私分类、隐私保护等。<br>3. 网络协议数据包含义分析。<br>4. 重要网络协议如 TCP、DNS、DHCP 等。<br>5. 华为交换机、路由器等安全配置命令。</td>
-</tr>
-<tr>
-<td>信息系统安全</td>
-<td>1. 信息安全概述、目标、访问控制原理、BLP 等模型。<br>2. C 语言代码漏洞分析，变量内存图等。<br>3. Linux 重要配置文件名及内容含义、文件权限、配置命令等。<br>4. Windows 重要配置：日志、防火墙、安全策略等界面。</td>
-</tr>
-<tr>
-<td>新技术</td>
-<td>移动应用——安卓系统和 iOS 系统；<br>数据敏感度、隐私保护、隐私分类等；<br>其他可能会考察的有：云计算、工控系统、移动应用、大数据、应急响应等安全新技术内容。</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>软考</category>
-      </categories>
-      <tags>
-        <tag>软考</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>软考密码学考点概述</title>
     <url>/2026/01/18/%E8%BD%AF%E8%80%83%E5%AF%86%E7%A0%81%E5%AD%A6%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/</url>
     <content><![CDATA[<p>软考常考的密码学基础知识、攻击类型以及主要的密码体制。以下是重要知识点：</p>
@@ -10778,6 +10902,167 @@
       <tags>
         <tag>RSA</tag>
         <tag>密码学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软考信息安全工程师考点概述</title>
+    <url>/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<p>软考信息安全工程师涉及到的考试章节和具体考点如下，科目一考点：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>章节名称</strong></th>
+<th><strong>章节内容</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. 网络信息安全概述</td>
+<td>网络发展现状、安全属性、安全管理、生命周期</td>
+</tr>
+<tr>
+<td>2. 网络攻击原理与常用方法</td>
+<td>攻击概述、常见攻击方法、黑客常用工具、攻击案例</td>
+</tr>
+<tr>
+<td>3. 密码学基本理论</td>
+<td>概况、密码学体制、常见密码算法、数字签名、安全协议</td>
+</tr>
+<tr>
+<td>4. 网络安全体系与网络安全模型</td>
+<td>概述、网络安全体系模型、建设原则、建设内容、参考案例</td>
+</tr>
+<tr>
+<td>5. 物理与环境安全技术</td>
+<td>物理安全、环境安全、机房安全、通信安全、设备安全、介质安全</td>
+</tr>
+<tr>
+<td>6. 认证技术原理与应用</td>
+<td>概述、认证类型与认证过程、认证技术、认证产品和技术指标</td>
+</tr>
+<tr>
+<td>7. 访问控制技术原理与应用</td>
+<td>访问控制原理、模型、类型、策略设计与实现、安全管理、产品</td>
+</tr>
+<tr>
+<td>8. 防火墙技术原理与应用</td>
+<td>防火墙原理、类型与实现技术、产品与技术指标、体系结构</td>
+</tr>
+<tr>
+<td>9. VPN 技术原理与应用</td>
+<td>概述、类型和实现技术、产品与技术指标、技术应用</td>
+</tr>
+<tr>
+<td>10. 入侵检测技术原理与应用</td>
+<td>概述、入侵检测技术、组成与分类、产品与技术指标、应用</td>
+</tr>
+<tr>
+<td>11. 网络物理隔离技术原理与应用</td>
+<td>网络物理隔离概述、系统与类型、机制与技术、产品与指标</td>
+</tr>
+<tr>
+<td>12. 网络安全审计技术原理与应用</td>
+<td>安全审计概述、组成与类型、机制与实现技术、产品与技术</td>
+</tr>
+<tr>
+<td>13. 网络安全漏洞防护技术原理与应用</td>
+<td>网络安全漏洞概述、分类与管理、漏洞扫描技术、处置技术、产品</td>
+</tr>
+<tr>
+<td>14. 恶意代码防范技术原理</td>
+<td>计算机病毒、特洛伊木马、网络蠕虫、僵尸网络等</td>
+</tr>
+<tr>
+<td>15. 网络安全主动防御技术与应用</td>
+<td>入侵阻断、软件白名单、网络流量清洗、可信计算、数字水印等</td>
+</tr>
+<tr>
+<td>16. 网络安全风险评估技术原理与应用</td>
+<td>风险评估概述、评估过程、评估技术、工作流程</td>
+</tr>
+<tr>
+<td>17. 网络安全应急响应技术原理与应用</td>
+<td>网络安全应急响应概述、工作机制、预案内容、应急处理</td>
+</tr>
+<tr>
+<td>18. 网络安全测评技术与标准</td>
+<td>网络安全测评概述、类型、流程与内容、技术工具、标准</td>
+</tr>
+<tr>
+<td>19. 操作系统安全保护</td>
+<td>概述、Windows / Linux 操作系统安全、国产操作系统安全</td>
+</tr>
+<tr>
+<td>20. 数据库系统安全</td>
+<td>概述、安全机制和技术、Oracle、MS SQL、MySQL、国产数据库安全</td>
+</tr>
+<tr>
+<td>21. 网络设备安全</td>
+<td>网络设备安全概述、机制与技术、增强技术、漏洞和解决方法</td>
+</tr>
+<tr>
+<td>22. 网站安全需求分析与安全保护</td>
+<td>网络安全威胁、Apache Web 安全、IIS 安全、Web 漏洞、网站安全</td>
+</tr>
+<tr>
+<td>23. 云计算安全需求分析与安全保护</td>
+<td>云计算安全威胁、安全需求、安全保护机制与技术、案例</td>
+</tr>
+<tr>
+<td>24. 工控安全需求分析与安全保护</td>
+<td>工控系统安全威胁、安全需求、安全保护机制与技术、案例</td>
+</tr>
+<tr>
+<td>25. 移动应用安全需求分析与安全保护</td>
+<td>移动应用安全威胁、Android、iOS 安全、保护机制和技术、案例</td>
+</tr>
+<tr>
+<td>26. 大数据安全需求分析与安全保护</td>
+<td>大数据安全威胁、安全需求、安全保护机制与技术、案例</td>
+</tr>
+<tr>
+<td>专业英语</td>
+<td>专业英语</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>科目二考点：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>考试专题</strong></th>
+<th><strong>知识点</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>密码学</td>
+<td>1. 安全目标等基础概念。<br>2. RSA 加解密详细过程，其他加密算法概述。<br>3. 公钥私钥加解密、数字签名过程，文字表示及识图。<br>4. 密钥管理技术、安全认证协议等。</td>
+</tr>
+<tr>
+<td>网络安全</td>
+<td>1. 防火墙概念（iptables 过滤规则及配置命令）、体系结构、包过滤规则填表，Windows / Linux 配置。<br>2. 各种网络攻击和威胁，数据敏感度、隐私分类、隐私保护等。<br>3. 网络协议数据包含义分析。<br>4. 重要网络协议如 TCP、DNS、DHCP 等。<br>5. 华为交换机、路由器等安全配置命令。</td>
+</tr>
+<tr>
+<td>信息系统安全</td>
+<td>1. 信息安全概述、目标、访问控制原理、BLP 等模型。<br>2. C 语言代码漏洞分析，变量内存图等。<br>3. Linux 重要配置文件名及内容含义、文件权限、配置命令等。<br>4. Windows 重要配置：日志、防火墙、安全策略等界面。</td>
+</tr>
+<tr>
+<td>新技术</td>
+<td>移动应用——安卓系统和 iOS 系统；<br>数据敏感度、隐私保护、隐私分类等；<br>其他可能会考察的有：云计算、工控系统、移动应用、大数据、应急响应等安全新技术内容。</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>软考</category>
+      </categories>
+      <tags>
+        <tag>软考</tag>
       </tags>
   </entry>
   <entry>

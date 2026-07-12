@@ -284,18 +284,18 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">48</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -320,6 +320,193 @@ mjx-container[display="true"] + br {
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/03/%E7%A7%BB%E5%8A%A8%E5%BA%94%E7%94%A8%E5%AE%89%E5%85%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/03/03/%E7%A7%BB%E5%8A%A8%E5%BA%94%E7%94%A8%E5%AE%89%E5%85%A8/" class="post-title-link" itemprop="url">移动应用安全</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-03-03 22:06:01 / 修改时间：22:07:18" itemprop="dateCreated datePublished" datetime="2026-03-03T22:06:01+08:00">2026-03-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="移动应用安全"><a href="#移动应用安全" class="headerlink" title="移动应用安全"></a>移动应用安全</h2><p>文档记录了<strong>移动应用（App）安全</strong>的威胁形势、Android/iOS 两大主流系统的安全机制、安全防护技术方案以及金融、运营商、移动办公三大典型场景的实战案例。</p>
+<h3 id="移动应用面临的五大安全威胁"><a href="#移动应用面临的五大安全威胁" class="headerlink" title="移动应用面临的五大安全威胁"></a>移动应用面临的五大安全威胁</h3><p>移动应用系统由三部分组成：<strong>App客户端 + 通信网络 + 应用服务端</strong>。这个架构的每个环节都面临安全威胁：</p>
+<ol>
+<li><strong>操作系统漏洞</strong>：无论 Android 还是 iOS，都存在大量 CVE 公开漏洞，成为攻击的突破口。</li>
+<li><strong>无线网络攻击</strong>：WiFi 钓鱼（伪造热点）、假冒基站、DNS 劫持等。黑客搭建恶意路由器，监听并篡改用户与服务器之间的数据。</li>
+<li><strong>恶意代码泛滥</strong>：流氓行为、资费消耗、隐私窃取、远程控制、诱骗欺诈等，尤以 Android 平台最为严重。</li>
+<li><strong>代码逆向工程</strong>：黑客对 App 的二进制文件进行<strong>反编译</strong>，获取源代码中的加密算法、密钥、业务逻辑。</li>
+<li><strong>App 非法篡改</strong>：黑客修改 App（如去广告、破解 VIP），甚至植入木马后重新打包发布（APK 二次打包）。</li>
+</ol>
+<h3 id="Android-系统的四层安全防护机制（重点）"><a href="#Android-系统的四层安全防护机制（重点）" class="headerlink" title="Android 系统的四层安全防护机制（重点）"></a>Android 系统的四层安全防护机制（重点）</h3><p>Android 是一个开源的移动终端操作系统，系统结构分为：Linux内核层、系统运行库层、应用程序框架层和应用程序层。每层都面临着不同程度的安全威胁，基础层威胁来自Linux内核攻击。</p>
+<p>Android 是开源系统，安全威胁尤为突出（APK 重打包、提权攻击、远程控制、恶意付费等）。针对性地，Android 在每一层都部署了防护措施，Android 系统安全机制如下：</p>
+<p><strong>1. 应用程序层：权限声明机制</strong></p>
+<ul>
+<li>把权限和对象绑定，才有权操作对象；</li>
+<li>将权限分为四级：<strong>normal</strong>（无害）、<strong>dangerous</strong>（潜在威胁，如读取位置）、<strong>signature</strong>（同签名应用才能访问）、<strong>signatureOrSystem</strong>（设备厂商专用）。</li>
+</ul>
+<p><strong>2. 应用框架层：应用签名机制</strong></p>
+<ul>
+<li>所有 APK 必须进行<strong>数字签名</strong>，标识开发者身份及应用之间的信任关系。</li>
+</ul>
+<p><strong>3. 系统运行层：沙箱隔离 + SSL/TLS</strong></p>
+<ul>
+<li>每个 App 运行在独立的 <strong>Dalvik 虚拟机和 Linux 进程空间</strong>中，彼此完全隔离。</li>
+<li>支持 SSL/TLS 对通信加密。</li>
+</ul>
+<p><strong>4. 内核层：文件系统权限 + ASLR + SELinux</strong></p>
+<ul>
+<li>采用 <strong>Linux ACL 权限控制</strong>：每个 App 拥有独立的用户 ID 和私有文件目录，互相不可访问。</li>
+<li><strong>系统分区只读</strong>（system.img），用户数据分区可读写（data.img）。</li>
+<li>Android 2.3 后引入基于硬件的NX（No Execute）支持，不允许在堆栈中执行代码。</li>
+<li>Android 4.0 后引入 <strong>ASLR（地址空间布局随机化）</strong>，防止内存攻击。</li>
+</ul>
+<h3 id="iOS-系统的六大核心安全机制（封闭生态）"><a href="#iOS-系统的六大核心安全机制（封闭生态）" class="headerlink" title="iOS 系统的六大核心安全机制（封闭生态）"></a>iOS 系统的六大核心安全机制（封闭生态）</h3><p>iOS 采用封闭式生态，从硬件、固件到软件层层设防，安全性相对更高。IOS 系统架构包含4个层次：核心操作系统层、核心服务层、媒体层、可触摸层；IOS 系统安全机制如下：</p>
+<p><strong>1. 安全启动链（Trust Chain）</strong></p>
+<ul>
+<li>开机时，只读内存（Boot ROM）验证底层引导程序（LLB）的苹果签名，确保启动链的每一步都是可信的。分叉为<strong>普通引导</strong>和<strong>DFU 固件更新模式</strong>。</li>
+</ul>
+<p><strong>2. 数据保护 API</strong></p>
+<ul>
+<li>针对设备丢失风险，提供加密 API，让开发者轻松对敏感文件和 Keychain 项进行保护。</li>
+</ul>
+<p><strong>3. 强制全盘加密 + File Data Protection</strong></p>
+<ul>
+<li>所有用户数据强制加密，且每个文件使用<strong>不同的密钥（Profile Key）</strong>，存于元文件中。加解密由<strong>硬件 AES 引擎</strong>完成（位于 DMA 内），性能极高。</li>
+</ul>
+<p><strong>4. 地址空间布局随机化（ASLR）</strong></p>
+<ul>
+<li>二进制文件、库、栈、堆的内存地址随机分布，增强抗攻击能力。</li>
+</ul>
+<p><strong>5. 代码签名（强制）</strong></p>
+<ul>
+<li>所有可执行程序必须使用<strong>苹果公司颁发的证书签名</strong>，杜绝非法程序运行。</li>
+</ul>
+<p><strong>6. 沙箱机制</strong></p>
+<ul>
+<li>限制进程的恶意行为，每个 App 只能访问自己的资源。</li>
+</ul>
+<h3 id="移动-App-的四大加固技术与安全检测要点"><a href="#移动-App-的四大加固技术与安全检测要点" class="headerlink" title="移动 App 的四大加固技术与安全检测要点"></a>移动 App 的四大加固技术与安全检测要点</h3><p><strong>一、App 安全加固（四防）</strong></p>
+<ol>
+<li><strong>防反编译</strong>：对 APK 文件进行加密（DEX 加密、SO 文件加密），代码混淆（名字混淆、控制流混淆）。</li>
+<li><strong>防调试</strong>：设置调试检测，一旦发现被调试，立即清理数据或退出。</li>
+<li><strong>防篡改</strong>：数字签名 + 多重校验，防止二次打包和盗版。</li>
+<li><strong>防窃取</strong>：加密本地数据文件和网络通信。</li>
+</ol>
+<p><strong>二、App 安全检测（11 项核心内容）</strong></p>
+<ul>
+<li>身份认证、会话安全、敏感信息保护、日志策略、交易流程、鉴权机制、访问控制、防篡改、防 SQL 注入、防钓鱼、漏洞检测。</li>
+</ul>
+<p><strong>三、个人信息收集最小必要权限（依据国家规范）</strong><br>文档列举了各类服务的最小权限要求（<strong>重要考点</strong>）：</p>
+<ul>
+<li><strong>地图导航、网络约车</strong>：位置 + 存储（+ 拨打电话）。</li>
+<li><strong>即时通信、博客论坛、短视频、网络支付</strong>：存储权限。</li>
+<li><strong>新闻资讯、网购、交通票务、快递、网页浏览器、输入法</strong>：<strong>无需任何权限</strong>。</li>
+<li><strong>安全管理类 App</strong>：需要存储、读取电话状态、短信等。</li>
+</ul>
+<h3 id="三大典型应用场景的安全方案（实战案例）"><a href="#三大典型应用场景的安全方案（实战案例）" class="headerlink" title="三大典型应用场景的安全方案（实战案例）"></a>三大典型应用场景的安全方案（实战案例）</h3><p><strong>1. 金融移动安全（高危行业）</strong></p>
+<ul>
+<li><strong>威胁</strong>：木马控制、钓鱼 App、资金窃取。</li>
+<li><strong>防护方案</strong>：<ul>
+<li><strong>安全开发</strong>：安全编程培训、代码安全审计、提供安全 SDK（安全软键盘、防界面劫持、短信保护）。</li>
+<li><strong>通信加密</strong>：对 App 通信协议加密。</li>
+<li><strong>加固</strong>：DEX 加密、smali 混淆、SO 加密、反调试。</li>
+<li><strong>持续监测</strong>：钓鱼监测（下架仿冒）、漏洞监测、盗版监测、威胁态势感知。</li>
+</ul>
+</li>
+</ul>
+<p><strong>2. 运营商移动安全</strong></p>
+<ul>
+<li><strong>威胁</strong>：账号窃取、漏洞利用、恶意刷量、计费 SDK 破解、钓鱼、社工库诈骗。</li>
+<li><strong>防护方案</strong>：<ul>
+<li>对运营商自有 App 和应用市场的第三方 App <strong>全面加固</strong>。</li>
+<li>提供<strong>恶意代码查杀服务</strong>。</li>
+<li>对<strong>计费 SDK 进行防破解加固</strong>。</li>
+<li>通信协议和证书加密。</li>
+<li><strong>威胁态势感知</strong>：监控异常流量、入侵攻击、风险 App。</li>
+</ul>
+</li>
+</ul>
+<p><strong>3. 移动办公安全</strong></p>
+<ul>
+<li><strong>威胁</strong>：设备丢失、信息泄露、恶意攻击、账号共享、WiFi 监听。</li>
+<li><strong>防护方案（以 360 天机为例）</strong>：<ul>
+<li><strong>安全管理平台 + 移动客户端</strong>架构。</li>
+<li>提供<strong>设备管控</strong>（外设管理、配置推送、远程锁定/擦除）。</li>
+<li><strong>恶意代码防范、App 安全加固、安全接入</strong>控制。</li>
+</ul>
+</li>
+</ul>
+<h3 id="💡-核心总结"><a href="#💡-核心总结" class="headerlink" title="💡 核心总结"></a>💡 核心总结</h3><p>移动安全的本质是<strong>攻防对抗的升级</strong>：Android 开源但更灵活（风险高），iOS 封闭但更安全。无论哪个平台，防护的核心都是<strong>加固 App + 加密通信 + 持续监测</strong>。对于考试，重点掌握 Android/iOS 的分层防护机制和 App 四防技术。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2072,181 +2259,6 @@ mjx-container[display="true"] + br {
 </ul>
 </li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/02/04/%E6%9C%BA%E6%88%BF%E5%AE%89%E5%85%A8%E5%88%86%E6%9E%90%E4%B8%8E%E9%98%B2%E6%8A%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/02/04/%E6%9C%BA%E6%88%BF%E5%AE%89%E5%85%A8%E5%88%86%E6%9E%90%E4%B8%8E%E9%98%B2%E6%8A%A4/" class="post-title-link" itemprop="url">机房安全分析与防护</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-02-04 20:31:35 / 修改时间：20:35:12" itemprop="dateCreated datePublished" datetime="2026-02-04T20:31:35+08:00">2026-02-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="一、-机房的功能组成与安全等级"><a href="#一、-机房的功能组成与安全等级" class="headerlink" title="一、 机房的功能组成与安全等级"></a>一、 机房的功能组成与安全等级</h3><h4 id="1-机房功能区域组成"><a href="#1-机房功能区域组成" class="headerlink" title="1. 机房功能区域组成"></a>1. 机房功能区域组成</h4><p>根据系统性质和管理体制，机房通常分为以下几类区域（可一室多用）：</p>
-<ul>
-<li><strong>主要工作房间</strong>：主机房、终端室等。</li>
-<li><strong>第一类辅助房间</strong>（关键保障）：低压配电间、UPS室、电池室、空调机室、气体钢瓶室、监控室。</li>
-<li><strong>第二类辅助房间</strong>（办公维修）：资料室、维修室、技术人员办公室。</li>
-<li><strong>第三类辅助房间</strong>（生活辅助）：储藏室、缓冲间、休息室、盥洗室。</li>
-</ul>
-<h4 id="2-机房安全等级划分-A、B、C级"><a href="#2-机房安全等级划分-A、B、C级" class="headerlink" title="2. 机房安全等级划分 (A、B、C级)"></a>2. 机房安全等级划分 (A、B、C级)</h4><p>依据系统中断后对<strong>国家安全、社会秩序、公共利益</strong>造成的损害程度划分：</p>
-<ul>
-<li><strong>A级（最高）</strong>：造成<strong>严重</strong>损害。要求最严格，措施最完善。</li>
-<li><strong>B级（中等）</strong>：造成<strong>较大</strong>损害。要求较严格。</li>
-<li><strong>C级（基本）</strong>：不属于A、B级的情况。满足基本要求。</li>
-<li><em>注：可根据实际需求，对不同安全项目（如防干扰、防火）执行不同的等级标准。</em></li>
-</ul>
-<h3 id="二、-机房场地的选址要求"><a href="#二、-机房场地的选址要求" class="headerlink" title="二、 机房场地的选址要求"></a>二、 机房场地的选址要求</h3><p>选址需综合考虑环境、地质、电磁干扰及建筑位置等因素：</p>
-<ol>
-<li><p><strong>环境安全性</strong>：</p>
-<ul>
-<li><strong>避开危险源</strong>：远离易燃易爆场所（化工厂、加油站）。</li>
-<li><strong>避开污染源</strong>：远离腐蚀性气体、多尘区（矿山、水泥厂）。</li>
-<li><strong>其他</strong>：避开盐雾区（海边）和落雷区域。</li>
-</ul>
-</li>
-<li><p><strong>地质可靠性</strong>：</p>
-<ul>
-<li>避开断裂带、滑坡、泥石流、矿区崩落区、低洼潮湿区。</li>
-</ul>
-</li>
-<li><p><strong>抗电磁干扰</strong>：</p>
-<ul>
-<li>远离强电磁场（广播台、雷达站）。</li>
-<li>远离强电流冲击源（电气化铁路、高压线），距离需在<strong>200米以上</strong>。</li>
-<li><em>指标参考</em>：GB/T 2887-2011，频率0.15~1000MHz时场强&lt;126dBµV。</li>
-</ul>
-</li>
-<li><p><strong>避开震动与噪声</strong>：</p>
-<ul>
-<li>远离强震动源（冲床、锻床）和强噪声源（机场、火车站）。</li>
-<li>避免机房窗户直接临街。</li>
-</ul>
-</li>
-<li><p><strong>建筑楼层选择</strong>：</p>
-<ul>
-<li><strong>不宜</strong>设在顶层（防热/漏水）或地下室（防潮/水灾）。</li>
-<li><strong>最佳</strong>：专用建筑的二层（一层作动力/配电）。</li>
-</ul>
-</li>
-</ol>
-<h3 id="三、-数据中心（Data-Center）建设与规范"><a href="#三、-数据中心（Data-Center）建设与规范" class="headerlink" title="三、 数据中心（Data Center）建设与规范"></a>三、 数据中心（Data Center）建设与规范</h3><p>数据中心指为实现对数据的集中处理、存储、传输、交换、管理以及为相关设备运行提供环境的建筑场所。</p>
-<h4 id="1-建设原则与分类"><a href="#1-建设原则与分类" class="headerlink" title="1. 建设原则与分类"></a>1. 建设原则与分类</h4><ul>
-<li><strong>原则</strong>：市场导向、资源有限、区域统筹、安全并重。</li>
-<li><strong>分类（按规模）</strong>：<ul>
-<li><strong>超大型 (≥10,000机架)</strong>：重点考虑气候和能源，优先在一类地区（气候寒冷、能源充足）建设。</li>
-<li><strong>大型 (3,000~10,000机架)</strong>：鼓励在一、二类地区建设。</li>
-<li><strong>中小型 (&lt;3,000机架)</strong>：靠近用户所在地，注重低延时，灵活部署。</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-设计规范-GB-50174-2017-强制性条文"><a href="#2-设计规范-GB-50174-2017-强制性条文" class="headerlink" title="2. 设计规范 (GB 50174-2017) 强制性条文"></a>2. 设计规范 (GB 50174-2017) 强制性条文</h4><ul>
-<li><strong>接地</strong>：金属外壳、管道、结构必须进行等电位联结并接地。</li>
-<li><strong>耐火等级</strong>：不应低于<strong>二级</strong>。</li>
-<li><strong>防火隔离</strong>：若与其他功能房在同一建筑，需用耐火极限<strong>2.0h</strong>的隔墙和<strong>1.5h</strong>的楼板隔开，门为<strong>甲级防火门</strong>。</li>
-<li><strong>火灾探测</strong>：主机房需设置<strong>两组独立</strong>的火灾探测器，联动灭火与监控。</li>
-<li><strong>呼吸器</strong>：气体灭火系统的主机房必须配置专用空气呼吸器。</li>
-</ul>
-<h4 id="3-数据中心分级"><a href="#3-数据中心分级" class="headerlink" title="3. 数据中心分级"></a>3. 数据中心分级</h4><p>与机房分级类似，分为A、B、C三级，A级对应中断后造成重大经济损失或公共秩序严重混乱。</p>
-<h3 id="四、-互联网数据中心（IDC）规范"><a href="#四、-互联网数据中心（IDC）规范" class="headerlink" title="四、 互联网数据中心（IDC）规范"></a>四、 互联网数据中心（IDC）规范</h3><h4 id="1-定义与逻辑结构"><a href="#1-定义与逻辑结构" class="headerlink" title="1. 定义与逻辑结构"></a>1. 定义与逻辑结构</h4><ul>
-<li><strong>定义</strong>：提供资源出租（主机托管）、应用平台租用等服务的数据中心。</li>
-<li><strong>六大逻辑组成</strong>：安全系统、业务系统、资源系统（计算/存储/网络）、网络系统、机房基础设施、管理系统。</li>
-</ul>
-<h4 id="2-工程技术规范-GB-51195-2016"><a href="#2-工程技术规范-GB-51195-2016" class="headerlink" title="2. 工程技术规范 (GB 51195-2016)"></a>2. 工程技术规范 (GB 51195-2016)</h4><ul>
-<li><strong>分级（R1、R2、R3）</strong>：<ul>
-<li><strong>R1</strong>：具备一定冗余，可用性 ≥99.5%。</li>
-<li><strong>R2</strong>：具备冗余，可用性 ≥99.9%。</li>
-<li><strong>R3</strong>：具备容错能力，可用性 ≥99.99%。</li>
-</ul>
-</li>
-<li><strong>强制性条文</strong>：<ul>
-<li><strong>抗震</strong>：7度以上抗震设防区，主要设备需经抗震检测。</li>
-<li><strong>防火封堵</strong>：楼板和线缆孔洞必须用非燃烧材料封堵。</li>
-<li><strong>标识</strong>：不同电压的电源设备需有明显区别标志。</li>
-</ul>
-</li>
-</ul>
-<p><img src="../uploads/IDC逻辑架构.png" alt=""></p>
-<h3 id="五、-CA机房（认证中心）物理安全控制"><a href="#五、-CA机房（认证中心）物理安全控制" class="headerlink" title="五、 CA机房（认证中心）物理安全控制"></a>五、 CA机房（认证中心）物理安全控制</h3><p>CA机房作为核心信任源，有更严格的合规要求（遵循GM/T 0034）：</p>
-<ol>
-<li><strong>屏蔽与检测</strong>：实施屏蔽措施，<strong>每五年</strong>至少进行一次屏蔽室检测。</li>
-<li><strong>访问控制</strong>：<ul>
-<li>严格佩戴身份标识。</li>
-<li>进出需经安全管理人员批准。</li>
-<li><strong>全程记录</strong>（录像、门禁日志），确认无安全用途后方可销毁。</li>
-</ul>
-</li>
-<li><strong>人员管理</strong>：建立陪同制度，定期审计访问权限。</li>
-<li><strong>介质安全</strong>：设备处理或再利用前，必须检查敏感数据并进行<strong>物理销毁或安全覆盖</strong>。</li>
-</ol>
 
       
     </div>

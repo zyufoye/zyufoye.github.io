@@ -172,18 +172,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">48</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -208,6 +208,181 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/02/04/%E6%9C%BA%E6%88%BF%E5%AE%89%E5%85%A8%E5%88%86%E6%9E%90%E4%B8%8E%E9%98%B2%E6%8A%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/02/04/%E6%9C%BA%E6%88%BF%E5%AE%89%E5%85%A8%E5%88%86%E6%9E%90%E4%B8%8E%E9%98%B2%E6%8A%A4/" class="post-title-link" itemprop="url">机房安全分析与防护</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-02-04 20:31:35 / 修改时间：20:35:12" itemprop="dateCreated datePublished" datetime="2026-02-04T20:31:35+08:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="一、-机房的功能组成与安全等级"><a href="#一、-机房的功能组成与安全等级" class="headerlink" title="一、 机房的功能组成与安全等级"></a>一、 机房的功能组成与安全等级</h3><h4 id="1-机房功能区域组成"><a href="#1-机房功能区域组成" class="headerlink" title="1. 机房功能区域组成"></a>1. 机房功能区域组成</h4><p>根据系统性质和管理体制，机房通常分为以下几类区域（可一室多用）：</p>
+<ul>
+<li><strong>主要工作房间</strong>：主机房、终端室等。</li>
+<li><strong>第一类辅助房间</strong>（关键保障）：低压配电间、UPS室、电池室、空调机室、气体钢瓶室、监控室。</li>
+<li><strong>第二类辅助房间</strong>（办公维修）：资料室、维修室、技术人员办公室。</li>
+<li><strong>第三类辅助房间</strong>（生活辅助）：储藏室、缓冲间、休息室、盥洗室。</li>
+</ul>
+<h4 id="2-机房安全等级划分-A、B、C级"><a href="#2-机房安全等级划分-A、B、C级" class="headerlink" title="2. 机房安全等级划分 (A、B、C级)"></a>2. 机房安全等级划分 (A、B、C级)</h4><p>依据系统中断后对<strong>国家安全、社会秩序、公共利益</strong>造成的损害程度划分：</p>
+<ul>
+<li><strong>A级（最高）</strong>：造成<strong>严重</strong>损害。要求最严格，措施最完善。</li>
+<li><strong>B级（中等）</strong>：造成<strong>较大</strong>损害。要求较严格。</li>
+<li><strong>C级（基本）</strong>：不属于A、B级的情况。满足基本要求。</li>
+<li><em>注：可根据实际需求，对不同安全项目（如防干扰、防火）执行不同的等级标准。</em></li>
+</ul>
+<h3 id="二、-机房场地的选址要求"><a href="#二、-机房场地的选址要求" class="headerlink" title="二、 机房场地的选址要求"></a>二、 机房场地的选址要求</h3><p>选址需综合考虑环境、地质、电磁干扰及建筑位置等因素：</p>
+<ol>
+<li><p><strong>环境安全性</strong>：</p>
+<ul>
+<li><strong>避开危险源</strong>：远离易燃易爆场所（化工厂、加油站）。</li>
+<li><strong>避开污染源</strong>：远离腐蚀性气体、多尘区（矿山、水泥厂）。</li>
+<li><strong>其他</strong>：避开盐雾区（海边）和落雷区域。</li>
+</ul>
+</li>
+<li><p><strong>地质可靠性</strong>：</p>
+<ul>
+<li>避开断裂带、滑坡、泥石流、矿区崩落区、低洼潮湿区。</li>
+</ul>
+</li>
+<li><p><strong>抗电磁干扰</strong>：</p>
+<ul>
+<li>远离强电磁场（广播台、雷达站）。</li>
+<li>远离强电流冲击源（电气化铁路、高压线），距离需在<strong>200米以上</strong>。</li>
+<li><em>指标参考</em>：GB/T 2887-2011，频率0.15~1000MHz时场强&lt;126dBµV。</li>
+</ul>
+</li>
+<li><p><strong>避开震动与噪声</strong>：</p>
+<ul>
+<li>远离强震动源（冲床、锻床）和强噪声源（机场、火车站）。</li>
+<li>避免机房窗户直接临街。</li>
+</ul>
+</li>
+<li><p><strong>建筑楼层选择</strong>：</p>
+<ul>
+<li><strong>不宜</strong>设在顶层（防热/漏水）或地下室（防潮/水灾）。</li>
+<li><strong>最佳</strong>：专用建筑的二层（一层作动力/配电）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="三、-数据中心（Data-Center）建设与规范"><a href="#三、-数据中心（Data-Center）建设与规范" class="headerlink" title="三、 数据中心（Data Center）建设与规范"></a>三、 数据中心（Data Center）建设与规范</h3><p>数据中心指为实现对数据的集中处理、存储、传输、交换、管理以及为相关设备运行提供环境的建筑场所。</p>
+<h4 id="1-建设原则与分类"><a href="#1-建设原则与分类" class="headerlink" title="1. 建设原则与分类"></a>1. 建设原则与分类</h4><ul>
+<li><strong>原则</strong>：市场导向、资源有限、区域统筹、安全并重。</li>
+<li><strong>分类（按规模）</strong>：<ul>
+<li><strong>超大型 (≥10,000机架)</strong>：重点考虑气候和能源，优先在一类地区（气候寒冷、能源充足）建设。</li>
+<li><strong>大型 (3,000~10,000机架)</strong>：鼓励在一、二类地区建设。</li>
+<li><strong>中小型 (&lt;3,000机架)</strong>：靠近用户所在地，注重低延时，灵活部署。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-设计规范-GB-50174-2017-强制性条文"><a href="#2-设计规范-GB-50174-2017-强制性条文" class="headerlink" title="2. 设计规范 (GB 50174-2017) 强制性条文"></a>2. 设计规范 (GB 50174-2017) 强制性条文</h4><ul>
+<li><strong>接地</strong>：金属外壳、管道、结构必须进行等电位联结并接地。</li>
+<li><strong>耐火等级</strong>：不应低于<strong>二级</strong>。</li>
+<li><strong>防火隔离</strong>：若与其他功能房在同一建筑，需用耐火极限<strong>2.0h</strong>的隔墙和<strong>1.5h</strong>的楼板隔开，门为<strong>甲级防火门</strong>。</li>
+<li><strong>火灾探测</strong>：主机房需设置<strong>两组独立</strong>的火灾探测器，联动灭火与监控。</li>
+<li><strong>呼吸器</strong>：气体灭火系统的主机房必须配置专用空气呼吸器。</li>
+</ul>
+<h4 id="3-数据中心分级"><a href="#3-数据中心分级" class="headerlink" title="3. 数据中心分级"></a>3. 数据中心分级</h4><p>与机房分级类似，分为A、B、C三级，A级对应中断后造成重大经济损失或公共秩序严重混乱。</p>
+<h3 id="四、-互联网数据中心（IDC）规范"><a href="#四、-互联网数据中心（IDC）规范" class="headerlink" title="四、 互联网数据中心（IDC）规范"></a>四、 互联网数据中心（IDC）规范</h3><h4 id="1-定义与逻辑结构"><a href="#1-定义与逻辑结构" class="headerlink" title="1. 定义与逻辑结构"></a>1. 定义与逻辑结构</h4><ul>
+<li><strong>定义</strong>：提供资源出租（主机托管）、应用平台租用等服务的数据中心。</li>
+<li><strong>六大逻辑组成</strong>：安全系统、业务系统、资源系统（计算/存储/网络）、网络系统、机房基础设施、管理系统。</li>
+</ul>
+<h4 id="2-工程技术规范-GB-51195-2016"><a href="#2-工程技术规范-GB-51195-2016" class="headerlink" title="2. 工程技术规范 (GB 51195-2016)"></a>2. 工程技术规范 (GB 51195-2016)</h4><ul>
+<li><strong>分级（R1、R2、R3）</strong>：<ul>
+<li><strong>R1</strong>：具备一定冗余，可用性 ≥99.5%。</li>
+<li><strong>R2</strong>：具备冗余，可用性 ≥99.9%。</li>
+<li><strong>R3</strong>：具备容错能力，可用性 ≥99.99%。</li>
+</ul>
+</li>
+<li><strong>强制性条文</strong>：<ul>
+<li><strong>抗震</strong>：7度以上抗震设防区，主要设备需经抗震检测。</li>
+<li><strong>防火封堵</strong>：楼板和线缆孔洞必须用非燃烧材料封堵。</li>
+<li><strong>标识</strong>：不同电压的电源设备需有明显区别标志。</li>
+</ul>
+</li>
+</ul>
+<p><img src="../uploads/IDC逻辑架构.png" alt=""></p>
+<h3 id="五、-CA机房（认证中心）物理安全控制"><a href="#五、-CA机房（认证中心）物理安全控制" class="headerlink" title="五、 CA机房（认证中心）物理安全控制"></a>五、 CA机房（认证中心）物理安全控制</h3><p>CA机房作为核心信任源，有更严格的合规要求（遵循GM/T 0034）：</p>
+<ol>
+<li><strong>屏蔽与检测</strong>：实施屏蔽措施，<strong>每五年</strong>至少进行一次屏蔽室检测。</li>
+<li><strong>访问控制</strong>：<ul>
+<li>严格佩戴身份标识。</li>
+<li>进出需经安全管理人员批准。</li>
+<li><strong>全程记录</strong>（录像、门禁日志），确认无安全用途后方可销毁。</li>
+</ul>
+</li>
+<li><strong>人员管理</strong>：建立陪同制度，定期审计访问权限。</li>
+<li><strong>介质安全</strong>：设备处理或再利用前，必须检查敏感数据并进行<strong>物理销毁或安全覆盖</strong>。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1551,106 +1726,6 @@
 </table>
 </div>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Java%E6%BC%8F%E6%B4%9E%E8%B0%83%E8%AF%95-%E4%BB%A5Retrofit%E4%B8%BA%E4%BE%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/28/Java%E6%BC%8F%E6%B4%9E%E8%B0%83%E8%AF%95-%E4%BB%A5Retrofit%E4%B8%BA%E4%BE%8B/" class="post-title-link" itemprop="url">Java漏洞调试-以Retrofit为例</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-28 22:23:16 / 修改时间：22:24:22" itemprop="dateCreated datePublished" datetime="2026-01-28T22:23:16+08:00">2026-01-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Java漏洞分析时，如果能够对程序进行动态调试，那就可以完整的追踪数据流的控制流，这样就可以知道漏洞的触发过程，对于漏洞原理的理解也会更加清晰。</p>
-<p>以 Retrofit 项目为例，简单记录一下漏洞的调试过程。</p>
-<h3 id="打断点"><a href="#打断点" class="headerlink" title="打断点"></a>打断点</h3><p>一般在程序的三个位置打断点：入口点、核心漏洞点、编码决策点，在该项目中：</p>
-<h4 id="入口点-PathTraversalTest-java-23"><a href="#入口点-PathTraversalTest-java-23" class="headerlink" title="入口点 PathTraversalTest.java:23"></a>入口点 PathTraversalTest.java:23</h4><p>测试用例发起的请求，这里是数据流的起点，参数 ../attacker 传入系统。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">PathTraversalTest</span> &#123;</span><br><span class="line">  <span class="meta">@Test</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pathTraversalWithEncodedTrue</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Example</span> &#123;</span><br><span class="line">      <span class="meta">@GET(&quot;users/&#123;user&#125;/profile&quot;)</span></span><br><span class="line">      Call&lt;ResponseBody&gt; <span class="title function_">getUser</span><span class="params">(<span class="meta">@Path(value = &quot;user&quot;, encoded = true)</span> String user)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Inputting a path traversal sequence</span></span><br><span class="line">    <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> buildRequest(Example.class, <span class="string">&quot;../attacker&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// If vulnerable, the URL will be resolved as http://example.com/attacker/profile</span></span><br><span class="line">    <span class="comment">// effectively escaping the &quot;users&quot; path segment.</span></span><br><span class="line">    System.out.println(<span class="string">&quot;Resolved URL: &quot;</span> + request.url().toString());</span><br><span class="line">    assertThat(request.url().toString()).isEqualTo(<span class="string">&quot;http://example.com/attacker/profile&quot;</span>);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h4 id="核心漏洞点-RequestBuilder-java-94"><a href="#核心漏洞点-RequestBuilder-java-94" class="headerlink" title="核心漏洞点 RequestBuilder.java:94"></a>核心漏洞点 RequestBuilder.java:94</h4><p>观察 relativeUrl 在替换前后的变化。这里会调用 canonicalizeForPath ，可以单步跟进这个函数，查看为什么 encoded=true 时 ../ 没有被编码。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">addPathParam</span><span class="params">(String name, String value, <span class="type">boolean</span> encoded)</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (relativeUrl == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// The relative URL is cleared when the first query parameter is set.</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AssertionError</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  relativeUrl = relativeUrl.replace(<span class="string">&quot;&#123;&quot;</span> + name + <span class="string">&quot;&#125;&quot;</span>, canonicalizeForPath(value, encoded));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="编码决策逻辑-RequestBuilder-java-103"><a href="#编码决策逻辑-RequestBuilder-java-103" class="headerlink" title="编码决策逻辑 RequestBuilder.java:103"></a>编码决策逻辑 RequestBuilder.java:103</h4><p>这是判断是否需要编码的核心逻辑。如果 alreadyEncoded 为 true （来自 @Path(encoded=true) ），这里的判断会直接跳过 / 的编码，导致路径遍历字符被保留。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title function_">canonicalizeForPath</span><span class="params">(String input, <span class="type">boolean</span> alreadyEncoded)</span> &#123;</span><br><span class="line">    <span class="type">int</span> codePoint;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>, limit = input.length(); i &lt; limit; i += Character.charCount(codePoint)) &#123;</span><br><span class="line">      codePoint = input.codePointAt(i);</span><br><span class="line">      <span class="keyword">if</span> (codePoint &lt; <span class="number">0x20</span> || codePoint &gt;= <span class="number">0x7f</span></span><br><span class="line">          || PATH_SEGMENT_ALWAYS_ENCODE_SET.indexOf(codePoint) != -<span class="number">1</span></span><br><span class="line">          || (!alreadyEncoded &amp;&amp; (codePoint == <span class="string">&#x27;/&#x27;</span> || codePoint == <span class="string">&#x27;%&#x27;</span>))) &#123;</span><br><span class="line">        <span class="comment">// Slow path: the character at i requires encoding!</span></span><br><span class="line">        <span class="type">Buffer</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Buffer</span>();</span><br><span class="line">        out.writeUtf8(input, <span class="number">0</span>, i);</span><br><span class="line">        canonicalizeForPath(out, input, i, limit, alreadyEncoded);</span><br><span class="line">        <span class="keyword">return</span> out.readUtf8();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="开始调试"><a href="#开始调试" class="headerlink" title="开始调试"></a>开始调试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn -pl retrofit <span class="built_in">test</span> -Dtest=PathTraversalTest -Dmaven.surefire.debug</span><br></pre></td></tr></table></figure>
-<p>等待终端显示 Listening for transport dt_socket at address: 5005</p>
-<p>在 IDE 中使用 Attach to Remote JVM (端口 5005) 连接调试器，一般位置都在IDE的右上角，选择调试那个虫子按钮</p>
-<p>程序会在第一个断点停下，然后可以使用 Step Over (F10) 和 Step Into (F11) 逐步跟踪数据流向</p>
-<p>在 launch.json 中添加配置内容：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;java&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Attach to Remote JVM&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="string">&quot;attach&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hostName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;localhost&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">5005</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        ...</span><br><span class="line">    <span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/01/28/Java%E6%BC%8F%E6%B4%9E%E8%B0%83%E8%AF%95-%E4%BB%A5Retrofit%E4%B8%BA%E4%BE%8B/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
       
     </div>
 
