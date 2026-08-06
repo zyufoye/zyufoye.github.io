@@ -284,18 +284,18 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">48</span>
+        <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -320,6 +320,773 @@ mjx-container[display="true"] + br {
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/18/SSH%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/18/SSH%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="url">SSH安全协议</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-18 16:07:34 / 修改时间：16:20:56" itemprop="dateCreated datePublished" datetime="2026-01-18T16:07:34+08:00">2026-01-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="基础理论：Diffie-Hellman-DH-密钥交换协议"><a href="#基础理论：Diffie-Hellman-DH-密钥交换协议" class="headerlink" title="基础理论：Diffie-Hellman (DH) 密钥交换协议"></a>基础理论：Diffie-Hellman (DH) 密钥交换协议</h3><p>在介绍SSH之前，首先了解DH协议，因为它是SSH能够安全协商密钥的基石。</p>
+<ul>
+<li><strong>核心难题</strong>：如何在不安全的网络上，让两个人协商出一个只有他们知道的“密码”（会话密钥），而不用担心被旁人窃听？</li>
+<li><strong>数学原理</strong>：基于<strong>离散对数问题</strong>的困难性。<ul>
+<li>公式：<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex;" xmlns="http://www.w3.org/2000/svg" width="17.244ex" height="2.117ex" role="img" focusable="false" viewBox="0 -853.7 7621.8 935.7"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mi"><path data-c="1D436" d="M50 252Q50 367 117 473T286 641T490 704Q580 704 633 653Q642 643 648 636T656 626L657 623Q660 623 684 649Q691 655 699 663T715 679T725 690L740 705H746Q760 705 760 698Q760 694 728 561Q692 422 692 421Q690 416 687 415T669 413H653Q647 419 647 422Q647 423 648 429T650 449T651 481Q651 552 619 605T510 659Q484 659 454 652T382 628T299 572T226 479Q194 422 175 346T156 222Q156 108 232 58Q280 24 350 24Q441 24 512 92T606 240Q610 253 612 255T628 257Q648 257 648 248Q648 243 647 239Q618 132 523 55T319 -22Q206 -22 128 53T50 252Z"></path></g><g data-mml-node="mi" transform="translate(845.3,363) scale(0.707)"><path data-c="1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g></g><g data-mml-node="mo" transform="translate(1540.7,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mi" transform="translate(2596.5,0)"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g><g data-mml-node="mspace" transform="translate(3647.5,0)"></g><g data-mml-node="mi" transform="translate(4481.2,0)"><path data-c="6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(833,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1333,0)"></path></g><g data-mml-node="mstyle" transform="translate(6370.2,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mstyle" transform="translate(6537.2,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mi" transform="translate(6870.8,0)"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path></g></g></g></svg></mjx-container></li>
+<li><strong>正向计算容易</strong>：已知 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="6.607ex" height="2.034ex" role="img" focusable="false" viewBox="0 -705 2920.3 899"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D436" d="M50 252Q50 367 117 473T286 641T490 704Q580 704 633 653Q642 643 648 636T656 626L657 623Q660 623 684 649Q691 655 699 663T715 679T725 690L740 705H746Q760 705 760 698Q760 694 728 561Q692 422 692 421Q690 416 687 415T669 413H653Q647 419 647 422Q647 423 648 429T650 449T651 481Q651 552 619 605T510 659Q484 659 454 652T382 628T299 572T226 479Q194 422 175 346T156 222Q156 108 232 58Q280 24 350 24Q441 24 512 92T606 240Q610 253 612 255T628 257Q648 257 648 248Q648 243 647 239Q618 132 523 55T319 -22Q206 -22 128 53T50 252Z"></path></g><g data-mml-node="mo" transform="translate(760,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(1204.7,0)"><path data-c="1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g><g data-mml-node="mo" transform="translate(1724.7,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(2169.3,0)"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path></g></g></g></svg></mjx-container>，算出 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="2.378ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 1051 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g></g></g></svg></mjx-container> 很快。</li>
+<li><strong>反向计算极难</strong>：已知 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="7.808ex" height="2.034ex" role="img" focusable="false" viewBox="0 -705 3451.3 899"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D440" d="M289 629Q289 635 232 637Q208 637 201 638T194 648Q194 649 196 659Q197 662 198 666T199 671T201 676T203 679T207 681T212 683T220 683T232 684Q238 684 262 684T307 683Q386 683 398 683T414 678Q415 674 451 396L487 117L510 154Q534 190 574 254T662 394Q837 673 839 675Q840 676 842 678T846 681L852 683H948Q965 683 988 683T1017 684Q1051 684 1051 673Q1051 668 1048 656T1045 643Q1041 637 1008 637Q968 636 957 634T939 623Q936 618 867 340T797 59Q797 55 798 54T805 50T822 48T855 46H886Q892 37 892 35Q892 19 885 5Q880 0 869 0Q864 0 828 1T736 2Q675 2 644 2T609 1Q592 1 592 11Q592 13 594 25Q598 41 602 43T625 46Q652 46 685 49Q699 52 704 61Q706 65 742 207T813 490T848 631L654 322Q458 10 453 5Q451 4 449 3Q444 0 433 0Q418 0 415 7Q413 11 374 317L335 624L267 354Q200 88 200 79Q206 46 272 46H282Q288 41 289 37T286 19Q282 3 278 1Q274 0 267 0Q265 0 255 0T221 1T157 2Q127 2 95 1T58 0Q43 0 39 2T35 11Q35 13 38 25T43 40Q45 46 65 46Q135 46 154 86Q158 92 223 354T289 629Z"></path></g><g data-mml-node="mo" transform="translate(1051,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(1495.7,0)"><path data-c="1D436" d="M50 252Q50 367 117 473T286 641T490 704Q580 704 633 653Q642 643 648 636T656 626L657 623Q660 623 684 649Q691 655 699 663T715 679T725 690L740 705H746Q760 705 760 698Q760 694 728 561Q692 422 692 421Q690 416 687 415T669 413H653Q647 419 647 422Q647 423 648 429T650 449T651 481Q651 552 619 605T510 659Q484 659 454 652T382 628T299 572T226 479Q194 422 175 346T156 222Q156 108 232 58Q280 24 350 24Q441 24 512 92T606 240Q610 253 612 255T628 257Q648 257 648 248Q648 243 647 239Q618 132 523 55T319 -22Q206 -22 128 53T50 252Z"></path></g><g data-mml-node="mo" transform="translate(2255.7,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path></g><g data-mml-node="mi" transform="translate(2700.3,0)"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path></g></g></g></svg></mjx-container>，想要算出指数 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.023ex;" xmlns="http://www.w3.org/2000/svg" width="1.176ex" height="1.593ex" role="img" focusable="false" viewBox="0 -694 520 704"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g></g></g></svg></mjx-container>（私钥），在 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.699ex" height="1.545ex" role="img" focusable="false" viewBox="0 -683 751 683"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path></g></g></g></svg></mjx-container> 足够大时，计算量是指数级的，现代计算机无法在有效时间内破解。</li>
+</ul>
+</li>
+<li><strong>作用</strong>：SSH利用DH算法，在客户端和服务器之间安全地生成一个<strong>对称密钥</strong>，用于后续的数据加密传输。</li>
+</ul>
+<h3 id="核心重点：SSH协议详解-Secure-Shell"><a href="#核心重点：SSH协议详解-Secure-Shell" class="headerlink" title="核心重点：SSH协议详解 (Secure Shell)"></a>核心重点：SSH协议详解 (Secure Shell)</h3><h4 id="1-什么是SSH？"><a href="#1-什么是SSH？" class="headerlink" title="1. 什么是SSH？"></a>1. 什么是SSH？</h4><p>SSH（Secure Shell）即“安全外壳”。它是基于<strong>公钥密码体系</strong>的安全应用协议，专为<strong>远程登录会话</strong>和其他网络服务提供安全性。</p>
+<ul>
+<li><strong>主要目的</strong>：替代Telnet、rsh等不安全的明文传输协议。</li>
+<li><strong>核心功能</strong>：加密（防窃听）、认证（防伪装）、完整性检查（防篡改）。</li>
+</ul>
+<h4 id="2-SSH的内部架构（三大子协议）"><a href="#2-SSH的内部架构（三大子协议）" class="headerlink" title="2. SSH的内部架构（三大子协议）"></a>2. SSH的内部架构（三大子协议）</h4><p>SSH不是一个单一的协议，而是由三个分工明确的协议组成的“协议栈”：</p>
+<ol>
+<li><strong>SSH传输层协议 (Transport Layer Protocol)</strong><ul>
+<li><em>职责</em>：负责最底层的脏活累活。包括<strong>算法协商</strong>（商量用什么加密）、<strong>密钥交换</strong>（DH算法）、<strong>服务器认证</strong>（确认服务器是真的）。</li>
+<li><em>结果</em>：建立一个加密的、压缩的、保证完整性的安全通道。</li>
+</ul>
+</li>
+<li><strong>SSH用户认证协议 (User Authentication Protocol)</strong><ul>
+<li><em>职责</em>：运行在传输层之上，负责鉴别<strong>客户端（用户）</strong>是谁。</li>
+<li><em>方式</em>：支持口令认证（输入密码）、公钥认证（免密登录）等。</li>
+</ul>
+</li>
+<li><strong>SSH连接协议 (Connection Protocol)</strong><ul>
+<li><em>职责</em>：在加密和认证都完成后，负责把加密隧道<strong>多路复用</strong>。</li>
+<li><em>功能</em>：将一个物理连接逻辑上分为多个逻辑通道（Channel），分别处理终端会话、文件传输、端口转发等。</li>
+</ul>
+</li>
+</ol>
+<h4 id="3-SSH的工作流程（7个步骤）"><a href="#3-SSH的工作流程（7个步骤）" class="headerlink" title="3. SSH的工作流程（7个步骤）"></a>3. SSH的工作流程（7个步骤）</h4><p><img src="../uploads/ssh_2.png" alt=""></p>
+<ol>
+<li><strong>获取证书</strong>：客户端获取服务器的公钥证书（或已经存有服务器公钥）。</li>
+<li><strong>连接请求</strong>：客户端发起TCP连接（握手）。</li>
+<li><strong>服务器身份通告</strong>：服务器把自己的公钥发给客户端。</li>
+<li><strong>验证服务器</strong>：客户端验证这个公钥是不是真的服务器（防止中间人冒充）。</li>
+<li><strong>建立密钥 (DH)</strong>：双方通过Diffie-Hellman算法，协商出一个<strong>会话密钥</strong>（对称密钥）。</li>
+<li><strong>认证用户</strong>：建立加密隧道后，服务器验证客户端的身份（如输入密码）。</li>
+<li><strong>会话开始</strong>：使用SSH Tunnel进行加密通信。</li>
+</ol>
+<h4 id="4-关键环节：如何验证服务器公钥的真实性？"><a href="#4-关键环节：如何验证服务器公钥的真实性？" class="headerlink" title="4. 关键环节：如何验证服务器公钥的真实性？"></a>4. 关键环节：如何验证服务器公钥的真实性？</h4><p>客户端如何确认“发给我公钥的服务器真的是由于我要连接的那台服务器？”（防止中间人攻击）。主要有三种方法：</p>
+<ul>
+<li><strong>方法一：物理拷贝 (最原始)</strong><ul>
+<li>用户直接带个U盘把服务器的公钥拷到客户端电脑里。安全但麻烦，不适合大规模使用。</li>
+</ul>
+</li>
+<li><strong>方法二：指纹核对 (最常用)</strong><ul>
+<li><strong>流程</strong>：<ol>
+<li>首次连接时，客户端下载服务器公钥。</li>
+<li>屏幕显示公钥的<strong>指纹 (Hash值)</strong>。</li>
+<li>用户通过电话或其他渠道联系管理员核对指纹。</li>
+<li>若指纹一致，用户输入“yes”信任该主机，公钥被保存到 <code>known_hosts</code> 文件中。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>方法三：PKI 认证 (最规范)</strong><ul>
+<li>通过权威的 CA 机构（PKI体系）来验证服务器证书的合法性。</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-SSH-的实际应用与风险"><a href="#5-SSH-的实际应用与风险" class="headerlink" title="5. SSH 的实际应用与风险"></a>5. SSH 的实际应用与风险</h4><ul>
+<li><strong>默认端口</strong>：Linux系统中默认是 TCP <strong>22</strong> 端口。</li>
+<li><strong>功能扩展</strong>：不仅是远程黑窗口（Shell），还支持 <code>scp/sftp</code>（文件传输）、端口转发（跳板机/代理）。</li>
+<li><strong>安全隐患</strong>：<ul>
+<li><strong>中间人攻击 (MITM)</strong>：如果在首次连接（TOFU, Trust On First Use）时没有仔细核对指纹，攻击者可能拦截连接并伪造公钥。</li>
+<li><strong>拒绝服务攻击 (DoS)</strong>：因为SSH握手涉及复杂的加密计算（DH交换），消耗CPU资源大，攻击者可利用这一点耗尽服务器资源。</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结</strong></p>
+<p>SSH 是一个<strong>分层</strong>的协议，利用 <strong>DH算法</strong> 协商密钥，通过 <strong>三种方式</strong> 验证服务器身份，最终建立加密隧道替代 Telnet，保障 <strong>22端口</strong> 的远程管理安全。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/18/%E5%8A%A0%E5%AF%86%E4%B8%8E%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/18/%E5%8A%A0%E5%AF%86%E4%B8%8E%E7%AD%BE%E5%90%8D%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">加密与签名的区别</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-18 11:03:48 / 修改时间：11:09:41" itemprop="dateCreated datePublished" datetime="2026-01-18T11:03:48+08:00">2026-01-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>私钥和公钥在数学逻辑上是可以“反过来”使用的</strong>（特别是在最经典的 RSA 算法中）。</p>
+<p>但这两种“方向”所达到的<strong>安全目标</strong>是完全相反的，我们可以把这对密钥想象成一对<strong>神奇的数学钥匙</strong>：</p>
+<h3 id="数学原理：互为逆运算"><a href="#数学原理：互为逆运算" class="headerlink" title="数学原理：互为逆运算"></a>数学原理：互为逆运算</h3><p>在 RSA 这种经典的公钥密码体制中，公钥和私钥在数学上是<strong>成对生成</strong>的。</p>
+<ul>
+<li><strong>规则</strong>：用A钥匙锁上的东西，<strong>只能</strong>用B钥匙打开；反之，用B钥匙锁上的东西，<strong>只能</strong>用A钥匙打开。</li>
+</ul>
+<p>数学上没有规定谁必须叫“公钥”，谁必须叫“私钥”。只是在产生密钥后，我们人为地规定：</p>
+<ul>
+<li><strong>公开</strong>给所有人的那把叫<strong>公钥</strong>。</li>
+<li><strong>自己留着</strong>保密的那把叫<strong>私钥</strong>。</li>
+</ul>
+<h3 id="2-两种方向，两种用途"><a href="#2-两种方向，两种用途" class="headerlink" title="2. 两种方向，两种用途"></a>2. 两种方向，两种用途</h3><p>正是因为它们可以“反过来”用，才衍生出了密码学的两大支柱功能：<strong>加密</strong>和<strong>签名</strong>。</p>
+<h4 id="情况-A：公钥加密，私钥解密（正常加密）"><a href="#情况-A：公钥加密，私钥解密（正常加密）" class="headerlink" title="情况 A：公钥加密，私钥解密（正常加密）"></a>情况 A：公钥加密，私钥解密（正常加密）</h4><ul>
+<li><strong>操作</strong>：别人用你的<strong>公钥</strong>把数据锁起来。</li>
+<li><strong>结果</strong>：因为只有你才有<strong>私钥</strong>，所以全世界只有你一个人能打开看。</li>
+<li><strong>目的</strong>：<strong>机密性 (Confidentiality)</strong> —— 保护隐私，不让别人偷看。</li>
+<li><em>比喻</em>：别人把信扔进你的信箱（公钥），只有你有钥匙（私钥）能打开信箱取信。</li>
+</ul>
+<h4 id="情况-B：私钥“加密”，公钥“解密”（数字签名）"><a href="#情况-B：私钥“加密”，公钥“解密”（数字签名）" class="headerlink" title="情况 B：私钥“加密”，公钥“解密”（数字签名）"></a>情况 B：私钥“加密”，公钥“解密”（数字签名）</h4><ul>
+<li><strong>操作</strong>：你用你的<strong>私钥</strong>把一段数据（通常是摘要）锁起来（处理一下）。</li>
+<li><strong>结果</strong>：因为<strong>公钥</strong>是公开的，全世界所有人都能用你的公钥打开它。<ul>
+<li>你可能会问：<em>“所有人都能打开，那还有什么保密性可言？”</em></li>
+<li><strong>没错！这里根本不是为了保密！</strong></li>
+<li>既然所有人都能用你的公钥解开，这就证明了——<strong>这段密文一定是用你的私钥锁上的</strong>。因为除了你的私钥，别人的私钥锁出来的东西，你的公钥是打不开的。</li>
+</ul>
+</li>
+<li><strong>目的</strong>：<strong>认证/防抵赖 (Authentication)</strong> —— 证明“这确实是我发的”。</li>
+<li><em>比喻</em>：这就好比古代皇帝的“玉玺”（私钥）。皇帝在诏书上盖了章，全天下人（拿着公钥）一看印章纹路，就知道这是皇帝亲笔，不是别人伪造的。</li>
+</ul>
+<h3 id="3-一个小小的专业修正"><a href="#3-一个小小的专业修正" class="headerlink" title="3. 一个小小的专业修正"></a>3. 一个小小的专业修正</h3><p>虽然我们为了理解方便，常说“数字签名就是用私钥加密”。但在严格的学术定义中：</p>
+<ul>
+<li><strong>对于 RSA 算法</strong>：确实就是“私钥加密，公钥解密”的数学过程。</li>
+<li><strong>对于其他算法（如 ECC、SM2、DSA）</strong>：虽然逻辑上是“私钥处理，公钥验证”，但数学过程并不是简单的加密反运算，而是专门设计的<strong>签名算法</strong>和<strong>验证算法</strong>。</li>
+</ul>
+<p><strong>总结：</strong></p>
+<ul>
+<li><strong>公钥 -&gt; 私钥</strong> = 为了<strong>秘密</strong>（只有你能看）。</li>
+<li><strong>私钥 -&gt; 公钥</strong> = 为了<strong>证明</strong>（只有你能签）。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/18/%E8%BD%AF%E8%80%83%E5%AF%86%E7%A0%81%E5%AD%A6%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/18/%E8%BD%AF%E8%80%83%E5%AF%86%E7%A0%81%E5%AD%A6%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">软考密码学考点概述</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-18 09:59:28 / 修改时间：16:22:31" itemprop="dateCreated datePublished" datetime="2026-01-18T09:59:28+08:00">2026-01-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">密码学</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>软考常考的密码学基础知识、攻击类型以及主要的密码体制。以下是重要知识点：</p>
+<h3 id="一、-密码学基础概念-Overview"><a href="#一、-密码学基础概念-Overview" class="headerlink" title="一、 密码学基础概念 (Overview)"></a>一、 密码学基础概念 (Overview)</h3><ul>
+<li><strong>定义与目标</strong>：密码学是研究信息安全保护的科学。主要目标是实现信息的<strong>保密性、完整性、可用性及抗抵赖性</strong>。</li>
+<li><strong>组成</strong>：包含 <strong>密码编码学</strong>（研究加密/保护）和 <strong>密码分析学</strong>（研究破译/获取明文）。</li>
+<li><strong>相关法律</strong>：提及了《电子签名法》（2005年）、商用密码算法公布（2006年）及《密码法》草案（2019年）。</li>
+<li><strong>核心术语</strong>：<ul>
+<li><strong>明文</strong>：未加密的消息。</li>
+<li><strong>密文</strong>：加密后的消息。</li>
+<li><strong>加/解密算法</strong>：进行变换的运算规则。</li>
+<li><strong>密钥</strong>：控制算法操作的关键参数。</li>
+</ul>
+</li>
+</ul>
+<h3 id="二、-密码分析与攻击类型-Attack-Types"><a href="#二、-密码分析与攻击类型-Attack-Types" class="headerlink" title="二、 密码分析与攻击类型 (Attack Types)"></a>二、 密码分析与攻击类型 (Attack Types)</h3><p>根据攻击者拥有的信息量（前提条件），攻击类型分为五种（按攻击者能力从低到高）：</p>
+<ol>
+<li><strong>唯密文攻击</strong>：最困难，攻击者只有密文。</li>
+<li><strong>已知明文攻击</strong>：攻击者拥有一些“明文-密文”对。<strong>（注：一个安全的密码必须能经得起这种攻击）</strong>。</li>
+<li><strong>选择明文攻击</strong>：攻击者能制造明文并获取对应的密文（对攻击者有利）。</li>
+<li><strong>密文验证攻击</strong>：攻击者能判断某个密文解密后的结果是否合法。</li>
+<li><strong>选择密文攻击</strong>：最容易破译，攻击者能选定密文并获取对应明文（常见于攻击公钥体制和数字签名）。</li>
+</ol>
+<h3 id="三、-密码体制分类-Cryptosystems"><a href="#三、-密码体制分类-Cryptosystems" class="headerlink" title="三、 密码体制分类 (Cryptosystems)"></a>三、 密码体制分类 (Cryptosystems)</h3><h4 id="1-私钥密码体制-Symmetric-Key-对称加密"><a href="#1-私钥密码体制-Symmetric-Key-对称加密" class="headerlink" title="1. 私钥密码体制 (Symmetric Key / 对称加密)"></a>1. 私钥密码体制 (Symmetric Key / 对称加密)</h4><ul>
+<li><strong>特点</strong>：加密和解密使用<strong>相同</strong>的密钥。</li>
+<li><strong>流程</strong>：双方必须事先通过安全渠道交换密钥。</li>
+<li><strong>优缺点</strong>：<ul>
+<li><em>优点</em>：速度快</li>
+<li><em>缺点</em>：密钥分配困难、密钥管理量大、无法认证源（难以实现抗抵赖）。</li>
+</ul>
+</li>
+<li><strong>常见算法</strong>：<ul>
+<li><strong>DES</strong>：替换+移位、56位密钥、64位数据块、速度快、但56位密钥易被破解</li>
+<li><strong>3DES</strong>：三重DES，两个56位密钥，K1和K2，较DES更安全</li>
+<li><strong>AES</strong>：美国标准，替代DES，安全性高</li>
+<li><strong>IDEA</strong>：128位密钥、64位数据块、较DES加密性更好</li>
+<li><strong>RC-5</strong>：RSA 数据公司很多产品使用RC5</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-公钥密码体制-Asymmetric-Key-非对称加密"><a href="#2-公钥密码体制-Asymmetric-Key-非对称加密" class="headerlink" title="2. 公钥密码体制 (Asymmetric Key / 非对称加密)"></a>2. 公钥密码体制 (Asymmetric Key / 非对称加密)</h4><ul>
+<li><strong>特点</strong>：加密和解密使用<strong>不同</strong>的密钥（公钥和私钥）。</li>
+<li><strong>原理</strong>：<ul>
+<li><strong>公钥</strong>：公开，用于<strong>加密</strong>。</li>
+<li><strong>私钥</strong>：保密，用于<strong>解密</strong>。</li>
+<li><em>例子</em>：甲给乙发消息，用<strong>乙的公钥</strong>加密，只有<strong>乙的私钥</strong>能解密。</li>
+</ul>
+</li>
+<li><strong>优缺点</strong>：<ul>
+<li><em>优点</em>：密钥分发方便、管理量少、支持数字签名。在公钥密码体制中，仅根据密码算法和加密密钥来确定解密密钥在计算上是不可行的。</li>
+<li><em>缺点</em>：<strong>速度慢</strong>，计算量大，不适合加密大数据。</li>
+</ul>
+</li>
+<li><strong>常见算法</strong>：<ul>
+<li><strong>RSA</strong>：基于大数分解，应用最广。公钥 (e,n) 私钥 (d,n) 。</li>
+<li><strong>ECC</strong>（椭圆曲线）、<strong>Elgamal</strong>、<strong>D-H</strong>（Diffie-Hellman）、<strong>背包算法</strong>。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-混合密码体制-Hybrid-System"><a href="#3-混合密码体制-Hybrid-System" class="headerlink" title="3. 混合密码体制 (Hybrid System)"></a>3. 混合密码体制 (Hybrid System)</h4><ul>
+<li><strong>目的</strong>：结合对称加密的“快”和非对称加密的“密钥分发方便”。</li>
+<li><strong>工作流程</strong>：<ol>
+<li>发送方随机生成一个<strong>对称密钥</strong>。</li>
+<li>用<strong>对称密钥</strong>加密<strong>明文消息</strong>（数据传输快）。</li>
+<li>用接收方的<strong>公钥</strong>加密这个<strong>对称密钥</strong>（数字信封）。</li>
+<li>将加密后的消息和加密后的密钥一起发送。</li>
+<li>接收方先用<strong>私钥</strong>解出<strong>对称密钥</strong>，再用<strong>对称密钥</strong>解密<strong>消息</strong>。</li>
+</ol>
+</li>
+</ul>
+<p><img src="../uploads/crypto_1.png" alt=""></p>
+<p>这张PPT主要详细介绍了四种常见的<strong>对称加密算法</strong>（DES、3DES、IDEA、AES）的具体参数和工作原理。以下是为您总结的核心知识点：</p>
+<h3 id="四、常见密码算法"><a href="#四、常见密码算法" class="headerlink" title="四、常见密码算法"></a>四、常见密码算法</h3><h4 id="1-DES-算法-Data-Encryption-Standard"><a href="#1-DES-算法-Data-Encryption-Standard" class="headerlink" title="1. DES 算法 (Data Encryption Standard)"></a>1. DES 算法 (Data Encryption Standard)</h4><ul>
+<li><strong>类型</strong>：分组加密算法。</li>
+<li><strong>分组长度</strong>：支持 <strong>64比特</strong> 的明文块加密。</li>
+<li><strong>密钥长度</strong>：<strong>56比特</strong>。</li>
+<li><strong>特点</strong>：由于密钥较短（56位），在现代算力下安全性较低，已逐渐被淘汰。</li>
+</ul>
+<h4 id="2-三重DES-3DES-TDEA"><a href="#2-三重DES-3DES-TDEA" class="headerlink" title="2. 三重DES (3DES / TDEA)"></a>2. 三重DES (3DES / TDEA)</h4><ul>
+<li><strong>原理</strong>：为了提高安全性，使用DES算法对明文进行 <strong>“加密 - 解密 - 加密”</strong> 的三次操作。</li>
+<li><strong>操作流程</strong>：<ul>
+<li><strong>加密</strong>：明文 -&gt; (用K1加密) -&gt; (用K2解密) -&gt; (用K3加密) -&gt; 密文。</li>
+<li><strong>解密</strong>：密文 -&gt; (用K3解密) -&gt; (用K2加密) -&gt; (用K1解密) -&gt; 明文。</li>
+</ul>
+</li>
+<li><strong>密钥规则</strong>：通常情况下，<strong>K1 和 K3 是相同的密钥</strong>（即使用两个不同的密钥K1和K2进行三次运算）。</li>
+</ul>
+<h4 id="3-IDEA-算法-International-Data-Encryption-Algorithm"><a href="#3-IDEA-算法-International-Data-Encryption-Algorithm" class="headerlink" title="3. IDEA 算法 (International Data Encryption Algorithm)"></a>3. IDEA 算法 (International Data Encryption Algorithm)</h4><ul>
+<li><strong>类型</strong>：分组加密算法。</li>
+<li><strong>分组长度</strong>：明文和密文分组均为 <strong>64比特</strong>。</li>
+<li><strong>密钥长度</strong>：<strong>128比特</strong>（比DES更安全）。</li>
+<li><strong>设计思想</strong>：混合使用来自不同代数群中的运算。</li>
+</ul>
+<h4 id="4-AES-算法-Advanced-Encryption-Standard"><a href="#4-AES-算法-Advanced-Encryption-Standard" class="headerlink" title="4. AES 算法 (Advanced Encryption Standard)"></a>4. AES 算法 (Advanced Encryption Standard)</h4><p>AES是用来替代DES的新一代标准，PPT中列出了该算法必须满足的标准要求：</p>
+<ul>
+<li><strong>公开性</strong>：算法无密级，描述必须完全公开披露。</li>
+<li><strong>免费性</strong>：必须可以在世界范围内免费使用。</li>
+<li><strong>分组长度</strong>：支持至少 <strong>128比特</strong> 的分组。</li>
+<li><strong>密钥长度</strong>：支持 <strong>128、192 和 256比特</strong> 的密钥长度。</li>
+</ul>
+<hr>
+<p><strong>总结对比表：</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">算法</th>
+<th style="text-align:left">分组长度</th>
+<th style="text-align:left">密钥长度</th>
+<th style="text-align:left">关键特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>DES</strong></td>
+<td style="text-align:left">64 bit</td>
+<td style="text-align:left">56 bit</td>
+<td style="text-align:left">早期标准，现已被认为不够安全。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>3DES</strong></td>
+<td style="text-align:left">64 bit</td>
+<td style="text-align:left">112 bit* (通常)</td>
+<td style="text-align:left">“加密-解密-加密”模式，过渡方案。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>IDEA</strong></td>
+<td style="text-align:left">64 bit</td>
+<td style="text-align:left">128 bit</td>
+<td style="text-align:left">混合代数运算设计。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AES</strong></td>
+<td style="text-align:left">≥128 bit</td>
+<td style="text-align:left">128/192/256 bit</td>
+<td style="text-align:left">现行标准，公开、免费、强度高。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><em>(注：3DES如果K1=K3，有效密钥长度通常认为是112位)</em></p>
+<h4 id="5-国产密码算法"><a href="#5-国产密码算法" class="headerlink" title="5.国产密码算法"></a>5.国产密码算法</h4><ul>
+<li><strong>国产密码算法</strong>：指由国家密码研究相关机构自主研发、具有相关知识产权的商用密码算法。</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">算法名称</th>
+<th style="text-align:left">算法类型</th>
+<th style="text-align:left">关键参数/技术细节</th>
+<th style="text-align:left">主要用途/备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>SM1</strong></td>
+<td style="text-align:left"><strong>对称加密</strong></td>
+<td style="text-align:left">分组长度：<strong>128比特</strong><br>密钥长度：<strong>128比特</strong></td>
+<td style="text-align:left">硬件实现为主，通常作为SM4的非公开版本背景知识</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SM2</strong></td>
+<td style="text-align:left"><strong>非对称加密</strong></td>
+<td style="text-align:left">基于<strong>椭圆曲线（ECC）</strong><br>推荐使用素数域 <strong>256位</strong> 椭圆曲线</td>
+<td style="text-align:left">功能全面：包括公钥加密、密钥交换协议、<strong>数字签名</strong>算法。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SM3</strong></td>
+<td style="text-align:left"><strong>杂凑算法</strong> (Hash)</td>
+<td style="text-align:left">杂凑值（摘要）长度：<strong>256比特</strong></td>
+<td style="text-align:left">类似于国际上的SHA-256。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SM4</strong></td>
+<td style="text-align:left"><strong>对称加密</strong></td>
+<td style="text-align:left">分组长度：<strong>128比特</strong><br>密钥长度：<strong>128比特</strong></td>
+<td style="text-align:left">无线局域网标准算法，参数与SM1一致，但已公开。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>SM9</strong></td>
+<td style="text-align:left"><strong>标识密码</strong></td>
+<td style="text-align:left">标识密码算法 (IBC)</td>
+<td style="text-align:left">基于身份的密码技术（例如将邮箱或手机号直接作为公钥）。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>为了方便理解和记忆，可以将国产算法与国际通用算法进行对标：</p>
+<ul>
+<li><strong>SM1 / SM4 (对称)</strong> <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0.124ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="0.968ex" role="img" focusable="false" viewBox="0 -483 778 428"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2248" d="M55 319Q55 360 72 393T114 444T163 472T205 482Q207 482 213 482T223 483Q262 483 296 468T393 413L443 381Q502 346 553 346Q609 346 649 375T694 454Q694 465 698 474T708 483Q722 483 722 452Q722 386 675 338T555 289Q514 289 468 310T388 357T308 404T224 426Q164 426 125 393T83 318Q81 289 69 289Q55 289 55 319ZM55 85Q55 126 72 159T114 210T163 238T205 248Q207 248 213 248T223 249Q262 249 296 234T393 179L443 147Q502 112 553 112Q609 112 649 141T694 220Q694 249 708 249T722 217Q722 153 675 104T555 55Q514 55 468 76T388 123T308 170T224 192Q164 192 125 159T83 84Q80 55 69 55Q55 55 55 85Z"></path></g></g></g></svg></mjx-container> <strong>AES-128</strong> (两者都是128位分组和密钥)</li>
+<li><strong>SM2 (非对称)</strong> <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0.124ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="0.968ex" role="img" focusable="false" viewBox="0 -483 778 428"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2248" d="M55 319Q55 360 72 393T114 444T163 472T205 482Q207 482 213 482T223 483Q262 483 296 468T393 413L443 381Q502 346 553 346Q609 346 649 375T694 454Q694 465 698 474T708 483Q722 483 722 452Q722 386 675 338T555 289Q514 289 468 310T388 357T308 404T224 426Q164 426 125 393T83 318Q81 289 69 289Q55 289 55 319ZM55 85Q55 126 72 159T114 210T163 238T205 248Q207 248 213 248T223 249Q262 249 296 234T393 179L443 147Q502 112 553 112Q609 112 649 141T694 220Q694 249 708 249T722 217Q722 153 675 104T555 55Q514 55 468 76T388 123T308 170T224 192Q164 192 125 159T83 84Q80 55 69 55Q55 55 55 85Z"></path></g></g></g></svg></mjx-container> <strong>ECC / RSA</strong> (但在相同安全强度下，SM2比RSA密钥更短，速度更快)</li>
+<li><strong>SM3 (哈希)</strong> <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0.124ex;" xmlns="http://www.w3.org/2000/svg" width="1.76ex" height="0.968ex" role="img" focusable="false" viewBox="0 -483 778 428"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2248" d="M55 319Q55 360 72 393T114 444T163 472T205 482Q207 482 213 482T223 483Q262 483 296 468T393 413L443 381Q502 346 553 346Q609 346 649 375T694 454Q694 465 698 474T708 483Q722 483 722 452Q722 386 675 338T555 289Q514 289 468 310T388 357T308 404T224 426Q164 426 125 393T83 318Q81 289 69 289Q55 289 55 319ZM55 85Q55 126 72 159T114 210T163 238T205 248Q207 248 213 248T223 249Q262 249 296 234T393 179L443 147Q502 112 553 112Q609 112 649 141T694 220Q694 249 708 249T722 217Q722 153 675 104T555 55Q514 55 468 76T388 123T308 170T224 192Q164 192 125 159T83 84Q80 55 69 55Q55 55 55 85Z"></path></g></g></g></svg></mjx-container> <strong>SHA-256</strong> (输出长度相同)</li>
+</ul>
+<h4 id="6-习题"><a href="#6-习题" class="headerlink" title="6.习题"></a>6.习题</h4><p>利用公开密钥算法进行数据加密时，采用方式是：<strong>发送方用公开密钥加密，接收方用私有密钥解密</strong>。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/18/%E8%BD%AF%E8%80%83%E5%AF%86%E7%A0%81%E5%AD%A6%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/17/%E8%A7%A3%E5%86%B3HEXO%E6%97%A0%E6%B3%95%E6%B8%B2%E6%9F%93LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/17/%E8%A7%A3%E5%86%B3HEXO%E6%97%A0%E6%B3%95%E6%B8%B2%E6%9F%93LaTeX%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">解决HEXO无法渲染LaTeX数学公式的问题</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-17 22:03:42 / 修改时间：22:09:35" itemprop="dateCreated datePublished" datetime="2026-01-17T22:03:42+08:00">2026-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>Hexo 默认的 Markdown 渲染引擎不支持 LaTeX 数学公式语法（即 <script type="math/tex">...</script> 和 $$$ … $$$），或者在渲染时将公式中的特殊字符（如 <code>_</code>、<code>\</code>）错误地转义了。</strong></p>
+<p>VS Code 能够正常显示是因为它内置了强大的 Markdown 预览功能（通常带有 MathJax 或 KaTeX 插件支持），但 Hexo 是一个静态生成器，需要手动配置数学公式渲染插件。</p>
+<p>要解决这个问题，可以按照以下步骤操作：</p>
+<h3 id="第一步：更换更强大的渲染引擎（推荐）"><a href="#第一步：更换更强大的渲染引擎（推荐）" class="headerlink" title="第一步：更换更强大的渲染引擎（推荐）"></a>第一步：更换更强大的渲染引擎（推荐）</h3><p>Hexo 默认使用的 <code>hexo-renderer-marked</code> 对数学公式支持很差，经常会导致公式乱码。建议更换为 <code>hexo-renderer-kramed</code>（它是 marked 的改进版，专门优化了数学公式）。</p>
+<p>在 Hexo 博客根目录下执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 卸载默认渲染器</span></span><br><span class="line">npm un hexo-renderer-marked --save</span><br><span class="line"><span class="comment"># 安装 kramed</span></span><br><span class="line">npm i hexo-renderer-kramed --save</span><br></pre></td></tr></table></figure>
+<h3 id="第二步：安装公式渲染插件"><a href="#第二步：安装公式渲染插件" class="headerlink" title="第二步：安装公式渲染插件"></a>第二步：安装公式渲染插件</h3><p>为了让网页能解析这些数学符号，需要安装 MathJax 或 KaTeX 插件。这里推荐安装 <code>hexo-filter-mathjax</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-filter-mathjax --save</span><br></pre></td></tr></table></figure>
+<h3 id="第三步：在博客配置文件中启用"><a href="#第三步：在博客配置文件中启用" class="headerlink" title="第三步：在博客配置文件中启用"></a>第三步：在博客配置文件中启用</h3><ol>
+<li><p><strong>修改站点配置文件 <code>_config.yml</code></strong>（博客根目录下的那个）：<br>在文件末尾添加以下配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mathjax:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">per_page:</span> <span class="literal">true</span> <span class="comment"># 建议设为 true，只有在需要时才开启</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>修改你的文章 Front-matter（开头部分）</strong>：<br>在你那篇 RSA 原理的文章最上面的 <code>---</code> 区域内，手动添加一行 <code>mathjax: true</code>。例如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">RSA原理解读</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2026-01-17 17:51:43</span></span><br><span class="line"><span class="attr">tags:</span> [<span class="string">RSA</span>, <span class="string">密码学</span>]</span><br><span class="line"><span class="attr">categories:</span> <span class="string">密码学</span></span><br><span class="line"><span class="attr">mathjax:</span> <span class="literal">true</span>  <span class="comment"># 必须加上这一行</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="第四步：检查主题（Theme）配置"><a href="#第四步：检查主题（Theme）配置" class="headerlink" title="第四步：检查主题（Theme）配置"></a>第四步：检查主题（Theme）配置</h3><p>很多 Hexo 主题（如 NexT, Butterfly, Fluid）已经内置了对 MathJax 的支持。如果按上述操作还是不行，就需要去<strong>主题的配置文件</strong>（<code>themes/你的主题名/_config.yml</code>）里搜索 <code>math</code> 或 <code>mathjax</code>，将 <code>enable</code> 设置为 <code>true</code>。</p>
+<h3 id="为什么会显示不正常？（技术原因分析）"><a href="#为什么会显示不正常？（技术原因分析）" class="headerlink" title="为什么会显示不正常？（技术原因分析）"></a>为什么会显示不正常？（技术原因分析）</h3><ol>
+<li><strong>符号冲突</strong>：Markdown 中 <code>_</code> 表示斜体，而在 LaTeX 中表示下标。Hexo 默认引擎会先处理 <code>_</code>，导致 LaTeX 还没来得及解析，公式就已经被破坏了。</li>
+<li><strong>转义问题</strong>：LaTeX 中经常使用反斜杠 <code>\</code>（如 <code>\phi</code>），默认引擎可能会把它当成 Markdown 的转义字符给删掉。</li>
+<li><strong>缺少前端渲染库</strong>：即便 Markdown 引擎不破坏公式，浏览器本身也看不懂 $$$ … $$$，需要像 MathJax.js 这样的 JavaScript 脚本在页面加载时把这些代码转换成美观的数学符号。</li>
+</ol>
+<p><strong>建议：</strong> 完成上述配置后，运行 <code>hexo clean</code> 然后 <code>hexo g</code> 重新生成预览。如果公式依然有部分乱码，通常是由于 <code>_</code> 导致的冲突，此时使用 <code>hexo-renderer-kramed</code> 效果通常最好。</p>
+<h3 id="可能会遇到的问题"><a href="#可能会遇到的问题" class="headerlink" title="可能会遇到的问题"></a>可能会遇到的问题</h3><p>我遇到的终端输出结果会提示<strong>环境安装已经成功，但存在一些版本兼容性带来的“副作用”。</strong></p>
+<p>以下是详细的分析和后续操作建议：</p>
+<h3 id="1-结果分析：安装成功了吗？"><a href="#1-结果分析：安装成功了吗？" class="headerlink" title="1. 结果分析：安装成功了吗？"></a>1. 结果分析：安装成功了吗？</h3><p><strong>结论：安装已经成功，可以开始配置了。</strong></p>
+<ul>
+<li><strong>卸载成功</strong>：<code>hexo-renderer-marked</code> 已移除。</li>
+<li><strong>安装成功</strong>：<code>hexo-renderer-kramed</code> 和 <code>hexo-filter-mathjax</code> 都已经正确进入了你的 <code>node_modules</code> 文件夹。</li>
+<li><strong>警告（Warn）</strong>：你看到的 <code>deprecated</code>（弃用）警告是因为这两个插件都是社区维护的，引用的某些底层库（如 <code>highlight.js</code> 和 <code>mathjax-full</code>）版本较旧。<strong>对于 Hexo 静态博客来说，这些警告通常可以忽略，不影响使用。</strong></li>
+</ul>
+<h3 id="2-安全漏洞（Vulnerabilities）分析"><a href="#2-安全漏洞（Vulnerabilities）分析" class="headerlink" title="2. 安全漏洞（Vulnerabilities）分析"></a>2. 安全漏洞（Vulnerabilities）分析</h3><p>执行 <code>npm audit</code> 发现了 5 个漏洞（2 个中等，3 个高危）。</p>
+<ul>
+<li><strong>原因</strong>：<code>hexo-renderer-kramed</code> 是一个为了解决数学公式而停止在旧版本的渲染器，它依赖的一些组件（如 <code>cross-spawn</code>, <code>striptags</code>）确实存在已知的安全漏洞。</li>
+<li><strong>风险评估</strong>：<strong>低风险。</strong> 因为 Hexo 是在<strong>本地电脑</strong>上运行生成静态 HTML 文件的工具。这些漏洞大多数是“拒绝服务攻击 (ReDoS)”，除非从网上下载来历不明的恶意 Markdown 插件并运行，否则它们不会影响生成的博客网页，也不会威胁到访问网站的读者。</li>
+<li><strong>特别提醒</strong>：<strong>千万不要运行 <code>npm audit fix --force</code></strong>。这可能会导致 npm 强制把你刚装好的 <code>kramed</code> 降级或替换回 <code>marked</code>，让你之前的操作白费。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/17/CodeQL%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99-Java%E5%86%85%E9%83%A8%E6%B5%8B%E8%AF%95API%E6%8F%90%E5%8F%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/17/CodeQL%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99-Java%E5%86%85%E9%83%A8%E6%B5%8B%E8%AF%95API%E6%8F%90%E5%8F%96/" class="post-title-link" itemprop="url">CodeQL规则编写_Java内部测试API提取</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-17 18:32:29 / 修改时间：20:40:48" itemprop="dateCreated datePublished" datetime="2026-01-17T18:32:29+08:00">2026-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SAST/" itemprop="url" rel="index"><span itemprop="name">SAST</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在 IRIS 项目中，第二步是提取全部内部测试 API ，CodeQL 规则编写如下，因为不太理解 CodeQL 规则如何编写，所以学习记录如下，内容由 GPT 5.2 生成。</p>
+<p>解读方式：“<strong>这条规则想解决什么问题 → 每个谓词/函数做什么 → where 条件组合后的真实含义 → 可能的坑与改进</strong>”的顺序，带你把它吃透。</p>
+<h2 id="1）一句话概括：这条规则在找什么？"><a href="#1）一句话概括：这条规则在找什么？" class="headerlink" title="1）一句话概括：这条规则在找什么？"></a>1）一句话概括：这条规则在找什么？</h2><p>它在找：</p>
+<blockquote>
+<p><strong>“在 src/test 里被调用过、但在非 test（业务代码）里从未被调用过”的 public 且有参数的源代码方法。</strong></p>
+</blockquote>
+<p>更口语一点：</p>
+<ul>
+<li>✅ 测试代码里在用它（isTested）</li>
+<li>❌ 业务代码里没人用它（isNotInvokedByInternalFunction）</li>
+<li>并且方法是 public、来自项目源码、且至少有一个参数</li>
+</ul>
+<p>这类方法常见场景：</p>
+<ul>
+<li>只为了测试而写的“辅助 API”（不一定是好事）</li>
+<li>public 暴露出去但实际上没人用（可能是 dead API / 过度暴露）</li>
+<li>测试通过“直接调用内部方法”来测（可能说明设计不佳或测试方式不对）</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/01/17/CodeQL%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99-Java%E5%86%85%E9%83%A8%E6%B5%8B%E8%AF%95API%E6%8F%90%E5%8F%96/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -958,707 +1725,8 @@ mjx-container[display="true"] + br {
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/07/Windows%E6%BF%80%E6%B4%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/07/Windows%E6%BF%80%E6%B4%BB/" class="post-title-link" itemprop="url">Windows激活</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-07 20:56:27 / 修改时间：22:19:57" itemprop="dateCreated datePublished" datetime="2026-01-07T20:56:27+08:00">2026-01-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>参考链接：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/6823352707">https://zhuanlan.zhihu.com/p/6823352707</a></p>
-<h2 id="PowerShell激活"><a href="#PowerShell激活" class="headerlink" title="PowerShell激活"></a>PowerShell激活</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irm https://get.activated.win | iex</span><br></pre></td></tr></table></figure>
-<p>看到激活选项，选择[1] HWID 用于 Windows 激活，选择[2] Ohook 用于 Office 激活。</p>
-<p>Windows 激活需要联网，属于在线激活方式，office激活无需联网。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/07/%E8%A7%A3%E5%86%B3Microsoft%E5%AE%98%E7%BD%91%E6%97%A0%E6%B3%95%E4%B8%8B%E8%BD%BDWin10-iso%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/07/%E8%A7%A3%E5%86%B3Microsoft%E5%AE%98%E7%BD%91%E6%97%A0%E6%B3%95%E4%B8%8B%E8%BD%BDWin10-iso%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">解决Microsoft官网无法下载Win10-iso问题</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-07 20:56:04 / 修改时间：22:16:06" itemprop="dateCreated datePublished" datetime="2026-01-07T20:56:04+08:00">2026-01-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在使用Windows系统访问微软官网时，无法直接下载到 Windows 10 iso 镜像，只提供MediaCreationTool_22H2.exe工具，修改浏览器 UA 即可，如果没有改包插件或者burp，可以用 Chrome 自带的 Devtools。</p>
-<p>F12 -&gt; More tools -&gt; Network conditions -&gt; User Agent</p>
-<p>随便输入其他系统的 UA，以 Linux 为例，输入以下内容即可：</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36</span><br></pre></td></tr></table></figure>
-<p>操作步骤如下：</p>
-<p><img src="../uploads/UA_1.png" alt=""></p>
-<p><img src="../uploads/UA_2.png" alt=""></p>
-<p><img src="../uploads/UA_3.png" alt=""></p>
-<p>参考链接：<a target="_blank" rel="noopener" href="https://github.com/hosxy/Settings/blob/master/Firefox/Windows%E4%B8%8B%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BD%BDWindows10%20ISO%E9%95%9C%E5%83%8F.md">https://github.com/hosxy/Settings/blob/master/Firefox/Windows%E4%B8%8B%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BD%BDWindows10%20ISO%E9%95%9C%E5%83%8F.md</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/06/%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%A6%82%E8%BF%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/06/%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">网络信息安全概述</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-06 22:48:55 / 修改时间：22:50:27" itemprop="dateCreated datePublished" datetime="2026-01-06T22:48:55+08:00">2026-01-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>网络发展趋势——数字化、网络化、智能化</p>
-<p>网络安全（狭义）指网络信息系统的各组成要素符合安全属性的要求，包含机密性、完整性、可用性、抗抵赖和可控性</p>
-<p>网络安全（广义）包含国家安全、城市安全、经济安全、社会安全、生产安全、人身安全在内的大安全</p>
-<p>网络安全新变化：</p>
-<ul>
-<li>单维向多维转变，保障维度包含网络空间域、物理空间域、社会空间域</li>
-<li>网络信息安全保障措施从单一性转向综合性（法律、政策、技术、管理、产业、教育）</li>
-<li>保障时间维度要求涵盖网络系统的整个生命周期，保障相应速度不断缩短，网络安全无战时、平时之分，而是时时刻刻</li>
-</ul>
-<h2 id="网络信息安全涉及方面"><a href="#网络信息安全涉及方面" class="headerlink" title="网络信息安全涉及方面"></a>网络信息安全涉及方面</h2><ol>
-<li>网络强依赖及关联风险</li>
-<li>产品供应链和安全质量风险</li>
-<li>技术同质性和技术滥用风险</li>
-<li>安全建设和管理发展不平衡</li>
-<li>数据安全</li>
-<li>高级持续威胁</li>
-<li>恶意代码</li>
-<li>软件安全漏洞</li>
-<li>网络安全意识</li>
-<li>技术复杂性和运营安全</li>
-<li>灰黑产</li>
-<li>间谍</li>
-</ol>
-<h2 id="网络信息安全基本属性"><a href="#网络信息安全基本属性" class="headerlink" title="网络信息安全基本属性"></a>网络信息安全基本属性</h2><p>基本属性</p>
-<ul>
-<li>机密性 Confidentiality 信息不泄露给非授权用户</li>
-<li>完整性 integrity 未经授权不能进行更改</li>
-<li>可用性 availability 合法许可用户能够及时获取网络信息或服务</li>
-<li>抗抵赖性 防止用户否认其活动行为</li>
-<li>可控性 主体对其具有管理和支配能力</li>
-</ul>
-<p>其他属性</p>
-<ul>
-<li>真实性 客观事实保持一致</li>
-<li>时效性 满足时间约束要求</li>
-<li>合规性 符合法律法规政策、标准规范要求</li>
-<li>公平性 同等地位处理相关任务</li>
-<li>可靠性 有效完成预定系统功能特性</li>
-<li>可生存性 提供最小化必要服务</li>
-<li>隐私性 敏感信息不对外公开</li>
-</ul>
-<h2 id="网络安全基本要求"><a href="#网络安全基本要求" class="headerlink" title="网络安全基本要求"></a>网络安全基本要求</h2><p>宏观：网络信息系统满足国家安全需求特性</p>
-<p>微观：具体安全要求</p>
-<p>基本功能：具备防御、监测、应急和恢复功能</p>
-<p>其他方面：物理环境安全、安全认证、访问控制、保密、漏洞扫描、恶意代码防护、内容安全、监测预警、应急响应。</p>
-<h2 id="网络信息安全管理"><a href="#网络信息安全管理" class="headerlink" title="网络信息安全管理"></a>网络信息安全管理</h2><p>管理对象：网络设备、网络通信协议、操作系统、网络服务、安全网络管理在内的软硬件和。企业、机构直接赋予了价值而需要保护的资产。</p>
-<p>涉及内容：物理安全、通信安全、操作系统安全、网络服务安全、操作安全和人员安全。</p>
-<p>网络安全管理方法：风险管理、等级保护、纵深防御、层次化防护、应急响应以及PDCA方法。</p>
-<p>网络信息安全管理要素：网络管理对象、网络威胁、网络脆弱性、网络风险、网络保护措施。</p>
-<p>安全威胁：自然威胁和人为威胁。</p>
-<p>风险控制包括：避免风险、转移风险、减少威胁、消除脆弱点、减少威胁影响、风险监测。</p>
-<p>管理工作流程如下：确定对象、评估价值、识别威胁、识别脆弱性、确定风险级别、指定防护体系和措施、实施和落实、运行和维护。</p>
-<p>生命周期：</p>
-<ul>
-<li>系统规划：风险评估，标识安全目标和安全需求；</li>
-<li>系统设计：风险控制方法，安全解决方案，安全体系结构涉及；</li>
-<li>系统集成：购买部署安全产品，系统安全配置，效果评估，需求、环境验证；</li>
-<li>运行维护：建立管理组织，制定规章制度，定期评估对象，挑战安全配置，漏洞修复，安全监测和应急处理；</li>
-<li>系统废弃：对要废弃的系统组件进行评估、处理和更新。</li>
-</ul>
-<h2 id="网络信息安全法规"><a href="#网络信息安全法规" class="headerlink" title="网络信息安全法规"></a>网络信息安全法规</h2><p>网络信息安全管理评估：网络信息安全等级保护测评、信息安全管理体系认证（ISMS）、系统安全工程能力成熟度模型（SSE-CMM）</p>
-<p>《中华人民共和国网络安全法》由第十二届全国人大第二十四次会议2016年11月7日通过，2017年6月1日执行。</p>
-<p>《中华人民共和国密码法》于2020年1月1日起实施。</p>
-<p>采取监测、记录网络运行状态、网络安全事件的技术措施，按照规定留存的网络日志<strong>不少于6个月</strong>。</p>
-<h2 id="网络安全等级保护"><a href="#网络安全等级保护" class="headerlink" title="网络安全等级保护"></a>网络安全等级保护</h2><p>等保工作可以概括为：定级、备案、建设整改、等级测评、运营维护。</p>
-<ul>
-<li>定级：确定定级对象</li>
-<li>备案：准备备案材料</li>
-<li>建设整改：根据差距分析，针对不符合项结合行业要求对保护对象进行整改</li>
-<li>等级测评：对定级的保护对象进行测评</li>
-<li>运行维护：对保护对象的安全相关事宜进行监督管理</li>
-</ul>
-<p>中国网络安全审查技术与认证中心 CCRC （原中国信息安全认证中心）</p>
-<p>域名服务是网络基础服务，域名服务出现安全事件时，应在24小时内向电信管理机构报告。域名是政府网站的基本组成部分和重要身份标识。</p>
-<p>国家计算机网络应急技术处理协调中心 CNCERT CNCERT/CC “积极预防、及时发现、快速响应、力保恢复”</p>
-<p>网络信息安全领域顶刊：S&amp;P、CCS、NDSS、USENIX Security</p>
-<p>网络信息安全术语包含：基础技术类、风险评估类、防护技术类、检测技术类、响应恢复类、测评技术类。</p>
-<ul>
-<li>密码：加密、解密、非对称加密、公钥、私钥</li>
-<li>风险评估：分布式拒绝服务、网页篡改、网页仿冒、挂马、域名劫持、垃圾邮件、恶意代码、特洛伊木马、网络蠕虫、僵尸网络</li>
-<li>防护技术：访问控制、防火墙、入侵检测</li>
-<li>检测技术：入侵检测、漏洞扫描</li>
-<li>响应恢复：应急响应、灾难恢复、备份</li>
-<li>测评技术：黑盒测试、白盒测试、灰盒测试、渗透测试、模糊测试</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/05/WebGoat%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/05/WebGoat%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA/" class="post-title-link" itemprop="url">WebGoat靶场搭建</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-05 22:42:51 / 修改时间：22:45:00" itemprop="dateCreated datePublished" datetime="2026-01-05T22:42:51+08:00">2026-01-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在 SAST 和 CodeQL 的学习过程中，需要找到一个比较有价值的测试目标，目前考虑到的关键点是代码不能过于简单，否则不具备测试深度，提出的方法不具备应用价值，这里选择 WebGoat 作为初步测试目标，结合 CodeQL-Community-Packs 进行学习、分析和测试。</p>
-<p>靶场地址下载地址：<a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat/releases">https://github.com/WebGoat/WebGoat/releases</a></p>
-<p>也可以直接下载 jar 包：<a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat/releases/download/v2025.3/webgoat-2025.3.jar">https://github.com/WebGoat/WebGoat/releases/download/v2025.3/webgoat-2025.3.jar</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export TZ=Asia/Shanghai # or your timezone</span><br><span class="line">java -Dfile.encoding=UTF-8 -jar webgoat-2025.3.jar</span><br></pre></td></tr></table></figure>
-<p>export TZ 用来设置时区，java 启动WebGoat应用程序，-Dfile.encoding=UTF-8 设置Java虚拟机的文件编码为UTF-8，-jar webgoat-2023.8.jar 运行名为webgoat-2023.8.jar的可执行JAR文件。</p>
-<h2 id="漏洞代码分析"><a href="#漏洞代码分析" class="headerlink" title="漏洞代码分析"></a>漏洞代码分析</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/SqlInjection/attack2&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> AttackResult <span class="title function_">completed</span><span class="params">(<span class="meta">@RequestParam</span> String query)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> injectableQuery(query);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这段代码定义了一个<strong>Spring MVC 控制器方法（Controller Method）</strong>，它是后端处理前端请求的入口点。</p>
-<h3 id="代码逐行详细解读"><a href="#代码逐行详细解读" class="headerlink" title="代码逐行详细解读"></a>代码逐行详细解读</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/SqlInjection/attack2&quot;)</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>功能</strong>：这是一个<strong>路由映射</strong>注解。</li>
-<li><strong>含义</strong>：它告诉 Spring 框架，当服务器收到一个 <strong>HTTP POST</strong> 请求，且请求的路径（URL）是 <strong>/SqlInjection/attack2</strong> 时，请把这个请求交给下面定义的 <code>completed</code> 方法来处理。</li>
-<li><strong>对应前端行为</strong>：用户在浏览器点击“提交”按钮时，浏览器会向这个地址发送数据。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>功能</strong>：这是一个<strong>响应处理</strong>注解。</li>
-<li><strong>含义</strong>：它告诉 Spring，这个方法的<strong>返回值</strong>（<code>AttackResult</code> 对象）应该直接被序列化（通常转为 JSON 格式）并写入 HTTP 响应体（Body）中返回给浏览器，而不是被解析为 JSP 或 HTML 页面模板。</li>
-<li><strong>对应前端行为</strong>：浏览器收到的不是一个新网页，而是一段 JSON 数据（如 <code>&#123;&quot;lessonCompleted&quot;: true, &quot;feedback&quot;: &quot;...&quot;&#125;</code>），前端 JS 脚本会读取这个 JSON 并弹窗提示结果。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> AttackResult <span class="title function_">completed</span><span class="params">(<span class="meta">@RequestParam</span> String query)</span> &#123;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>方法签名</strong>：定义了一个名为 <code>completed</code> 的公共方法。</li>
-<li><strong><code>@RequestParam String query</code></strong>：<ul>
-<li>这是<strong>参数绑定</strong>。它告诉 Spring 从 HTTP 请求的参数中提取名为 <strong>“query”</strong> 的值，并将其赋值给方法参数 <code>query</code>。</li>
-<li>如果请求是 <code>POST /SqlInjection/attack2?query=SELECT...</code> 或者表单数据中包含 <code>query=SELECT...</code>，那么这里的 <code>String query</code> 就会得到那个 SQL 字符串。</li>
-</ul>
-</li>
-<li><strong>返回值类型 <code>AttackResult</code></strong>：这是 WebGoat 自定义的一个类，用来封装“练习结果”，包含是否通关、反馈信息等。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">return</span> injectableQuery(query);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>逻辑</strong>：它没有自己处理业务逻辑，而是直接调用了同一个类中的辅助方法 <code>injectableQuery(query)</code>，并将结果直接返回。</li>
-<li><strong>作用</strong>：这是一个简单的<strong>入口转发</strong>。真正执行 SQL 查询和判定是否通关的逻辑都在 <code>injectableQuery</code> 方法里（也就是下面那段有漏洞的代码）。</li>
-</ul>
-<h3 id="总结功能"><a href="#总结功能" class="headerlink" title="总结功能"></a>总结功能</h3><p>这段代码的作用是在服务器上开放了一个名为 <code>/SqlInjection/attack2</code> 的接口，专门接收用户 POST 过来的 <code>query</code> 参数，然后把这个参数扔给内部逻辑去执行，最后把执行结果（成功或失败的消息）以 JSON 格式扔回给用户。</p>
-<h2 id="CodeQL-分析"><a href="#CodeQL-分析" class="headerlink" title="CodeQL 分析"></a>CodeQL 分析</h2><p>如果使用 CodeQL 进行静态分析，它识别到的<strong>Source（污染源/用户输入点）</strong> 就是：</p>
-<p><strong><code>@RequestParam String query</code></strong></p>
-<p>具体来说，CodeQL 的污点跟踪（Taint Tracking）分析会标记以下位置为 Source：</p>
-<ol>
-<li><strong>位置</strong>：第 42 行的参数声明 <code>String query</code>。</li>
-<li><strong>原因</strong>：<ul>
-<li>该方法被注解 <code>@PostMapping</code> 标记，表明这是一个处理 HTTP 请求的 Handler 方法。</li>
-<li>参数被注解 <code>@RequestParam</code> 标记（即使没有显式标记，Spring Boot 中默认非简单类型或特定配置下也会被视为输入）。</li>
-<li>CodeQL 的 <code>RemoteFlowSource</code> 库（尤其是针对 Spring MVC 的建模）明确定义了被 <code>@RequestParam</code>、<code>@RequestBody</code>、<code>@PathVariable</code> 等注解修饰的控制器方法参数均视为不可信的外部输入（Untrusted User Input）。</li>
-</ul>
-</li>
-</ol>
-<h3 id="CodeQL-视角的污点路径（Data-Flow-Path）"><a href="#CodeQL-视角的污点路径（Data-Flow-Path）" class="headerlink" title="CodeQL 视角的污点路径（Data Flow Path）"></a>CodeQL 视角的污点路径（Data Flow Path）</h3><p>CodeQL 会追踪数据流，构建如下的路径：</p>
-<ol>
-<li><strong>Source (源头)</strong>: 第 42 行 <code>completed(@RequestParam String query)</code> 中的 <strong><code>query</code></strong> 变量。<ul>
-<li><em>标记：Remote user input source</em></li>
-</ul>
-</li>
-<li><strong>Flow (传递)</strong>: 第 43 行 <code>return injectableQuery(query);</code>，<code>query</code> 被传递给 <code>injectableQuery</code> 方法。</li>
-<li><strong>Flow (传递)</strong>: 第 46 行 <code>protected AttackResult injectableQuery(String query)</code>，参数 <code>query</code> 接收了污点。</li>
-<li><strong>Sink (汇聚点/漏洞点)</strong>: 第 49 行 <code>statement.executeQuery(query);</code>。<ul>
-<li><em>标记：SQL Injection Sink (java.sql.Statement.executeQuery)</em></li>
-</ul>
-</li>
-</ol>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>CodeQL 会准确地将 <strong>第 42 行的 <code>query</code> 参数</strong> 识别为用户输入的源头。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/03/%E8%BD%AF%E8%80%83%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88%E8%80%83%E7%82%B9%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">软考信息安全工程师考点概述</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-03 22:05:33 / 修改时间：22:10:47" itemprop="dateCreated datePublished" datetime="2026-01-03T22:05:33+08:00">2026-01-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>软考信息安全工程师涉及到的考试章节和具体考点如下，科目一考点：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th><strong>章节名称</strong></th>
-<th><strong>章节内容</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1. 网络信息安全概述</td>
-<td>网络发展现状、安全属性、安全管理、生命周期</td>
-</tr>
-<tr>
-<td>2. 网络攻击原理与常用方法</td>
-<td>攻击概述、常见攻击方法、黑客常用工具、攻击案例</td>
-</tr>
-<tr>
-<td>3. 密码学基本理论</td>
-<td>概况、密码学体制、常见密码算法、数字签名、安全协议</td>
-</tr>
-<tr>
-<td>4. 网络安全体系与网络安全模型</td>
-<td>概述、网络安全体系模型、建设原则、建设内容、参考案例</td>
-</tr>
-<tr>
-<td>5. 物理与环境安全技术</td>
-<td>物理安全、环境安全、机房安全、通信安全、设备安全、介质安全</td>
-</tr>
-<tr>
-<td>6. 认证技术原理与应用</td>
-<td>概述、认证类型与认证过程、认证技术、认证产品和技术指标</td>
-</tr>
-<tr>
-<td>7. 访问控制技术原理与应用</td>
-<td>访问控制原理、模型、类型、策略设计与实现、安全管理、产品</td>
-</tr>
-<tr>
-<td>8. 防火墙技术原理与应用</td>
-<td>防火墙原理、类型与实现技术、产品与技术指标、体系结构</td>
-</tr>
-<tr>
-<td>9. VPN 技术原理与应用</td>
-<td>概述、类型和实现技术、产品与技术指标、技术应用</td>
-</tr>
-<tr>
-<td>10. 入侵检测技术原理与应用</td>
-<td>概述、入侵检测技术、组成与分类、产品与技术指标、应用</td>
-</tr>
-<tr>
-<td>11. 网络物理隔离技术原理与应用</td>
-<td>网络物理隔离概述、系统与类型、机制与技术、产品与指标</td>
-</tr>
-<tr>
-<td>12. 网络安全审计技术原理与应用</td>
-<td>安全审计概述、组成与类型、机制与实现技术、产品与技术</td>
-</tr>
-<tr>
-<td>13. 网络安全漏洞防护技术原理与应用</td>
-<td>网络安全漏洞概述、分类与管理、漏洞扫描技术、处置技术、产品</td>
-</tr>
-<tr>
-<td>14. 恶意代码防范技术原理</td>
-<td>计算机病毒、特洛伊木马、网络蠕虫、僵尸网络等</td>
-</tr>
-<tr>
-<td>15. 网络安全主动防御技术与应用</td>
-<td>入侵阻断、软件白名单、网络流量清洗、可信计算、数字水印等</td>
-</tr>
-<tr>
-<td>16. 网络安全风险评估技术原理与应用</td>
-<td>风险评估概述、评估过程、评估技术、工作流程</td>
-</tr>
-<tr>
-<td>17. 网络安全应急响应技术原理与应用</td>
-<td>网络安全应急响应概述、工作机制、预案内容、应急处理</td>
-</tr>
-<tr>
-<td>18. 网络安全测评技术与标准</td>
-<td>网络安全测评概述、类型、流程与内容、技术工具、标准</td>
-</tr>
-<tr>
-<td>19. 操作系统安全保护</td>
-<td>概述、Windows / Linux 操作系统安全、国产操作系统安全</td>
-</tr>
-<tr>
-<td>20. 数据库系统安全</td>
-<td>概述、安全机制和技术、Oracle、MS SQL、MySQL、国产数据库安全</td>
-</tr>
-<tr>
-<td>21. 网络设备安全</td>
-<td>网络设备安全概述、机制与技术、增强技术、漏洞和解决方法</td>
-</tr>
-<tr>
-<td>22. 网站安全需求分析与安全保护</td>
-<td>网络安全威胁、Apache Web 安全、IIS 安全、Web 漏洞、网站安全</td>
-</tr>
-<tr>
-<td>23. 云计算安全需求分析与安全保护</td>
-<td>云计算安全威胁、安全需求、安全保护机制与技术、案例</td>
-</tr>
-<tr>
-<td>24. 工控安全需求分析与安全保护</td>
-<td>工控系统安全威胁、安全需求、安全保护机制与技术、案例</td>
-</tr>
-<tr>
-<td>25. 移动应用安全需求分析与安全保护</td>
-<td>移动应用安全威胁、Android、iOS 安全、保护机制和技术、案例</td>
-</tr>
-<tr>
-<td>26. 大数据安全需求分析与安全保护</td>
-<td>大数据安全威胁、安全需求、安全保护机制与技术、案例</td>
-</tr>
-<tr>
-<td>专业英语</td>
-<td>专业英语</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>科目二考点：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th><strong>考试专题</strong></th>
-<th><strong>知识点</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>密码学</td>
-<td>1. 安全目标等基础概念。<br>2. RSA 加解密详细过程，其他加密算法概述。<br>3. 公钥私钥加解密、数字签名过程，文字表示及识图。<br>4. 密钥管理技术、安全认证协议等。</td>
-</tr>
-<tr>
-<td>网络安全</td>
-<td>1. 防火墙概念（iptables 过滤规则及配置命令）、体系结构、包过滤规则填表，Windows / Linux 配置。<br>2. 各种网络攻击和威胁，数据敏感度、隐私分类、隐私保护等。<br>3. 网络协议数据包含义分析。<br>4. 重要网络协议如 TCP、DNS、DHCP 等。<br>5. 华为交换机、路由器等安全配置命令。</td>
-</tr>
-<tr>
-<td>信息系统安全</td>
-<td>1. 信息安全概述、目标、访问控制原理、BLP 等模型。<br>2. C 语言代码漏洞分析，变量内存图等。<br>3. Linux 重要配置文件名及内容含义、文件权限、配置命令等。<br>4. Windows 重要配置：日志、防火墙、安全策略等界面。</td>
-</tr>
-<tr>
-<td>新技术</td>
-<td>移动应用——安卓系统和 iOS 系统；<br>数据敏感度、隐私保护、隐私分类等；<br>其他可能会考察的有：云计算、工控系统、移动应用、大数据、应急响应等安全新技术内容。</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/8/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

