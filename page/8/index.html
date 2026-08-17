@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">103</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -208,6 +208,300 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/10/SSH%E7%A7%81%E9%92%A5%E8%BF%9E%E6%8E%A5%E5%8F%8AVScode%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/10/SSH%E7%A7%81%E9%92%A5%E8%BF%9E%E6%8E%A5%E5%8F%8AVScode%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">SSH私钥连接服务器及VScode配置</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-10 18:26:03 / 修改时间：18:54:52" itemprop="dateCreated datePublished" datetime="2026-01-10T18:26:03+08:00">2026-01-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>SSH 指定密钥登录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i /home/test/.ssh/id_rsa -p 22 test@10.10.10.1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>i 指定密钥文件路径</li>
+<li>p 指定端口号</li>
+</ul>
+<p>Trae 中进行配置，使用私钥登录，首先在扩展处搜索 <code>Remote-SSH</code> ，安装完成后，在远程资源管理器模块，选择SSH连接目标的设置按钮</p>
+<p><img src="../uploads/ssh_1.png" alt=""></p>
+<p>添加以下配置信息，路径、用户、端口号等信息对应修改即可，这里记录了Windows操作系统的路径写法：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">Host</span> <span class="string">Ubuntu-server</span></span><br><span class="line">    <span class="string">HostName</span> <span class="number">10.10</span><span class="number">.10</span><span class="number">.1</span></span><br><span class="line">    <span class="string">User</span> <span class="string">username</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">C:\Users\test/.ssh/id_rsa</span></span><br><span class="line">    <span class="string">Port</span> <span class="number">22</span></span><br></pre></td></tr></table></figure>
+<p>相关配置 VScode 同理。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/07/%E8%BD%AF%E8%80%83%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/07/%E8%BD%AF%E8%80%83%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">软考网络攻击原理及常用方法</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-01-07 22:29:10" itemprop="dateCreated datePublished" datetime="2026-01-07T22:29:10+08:00">2026-01-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-01-11 17:00:36" itemprop="dateModified" datetime="2026-01-11T17:00:36+08:00">2026-01-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="网络攻击概述"><a href="#网络攻击概述" class="headerlink" title="网络攻击概述"></a>网络攻击概述</h2><p>网络攻击是指损害网络系统安全属性的危害行为。危害行为导致网络系统的机密性、完整性、可用性、真实性、抗抵赖性等受到不同程度的破坏。</p>
+<p>常见的危害行为有四个基本类型：信息泄露攻击；完整性破坏攻击；拒绝服务攻击；非法使用攻击。</p>
+<h2 id="网络攻击模型"><a href="#网络攻击模型" class="headerlink" title="网络攻击模型"></a>网络攻击模型</h2><p>掌握网络攻击模型有助于更好地理解分析网络攻击活动，以便对目标系统的抗攻击能力进行测评。常见的网络攻击模型如下：</p>
+<p>以下为图片中的文字内容（按原结构整理）：</p>
+<p><strong>1. 攻击树模型</strong>：起源于故障树分析方法，经过扩展形成 <strong>AND-OR 形式的树结构</strong> 对目标对象进行网络安全威胁分析。可以被 <strong>Red Team</strong> 用来进行渗透测试，同时也可以被 <strong>Blue Team</strong> 用来研究防御机制。</p>
+<p>◆ <strong>优点</strong>：<br>能够采取专家头脑风暴法，并且将这些意见融合到攻击树中去；<br>能够进行费效分析或者概率分析；<br>能够建模非常复杂的攻击场景。</p>
+<p>◆ <strong>缺点</strong>：<br>由于树结构的内在限制，攻击树不能用来建模多重常识攻击、时间依赖及访问控制等场景；<br>不能用来建模循环事件；<br>对于现实中的大规模网络，攻击树方法处理起来将会特别复杂。</p>
+<p><strong>2. MITRE ATT&amp;CK 模型</strong>：<br>根据<strong>真实观察到的网络攻击数据</strong>提炼形成的攻击矩阵模型；<br>该模型把攻击活动抽象为<strong>初始访问、执行、持久化、特权提升、躲避防御、凭据访问、发现、横向移动、收集、指挥和控制、外泄、影响</strong>，然后给出攻击活动的具体实现方式。<br>主要应用场景有：<strong>网络红蓝对抗模拟、网络安全渗透测试、网络防御差距评估、网络威胁情报收集</strong>等。</p>
+<p><strong>3. 网络杀伤链（Kill Chain）模型</strong>：<br>将网络攻击活动分成<strong>目标侦察、武器构造、载荷投送、漏洞利用、安装植入、指挥和控制、目标行动</strong>等七个阶段。</p>
+<h2 id="网络攻击一般过程"><a href="#网络攻击一般过程" class="headerlink" title="网络攻击一般过程"></a>网络攻击一般过程</h2><p>（1）<strong>隐藏攻击源。</strong> 利用被侵入的主机作为跳板；免费代理网关；伪造 IP 地址；假冒用户账号。</p>
+<p>（2）<strong>收集攻击目标信息。</strong> 收集目标系统一般信息、配置信息、安全漏洞信息、安全措施信息、用户信息。</p>
+<p>（3）<strong>挖掘漏洞信息。</strong> 系统或应用服务软件漏洞；主机信任关系漏洞；目标网络的使用者漏洞；通信协议漏洞；网络业务系统漏洞。</p>
+<p>（4）<strong>获取目标访问权限。</strong> 获得系统管理员的口令；利用系统管理上的漏洞；让系统管理员运行一些特洛伊木马；窃听管理员口令。</p>
+<p>（5）<strong>隐藏攻击行为。</strong> 连接隐藏；进程隐藏；文件隐藏。</p>
+<p>（6）<strong>实施攻击。</strong> 攻击其他被信任的主机和网络；修改或删除重要数据；窃取敏感数据；停止网络服务；下载敏感数据；删除数据账号；修改数据记录。</p>
+<p>（7）<strong>开启后门。</strong> 放宽文件许可权；重新开放不安全的服务；修改系统的配置；替换系统本身的共享库文件；修改系统的源代码；安装各种特洛伊木马；安装嗅探器；建立隐藏信道。</p>
+<p>（8）<strong>清除攻击痕迹。</strong> 篡改日志文件中的审计信息；改变系统时间造成日志文件数据紊乱以迷惑系统管理员；删除或停止审计服务进程；干扰入侵检测系统的正常运行；修改完整性检测标签。</p>
+<h2 id="网络攻击常见技术方法"><a href="#网络攻击常见技术方法" class="headerlink" title="网络攻击常见技术方法"></a>网络攻击常见技术方法</h2><h3 id="1-端口扫描"><a href="#1-端口扫描" class="headerlink" title="1.端口扫描"></a>1.端口扫描</h3><p>端口扫描目的是找出目标系统上提供的服务列表。<br>挨个尝试与 TCP/UDP 端口连接，然后根据端口与服务的对应关系，结合服务器端的反映推断目标系统上是否运行了某项服务，攻击者通过这些服务可能获得关于目标系统的进一步的知识或通往目标系统的途径。<br>扫描类型包括：</p>
+<ul>
+<li><p>完全连接扫描：利用 TCP/IP 协议的三次握手连接机制，使源主机和目的主机的某个端口建立一次完整的连接。如果建立成功，则表明该端口开放；否则，表明该端口关闭。</p>
+</li>
+<li><p>半连接扫描：是指在源主机和目的主机的三次握手连接过程中，只完成前两次握手，不建立一次完整的连接。</p>
+</li>
+<li><p>SYN 扫描：首先向目标主机发送连接请求，当目标主机返回响应后，立即切断连接过程，并查看响应情况。如果目标主机返回 ACK 信息，表示目标主机的该端口开放；如果目标主机返回 RESET 信息，表示该端口没有开放。</p>
+</li>
+<li><p>ID 头扫描：ID 头扫描是一种非常隐蔽的端口扫描方法，攻击者不会直接扫描目标主机，而是利用一台几乎不与外界通信的“空闲主机”。通过伪造空闲主机的 IP 地址向目标主机发送连接请求，再观察空闲主机返回数据包中 IP ID 字段的变化情况，来判断目标主机端口是否开放。如果空闲主机的 IP ID 增长异常，说明目标端口是开放的；如果按正常规律递增，则说明端口未开放。</p>
+<ul>
+<li><p>具体操作：需要用一台第三方机器配置扫描，并且这台机器的网络通信量要非常少，即 dumb 主机。首先由源主机 A 向 dumb 主机 B 发出连续的 PING 数据包，并且查看主机 B 返回的数据包的 ID 头信息。一般而言，每个顺序数据包的 ID 头的值会加 1。然后由源主机 A 假冒主机 B 的地址向目的主机 C 的任意端口（1–65535）发送 SYN 数据包。这时，主机 C 向主机 B 发送的数据包有两种可能的结果：</p>
+</li>
+<li><p>◆ SYN | ACK：表示该端口处于监听状态。</p>
+</li>
+<li><p>◆ RST | ACK：表示该端口处于非监听状态。</p>
+</li>
+<li><p>那么，由后续 PING 数据包的响应信息的 ID 头信息可以看出，如果主机 C 的某个端口是开放的，则主机 B 返回的数据包中，ID 头的值不是递增 1，而是大于 1。如果主机 C 的某个端口是非开放的，则主机 B 返回的数据包中，ID 头的值递增 1，非常规律。</p>
+</li>
+</ul>
+</li>
+<li><p>隐蔽扫描：是指能够成功地绕过 IDS、防火墙和监视系统等安全机制，取得目标主机端口信息的一种扫描方式。</p>
+</li>
+<li><p>SYN | ACK 扫描：由源主机向目标主机的某个端口直接发送 SYN/ACK 数据包，而不是发送 SYN 数据包。由于这种方法不发送 SYN 数据包，目标主机认为这是一次错误的连接，从而会报错。如果目标主机的该端口没有开放，会返回 RST 信息；如果该端口开放（LISTENING），则不会返回任何信息，而是直接将这个数据包丢弃。</p>
+</li>
+<li><p>FIN 扫描：源主机 A 向目标主机 B 发送 FIN 数据包，然后查看反馈消息。如果端口返回 RESET 信息，则说明该端口关闭；如果端口没有返回任何信息，则说明端口开放。</p>
+</li>
+<li><p>ACK 扫描：首先由主机 A 向目标主机 B 发送 FIN 数据包，然后查看反馈数据包的 TTL 值和 WIN 值。开放端口所返回的数据包的 TTL 值一般小于 64，而关闭端口的返回值一般大于 64；开放端口所返回的 WIN 值一般大于 0，而关闭端口的返回值一般等于 0。</p>
+</li>
+<li><p>NULL 扫描：将源主机发送的数据包中的 ACK、FIN、RST、SYN、URG、PSH 等标志位全部置空。如果目标主机没有返回任何信息，则表明该端口是开放的；如果返回 RST 信息，则表明该端口是关闭的。</p>
+</li>
+<li><p>XMAS 扫描：原理和 NULL 扫描相同，只是将要发送的数据包中的 ACK、FIN、RST、SYN、URG、PSH 等标志位全部置 1。如果目标主机没有返回任何信息，则表明该端口是开放的；如果返回 RST 信息，则表明该端口是关闭的。</p>
+<blockquote>
+<p>为什么扫描经常会用到 RST 呢？ 因为当主机收到<strong>无法识别或不合法</strong>的 TCP 请求，且对应端口没有监听时，必须返回 RST（复位）报文。RST（Reset，复位）是 TCP 的一种控制报文，作用是立即终止一个不存在、异常或错误的连接。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="2-口令破解"><a href="#2-口令破解" class="headerlink" title="2.口令破解"></a>2.口令破解</h3><p>口令机制是系统访问控制的第一道防线，攻击者通过不断尝试用户名和口令来获取系统访问权限。其基本过程是：先与目标服务器建立连接，然后准备用户名和密码字典，按照网络服务协议将用户名和口令组合发送给目标服务，分析服务器的返回结果判断是否登录成功，若失败则更换新的用户名和口令反复尝试，直到成功或字典用完为止。</p>
+<h3 id="3-缓冲区溢出"><a href="#3-缓冲区溢出" class="headerlink" title="3.缓冲区溢出"></a>3.缓冲区溢出</h3><p>通过向程序的缓冲区写出超出其长度的内容，造成缓冲区溢出，从而破坏程序的堆栈，使程序转而执行其他预设指令，以达到攻击目的的攻击方法。</p>
+<p>缓冲区溢出攻击的基本原理是向缓冲区中写入超长的、预设的内容，导致缓冲区溢出，覆盖其他正常的程序或数据，然后让计算机转去运行预设的程序，达到执行非法操作、实现攻击的目的。</p>
+<h3 id="4-恶意代码"><a href="#4-恶意代码" class="headerlink" title="4.恶意代码"></a>4.恶意代码</h3><p>为达到恶意目的而专门设计的程序或代码，是指破坏计算机或网络系统可靠性、可用性、安全性和数据完整性或者损耗系统资源的恶意程序。<br>常见的恶意代码类型有：计算机病毒、网络蠕虫、特洛伊木马、后门、逻辑炸弹、僵尸网络等。</p>
+<h3 id="5-拒绝服务攻击"><a href="#5-拒绝服务攻击" class="headerlink" title="5.拒绝服务攻击"></a>5.拒绝服务攻击</h3><p>拒绝服务攻击 DoS（Denial of Service）的主要目标是依靠网络系统或网络协议的缺陷和配置漏洞进行网络攻击，使网络拥塞、系统资源耗尽或者系统应用死锁，妨碍目标主机和网络系统对正常用户服务请求的及时响应，造成服务的性能受损甚至服务中断。</p>
+<p>原理：消耗系统资源，导致目标主机宕机，从而阻止授权用户正常访问服务。</p>
+<p>要对服务器实施拒绝服务攻击，实质上的方式就是有两个：</p>
+<ol>
+<li>服务器的缓冲区满，不接收新的请求。</li>
+<li>使用 IP 欺骗，迫使服务器把合法用户的连接复位，影响合法用户的连接。这也是 DoS 攻击实施的基本思路。</li>
+</ol>
+<p>拒绝服务攻击类型有许多种，网络的内外部用户都可以发动这种攻击。内部用户可以通过长时间占用系统的内存、CPU 处理时间使其他用户不能及时得到这些资源，而引起拒绝服务攻击；外部攻击者可以通过占用网络连接使其他用户得不到网络服务。</p>
+<p>外部用户针对网络连接发动拒绝服务攻击主要有几种模式：消耗资源、破坏或更改配置信息、物理破坏或改变网络部件、利用服务程序中的处理错误使服务失效。</p>
+<ul>
+<li><p>SYN Flooding：利用 TCP 协议缺陷发送<strong>大量伪造的 TCP 连接请求</strong>，使得服务器资源耗尽。三次握手，进行了两次，不进行第三次握手，连接队列处于等待状态，大量这样的等待，会占满全部队列空间，使得系统挂起。</p>
+</li>
+<li><p>Smurf 攻击：攻击者伪装目标主机向局域网的广播地址发送大量欺骗性的 ICMP 请求，这些包被放大，并发送到被欺骗的地址，大量的计算机向一台计算机回应 ECHO 包，目标系统会崩溃。</p>
+</li>
+<li><p>Ping of Death 攻击：攻击者故意发送大于 65535 字节的 IP 数据包给对方，导致内存溢出，这时主机会出现内存分配错误而导致 TCP/IP 堆栈崩溃，导致死机。</p>
+</li>
+<li><p>Teardrop 攻击：分段攻击，伪造数据报文向目标主机发送含有重叠偏移的数据分段，通过将各个分段重叠来使目标系统崩溃或挂起。</p>
+</li>
+<li><p>Winnuke 攻击：针对 Windows 系统开放的 139 端口，只要向该端口发送 1 字节的 TCPOOB 数据（TCP 连接的一种特殊数据，设置了 URG 标志，优先级更高），就可以使 Windows 系统出现蓝屏错误，并且网络功能完全瘫痪。</p>
+</li>
+<li><p>Land 攻击：也是利用三次握手的缺陷进行攻击，将 SYN 数据包的源地址和目的地址都设置为目标主机的地址，目标主机向自己回应 SYN+ACK 包，导致自己又给自己回一个 ACK 并建立自己与自己的连接。当这种无效连接达到一定的数量，目标主机将会拒绝新的连接请求。</p>
+</li>
+<li><p>电子邮件轰炸：针对服务端口（SMTP 端口，端口号 25）的攻击，攻击者通过连接邮件服务器的 25 端口，按照 SMTP 协议发送几行头信息加上一堆文字垃圾，反复发送形成邮件轰炸。</p>
+</li>
+<li><p>低速率拒绝服务攻击（Low-rate DoS，LDoS）：与传统的洪泛式 DoS 攻击截然不同，其最大特点是不需要维持高速率攻击流，耗尽受害者端所有可用资源，而是利用网络协议或应用服务中常见的自适应机制（如 TCP 的拥塞控制机制）中所存在的安全漏洞，通过周期性地在一个特定的短暂时间间隔内突发性地发送大量攻击数据包，从而降低被攻击端服务性能。</p>
+</li>
+<li><p>分布式拒绝服务攻击 DDoS（Distributed Denial of Service）：是对传统 DoS 攻击的发展，攻击者首先侵入并控制一些计算机，然后控制这些计算机同时向一个特定的目标发起拒绝服务攻击。<br>分布式攻击 C/S 结构：</p>
+<ul>
+<li><p>Client（客户端）：运行在攻击者的主机上，用来发起和控制 DDoS 攻击；</p>
+</li>
+<li><p>Handler（主控端）：运行在被攻击者侵入并获得控制的主机上，用来控制代理端；</p>
+</li>
+<li><p>Agent（代理端）：运行在已被攻击者侵入并获得控制的主机上，从主控端接收命令，负责对目标实施实际的攻击。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-网络钓鱼（Phishing，与-fishing-发音相近名）"><a href="#6-网络钓鱼（Phishing，与-fishing-发音相近名）" class="headerlink" title="6.网络钓鱼（Phishing，与 fishing 发音相近名）"></a>6.网络钓鱼（Phishing，与 fishing 发音相近名）</h3><p>是一种通过假冒可信方（知名银行、在线零售商和信用卡公司等可信的品牌）提供网上服务，以欺骗手段获取敏感个人信息（如口令、信用卡详细信息等）的攻击方式。网络钓鱼者利用欺骗性的电子邮件和伪造的网站来进行诈骗活动，诱骗访问者提供一些个人信息，以谋求不正当的利益。</p>
+<h3 id="7-网络窃听"><a href="#7-网络窃听" class="headerlink" title="7.网络窃听"></a>7.网络窃听</h3><p>是指利用网络通信技术缺陷，使得攻击者能够获取到其他人的网络通信信息。常见的网络窃听技术手段主要有网络嗅探、中间人攻击。网络攻击者将主机网络接口的方式设成“混杂”模式，就可以接收整个网络上的信息包，从而可以获取敏感口令，甚至将其重组、还原为用户传递的文件。</p>
+<h3 id="8-SQL-注入攻击"><a href="#8-SQL-注入攻击" class="headerlink" title="8.SQL 注入攻击"></a>8.SQL 注入攻击</h3><p>在 Web 服务中，一般采用三层架构模式：浏览器 + Web 服务器 + 数据库。其中，WEB 应用程序负责处理来自浏览器的请求。但是由于 WEB 应用程序的编程漏洞，对来自浏览器的信息缺乏输入安全合法性检查，网络攻击者利用这个漏洞，把 SQL 命令插入 WEB 表单的输入域或页面的请求参数字符串，欺骗服务器执行恶意的 SQL 命令。</p>
+<h3 id="9-社会工程学"><a href="#9-社会工程学" class="headerlink" title="9. 社会工程学"></a>9. 社会工程学</h3><p>网络攻击者通过一系列的社交活动，获取需要的信息。例如伪造系统管理员的身份，给特定的用户发电子邮件欺骗他的密码口令。有的攻击者给用户发送免费程序，不过该程序除了完成用户所需的功能外，还隐藏了一个将用户的计算机信息发送给攻击者的功能。</p>
+<h3 id="10-电子监听"><a href="#10-电子监听" class="headerlink" title="10.电子监听"></a>10.电子监听</h3><p>网络攻击者采用电子设备远距离地监视电磁波的传送过程。灵敏的无线电接收装置能够在远处看到计算机操作者输入的字符或屏幕显示的内容。</p>
+<h3 id="11-会话劫持"><a href="#11-会话劫持" class="headerlink" title="11.会话劫持"></a>11.会话劫持</h3><p>是指攻击者在初始授权之后建立一个连接，在会话劫持以后，攻击者具有合法用户的特权权限，如 “TCP 会话劫持”。</p>
+<h3 id="12-漏洞扫描"><a href="#12-漏洞扫描" class="headerlink" title="12.漏洞扫描"></a>12.漏洞扫描</h3><p>是一种自动检测远程或本地主机安全漏洞的软件，通过漏洞扫描器可以自动发现系统的安全漏洞。常见的漏洞扫描技术有 CGI 漏洞扫描、弱口令扫描、操作系统漏洞扫描、数据库漏洞扫描等。</p>
+<h3 id="13-代理技术"><a href="#13-代理技术" class="headerlink" title="13.代理技术"></a>13.代理技术</h3><p>网络攻击者通过免费代理服务器进行攻击，其目的是以代理服务器为“攻击跳板”，即使攻击目标的网络管理员发现了，也难以追踪到网络攻击者的真实身份或 IP 地址。为了增加追踪的难度，网络攻击者还会采用多级代理服务器或者“跳板机”来攻击目标。在黑客中，代理服务器被称为“肉鸡”，黑客常利用所控制的机器进行攻击活动，如 DDoS 攻击。</p>
+<h3 id="14-数据加密"><a href="#14-数据加密" class="headerlink" title="14.数据加密"></a>14.数据加密</h3><p>网络攻击者常采用数据加密技术来逃避网络安全管理人员的追踪。加密使网络攻击者的数据得到有效保护，即使网络安全管理人员得到这些加密的数据，没有密钥也无法读懂，这就实现了攻击者的自我保护。攻击者的安全原则是，任何与攻击有关的内容都必须加密或者立刻销毁。</p>
+<h2 id="黑客常用工具"><a href="#黑客常用工具" class="headerlink" title="黑客常用工具"></a>黑客常用工具</h2><p>◆ 扫描器：通过扫描程序，黑客可以找到攻击目标的 IP 地址、开放的端口号、服务器运行的版本、程序中可能存在的漏洞等。根据不同的扫描目的，扫描类软件又分为地址扫描器、端口扫描器、漏洞扫描器三个类别。下面列出几种经典的扫描软件：</p>
+<p>◆ NMAP（Network Map）即网络地图：通过 Nmap 可以检测网络上主机的开放端口号、主机的操作系统类型以及提供的网络服务。</p>
+<p>◆ Nessus：可运行在 Linux 操作系统平台上，支持多线程和插件。</p>
+<p>◆ Super Scan：是一款具有 TCP connect 端口扫描、Ping 和域名解析等功能的工具，能较容易地指定范围内的 IP 地址进行 Ping 和扫描。</p>
+<p>◆ 远程监控：实际上是在受害机器上运行一个代理软件，而在黑客的电脑中运行管理软件，受害机器受控于黑客的管理端。受害主机通常被称为“肉鸡”，其经常被用于发起 DoS 拒绝服务攻击或作为攻击跳板。常见的远程监控工具有冰河、网络精灵、Netcat。</p>
+<p>◆ 密码破解：安全渗透常用的工具，常见的密码破解方式有口令猜测（针对用户的弱口令）、穷举搜索（针对用户密码的选择空间，使用高性能计算机，逐个尝试可能的密码）、撞库（根据已经收集的用户密码的相关数据，通过用户关键词搜索匹配，与目标系统的用户信息进行碰撞，以获取用户的密码）等。</p>
+<p>◆ 密码破解工具大多是由高级黑客编写，供初级黑客使用，常见工具如下：</p>
+<p>◆ John the Ripper：用于检测 Unix/Linux 系统的弱口令，支持几乎所有 Unix 平台上经 crypt 函数加密后的口令哈希类型。</p>
+<p>◆ L0phtCrack：常用于破解 Windows 系统口令，含有词典攻击、组合攻击、强行攻击等多种口令破解方法。</p>
+<p>◆ 网络嗅探器（Network Sniffer）：通过网络嗅探，黑客可以截获网络的信息包，之后对加密的信息包进行破解，进而分析包内的数据，获得有关系统的信息。常见的网络嗅探器工具有：</p>
+<p>◆ Tcpdump / Wireshark：基于命令行的网络数据包分析软件，可以作为网络嗅探工具，能把匹配规则的数据内容显示出来。</p>
+<p>◆ Wireshark：提供图形化的网络数据包分析功能，可视化地展示网络数据包的内容。</p>
+<p>◆ DSniff：可以获取口令、邮件、文件等信息。</p>
+<p>◆ 安全渗透工具箱</p>
+<p>◆ Metasploit：是一个开源渗透测试工具，提供漏洞查找、漏洞利用、漏洞验证等服务功能，支持 1500 多个漏洞挖掘利用，提供 OWASP TOP10 漏洞测试。</p>
+<p>◆ BackTrack：集成了大量的安全工具软件，支持信息收集、漏洞评估、漏洞利用、特权提升、保持访问、逆向工程、压力测试。</p>
+<h2 id="典型攻击案例"><a href="#典型攻击案例" class="headerlink" title="典型攻击案例"></a>典型攻击案例</h2><p>W32.Blaster.Worm（冲击波蠕虫） 的典型攻击案例：W32.Blaster.Worm 是一种利用 Windows 系统 DCOM RPC 漏洞进行传播的网络蠕虫。它通过扫描网络中存在漏洞的主机，主动连接目标主机的 TCP 135 端口发起 RPC 漏洞攻击，在目标主机上打开 TCP 4444 端口获取命令行控制权限，并通过 UDP 69（TFTP） 将蠕虫程序下载到受害主机并执行，实现自动传播。蠕虫会在系统中写入注册表项以实现开机自启动，导致系统频繁重启、运行不稳定。同时，该蠕虫还会在特定时间段对 windowsupdate.com 发动拒绝服务攻击，阻止用户下载系统补丁，从而进一步扩大感染范围。</p>
+<p>乌克兰电力系统攻击事件：该攻击中，黑客首先通过钓鱼邮件诱骗电力公司员工下载并打开携带 BlackEnergy 恶意代码的文件，成功在内网植入木马。随后攻击者利用木马获取系统控制权，进一步安装 SSH 后门 和 KillDisk 等破坏性工具，实现长期潜伏和横向渗透。最终，黑客远程操控电力调度与控制系统，恶意断开变电站开关导致大面积停电；同时对电力客服中心发动 DDoS 攻击，使工作人员无法接到报修电话，从而延长了停电时间并加大恢复难度。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1444,190 +1738,6 @@
 </table>
 </div>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/18/Vulnhalla%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/18/Vulnhalla%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/" class="post-title-link" itemprop="url">Vulnhalla文章阅读</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-18 22:17:32 / 修改时间：22:24:09" itemprop="dateCreated datePublished" datetime="2025-12-18T22:17:32+08:00">2025-12-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Papers/" itemprop="url" rel="index"><span itemprop="name">Papers</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Vulnhalla-Picking-the-true-vulnerabilities-from-the-CodeQL-haystack"><a href="#Vulnhalla-Picking-the-true-vulnerabilities-from-the-CodeQL-haystack" class="headerlink" title="Vulnhalla: Picking the true vulnerabilities from the CodeQL haystack"></a>Vulnhalla: Picking the true vulnerabilities from the CodeQL haystack</h2><p>从 CodeQL 海量结果中找到真正的漏洞。</p>
-<p>这篇文章主要介绍了一种结合 LLM 推理和静态分析来发现漏洞的方法。通过在 CodeQL 之上叠加 LLM，可以显著减少困扰安全团队的大量误报。最终，开发人员和安全研究人员能够专注于真正具有潜在利用价值的漏洞，从而优化工作流程。</p>
-<h2 id="使用-LLM-进行漏洞挖掘目前的挑战"><a href="#使用-LLM-进行漏洞挖掘目前的挑战" class="headerlink" title="使用 LLM 进行漏洞挖掘目前的挑战"></a>使用 LLM 进行漏洞挖掘目前的挑战</h2><p>过去，使用大型语言模型（LLM）进行漏洞检测的主要挑战在于大型代码库的上下文窗口有限。然而，如今这种情况正在改变；一些模型现在可以处理多达一百万个 token 。</p>
-<p>就如今的 <strong>大模型漏洞挖掘</strong>而言，主要问题可以归结为两个：</p>
-<ul>
-<li>WHERE</li>
-<li>WHAT</li>
-</ul>
-<p>WHERE 问题在于 LLM 无法确定代码的哪一部分值得关注。在大型代码库中，可能的关注点数量庞大，这意味着模型很容易分心，把注意力放在错误的地方。</p>
-<p>问题在于，即使模型检查到了正确的位置，它仍然需要猜测应该查找哪种类型的错误，例如内存问题、竞态条件或 API 误用。如果没有指导，它可能会完全选择错误的类别，从而无法检测到真正的错误。</p>
-<p>Google 和 OpenAI 采取了不同的解决方案。Google 的 Deep Sleep 试图通过分析与已知 CVE 关联的代码更改（例如 git diff 或提交补丁）来解决这些问题，并验证修复程序或附近的代码是否包含类似的问题。OpenAI 采取了不同的策略 ，专注于新的代码提交。他们声称大约 1.2% 的提交引入了已知的安全问题，他们的目标是识别并解决这些问题。这有助于通过将关注点缩小到潜在危险的提交来解决“查找位置”问题，但它并没有完全解决“查找内容”问题，因为该模型仍然需要决定在每种情况下要查找哪种类型的错误。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/18/Vulnhalla%E6%96%87%E7%AB%A0%E9%98%85%E8%AF%BB/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2025/12/18/Ubuntu%E9%80%9A%E8%BF%87Ollama%E9%83%A8%E7%BD%B2LLM/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/18/Ubuntu%E9%80%9A%E8%BF%87Ollama%E9%83%A8%E7%BD%B2LLM/" class="post-title-link" itemprop="url">Ubuntu通过Ollama部署LLM</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-18 22:16:48 / 修改时间：22:19:43" itemprop="dateCreated datePublished" datetime="2025-12-18T22:16:48+08:00">2025-12-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>Ubuntu 24.04<br>python 3.12.3<br>ollama 0.13.4<br>git 2.43.0</p>
-<p>换源</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 备份</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">cp</span> /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources.bak</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑文件</span></span><br><span class="line"><span class="built_in">sudo</span> vim /etc/apt/sources.list.d/ubuntu.sources</span><br><span class="line"></span><br><span class="line">Types: deb</span><br><span class="line">URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu/</span><br><span class="line">Suites: noble noble-updates noble-backports</span><br><span class="line">Components: main restricted universe multiverse</span><br><span class="line">Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg</span><br><span class="line"></span><br><span class="line">Types: deb</span><br><span class="line">URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu/</span><br><span class="line">Suites: noble-security</span><br><span class="line">Components: main restricted universe multiverse</span><br><span class="line">Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt upgrade -y</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/12/18/Ubuntu%E9%80%9A%E8%BF%87Ollama%E9%83%A8%E7%BD%B2LLM/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
       
     </div>
 

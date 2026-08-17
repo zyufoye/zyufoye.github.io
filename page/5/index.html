@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">103</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -208,6 +208,314 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/02/02/%E5%85%B6%E4%BB%96%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/02/02/%E5%85%B6%E4%BB%96%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">其他网络安全体系模型</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-02-02 22:03:53 / 修改时间：22:04:21" itemprop="dateCreated datePublished" datetime="2026-02-02T22:03:53+08:00">2026-02-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="一、-纵深防御模型-Defense-in-Depth"><a href="#一、-纵深防御模型-Defense-in-Depth" class="headerlink" title="一、 纵深防御模型 (Defense-in-Depth)"></a>一、 纵深防御模型 (Defense-in-Depth)</h3><p>这是现代安全防御最核心的理念，其精髓在于<strong>“多重保险，互相补位”</strong>。</p>
+<ul>
+<li><strong>基本思路</strong>：<br>绝对安全的单一防线是不存在的。所以不能只靠一道墙，要设立多道防线。一道破了，后面还有，互相支援。</li>
+<li><strong>核心：四道防线（按时间轴排列）</strong><ol>
+<li><strong>安全保护 (Protection) —— 第一道</strong>：<ul>
+<li><strong>任务</strong>：拒敌于门外。</li>
+<li><strong>作用</strong>：比如防火墙、门禁，尽量不让攻击发生。</li>
+</ul>
+</li>
+<li><strong>安全监测 (Detection) —— 第二道</strong>：<ul>
+<li><strong>任务</strong>：发现漏网之鱼。</li>
+<li><strong>作用</strong>：比如入侵检测系统（IDS），如果有人翻过了第一道墙，必须立马看见。</li>
+</ul>
+</li>
+<li><strong>实时响应 (Response) —— 第三道</strong>：<ul>
+<li><strong>任务</strong>：带伤战斗（打不垮）。</li>
+<li><strong>作用</strong>：攻击正在发生时，要能顶住，维持网络不瘫痪。</li>
+</ul>
+</li>
+<li><strong>恢复 (Recovery) —— 第四道</strong>：<ul>
+<li><strong>任务</strong>：起死回生。</li>
+<li><strong>作用</strong>：如果真的被打瘫了，要能最快速度用备份数据复原，把损失降到最低。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="二、-分层防护模型-Layered-Protection"><a href="#二、-分层防护模型-Layered-Protection" class="headerlink" title="二、 分层防护模型 (Layered Protection)"></a>二、 分层防护模型 (Layered Protection)</h3><p>纵深防御是横向的“多道墙”，分层防护则是纵向的<strong>“剥洋葱”</strong>。</p>
+<ul>
+<li><strong>参考标准</strong>：<strong>OSI 7层模型</strong>（网络通信的基础标准）。</li>
+<li><strong>核心逻辑</strong>：<br>针对每一个单独的节点，从物理硬件到最上层的管理，每一层都有独特的漏洞，所以每一层都要有对应的锁。</li>
+<li><strong>典型层次与举例</strong>：<ul>
+<li><strong>物理层</strong>：防止有人偷走服务器、拔网线。</li>
+<li><strong>网络层</strong>：防止数据包监听、IP欺骗。</li>
+<li><strong>系统层</strong>：防止操作系统漏洞（Windows/Linux漏洞）。</li>
+<li><strong>应用层</strong>：防止 SQL 注入、网页篡改。</li>
+<li><strong>管理层</strong>：防止员工贴便利贴泄露密码。</li>
+<li><strong>结论</strong>：每一层都得配专门的药，不能用防火墙去防小偷砸门。</li>
+</ul>
+</li>
+</ul>
+<h3 id="三、-等级保护模型-Graded-Protection"><a href="#三、-等级保护模型-Graded-Protection" class="headerlink" title="三、 等级保护模型 (Graded Protection)"></a>三、 等级保护模型 (Graded Protection)</h3><p>这就是我们常听到的<strong>“等保”</strong>，是中国网络安全工作的基本国策。</p>
+<ul>
+<li><strong>核心逻辑</strong>：<strong>“看人下菜碟”</strong>（资源是有限的，好钢要用在刀刃上）。</li>
+<li><strong>划分依据</strong>：<br>根据系统的重要性（涉及国家安全、经济命脉，还是普通娱乐网站）以及被破坏后的危害程度。</li>
+<li><strong>执行方式</strong>：<ul>
+<li>重要的系统（如银行、电网、政务网）：定级高，防护措施极其严格，花大价钱保护。</li>
+<li>不重要的系统（如公司内部食堂点餐网）：定级低，基本的防护即可。</li>
+</ul>
+</li>
+<li><strong>目的</strong>：平衡<strong>安全需求</strong>与<strong>成本开销</strong>。</li>
+</ul>
+<h3 id="四、-网络生存模型-Network-Survivability"><a href="#四、-网络生存模型-Network-Survivability" class="headerlink" title="四、 网络生存模型 (Network Survivability)"></a>四、 网络生存模型 (Network Survivability)</h3><p>这个模型非常硬核，它不再幻想“完全防住”，而是假设<strong>“攻击一定会成功”</strong>，这时候该怎么办？</p>
+<ul>
+<li><strong>核心定义</strong>：<br><strong>带病生存能力</strong>。指系统在遭受入侵、甚至部分被破坏的情况下，<strong>仍然能够持续提供必要服务</strong>的能力。</li>
+<li><strong>关键方法：“3R”策略</strong><ol>
+<li><strong>抵抗 (Resistance)</strong>：尽量防住攻击（加固盾牌）。</li>
+<li><strong>识别 (Recognition)</strong>：识别出哪里被攻击了，是哪种模式。</li>
+<li><strong>恢复 (Recovery)</strong>：快速修复受损部分。</li>
+</ol>
+</li>
+<li><strong>战术思想</strong>：<ul>
+<li><strong>划分“安全核”</strong>：把系统分为两部分，一部分是<strong>“绝对不能死的核心”</strong>（安全核），另一部分是<strong>“可以牺牲的可恢复部分”</strong>。</li>
+<li><strong>丢车保帅</strong>：在遭到猛烈攻击时，为了保证核心业务（如银行的存取款）不停，可以暂时牺牲非关键业务（如银行的积分兑换网页）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><strong>纵深防御</strong>：设多道关卡（防、测、应、恢）。</li>
+<li><strong>分层防护</strong>：从硬件到软件，层层设防。</li>
+<li><strong>等级保护</strong>：重要的重点保，次要的简单保。</li>
+<li><strong>网络生存</strong>：被打残了也要能动，核心心脏不能停（3R）。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/02/02/%E8%83%BD%E5%8A%9B%E6%88%90%E7%86%9F%E5%BA%A6%E6%A8%A1%E5%9E%8BCMM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/02/02/%E8%83%BD%E5%8A%9B%E6%88%90%E7%86%9F%E5%BA%A6%E6%A8%A1%E5%9E%8BCMM/" class="post-title-link" itemprop="url">能力成熟度模型CMM</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-02-02 22:03:11 / 修改时间：22:03:32" itemprop="dateCreated datePublished" datetime="2026-02-02T22:03:11+08:00">2026-02-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>简单来说，CMM 就是一把<strong>“尺子”</strong>，用来衡量一个公司或组织做事情（特别是做软件或安全工程）的<strong>靠谱程度</strong>和<strong>规范程度</strong>。</p>
+<h3 id="第一部分：通用的-CMM-五级模型（核心基础）"><a href="#第一部分：通用的-CMM-五级模型（核心基础）" class="headerlink" title="第一部分：通用的 CMM 五级模型（核心基础）"></a>第一部分：通用的 CMM 五级模型（核心基础）</h3><p>这是所有成熟度模型的“祖师爷”，用来评价一个组织做事有没有章法。图片中将其分为从低到高的五个等级：</p>
+<ul>
+<li><strong>1级 - 非正式执行 (Initial)</strong>：<ul>
+<li><strong>关键词</strong>：<strong>混乱、救火</strong>。</li>
+<li><strong>解读</strong>：没有规矩，全靠“英雄主义”。项目能不能成全看程序员心情和个人能力。一旦核心人员离职，项目就崩了。</li>
+</ul>
+</li>
+<li><strong>2级 - 计划跟踪 (Managed)</strong>：<ul>
+<li><strong>关键词</strong>：<strong>有计划、但未成体系</strong>。</li>
+<li><strong>解读</strong>：开始有项目经理了，知道制定计划和跟踪进度。以前做成功的项目，现在能照葫芦画瓢再做一次（可重复），但还没形成全公司的统一标准。</li>
+</ul>
+</li>
+<li><strong>3级 - 充分定义 (Defined)</strong>：<ul>
+<li><strong>关键词</strong>：<strong>标准化、文档化</strong>。</li>
+<li><strong>解读</strong>：全公司有了统一的“标准作业程序”（SOP）。不管张三还是李四做项目，都得按这一套流程走。</li>
+</ul>
+</li>
+<li><strong>4级 - 量化控制 (Quantitatively Managed)</strong>：<ul>
+<li><strong>关键词</strong>：<strong>数据说话</strong>。</li>
+<li><strong>解读</strong>：不仅有流程，还开始用数据来管理。比如“代码缺陷率控制在0.1%以内”，“服务器响应时间不超过20ms”。一切用量化指标考核。</li>
+</ul>
+</li>
+<li><strong>5级 - 持续优化 (Optimizing)</strong>：<ul>
+<li><strong>关键词</strong>：<strong>自我进化</strong>。</li>
+<li><strong>解读</strong>：不满足于现状，利用数据分析不断寻找流程中的短板，主动改进，追求完美。</li>
+</ul>
+</li>
+</ul>
+<h3 id="第二部分：安全领域的-CMM-变体"><a href="#第二部分：安全领域的-CMM-变体" class="headerlink" title="第二部分：安全领域的 CMM 变体"></a>第二部分：安全领域的 CMM 变体</h3><p>CMM 的思想被引入到安全界，衍生出了几个特定的模型：</p>
+<ol>
+<li><p><strong>SSE-CMM (系统安全工程能力成熟度模型)</strong>：</p>
+<ul>
+<li><strong>用途</strong>：专门衡量做“安全工程”的能力。</li>
+<li><strong>三大过程类</strong>：它不只看技术，还看<strong>工程过程</strong>（怎么做的）、<strong>组织过程</strong>（公司怎么管的）和<strong>项目过程</strong>（项目怎么推的）。</li>
+</ul>
+</li>
+<li><p><strong>数据安全能力成熟度模型</strong>：</p>
+<ul>
+<li><strong>评估维度</strong>：它从四个方面来综合打分：<ol>
+<li><strong>组织建设</strong>（有没有专门的部门？）</li>
+<li><strong>制度流程</strong>（有没有规章？）</li>
+<li><strong>技术工具</strong>（有没有买防火墙、DLP等设备？）</li>
+<li><strong>人员能力</strong>（员工懂不懂安全？）</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="第三部分：软件安全能力成熟度模型（实战举例）"><a href="#第三部分：软件安全能力成熟度模型（实战举例）" class="headerlink" title="第三部分：软件安全能力成熟度模型（实战举例）"></a>第三部分：软件安全能力成熟度模型（实战举例）</h3><p>这部分非常有意思，它把通用的 CMM 级别对应到了具体的<strong>软件开发安全（DevSecOps）</strong>动作上。这实际上展示了一个公司是如何从“不管安全”进化到“顶级安全”的：</p>
+<ul>
+<li><strong>CMM 1级 - 补丁修补</strong>：<ul>
+<li><strong>状态</strong>：<strong>亡羊补牢</strong>。</li>
+<li>软件做出来发布了，用户发现有漏洞，赶紧打个补丁。这是最被动的。</li>
+</ul>
+</li>
+<li><strong>CMM 2级 - 渗透测试、安全代码评审</strong>：<ul>
+<li><strong>状态</strong>：<strong>找茬纠错</strong>。</li>
+<li>在上线前，专门请黑客（渗透测试员）来攻击一下，或者找人检查代码。比1级强，因为是在内部发现问题。</li>
+</ul>
+</li>
+<li><strong>CMM 3级 - 漏洞评估、安全编码标准</strong>：<ul>
+<li><strong>状态</strong>：<strong>立规矩</strong>。</li>
+<li>不再只靠最后测试，而是在写代码之前就规定好：“大家必须按安全标准写代码（如禁止使用 <code>strcpy</code> 函数）”。把安全融入到了开发规范中。</li>
+</ul>
+</li>
+<li><strong>CMM 4级 - 软件安全风险识别、SDLC 检查点</strong>：<ul>
+<li><strong>状态</strong>：<strong>全程管控</strong>。</li>
+<li>在软件开发生命周期（SDLC）的每一个阶段（需求、设计、开发、测试）都设置“关卡”。比如设计阶段如果不符合安全要求，就不准进入开发阶段。</li>
+</ul>
+</li>
+<li><strong>CMM 5级 - 改进风险覆盖率、评估安全差距</strong>：<ul>
+<li><strong>状态</strong>：<strong>精益求精</strong>。</li>
+<li>系统性地分析：“为什么我们上次漏掉了那个漏洞？”、“我们和行业顶尖水平差在哪里？”。通过复盘来提升整个体系的防御能力。</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>核心逻辑是：<strong>安全不是一个“状态”，而是一个“过程”</strong>。</p>
+<p>通过 CMM 模型，企业可以知道自己现在的安全水平处于哪个阶段（是还在忙着打补丁的菜鸟，还是已经建立标准化流程的高手），并明确下一阶段的努力方向。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1301,270 +1609,6 @@
 <li><strong>文件类型限制</strong>：如果业务不需要，禁止用户上传压缩包文件。</li>
 </ol>
 <h3 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h3><p><strong>Zip Slip</strong> 就是攻击者把<strong>带有“穿越路径”文件名</strong>的文件藏在压缩包里，当你解压时，这个文件会“滑（Slip）”出你设定的文件夹，跑去覆盖系统的关键文件，从而让攻击者控制你的服务器。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Wildfly-CVE-2018-1047-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/28/Wildfly-CVE-2018-1047-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="post-title-link" itemprop="url">Wildfly CVE-2018-1047 漏洞研究</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-28 22:17:01 / 修改时间：22:21:01" itemprop="dateCreated datePublished" datetime="2026-01-28T22:17:01+08:00">2026-01-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>CVE-2018-1047</strong> 是一个存在于 <strong>WildFly</strong>（JBoss EAP 的上游项目）中关于 <strong>Undertow</strong> 子系统的路径遍历漏洞。</p>
-<p>WildFly（前身是著名的 JBoss AS）是由 Red Hat 领导开发的开源、轻量级且高性能的 Java EE / Jakarta EE 应用服务器；它是商业级产品 JBoss EAP（Enterprise Application Platform）的上游社区版本，以模块化架构、极速启动和低内存占用著称，广泛用于开发和部署企业级 Java 应用程序。<br>针对 <strong>CVE-2018-1047</strong> 的详细复盘与代码分析：</p>
-<h3 id="1-漏洞基本信息"><a href="#1-漏洞基本信息" class="headerlink" title="1. 漏洞基本信息"></a>1. 漏洞基本信息</h3><ul>
-<li><strong>漏洞编号</strong>：CVE-2018-1047</li>
-<li><strong>漏洞组件</strong>：JBoss EAP / WildFly (具体位于 <code>undertow</code> 扩展模块)</li>
-<li><strong>漏洞类型</strong>：Path Traversal (路径遍历)</li>
-<li><strong>漏洞场景</strong>：涉及 <strong>Deployment Overlays (部署覆盖)</strong> 功能时触发。</li>
-<li><strong>漏洞版本</strong>：9.x 和 11.0.0.Final</li>
-</ul>
-<h3 id="2-什么是-Deployment-Overlays？"><a href="#2-什么是-Deployment-Overlays？" class="headerlink" title="2. 什么是 Deployment Overlays？"></a>2. 什么是 Deployment Overlays？</h3><p>在分析代码前，需要理解这个业务背景。WildFly 允许管理员配置“Overlay”，即用服务器上的外部文件覆盖 WAR 包内的静态资源，而无需重新打包 WAR。</p>
-<ul>
-<li><strong>正常逻辑</strong>：用户请求 <code>/images/logo.png</code> -&gt; WildFly 发现有 Overlay -&gt; 读取 <code>/opt/wildfly/overlays/custom-logo.png</code> 返回。</li>
-<li>应用里原本有 logo.png。</li>
-<li>管理员配置一个 Overlay，指向 /etc/wildfly/custom-logo.png。</li>
-<li>当用户访问 logo.png 时，服务器会读取 Overlay 指定的文件。</li>
-<li><strong>漏洞逻辑</strong>：用户请求 <code>/images/../../etc/passwd</code> -&gt; WildFly 未经检查直接拼接路径 -&gt; 读取 <code>/etc/passwd</code> 返回。</li>
-</ul>
-<h3 id="3-代码分析"><a href="#3-代码分析" class="headerlink" title="3. 代码分析"></a>3. 代码分析</h3><p>我们对照补丁代码（Diff）进行详细解读：</p>
-<h4 id="3-1-漏洞成因"><a href="#3-1-漏洞成因" class="headerlink" title="3.1. 漏洞成因"></a>3.1. 漏洞成因</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// p 是用户请求的 URL 路径（例如 &quot;/../../etc/passwd&quot;）</span></span><br><span class="line">p = p.substring(<span class="number">1</span>); </span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">for</span> (VirtualFile overlay : overlays) &#123;</span><br><span class="line">    <span class="comment">// 【致命错误】直接使用原始路径 p 去获取文件对象</span></span><br><span class="line">    <span class="type">VirtualFile</span> <span class="variable">child</span> <span class="operator">=</span> overlay.getChild(p);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 仅仅检查文件是否存在</span></span><br><span class="line">    <span class="keyword">if</span> (child.exists()) &#123;</span><br><span class="line">        <span class="comment">// 如果存在，就认为是合法资源并返回</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ServletResource</span>(..., child, path);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>问题核心</strong>：代码完全信任了变量 <code>p</code>。</li>
-<li><strong>JBoss VFS 的行为</strong>：<code>overlay.getChild(p)</code> 在处理包含 <code>../</code> 的路径时，会忠实地解析为父级目录。</li>
-<li><strong>缺失的检查</strong>：代码只问了“文件存在吗？(<code>exists()</code>)”，而没有问“文件还在 Overlay 目录下吗？”。这导致攻击者可以逃逸出 Overlay 定义的文件夹。</li>
-</ul>
-<h4 id="3-2-修复逻辑"><a href="#3-2-修复逻辑" class="headerlink" title="3.2. 修复逻辑"></a>3.2. 修复逻辑</h4><p>修复方案采用了非常标准的<strong>“净化 + 验证”</strong>双重防御机制：</p>
-<p><strong>第一层防御：路径规范化 (Canonicalization)</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 CanonicalPathUtils 工具类，消除路径中的 &quot;.&quot; 和 &quot;..&quot;</span></span><br><span class="line"><span class="type">String</span> <span class="variable">canonical</span> <span class="operator">=</span> CanonicalPathUtils.canonicalize(p);</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>作用</strong>：将 <code>/images/../secure/file</code> 转换为 <code>/secure/file</code>。这能防御简单的字符串拼接攻击，确保后续处理的是纯净路径。</li>
-</ul>
-<p><strong>第二层防御：边界逃逸检测 (Boundary Check) —— 这是修复的关键！</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用规范化后的路径获取文件对象</span></span><br><span class="line"><span class="type">VirtualFile</span> <span class="variable">child</span> <span class="operator">=</span> overlay.getChild(canonical);</span><br><span class="line"><span class="keyword">if</span> (child.exists()) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 【核心防御】尝试获取 child 相对于 overlay 的路径</span></span><br><span class="line">        child.getPathNameRelativeTo(overlay);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 只有当上述代码不报错，才说明 child 确实在 overlay 内部，允许返回</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ServletResource</span>(..., child, canonical);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IllegalArgumentException ignore) &#123;</span><br><span class="line">        <span class="comment">// 如果抛出异常，说明 child 不在 overlay 目录下（发生了路径逃逸）</span></span><br><span class="line">        <span class="comment">// 这里捕获异常并忽略，即拒绝提供该文件</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>原理</strong>：<code>getPathNameRelativeTo(parent)</code> 方法的逻辑通常是：检查 <code>parent</code> 的路径是否是 <code>child</code> 路径的前缀。</li>
-<li><strong>效果</strong>：<ul>
-<li>如果是正常请求：<code>child</code> 为 <code>/opt/overlay/img.png</code>，<code>overlay</code> 为 <code>/opt/overlay</code>。前缀匹配成功。</li>
-<li>如果是攻击请求：<code>child</code> 解析后变成 <code>/etc/passwd</code>，<code>overlay</code> 为 <code>/opt/overlay</code>。<code>/etc/passwd</code> 不以 <code>/opt/overlay</code> 开头，<strong>方法抛出异常</strong>。</li>
-</ul>
-</li>
-</ul>
-<h3 id="4-攻击复现推演"><a href="#4-攻击复现推演" class="headerlink" title="4. 攻击复现推演"></a>4. 攻击复现推演</h3><p>假设服务器上配置了一个 Overlay 目录指向 <code>/var/www/html/overlay</code>。</p>
-<ol>
-<li><p><strong>攻击者发送请求</strong>：<br><code>GET /context-path/..%2F..%2F..%2F..%2Fetc%2Fpasswd</code></p>
-</li>
-<li><p><strong>修复前 (Vulnerable)</strong>：</p>
-<ul>
-<li><code>p</code> = <code>../../../../etc/passwd</code></li>
-<li><code>overlay.getChild(p)</code> 解析指向 <code>/etc/passwd</code>。</li>
-<li><code>child.exists()</code> 返回 <code>true</code>。</li>
-<li><strong>结果</strong>：服务器读取并输出 <code>/etc/passwd</code> 的内容。</li>
-</ul>
-</li>
-<li><p><strong>修复后 (Patched)</strong>：</p>
-<ul>
-<li><code>canonical</code> = <code>../../../../etc/passwd</code> (或者被工具类处理得更干净，但这不重要)。</li>
-<li><code>child</code> 依然指向 <code>/etc/passwd</code>。</li>
-<li>执行 <code>child.getPathNameRelativeTo(overlay)</code>。</li>
-<li>系统判断：<code>/etc/passwd</code> 不是 <code>/var/www/html/overlay</code> 的子文件。</li>
-<li>抛出 <code>IllegalArgumentException</code>。</li>
-<li><strong>结果</strong>：Catch 块捕获异常，循环继续或结束，用户收到 404 或 403，<strong>攻击失败</strong>。</li>
-</ul>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Apache-JSPWiki-CVE-2019-0225-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/28/Apache-JSPWiki-CVE-2019-0225-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="post-title-link" itemprop="url">Apache JSPWiki CVE-2019-0225 漏洞研究</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-28 22:16:43 / 修改时间：22:20:39" itemprop="dateCreated datePublished" datetime="2026-01-28T22:16:43+08:00">2026-01-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>Apache JSPWiki 路径遍历漏洞 (CVE-2019-0225)</strong> 分析</p>
-<h3 id="1-漏洞背景"><a href="#1-漏洞背景" class="headerlink" title="1. 漏洞背景"></a>1. 漏洞背景</h3><ul>
-<li><strong>漏洞组件</strong>：Apache JSPWiki (一个基于 Java 的开源 Wiki 引擎)</li>
-<li><strong>漏洞编号</strong>：CVE-2019-0225</li>
-<li><strong>漏洞类型</strong>：路径遍历 (Path Traversal) / 访问控制绕过</li>
-<li><strong>漏洞位置</strong>：<code>org.apache.wiki.url.DefaultURLConstructor.java</code> 类中的 <code>getForwardPage</code> 方法。</li>
-<li><strong>漏洞版本</strong>：2.9.0 ~ 2.11.0.M2</li>
-</ul>
-<h3 id="2-漏洞成因分析"><a href="#2-漏洞成因分析" class="headerlink" title="2. 漏洞成因分析"></a>2. 漏洞成因分析</h3><h4 id="2-1-漏洞代码（修复前）"><a href="#2-1-漏洞代码（修复前）" class="headerlink" title="2.1. 漏洞代码（修复前）"></a>2.1. 漏洞代码（修复前）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">getForwardPage</span><span class="params">( HttpServletRequest request )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 漏洞点：直接返回用户请求路径中的 PathInfo</span></span><br><span class="line">    <span class="keyword">return</span> request.getPathInfo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里调用了 <code>request.getPathInfo()</code>。在 Java Servlet 中，这个方法返回的是请求 URL 中 Servlet 路径之后、查询字符串之前的部分。</p>
-<p><strong>场景假设</strong>：<br>假设 JSPWiki 的 Servlet 映射配置为 <code>/wiki/*</code>。</p>
-<ul>
-<li><p><strong>正常请求</strong>：用户访问 <code>http://site.com/wiki/Main</code></p>
-<ul>
-<li><code>getPathInfo()</code> 返回 <code>/Main</code>。</li>
-<li>系统内部可能将请求转发给 <code>/Main</code> 对应的处理逻辑。</li>
-</ul>
-</li>
-<li><p><strong>攻击请求</strong>：用户访问 <code>http://site.com/wiki/../../WEB-INF/web.xml</code></p>
-<ul>
-<li><code>getPathInfo()</code> 返回 <code>/../../WEB-INF/web.xml</code>。</li>
-<li><strong>关键点</strong>：<code>getForwardPage</code> 方法的返回值通常会被用于 <code>RequestDispatcher.forward(path)</code>。</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-2-为什么会有危害？"><a href="#2-2-为什么会有危害？" class="headerlink" title="2.2. 为什么会有危害？"></a>2.2. 为什么会有危害？</h4><p>当应用程序接收到 <code>/../../WEB-INF/web.xml</code> 并将其传入 <code>request.getRequestDispatcher(...).forward(...)</code> 时，由于没有对路径进行清洗或校验，Servlet 容器（如 Tomcat）会尝试解析这个路径。</p>
-<ol>
-<li><strong>目录穿越</strong>：<code>../</code> 会导致路径向上层跳转。</li>
-<li><strong>访问受保护资源</strong>：攻击者可以跳出 Wiki 的页面目录，直接访问 <code>WEB-INF</code> 目录下的敏感文件（如 <code>web.xml</code> 配置文件、<code>classes</code> 里的类文件等）。在 Java Web 规范中，<code>WEB-INF</code> 目录下的文件是禁止通过浏览器直接访问的，但<strong>内部转发 (Forward)</strong> 不受此限制，因此可以通过这种方式绕过安全检查。</li>
-<li><strong>执行意料之外的 JSP</strong>：攻击者甚至可能利用此漏洞去包含或执行某些不应该被直接访问的 JSP 文件。</li>
-</ol>
-<h3 id="3-修复方案分析"><a href="#3-修复方案分析" class="headerlink" title="3. 修复方案分析"></a>3. 修复方案分析</h3><h4 id="3-1-修复代码（修复后）"><a href="#3-1-修复代码（修复后）" class="headerlink" title="3.1. 修复代码（修复后）"></a>3.1. 修复代码（修复后）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">getForwardPage</span><span class="params">( HttpServletRequest request )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 修复方案：硬编码返回固定的页面，完全忽略用户的 PathInfo</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Wiki.jsp&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="3-2-修复逻辑解读"><a href="#3-2-修复逻辑解读" class="headerlink" title="3.2. 修复逻辑解读"></a>3.2. 修复逻辑解读</h4><p>开发者采取了<strong>最彻底的防御措施</strong>：</p>
-<ol>
-<li><strong>切断输入源</strong>：不再读取 <code>request.getPathInfo()</code>。无论用户在 URL 里输入什么花哨的 <code>../</code> 或恶意路径，这个方法现在只返回字符串 <code>&quot;Wiki.jsp&quot;</code>。</li>
-<li><strong>强制路由</strong>：这意味着该 URL 构造器现在强制所有相关的请求都由 <code>Wiki.jsp</code> 这个主入口文件来处理。</li>
-</ol>
-<p>这个修复表明，原本在这里使用 <code>getPathInfo()</code> 可能是一个设计上的疏忽或者过度灵活的设计。对于 <code>DefaultURLConstructor</code> 来说，将请求转发给统一的入口 <code>Wiki.jsp</code> 才是符合预期的行为，而不需要动态地根据 URL 路径去决定转发目标。</p>
-<h3 id="4-总结与启示"><a href="#4-总结与启示" class="headerlink" title="4. 总结与启示"></a>4. 总结与启示</h3><p>这个漏洞修复案例给开发者提供了两条重要的安全经验：</p>
-<ol>
-<li><p><strong>Input Validation (输入验证) vs. Hardcoding (硬编码)</strong>：<br>通常我们说要对输入做清洗（比如过滤 <code>..</code>），但在这个案例中，开发者发现<strong>根本不需要这个输入</strong>。<br><strong>启示</strong>：在修复漏洞时，首先思考“我们真的需要这个用户输入吗？”。如果可以用硬编码的白名单值（如 <code>&quot;Wiki.jsp&quot;</code>）代替动态输入，安全性得到保障。</p>
-</li>
-<li><p><strong><code>getPathInfo()</code> 的陷阱</strong>：<br>在 Java Web 开发中，<code>request.getRequestURI()</code> 和 <code>request.getPathInfo()</code> 都是攻击者可控的“污染源”。如果将它们直接传递给文件操作或 <code>RequestDispatcher</code>，极大概率会导致路径遍历或服务端请求伪造（SSRF）漏洞。</p>
-</li>
-</ol>
 
       
     </div>

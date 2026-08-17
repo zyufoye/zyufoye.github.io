@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zyufoye.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="哈希 Hash 散列函数 消息摘要常见哈希算法有MD5、SHA、SM3（国密）； 将任意长度的一段数据经过一道计算，转换为一段定长的数据（MD5 128位，SHA 160位，SM3 256位）：  不可逆性（单向）：几乎无法通过hash结果推导出原文，无法通过x的哈希值推导出x； 无碰撞性：几乎没可能找到一个y使y的hash值等于x的hash值； 雪崩效应：输入发生轻微变化，hash输出会产生巨大">
+<meta property="og:type" content="article">
+<meta property="og:title" content="哈希+数字证书+数字签名">
+<meta property="og:url" content="https://zyufoye.github.io/2026/08/17/%E5%93%88%E5%B8%8C-%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/index.html">
+<meta property="og:site_name" content="Aono Note">
+<meta property="og:description" content="哈希 Hash 散列函数 消息摘要常见哈希算法有MD5、SHA、SM3（国密）； 将任意长度的一段数据经过一道计算，转换为一段定长的数据（MD5 128位，SHA 160位，SM3 256位）：  不可逆性（单向）：几乎无法通过hash结果推导出原文，无法通过x的哈希值推导出x； 无碰撞性：几乎没可能找到一个y使y的hash值等于x的hash值； 雪崩效应：输入发生轻微变化，hash输出会产生巨大">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-08-17T14:15:25.000Z">
+<meta property="article:modified_time" content="2026-08-17T14:18:27.521Z">
+<meta property="article:author" content="Aono">
+<meta property="article:tag" content="软考">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zyufoye.github.io/2026/08/17/%E5%93%88%E5%B8%8C-%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zyufoye.github.io/2026/08/17/%E5%93%88%E5%B8%8C-%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/","path":"2026/08/17/哈希-数字证书-数字签名/","title":"哈希+数字证书+数字签名"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>哈希+数字证书+数字签名 | Aono Note</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Aono Note</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">好记性不如烂键盘</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%88%E5%B8%8C-Hash-%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0-%E6%B6%88%E6%81%AF%E6%91%98%E8%A6%81"><span class="nav-number">1.</span> <span class="nav-text">哈希 Hash 散列函数 消息摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D"><span class="nav-number">2.</span> <span class="nav-text">数字签名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6"><span class="nav-number">3.</span> <span class="nav-text">数字证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PKI%EF%BC%88%E5%85%AC%E9%92%A5%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%EF%BC%89%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="nav-number">4.</span> <span class="nav-text">PKI（公钥基础设施）体系结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos-%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE"><span class="nav-number">5.</span> <span class="nav-text">Kerberos 认证协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%BB%84%E4%BB%B6"><span class="nav-number">5.1.</span> <span class="nav-text">1. 体系结构组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B%EF%BC%88%E7%AE%80%E7%95%A5%E6%AD%A5%E9%AA%A4%EF%BC%89"><span class="nav-number">5.2.</span> <span class="nav-text">2. 认证流程（简略步骤）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5"><span class="nav-number">5.3.</span> <span class="nav-text">3. 重要概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA%E8%BE%A8%E6%9E%90%EF%BC%88%E7%BB%93%E5%90%88%E9%A2%98%E5%B9%B2%EF%BC%89"><span class="nav-number">5.4.</span> <span class="nav-text">4. 常见误区辨析（结合题干）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6-vs-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%88%E7%B1%BB%E6%AF%94%E4%B8%8E%E5%AF%B9%E6%AF%94%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">数字证书 vs 数字签名（类比与对比）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%BC%E5%90%88%E5%BD%92%E7%BA%B3"><span class="nav-number">7.</span> <span class="nav-text">综合归纳</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Aono"
+      src="/uploads/kehan.jpg">
+  <p class="site-author-name" itemprop="name">Aono</p>
+  <div class="site-description" itemprop="description">专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">103</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zyufoye" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zyufoye" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zygoticx@163.com" title="E-Mail → mailto:zygoticx@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/08/17/%E5%93%88%E5%B8%8C-%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="哈希+数字证书+数字签名 | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          哈希+数字证书+数字签名
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-08-17 22:15:25 / 修改时间：22:18:27" itemprop="dateCreated datePublished" datetime="2026-08-17T22:15:25+08:00">2026-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="哈希-Hash-散列函数-消息摘要"><a href="#哈希-Hash-散列函数-消息摘要" class="headerlink" title="哈希 Hash 散列函数 消息摘要"></a>哈希 Hash 散列函数 消息摘要</h2><p>常见哈希算法有MD5、SHA、SM3（国密）；</p>
+<p>将任意长度的一段数据经过一道计算，转换为一段定长的数据（MD5 128位，SHA 160位，SM3 256位）：</p>
+<ol>
+<li>不可逆性（单向）：几乎无法通过hash结果推导出原文，无法通过x的哈希值推导出x；</li>
+<li>无碰撞性：几乎没可能找到一个y使y的hash值等于x的hash值；</li>
+<li>雪崩效应：输入发生轻微变化，hash输出会产生巨大变化（可用于校验完整性）；</li>
+</ol>
+<p>MD5：对任意长度报文进行运算，先把报文按照512位分组，最后得到128位报文摘要；</p>
+<p>SHA：对512位数据块进行复杂运行，最终产生160位散列值，比MD5更安全更慢；</p>
+<p>SM3：分组512位，输出杂凑256位；</p>
+<p>Hash三大应用：文件完整性校验、账户密码加密存储、用户身份认证。</p>
+<p>账户密码存储方式：</p>
+<ol>
+<li>明文存储，无安全防护；</li>
+<li>哈希存储，容易受到彩虹表攻击；</li>
+<li>哈希+盐存储，彩虹表攻击无效，盐（账户注册时间或者加上其他随机数一起生成）；</li>
+</ol>
+<p>CHAP认证（PPP中的认证方式：PAP和CHAP）：首先A向PPPoE服务器发起认证，服务端检测有张三，返回随机数R，A接收到R后用密码+R生成哈希，发回HMAC，服务端完成对比验证，可以实现源认证+完整性校验，不需要在网络上传输真实的密码。</p>
+<p>MAC或者HMAC，消息认证码，HMAC是基于hash的消息认证码，HMAC=hash（密码+R）。</p>
+<h2 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h2><p>签名方用自己的<strong><font style="color:#DF2A3F;">私钥进行签名</font></strong>，对方收到后，用签名方的<strong><font style="color:#DF2A3F;">公钥进行验证</font></strong>；</p>
+<p>签名的主要目的是为了防止事后否认，跟手写签名的核心理念是一样的。</p>
+<p>常见的数字签名算法（公钥加密算法）：RSA（使用较多）、SM2（国密）Rabin、ELGamel签名体制和DSS标准；</p>
+<p>数字签名用于确认发送者身份和消息完整性的一个加密消息摘要，具体特点如下：可信、不可伪造、不重新使用，签名文件不可改变，不能抵赖，能够核实发送者身份；</p>
+<p>实现基于：公钥密码体制和单向安全哈希算法，如MD5RSA；</p>
+<p>SM2算法基于椭圆曲线，RSA基于大整数因子分解问题，Elgamal和ECC椭圆曲线密码基于离散对数问题；</p>
+<h2 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h2><p>数字证书是由一个可信的权威机构签署的信息集合。PKI中的X.509数字证书的内容包括：版本号、序列号、签名算法、颁发者、有效起始日期、有效终止日期、主体名称、<strong>用户公钥</strong>、<strong>CA数字签名信息</strong>等，不含加密算法标识。</p>
+<p>S/MIME采用MD5生成数字指纹，利用RSA进行数字签名，并采用3DES加密数字签名。</p>
+<p>A获取B的数字证书，利用其中的B的公钥进行加密，B收到消息后用自己的私钥进行解密。</p>
+<p>权威机构CA用自己的私钥进行签名，大家可以用CA发布的公钥去进行验证。</p>
+<p>CA提供数字证书的申请、审核、签发、查询、发布及证书吊销等全生命周期的管理服务。</p>
+<p>根据您提供的四张图片，我将其中涉及的核心知识点进行了系统化总结，涵盖 <strong>PKI 体系结构</strong>、<strong>Kerberos 认证协议</strong> 以及 <strong>数字证书与数字签名的对比</strong> 三大部分。</p>
+<h2 id="PKI（公钥基础设施）体系结构"><a href="#PKI（公钥基础设施）体系结构" class="headerlink" title="PKI（公钥基础设施）体系结构"></a>PKI（公钥基础设施）体系结构</h2><p>PKI 是一套用于管理数字证书和公钥加密的框架，主要组件及其职责如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>角色与功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>终端实体（用户/终端实体）</strong></td>
+<td>申请数字证书的客户，可以是个人、组织或政府机构。</td>
+</tr>
+<tr>
+<td><strong>注册机构（RA）</strong></td>
+<td>负责受理证书申请，对申请人合法性进行资格审查，决定批准或拒绝申请。<strong>RA 不签发证书</strong>，仅做身份审核；小型机构可由 CA 兼任 RA。</td>
+</tr>
+<tr>
+<td><strong>证书颁发机构（CA）</strong></td>
+<td>核心机构，负责签发、管理和撤销证书（包括颁发、续期、吊销）。</td>
+</tr>
+<tr>
+<td><strong>证书发布系统</strong></td>
+<td>负责证书的发放与分发，可通过目录服务或用户自行下载等方式。</td>
+</tr>
+<tr>
+<td><strong>CRL（证书吊销列表）库</strong></td>
+<td>存放已吊销或过期证书的列表，供验证方查询证书有效性。</td>
+</tr>
+<tr>
+<td><strong>CRL 发布者</strong></td>
+<td>负责生成并发布 CRL。</td>
+</tr>
+<tr>
+<td><strong>CRL 用户</strong></td>
+<td>需要查询 CRL 以验证证书状态的实体。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p><strong>关键点</strong>：CA 负责签发证书，RA 负责资格审查，CRL 用于证书状态查询，三者协同完成证书全生命周期管理。</p>
+</blockquote>
+<h2 id="Kerberos-认证协议"><a href="#Kerberos-认证协议" class="headerlink" title="Kerberos 认证协议"></a>Kerberos 认证协议</h2><p>Kerberos 是一个基于<strong>对称加密</strong>的网络认证协议，使用<strong>可信第三方（KDC）</strong>为客户端/服务器应用提供强身份认证。</p>
+<h3 id="1-体系结构组件"><a href="#1-体系结构组件" class="headerlink" title="1. 体系结构组件"></a>1. 体系结构组件</h3><ul>
+<li><strong>KDC（密钥分发中心）</strong>：由两个逻辑服务组成：<ul>
+<li><strong>AS（认证服务器）</strong>：负责初始身份认证，发放<strong>许可凭证（Ticket Granting Ticket, TGT）</strong>。</li>
+<li><strong>TGS（票据发放服务器）</strong>：负责为已认证用户发放访问特定服务的<strong>服务凭证（Service Ticket）</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-认证流程（简略步骤）"><a href="#2-认证流程（简略步骤）" class="headerlink" title="2. 认证流程（简略步骤）"></a>2. 认证流程（简略步骤）</h3><ol>
+<li>客户端向 <strong>AS</strong> 请求许可凭证（TGT）。  </li>
+<li>AS 返回 TGT（加密的）。  </li>
+<li>客户端用 TGT 向 <strong>TGS</strong> 请求访问某服务的凭证。  </li>
+<li>TGS 返回服务凭证。  </li>
+<li>客户端将服务凭证提交给目标服务器，完成认证。</li>
+</ol>
+<h3 id="3-重要概念"><a href="#3-重要概念" class="headerlink" title="3. 重要概念"></a>3. 重要概念</h3><ul>
+<li><strong>票据（Ticket）</strong> 主要包含：<strong>客户与目的服务方的 Principal（主体名）、客户方 IP 地址、时间戳、生存期、会话密钥</strong>等。</li>
+<li>整个协议依赖对称密钥（如 DES、AES），KDC 作为可信第三方。</li>
+</ul>
+<h3 id="4-常见误区辨析（结合题干）"><a href="#4-常见误区辨析（结合题干）" class="headerlink" title="4. 常见误区辨析（结合题干）"></a>4. 常见误区辨析（结合题干）</h3><ul>
+<li><strong>错误说法</strong>：<code>认证服务器 AS 为申请服务的用户授予票据</code> —— 实际上，<strong>AS 授予的是 TGT（许可凭证）</strong>，而<strong>访问具体服务的票据由 TGS 授予</strong>。因此该说法是错误的。</li>
+</ul>
+<hr>
+<h2 id="数字证书-vs-数字签名（类比与对比）"><a href="#数字证书-vs-数字签名（类比与对比）" class="headerlink" title="数字证书 vs 数字签名（类比与对比）"></a>数字证书 vs 数字签名（类比与对比）</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th><strong>数字证书</strong></th>
+<th><strong>数字签名</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>类比</strong></td>
+<td>身份证</td>
+<td>手写签名 / 按手印</td>
+</tr>
+<tr>
+<td><strong>核心作用</strong></td>
+<td><strong>验证用户/网站身份</strong>（即“你是谁”）</td>
+<td><strong>防止抵赖</strong>（不可否认性） + 验证身份（“你是否认过此内容”）</td>
+</tr>
+<tr>
+<td><strong>技术原理</strong></td>
+<td>证书中包含<strong>用户公钥</strong>，并由 <strong>CA 的私钥进行数字签名</strong>（即 CA 担保公钥的归属）。</td>
+<td>发送方使用<strong>自己的私钥</strong>对消息（或摘要）加密，接收方使用<strong>发送方的公钥</strong>进行验证。</td>
+</tr>
+<tr>
+<td><strong>典型应用场景</strong></td>
+<td>验证网站真伪（HTTPS）、加密通信、代码签名等。</td>
+<td>合同签署、电子邮件、软件发布等需要确保完整性和来源真实性的场景。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p><strong>核心差异</strong>：数字证书用于<strong>绑定身份与公钥</strong>（借助 CA 的可信背书）；数字签名用于<strong>保证数据完整性和来源可信</strong>（借助私钥签名、公钥验签）。两者常结合使用（例如证书中包含公钥，该公钥可用于验证签名）。</p>
+</blockquote>
+<h2 id="综合归纳"><a href="#综合归纳" class="headerlink" title="综合归纳"></a>综合归纳</h2><ul>
+<li><strong>PKI</strong> 提供了证书的颁发、管理和撤销机制，是数字证书可信的基础。</li>
+<li><strong>Kerberos</strong> 是另一种基于对称密钥、无需公钥体系的认证协议，适合内网环境，强调单点登录和时效性。</li>
+<li><strong>数字证书与数字签名</strong>虽都依赖非对称加密，但目的不同：证书侧重“身份绑定”，签名侧重“行为确认”。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E8%80%83/" rel="tag"># 软考</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/08/17/RSA%E8%AE%A1%E7%AE%97%E4%B8%93%E9%A2%98/" rel="prev" title="RSA计算专题">
+                  <i class="fa fa-angle-left"></i> RSA计算专题
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Aono</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

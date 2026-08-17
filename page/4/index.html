@@ -284,7 +284,7 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">103</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -320,6 +320,250 @@ mjx-container[display="true"] + br {
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/02/%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E5%8E%9F%E7%90%86%E4%B8%8E%E5%BA%94%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/03/02/%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E5%8E%9F%E7%90%86%E4%B8%8E%E5%BA%94%E7%94%A8/" class="post-title-link" itemprop="url">入侵检测原理与应用</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-03-02 21:21:33 / 修改时间：21:25:08" itemprop="dateCreated datePublished" datetime="2026-03-02T21:21:33+08:00">2026-03-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="入侵检测系统IDS"><a href="#入侵检测系统IDS" class="headerlink" title="入侵检测系统IDS"></a>入侵检测系统IDS</h2><h3 id="模块一：入侵检测的基础概念与定位"><a href="#模块一：入侵检测的基础概念与定位" class="headerlink" title="模块一：入侵检测的基础概念与定位"></a>模块一：入侵检测的基础概念与定位</h3><p><strong>1. 什么是入侵检测（IDS）？</strong></p>
+<ul>
+<li><strong>概念</strong>：入侵是指违背了目标安全策略的行为。IDS 通过收集操作系统、网络包等信息，来发现这些违规行为。</li>
+<li><strong>判断依据</strong>：对目标的操作是否超出了目标的安全策略范围。</li>
+<li><strong>角色定位</strong>：如果说防火墙是“门卫”，那么 IDS 就是网络中的<strong>预警机</strong>或<strong>巡逻员</strong>。它的直接目的<strong>不是阻断</strong>（那是IPS或防火墙干的事），而是<strong>发现、记录和报警</strong>，为应急响应和取证提供依据。</li>
+</ul>
+<p>传统的入侵检测模型：</p>
+<p><img src="../uploads/IDS1.png" alt=""></p>
+<p><strong>2. CIDF 通用模型（四大组件）</strong><br>现代 IDS 都遵循 CIDF 框架，包含四个部分：</p>
+<ul>
+<li><strong>事件产生器</strong>：负责到处收集数据（抓包、拿日志）。</li>
+<li><strong>事件分析器</strong>：大脑，负责分析数据是否异常。</li>
+<li><strong>响应单元</strong>：依据分析结果做出反应（如发警报）。</li>
+<li><strong>事件数据库</strong>：存储数据和结果。</li>
+</ul>
+<p><img src="../uploads/IDS2.png" alt=""></p>
+<h3 id="模块二：两大核心检测技术流派（重点）"><a href="#模块二：两大核心检测技术流派（重点）" class="headerlink" title="模块二：两大核心检测技术流派（重点）"></a>模块二：两大核心检测技术流派（重点）</h3><p>这是 IDS 最核心的理论，分为“误用检测”和“异常检测”两大流派，外加一些新型辅助技术。</p>
+<p><strong>1. 基于误用的检测（又称：基于特征的检测）</strong></p>
+<ul>
+<li><strong>原理（对号入座）</strong>：建立一个已知攻击的<strong>特征模式库（黑名单）</strong>。如果抓到的数据和库里的特征匹配上了，就认定是入侵。</li>
+<li><strong>优缺点</strong>：优点是<strong>准确率高</strong>，一抓一个准（比如 Snort 规则）；缺点是<strong>高度依赖特征库的更新</strong>，对于库里没有的<strong>新型攻击（未知攻击）毫无办法</strong>。</li>
+<li><strong>具体方法</strong>：状态迁移、条件概率、规则匹配、键盘监控等。</li>
+</ul>
+<p><strong>2. 基于异常的检测</strong></p>
+<ul>
+<li><strong>原理（寻找异类）</strong>：先给系统或用户的正常行为画一个“轮廓”（建立<strong>正常基线/白名单</strong>）。如果当前行为严重偏离了这个正常基线，就认为是异常/入侵。</li>
+<li><strong>优缺点</strong>：优点是<strong>能发现未知的、新型的攻击</strong>；缺点是<strong>误报率极高</strong>（因为“异常”不一定等于“入侵”，比如管理员偶尔半夜登录也会被当成攻击）。</li>
+<li><strong>具体方法</strong>：统计分析、模式预测、文本分类、贝叶斯推理等。</li>
+</ul>
+<p><strong>3. 其他新型检测技术</strong></p>
+<ul>
+<li><strong>沙箱动态分析</strong>：把可疑文件放进一个隔离的“安全屋（沙箱）”里运行，看它有没有搞破坏的动作（专治隐藏极深的木马）。</li>
+<li><strong>报警关联分析</strong>：把海量零碎的报警连起来看，消除噪音，挖出背后复杂的连环攻击。</li>
+<li><strong>攻击诱骗</strong>：故意弄个假系统（蜜罐）吸引黑客攻击，从而反向追踪黑客。</li>
+</ul>
+<h3 id="模块三：IDS-的三大分类及优缺点对比（考点）"><a href="#模块三：IDS-的三大分类及优缺点对比（考点）" class="headerlink" title="模块三：IDS 的三大分类及优缺点对比（考点）"></a>模块三：IDS 的三大分类及优缺点对比（考点）</h3><p>IDS 系统组成：数据采集模块、入侵分析引擎模块、应急处理模块、管理配置模块和其他辅助模块，架构图如下：</p>
+<p><img src="../uploads/IDS3.png" alt=""></p>
+<p>根据<strong>数据来源</strong>和<strong>部署位置</strong>，IDS 分为三大类：</p>
+<p><strong>1. 基于主机的 IDS（HIDS）</strong></p>
+<ul>
+<li><strong>数据源</strong>：主机的系统日志、CPU/内存状态、注册表、文件完整性等。</li>
+<li><strong>部署</strong>：直接以软件形式安装在被保护的服务器上。</li>
+<li><strong>优缺点</strong>：<strong>优点</strong>是不怕网络加密（因为数据到了主机已经解密了），能防范内部人员操作；<strong>缺点</strong>是耗费服务器性能，且一旦服务器被黑，HIDS 本身也可能被破坏。无法看到整个网络的宏观扫描。 HIDS包含软件： SWATCH 监视软件、Tripwire 文件和目录完整性检测工具、网页防篡改。</li>
+</ul>
+<p><strong>2. 基于网络的 IDS（NIDS）</strong></p>
+<ul>
+<li><strong>数据源</strong>：网络上流动的通信数据包。</li>
+<li><strong>部署</strong>：作为一个旁路设备，接在交换机的镜像端口上（静静地旁听）。</li>
+<li><strong>优缺点</strong>：<strong>优点</strong>是不影响现有网络性能，对黑客隐蔽，能监控一大片网络；<strong>缺点</strong>是遇到高加密流量就成了“瞎子”，且在高速网络下容易“漏抓”（漏包）。</li>
+</ul>
+<p><strong>3. 分布式 IDS（DIDS）</strong></p>
+<ul>
+<li><strong>原理</strong>：面对大型复杂网络，采用“多点探测、集中管理”的模式。把 HIDS 和 NIDS 结合起来，统一把情报汇总到一个管理中心进行综合分析。</li>
+</ul>
+<h3 id="模块四：演进产品与实际部署"><a href="#模块四：演进产品与实际部署" class="headerlink" title="模块四：演进产品与实际部署"></a>模块四：演进产品与实际部署</h3><p><strong>1. 产品的演进</strong><br>除了传统的 HIDS 和 NIDS，目前衍生出了更多形态：</p>
+<ul>
+<li><strong>UTM（统一威胁管理）</strong>：把防火墙、IDS、杀毒等功能集成在一个铁盒子（硬件）里。</li>
+<li><strong>APT 检查</strong>：专门针对潜伏深、利用文档（PDF/Word）传播的高级持续性威胁。</li>
+<li><strong>细分领域 IDS</strong>：专盯网页攻击的 Web IDS、专盯数据库违规操作的 数据库 IDS、专盯工业设备的 工控 IDS。</li>
+<li><strong>IDS相关指标</strong>：可靠、可用、时效、准确、安全、可扩展。</li>
+</ul>
+<p><strong>2. 部署规范与方法</strong></p>
+<ul>
+<li><strong>7 步部署法</strong>：确定保护对象 -&gt; 装探测器 -&gt; 定策略 -&gt; 选架构 -&gt; 配规则 -&gt; 测试验证 -&gt; 运行维护。</li>
+<li><strong>经典部署位置</strong>：<ul>
+<li><strong>测内网威胁</strong>：把 NIDS 挂在内网核心交换机的镜像端口上，查内鬼。</li>
+<li><strong>测边界威胁</strong>：把 NIDS 挂在防火墙后面的网络边界处，查外部黑客。</li>
+</ul>
+</li>
+</ul>
+<h3 id="💡-核心总结"><a href="#💡-核心总结" class="headerlink" title="💡 核心总结"></a>💡 核心总结</h3><p>学习 IDS，只需记住一句话：<strong>它是网络里的“监控摄像头”和“警报器”</strong>。它通过<strong>认黑名单（误用特征）</strong>或<strong>找行为反常（异常基线）</strong>来发现坏人。在部署上，装在电脑里的叫 <strong>HIDS</strong>，趴在交换机上偷听的叫 <strong>NIDS</strong>。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/03/02/%E4%BB%80%E4%B9%88%E6%98%AF%E7%BD%91%E9%97%B8%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/03/02/%E4%BB%80%E4%B9%88%E6%98%AF%E7%BD%91%E9%97%B8%EF%BC%9F/" class="post-title-link" itemprop="url">什么是网闸？</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-03-02 21:20:27 / 修改时间：21:21:00" itemprop="dateCreated datePublished" datetime="2026-03-02T21:20:27+08:00">2026-03-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>“网闸（GAP）”这个名字听起来很专业，但其实它的工作原理非常像我们生活中的<strong>“银行防弹玻璃下面的那种旋转递物槽”</strong>，或者叫<strong>“渡船”</strong>。</p>
+<p>结合您提供的这张图，我用最通俗的语言为您拆解网闸到底是怎么工作的：</p>
+<h3 id="1-核心铁律：内外网“老死不相往来”"><a href="#1-核心铁律：内外网“老死不相往来”" class="headerlink" title="1. 核心铁律：内外网“老死不相往来”"></a>1. 核心铁律：内外网“老死不相往来”</h3><p>普通的防火墙就像一个<strong>“安检门”</strong>，只要安检合格，外面的人（数据流）是可以直接走到里面去的（网络层连通）。<br>但网闸的铁律是：<strong>绝对不允许内外网有一根线直接连通！</strong> 它们之间没有任何 TCP/IP 网络连接。</p>
+<h3 id="2-网闸是怎么运送数据的？（“渡船”原理）"><a href="#2-网闸是怎么运送数据的？（“渡船”原理）" class="headerlink" title="2. 网闸是怎么运送数据的？（“渡船”原理）"></a>2. 网闸是怎么运送数据的？（“渡船”原理）</h3><p>请看图中间那个方框，里面有<strong>“存储介质”</strong>和<strong>“控制开关”</strong>。这就是网闸的核心。<br>它运送数据的过程，分为严格的三个步骤（假设外网要把一份文件发给内网）：</p>
+<ul>
+<li><strong>第一步：外网卸货（此时内网断开）</strong><br>外网把数据发过来。此时，“控制开关”将“存储介质”只连接到外网。外网把文件存进这个介质里。<strong>这个时候，内网是物理断开的，绝对连不到这个存储介质。</strong></li>
+<li><strong>第二步：中间隔离与安检（内外网全断开）</strong><br>文件存好后，“控制开关”立刻“咔嚓”一下，把外网也断开。这个时候，这个“存储介质”既不连外网，也不连内网，变成了一座“孤岛”。网闸通常会在这个时候对文件进行杀毒、拆解、检查。</li>
+<li><strong>第三步：内网取货（此时外网断开）</strong><br>检查没问题后，“控制开关”再次拨动，将“存储介质”连接到内网。内网的主机过来，把这份文件“拿”走。<strong>这个时候，外网是物理断开的。</strong></li>
+</ul>
+<p><strong>总结一下：</strong> 外网和内网就像在河的两岸，数据是靠中间的“存储介质”像渡船一样来回摆渡的。<strong>船靠左岸时，右岸上不去；船靠右岸时，左岸上不去。</strong></p>
+<h3 id="3-这样做的好处是什么？（剥离网络协议）"><a href="#3-这样做的好处是什么？（剥离网络协议）" class="headerlink" title="3. 这样做的好处是什么？（剥离网络协议）"></a>3. 这样做的好处是什么？（剥离网络协议）</h3><p>因为内外网从来没有真正连通过，所以所有基于“网络层面”的黑客攻击（比如 Ping 攻击、TCP 洪水攻击、端口扫描等）在网闸面前<strong>全部失效</strong>。<br>网闸把外部运送数据的“网络卡车”直接拦在了门外，只把车里装的“纯粹的货物（数据/文件）”搬了进来。</p>
+<h3 id="4-存在什么“安全风险”？"><a href="#4-存在什么“安全风险”？" class="headerlink" title="4. 存在什么“安全风险”？"></a>4. 存在什么“安全风险”？</h3><p>提到了一个致命的风险：<strong>恶意数据驱动攻击（带毒文件）</strong>。</p>
+<ul>
+<li><strong>原理解读：</strong> 虽然网闸拦住了所有的“网络攻击”，但如果外网传进来的是一份精心伪装的 <strong>Word 文档</strong>，而这份文档里藏着<strong>木马病毒代码</strong>。</li>
+<li><strong>结果：</strong> 网闸的“渡船”会忠实地把这份 Word 文档摆渡到内网。只要内网的员工双击打开了这份文档，木马就会在内网爆发。</li>
+<li><strong>结论：</strong> 网闸能隔绝“网络层”的连接攻击，但对“应用层”伪装在正常文件里的恶意代码（比如病毒、恶意宏指令）防御力有限。所以现代的高级网闸通常还要结合强大的<strong>内容过滤和杀毒引擎</strong>来一起工作。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2058,314 +2302,6 @@ mjx-container[display="true"] + br {
 <li><strong>重管理</strong>：利用 <strong>ISO 27000 (PDCA)</strong> 确保流程不断优化。</li>
 <li><strong>强实战</strong>：利用 <strong>NIST (IPDRR)</strong> 提升从识别到恢复的闭环作战能力。</li>
 </ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/02/02/%E5%85%B6%E4%BB%96%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E6%A8%A1%E5%9E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/02/02/%E5%85%B6%E4%BB%96%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%BD%93%E7%B3%BB%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">其他网络安全体系模型</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-02-02 22:03:53 / 修改时间：22:04:21" itemprop="dateCreated datePublished" datetime="2026-02-02T22:03:53+08:00">2026-02-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="一、-纵深防御模型-Defense-in-Depth"><a href="#一、-纵深防御模型-Defense-in-Depth" class="headerlink" title="一、 纵深防御模型 (Defense-in-Depth)"></a>一、 纵深防御模型 (Defense-in-Depth)</h3><p>这是现代安全防御最核心的理念，其精髓在于<strong>“多重保险，互相补位”</strong>。</p>
-<ul>
-<li><strong>基本思路</strong>：<br>绝对安全的单一防线是不存在的。所以不能只靠一道墙，要设立多道防线。一道破了，后面还有，互相支援。</li>
-<li><strong>核心：四道防线（按时间轴排列）</strong><ol>
-<li><strong>安全保护 (Protection) —— 第一道</strong>：<ul>
-<li><strong>任务</strong>：拒敌于门外。</li>
-<li><strong>作用</strong>：比如防火墙、门禁，尽量不让攻击发生。</li>
-</ul>
-</li>
-<li><strong>安全监测 (Detection) —— 第二道</strong>：<ul>
-<li><strong>任务</strong>：发现漏网之鱼。</li>
-<li><strong>作用</strong>：比如入侵检测系统（IDS），如果有人翻过了第一道墙，必须立马看见。</li>
-</ul>
-</li>
-<li><strong>实时响应 (Response) —— 第三道</strong>：<ul>
-<li><strong>任务</strong>：带伤战斗（打不垮）。</li>
-<li><strong>作用</strong>：攻击正在发生时，要能顶住，维持网络不瘫痪。</li>
-</ul>
-</li>
-<li><strong>恢复 (Recovery) —— 第四道</strong>：<ul>
-<li><strong>任务</strong>：起死回生。</li>
-<li><strong>作用</strong>：如果真的被打瘫了，要能最快速度用备份数据复原，把损失降到最低。</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-<h3 id="二、-分层防护模型-Layered-Protection"><a href="#二、-分层防护模型-Layered-Protection" class="headerlink" title="二、 分层防护模型 (Layered Protection)"></a>二、 分层防护模型 (Layered Protection)</h3><p>纵深防御是横向的“多道墙”，分层防护则是纵向的<strong>“剥洋葱”</strong>。</p>
-<ul>
-<li><strong>参考标准</strong>：<strong>OSI 7层模型</strong>（网络通信的基础标准）。</li>
-<li><strong>核心逻辑</strong>：<br>针对每一个单独的节点，从物理硬件到最上层的管理，每一层都有独特的漏洞，所以每一层都要有对应的锁。</li>
-<li><strong>典型层次与举例</strong>：<ul>
-<li><strong>物理层</strong>：防止有人偷走服务器、拔网线。</li>
-<li><strong>网络层</strong>：防止数据包监听、IP欺骗。</li>
-<li><strong>系统层</strong>：防止操作系统漏洞（Windows/Linux漏洞）。</li>
-<li><strong>应用层</strong>：防止 SQL 注入、网页篡改。</li>
-<li><strong>管理层</strong>：防止员工贴便利贴泄露密码。</li>
-<li><strong>结论</strong>：每一层都得配专门的药，不能用防火墙去防小偷砸门。</li>
-</ul>
-</li>
-</ul>
-<h3 id="三、-等级保护模型-Graded-Protection"><a href="#三、-等级保护模型-Graded-Protection" class="headerlink" title="三、 等级保护模型 (Graded Protection)"></a>三、 等级保护模型 (Graded Protection)</h3><p>这就是我们常听到的<strong>“等保”</strong>，是中国网络安全工作的基本国策。</p>
-<ul>
-<li><strong>核心逻辑</strong>：<strong>“看人下菜碟”</strong>（资源是有限的，好钢要用在刀刃上）。</li>
-<li><strong>划分依据</strong>：<br>根据系统的重要性（涉及国家安全、经济命脉，还是普通娱乐网站）以及被破坏后的危害程度。</li>
-<li><strong>执行方式</strong>：<ul>
-<li>重要的系统（如银行、电网、政务网）：定级高，防护措施极其严格，花大价钱保护。</li>
-<li>不重要的系统（如公司内部食堂点餐网）：定级低，基本的防护即可。</li>
-</ul>
-</li>
-<li><strong>目的</strong>：平衡<strong>安全需求</strong>与<strong>成本开销</strong>。</li>
-</ul>
-<h3 id="四、-网络生存模型-Network-Survivability"><a href="#四、-网络生存模型-Network-Survivability" class="headerlink" title="四、 网络生存模型 (Network Survivability)"></a>四、 网络生存模型 (Network Survivability)</h3><p>这个模型非常硬核，它不再幻想“完全防住”，而是假设<strong>“攻击一定会成功”</strong>，这时候该怎么办？</p>
-<ul>
-<li><strong>核心定义</strong>：<br><strong>带病生存能力</strong>。指系统在遭受入侵、甚至部分被破坏的情况下，<strong>仍然能够持续提供必要服务</strong>的能力。</li>
-<li><strong>关键方法：“3R”策略</strong><ol>
-<li><strong>抵抗 (Resistance)</strong>：尽量防住攻击（加固盾牌）。</li>
-<li><strong>识别 (Recognition)</strong>：识别出哪里被攻击了，是哪种模式。</li>
-<li><strong>恢复 (Recovery)</strong>：快速修复受损部分。</li>
-</ol>
-</li>
-<li><strong>战术思想</strong>：<ul>
-<li><strong>划分“安全核”</strong>：把系统分为两部分，一部分是<strong>“绝对不能死的核心”</strong>（安全核），另一部分是<strong>“可以牺牲的可恢复部分”</strong>。</li>
-<li><strong>丢车保帅</strong>：在遭到猛烈攻击时，为了保证核心业务（如银行的存取款）不停，可以暂时牺牲非关键业务（如银行的积分兑换网页）。</li>
-</ul>
-</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li><strong>纵深防御</strong>：设多道关卡（防、测、应、恢）。</li>
-<li><strong>分层防护</strong>：从硬件到软件，层层设防。</li>
-<li><strong>等级保护</strong>：重要的重点保，次要的简单保。</li>
-<li><strong>网络生存</strong>：被打残了也要能动，核心心脏不能停（3R）。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/02/02/%E8%83%BD%E5%8A%9B%E6%88%90%E7%86%9F%E5%BA%A6%E6%A8%A1%E5%9E%8BCMM/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/02/02/%E8%83%BD%E5%8A%9B%E6%88%90%E7%86%9F%E5%BA%A6%E6%A8%A1%E5%9E%8BCMM/" class="post-title-link" itemprop="url">能力成熟度模型CMM</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-02-02 22:03:11 / 修改时间：22:03:32" itemprop="dateCreated datePublished" datetime="2026-02-02T22:03:11+08:00">2026-02-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%BD%AF%E8%80%83/" itemprop="url" rel="index"><span itemprop="name">软考</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>简单来说，CMM 就是一把<strong>“尺子”</strong>，用来衡量一个公司或组织做事情（特别是做软件或安全工程）的<strong>靠谱程度</strong>和<strong>规范程度</strong>。</p>
-<h3 id="第一部分：通用的-CMM-五级模型（核心基础）"><a href="#第一部分：通用的-CMM-五级模型（核心基础）" class="headerlink" title="第一部分：通用的 CMM 五级模型（核心基础）"></a>第一部分：通用的 CMM 五级模型（核心基础）</h3><p>这是所有成熟度模型的“祖师爷”，用来评价一个组织做事有没有章法。图片中将其分为从低到高的五个等级：</p>
-<ul>
-<li><strong>1级 - 非正式执行 (Initial)</strong>：<ul>
-<li><strong>关键词</strong>：<strong>混乱、救火</strong>。</li>
-<li><strong>解读</strong>：没有规矩，全靠“英雄主义”。项目能不能成全看程序员心情和个人能力。一旦核心人员离职，项目就崩了。</li>
-</ul>
-</li>
-<li><strong>2级 - 计划跟踪 (Managed)</strong>：<ul>
-<li><strong>关键词</strong>：<strong>有计划、但未成体系</strong>。</li>
-<li><strong>解读</strong>：开始有项目经理了，知道制定计划和跟踪进度。以前做成功的项目，现在能照葫芦画瓢再做一次（可重复），但还没形成全公司的统一标准。</li>
-</ul>
-</li>
-<li><strong>3级 - 充分定义 (Defined)</strong>：<ul>
-<li><strong>关键词</strong>：<strong>标准化、文档化</strong>。</li>
-<li><strong>解读</strong>：全公司有了统一的“标准作业程序”（SOP）。不管张三还是李四做项目，都得按这一套流程走。</li>
-</ul>
-</li>
-<li><strong>4级 - 量化控制 (Quantitatively Managed)</strong>：<ul>
-<li><strong>关键词</strong>：<strong>数据说话</strong>。</li>
-<li><strong>解读</strong>：不仅有流程，还开始用数据来管理。比如“代码缺陷率控制在0.1%以内”，“服务器响应时间不超过20ms”。一切用量化指标考核。</li>
-</ul>
-</li>
-<li><strong>5级 - 持续优化 (Optimizing)</strong>：<ul>
-<li><strong>关键词</strong>：<strong>自我进化</strong>。</li>
-<li><strong>解读</strong>：不满足于现状，利用数据分析不断寻找流程中的短板，主动改进，追求完美。</li>
-</ul>
-</li>
-</ul>
-<h3 id="第二部分：安全领域的-CMM-变体"><a href="#第二部分：安全领域的-CMM-变体" class="headerlink" title="第二部分：安全领域的 CMM 变体"></a>第二部分：安全领域的 CMM 变体</h3><p>CMM 的思想被引入到安全界，衍生出了几个特定的模型：</p>
-<ol>
-<li><p><strong>SSE-CMM (系统安全工程能力成熟度模型)</strong>：</p>
-<ul>
-<li><strong>用途</strong>：专门衡量做“安全工程”的能力。</li>
-<li><strong>三大过程类</strong>：它不只看技术，还看<strong>工程过程</strong>（怎么做的）、<strong>组织过程</strong>（公司怎么管的）和<strong>项目过程</strong>（项目怎么推的）。</li>
-</ul>
-</li>
-<li><p><strong>数据安全能力成熟度模型</strong>：</p>
-<ul>
-<li><strong>评估维度</strong>：它从四个方面来综合打分：<ol>
-<li><strong>组织建设</strong>（有没有专门的部门？）</li>
-<li><strong>制度流程</strong>（有没有规章？）</li>
-<li><strong>技术工具</strong>（有没有买防火墙、DLP等设备？）</li>
-<li><strong>人员能力</strong>（员工懂不懂安全？）</li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-<h3 id="第三部分：软件安全能力成熟度模型（实战举例）"><a href="#第三部分：软件安全能力成熟度模型（实战举例）" class="headerlink" title="第三部分：软件安全能力成熟度模型（实战举例）"></a>第三部分：软件安全能力成熟度模型（实战举例）</h3><p>这部分非常有意思，它把通用的 CMM 级别对应到了具体的<strong>软件开发安全（DevSecOps）</strong>动作上。这实际上展示了一个公司是如何从“不管安全”进化到“顶级安全”的：</p>
-<ul>
-<li><strong>CMM 1级 - 补丁修补</strong>：<ul>
-<li><strong>状态</strong>：<strong>亡羊补牢</strong>。</li>
-<li>软件做出来发布了，用户发现有漏洞，赶紧打个补丁。这是最被动的。</li>
-</ul>
-</li>
-<li><strong>CMM 2级 - 渗透测试、安全代码评审</strong>：<ul>
-<li><strong>状态</strong>：<strong>找茬纠错</strong>。</li>
-<li>在上线前，专门请黑客（渗透测试员）来攻击一下，或者找人检查代码。比1级强，因为是在内部发现问题。</li>
-</ul>
-</li>
-<li><strong>CMM 3级 - 漏洞评估、安全编码标准</strong>：<ul>
-<li><strong>状态</strong>：<strong>立规矩</strong>。</li>
-<li>不再只靠最后测试，而是在写代码之前就规定好：“大家必须按安全标准写代码（如禁止使用 <code>strcpy</code> 函数）”。把安全融入到了开发规范中。</li>
-</ul>
-</li>
-<li><strong>CMM 4级 - 软件安全风险识别、SDLC 检查点</strong>：<ul>
-<li><strong>状态</strong>：<strong>全程管控</strong>。</li>
-<li>在软件开发生命周期（SDLC）的每一个阶段（需求、设计、开发、测试）都设置“关卡”。比如设计阶段如果不符合安全要求，就不准进入开发阶段。</li>
-</ul>
-</li>
-<li><strong>CMM 5级 - 改进风险覆盖率、评估安全差距</strong>：<ul>
-<li><strong>状态</strong>：<strong>精益求精</strong>。</li>
-<li>系统性地分析：“为什么我们上次漏掉了那个漏洞？”、“我们和行业顶尖水平差在哪里？”。通过复盘来提升整个体系的防御能力。</li>
-</ul>
-</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>核心逻辑是：<strong>安全不是一个“状态”，而是一个“过程”</strong>。</p>
-<p>通过 CMM 模型，企业可以知道自己现在的安全水平处于哪个阶段（是还在忙着打补丁的菜鸟，还是已经建立标准化流程的高手），并明确下一阶段的努力方向。</p>
 
       
     </div>

@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">103</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -208,6 +208,270 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Wildfly-CVE-2018-1047-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/28/Wildfly-CVE-2018-1047-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="post-title-link" itemprop="url">Wildfly CVE-2018-1047 漏洞研究</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-28 22:17:01 / 修改时间：22:21:01" itemprop="dateCreated datePublished" datetime="2026-01-28T22:17:01+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>CVE-2018-1047</strong> 是一个存在于 <strong>WildFly</strong>（JBoss EAP 的上游项目）中关于 <strong>Undertow</strong> 子系统的路径遍历漏洞。</p>
+<p>WildFly（前身是著名的 JBoss AS）是由 Red Hat 领导开发的开源、轻量级且高性能的 Java EE / Jakarta EE 应用服务器；它是商业级产品 JBoss EAP（Enterprise Application Platform）的上游社区版本，以模块化架构、极速启动和低内存占用著称，广泛用于开发和部署企业级 Java 应用程序。<br>针对 <strong>CVE-2018-1047</strong> 的详细复盘与代码分析：</p>
+<h3 id="1-漏洞基本信息"><a href="#1-漏洞基本信息" class="headerlink" title="1. 漏洞基本信息"></a>1. 漏洞基本信息</h3><ul>
+<li><strong>漏洞编号</strong>：CVE-2018-1047</li>
+<li><strong>漏洞组件</strong>：JBoss EAP / WildFly (具体位于 <code>undertow</code> 扩展模块)</li>
+<li><strong>漏洞类型</strong>：Path Traversal (路径遍历)</li>
+<li><strong>漏洞场景</strong>：涉及 <strong>Deployment Overlays (部署覆盖)</strong> 功能时触发。</li>
+<li><strong>漏洞版本</strong>：9.x 和 11.0.0.Final</li>
+</ul>
+<h3 id="2-什么是-Deployment-Overlays？"><a href="#2-什么是-Deployment-Overlays？" class="headerlink" title="2. 什么是 Deployment Overlays？"></a>2. 什么是 Deployment Overlays？</h3><p>在分析代码前，需要理解这个业务背景。WildFly 允许管理员配置“Overlay”，即用服务器上的外部文件覆盖 WAR 包内的静态资源，而无需重新打包 WAR。</p>
+<ul>
+<li><strong>正常逻辑</strong>：用户请求 <code>/images/logo.png</code> -&gt; WildFly 发现有 Overlay -&gt; 读取 <code>/opt/wildfly/overlays/custom-logo.png</code> 返回。</li>
+<li>应用里原本有 logo.png。</li>
+<li>管理员配置一个 Overlay，指向 /etc/wildfly/custom-logo.png。</li>
+<li>当用户访问 logo.png 时，服务器会读取 Overlay 指定的文件。</li>
+<li><strong>漏洞逻辑</strong>：用户请求 <code>/images/../../etc/passwd</code> -&gt; WildFly 未经检查直接拼接路径 -&gt; 读取 <code>/etc/passwd</code> 返回。</li>
+</ul>
+<h3 id="3-代码分析"><a href="#3-代码分析" class="headerlink" title="3. 代码分析"></a>3. 代码分析</h3><p>我们对照补丁代码（Diff）进行详细解读：</p>
+<h4 id="3-1-漏洞成因"><a href="#3-1-漏洞成因" class="headerlink" title="3.1. 漏洞成因"></a>3.1. 漏洞成因</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// p 是用户请求的 URL 路径（例如 &quot;/../../etc/passwd&quot;）</span></span><br><span class="line">p = p.substring(<span class="number">1</span>); </span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">for</span> (VirtualFile overlay : overlays) &#123;</span><br><span class="line">    <span class="comment">// 【致命错误】直接使用原始路径 p 去获取文件对象</span></span><br><span class="line">    <span class="type">VirtualFile</span> <span class="variable">child</span> <span class="operator">=</span> overlay.getChild(p);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 仅仅检查文件是否存在</span></span><br><span class="line">    <span class="keyword">if</span> (child.exists()) &#123;</span><br><span class="line">        <span class="comment">// 如果存在，就认为是合法资源并返回</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ServletResource</span>(..., child, path);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>问题核心</strong>：代码完全信任了变量 <code>p</code>。</li>
+<li><strong>JBoss VFS 的行为</strong>：<code>overlay.getChild(p)</code> 在处理包含 <code>../</code> 的路径时，会忠实地解析为父级目录。</li>
+<li><strong>缺失的检查</strong>：代码只问了“文件存在吗？(<code>exists()</code>)”，而没有问“文件还在 Overlay 目录下吗？”。这导致攻击者可以逃逸出 Overlay 定义的文件夹。</li>
+</ul>
+<h4 id="3-2-修复逻辑"><a href="#3-2-修复逻辑" class="headerlink" title="3.2. 修复逻辑"></a>3.2. 修复逻辑</h4><p>修复方案采用了非常标准的<strong>“净化 + 验证”</strong>双重防御机制：</p>
+<p><strong>第一层防御：路径规范化 (Canonicalization)</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 CanonicalPathUtils 工具类，消除路径中的 &quot;.&quot; 和 &quot;..&quot;</span></span><br><span class="line"><span class="type">String</span> <span class="variable">canonical</span> <span class="operator">=</span> CanonicalPathUtils.canonicalize(p);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>作用</strong>：将 <code>/images/../secure/file</code> 转换为 <code>/secure/file</code>。这能防御简单的字符串拼接攻击，确保后续处理的是纯净路径。</li>
+</ul>
+<p><strong>第二层防御：边界逃逸检测 (Boundary Check) —— 这是修复的关键！</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用规范化后的路径获取文件对象</span></span><br><span class="line"><span class="type">VirtualFile</span> <span class="variable">child</span> <span class="operator">=</span> overlay.getChild(canonical);</span><br><span class="line"><span class="keyword">if</span> (child.exists()) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 【核心防御】尝试获取 child 相对于 overlay 的路径</span></span><br><span class="line">        child.getPathNameRelativeTo(overlay);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 只有当上述代码不报错，才说明 child 确实在 overlay 内部，允许返回</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ServletResource</span>(..., child, canonical);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IllegalArgumentException ignore) &#123;</span><br><span class="line">        <span class="comment">// 如果抛出异常，说明 child 不在 overlay 目录下（发生了路径逃逸）</span></span><br><span class="line">        <span class="comment">// 这里捕获异常并忽略，即拒绝提供该文件</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>原理</strong>：<code>getPathNameRelativeTo(parent)</code> 方法的逻辑通常是：检查 <code>parent</code> 的路径是否是 <code>child</code> 路径的前缀。</li>
+<li><strong>效果</strong>：<ul>
+<li>如果是正常请求：<code>child</code> 为 <code>/opt/overlay/img.png</code>，<code>overlay</code> 为 <code>/opt/overlay</code>。前缀匹配成功。</li>
+<li>如果是攻击请求：<code>child</code> 解析后变成 <code>/etc/passwd</code>，<code>overlay</code> 为 <code>/opt/overlay</code>。<code>/etc/passwd</code> 不以 <code>/opt/overlay</code> 开头，<strong>方法抛出异常</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-攻击复现推演"><a href="#4-攻击复现推演" class="headerlink" title="4. 攻击复现推演"></a>4. 攻击复现推演</h3><p>假设服务器上配置了一个 Overlay 目录指向 <code>/var/www/html/overlay</code>。</p>
+<ol>
+<li><p><strong>攻击者发送请求</strong>：<br><code>GET /context-path/..%2F..%2F..%2F..%2Fetc%2Fpasswd</code></p>
+</li>
+<li><p><strong>修复前 (Vulnerable)</strong>：</p>
+<ul>
+<li><code>p</code> = <code>../../../../etc/passwd</code></li>
+<li><code>overlay.getChild(p)</code> 解析指向 <code>/etc/passwd</code>。</li>
+<li><code>child.exists()</code> 返回 <code>true</code>。</li>
+<li><strong>结果</strong>：服务器读取并输出 <code>/etc/passwd</code> 的内容。</li>
+</ul>
+</li>
+<li><p><strong>修复后 (Patched)</strong>：</p>
+<ul>
+<li><code>canonical</code> = <code>../../../../etc/passwd</code> (或者被工具类处理得更干净，但这不重要)。</li>
+<li><code>child</code> 依然指向 <code>/etc/passwd</code>。</li>
+<li>执行 <code>child.getPathNameRelativeTo(overlay)</code>。</li>
+<li>系统判断：<code>/etc/passwd</code> 不是 <code>/var/www/html/overlay</code> 的子文件。</li>
+<li>抛出 <code>IllegalArgumentException</code>。</li>
+<li><strong>结果</strong>：Catch 块捕获异常，循环继续或结束，用户收到 404 或 403，<strong>攻击失败</strong>。</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/28/Apache-JSPWiki-CVE-2019-0225-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/kehan.jpg">
+      <meta itemprop="name" content="Aono">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Aono Note">
+      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Aono Note">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/01/28/Apache-JSPWiki-CVE-2019-0225-%E6%BC%8F%E6%B4%9E%E7%A0%94%E7%A9%B6/" class="post-title-link" itemprop="url">Apache JSPWiki CVE-2019-0225 漏洞研究</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-01-28 22:16:43 / 修改时间：22:20:39" itemprop="dateCreated datePublished" datetime="2026-01-28T22:16:43+08:00">2026-01-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>Apache JSPWiki 路径遍历漏洞 (CVE-2019-0225)</strong> 分析</p>
+<h3 id="1-漏洞背景"><a href="#1-漏洞背景" class="headerlink" title="1. 漏洞背景"></a>1. 漏洞背景</h3><ul>
+<li><strong>漏洞组件</strong>：Apache JSPWiki (一个基于 Java 的开源 Wiki 引擎)</li>
+<li><strong>漏洞编号</strong>：CVE-2019-0225</li>
+<li><strong>漏洞类型</strong>：路径遍历 (Path Traversal) / 访问控制绕过</li>
+<li><strong>漏洞位置</strong>：<code>org.apache.wiki.url.DefaultURLConstructor.java</code> 类中的 <code>getForwardPage</code> 方法。</li>
+<li><strong>漏洞版本</strong>：2.9.0 ~ 2.11.0.M2</li>
+</ul>
+<h3 id="2-漏洞成因分析"><a href="#2-漏洞成因分析" class="headerlink" title="2. 漏洞成因分析"></a>2. 漏洞成因分析</h3><h4 id="2-1-漏洞代码（修复前）"><a href="#2-1-漏洞代码（修复前）" class="headerlink" title="2.1. 漏洞代码（修复前）"></a>2.1. 漏洞代码（修复前）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">getForwardPage</span><span class="params">( HttpServletRequest request )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 漏洞点：直接返回用户请求路径中的 PathInfo</span></span><br><span class="line">    <span class="keyword">return</span> request.getPathInfo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里调用了 <code>request.getPathInfo()</code>。在 Java Servlet 中，这个方法返回的是请求 URL 中 Servlet 路径之后、查询字符串之前的部分。</p>
+<p><strong>场景假设</strong>：<br>假设 JSPWiki 的 Servlet 映射配置为 <code>/wiki/*</code>。</p>
+<ul>
+<li><p><strong>正常请求</strong>：用户访问 <code>http://site.com/wiki/Main</code></p>
+<ul>
+<li><code>getPathInfo()</code> 返回 <code>/Main</code>。</li>
+<li>系统内部可能将请求转发给 <code>/Main</code> 对应的处理逻辑。</li>
+</ul>
+</li>
+<li><p><strong>攻击请求</strong>：用户访问 <code>http://site.com/wiki/../../WEB-INF/web.xml</code></p>
+<ul>
+<li><code>getPathInfo()</code> 返回 <code>/../../WEB-INF/web.xml</code>。</li>
+<li><strong>关键点</strong>：<code>getForwardPage</code> 方法的返回值通常会被用于 <code>RequestDispatcher.forward(path)</code>。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-2-为什么会有危害？"><a href="#2-2-为什么会有危害？" class="headerlink" title="2.2. 为什么会有危害？"></a>2.2. 为什么会有危害？</h4><p>当应用程序接收到 <code>/../../WEB-INF/web.xml</code> 并将其传入 <code>request.getRequestDispatcher(...).forward(...)</code> 时，由于没有对路径进行清洗或校验，Servlet 容器（如 Tomcat）会尝试解析这个路径。</p>
+<ol>
+<li><strong>目录穿越</strong>：<code>../</code> 会导致路径向上层跳转。</li>
+<li><strong>访问受保护资源</strong>：攻击者可以跳出 Wiki 的页面目录，直接访问 <code>WEB-INF</code> 目录下的敏感文件（如 <code>web.xml</code> 配置文件、<code>classes</code> 里的类文件等）。在 Java Web 规范中，<code>WEB-INF</code> 目录下的文件是禁止通过浏览器直接访问的，但<strong>内部转发 (Forward)</strong> 不受此限制，因此可以通过这种方式绕过安全检查。</li>
+<li><strong>执行意料之外的 JSP</strong>：攻击者甚至可能利用此漏洞去包含或执行某些不应该被直接访问的 JSP 文件。</li>
+</ol>
+<h3 id="3-修复方案分析"><a href="#3-修复方案分析" class="headerlink" title="3. 修复方案分析"></a>3. 修复方案分析</h3><h4 id="3-1-修复代码（修复后）"><a href="#3-1-修复代码（修复后）" class="headerlink" title="3.1. 修复代码（修复后）"></a>3.1. 修复代码（修复后）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">getForwardPage</span><span class="params">( HttpServletRequest request )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 修复方案：硬编码返回固定的页面，完全忽略用户的 PathInfo</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Wiki.jsp&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-修复逻辑解读"><a href="#3-2-修复逻辑解读" class="headerlink" title="3.2. 修复逻辑解读"></a>3.2. 修复逻辑解读</h4><p>开发者采取了<strong>最彻底的防御措施</strong>：</p>
+<ol>
+<li><strong>切断输入源</strong>：不再读取 <code>request.getPathInfo()</code>。无论用户在 URL 里输入什么花哨的 <code>../</code> 或恶意路径，这个方法现在只返回字符串 <code>&quot;Wiki.jsp&quot;</code>。</li>
+<li><strong>强制路由</strong>：这意味着该 URL 构造器现在强制所有相关的请求都由 <code>Wiki.jsp</code> 这个主入口文件来处理。</li>
+</ol>
+<p>这个修复表明，原本在这里使用 <code>getPathInfo()</code> 可能是一个设计上的疏忽或者过度灵活的设计。对于 <code>DefaultURLConstructor</code> 来说，将请求转发给统一的入口 <code>Wiki.jsp</code> 才是符合预期的行为，而不需要动态地根据 URL 路径去决定转发目标。</p>
+<h3 id="4-总结与启示"><a href="#4-总结与启示" class="headerlink" title="4. 总结与启示"></a>4. 总结与启示</h3><p>这个漏洞修复案例给开发者提供了两条重要的安全经验：</p>
+<ol>
+<li><p><strong>Input Validation (输入验证) vs. Hardcoding (硬编码)</strong>：<br>通常我们说要对输入做清洗（比如过滤 <code>..</code>），但在这个案例中，开发者发现<strong>根本不需要这个输入</strong>。<br><strong>启示</strong>：在修复漏洞时，首先思考“我们真的需要这个用户输入吗？”。如果可以用硬编码的白名单值（如 <code>&quot;Wiki.jsp&quot;</code>）代替动态输入，安全性得到保障。</p>
+</li>
+<li><p><strong><code>getPathInfo()</code> 的陷阱</strong>：<br>在 Java Web 开发中，<code>request.getRequestURI()</code> 和 <code>request.getPathInfo()</code> 都是攻击者可控的“污染源”。如果将它们直接传递给文件操作或 <code>RequestDispatcher</code>，极大概率会导致路径遍历或服务端请求伪造（SSRF）漏洞。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1223,239 +1487,6 @@
 <li><strong><code>test</code></strong> 是为了<strong>“跑得稳”</strong></li>
 <li><strong>Maven 结构</strong> 是一种全行业通用的“收纳整理术”，遵守这个结构，你的项目在任何 IDE（IntelliJ IDEA, Eclipse, VS Code）里都能被自动识别并正确运行。</li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/27/Ubuntu%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/27/Ubuntu%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/" class="post-title-link" itemprop="url">Ubuntu下的压缩和解压缩</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-27 22:18:05 / 修改时间：22:35:25" itemprop="dateCreated datePublished" datetime="2026-01-27T22:18:05+08:00">2026-01-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Config/" itemprop="url" rel="index"><span itemprop="name">Config</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Ubuntu 下使用 <code>zip</code> 和 <code>unzip</code> 的实用指南：</p>
-<h3 id="0-确保已安装"><a href="#0-确保已安装" class="headerlink" title="0. 确保已安装"></a>0. 确保已安装</h3><p>如果命令不存在，先安装：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install zip unzip</span><br></pre></td></tr></table></figure></p>
-<h3 id="1-压缩-zip"><a href="#1-压缩-zip" class="headerlink" title="1. 压缩 (zip)"></a>1. 压缩 (zip)</h3><p><strong>语法：</strong> <code>zip [参数] [生成的压缩包名] [要压缩的文件/目录]</code></p>
-<ul>
-<li><p><strong>压缩单个文件</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip output.zip file.txt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>压缩目录（最常用，必须加 <code>-r</code>）</strong>：<br><code>-r</code> 代表递归，如果不加，只会打包空文件夹。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip -r website.zip /var/www/html</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>压缩多个文件</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip data.zip file1.txt file2.jpg file3.png</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>加密压缩</strong>（会提示输入密码）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip -e secret.zip file.txt</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="2-解压-unzip"><a href="#2-解压-unzip" class="headerlink" title="2. 解压 (unzip)"></a>2. 解压 (unzip)</h3><p><strong>语法：</strong> <code>unzip [压缩包名] [参数]</code></p>
-<ul>
-<li><p><strong>解压到当前目录</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip file.zip</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>解压到指定目录（最常用，必须加 <code>-d</code>）</strong>：<br><code>-d</code> 代表 destination（目标）。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip file.zip -d /opt/myapp/</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>只查看内容不解压</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip -l file.zip</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="⚡️-核心记忆点："><a href="#⚡️-核心记忆点：" class="headerlink" title="⚡️ 核心记忆点："></a>⚡️ 核心记忆点：</h3><ul>
-<li>压缩文件夹用 <strong><code>-r</code></strong></li>
-<li>解压到指定位置用 <strong><code>-d</code></strong></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zyufoye.github.io/2026/01/22/CWE-Bench-Java%EF%BC%9A%E9%AB%98%E6%95%88%E6%9E%84%E5%BB%BA%E5%A4%A7%E8%A7%84%E6%A8%A1%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E6%95%B0%E6%8D%AE%E9%9B%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/kehan.jpg">
-      <meta itemprop="name" content="Aono">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Aono Note">
-      <meta itemprop="description" content="专注于网络安全学习与实践的个人博客，记录AI安全、攻防技术、漏洞分析、工具使用与踩坑经验。 不生产知识，只做知识的搬运工。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Aono Note">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/01/22/CWE-Bench-Java%EF%BC%9A%E9%AB%98%E6%95%88%E6%9E%84%E5%BB%BA%E5%A4%A7%E8%A7%84%E6%A8%A1%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E6%95%B0%E6%8D%AE%E9%9B%86/" class="post-title-link" itemprop="url">CWE-Bench-Java：高效构建大规模漏洞挖掘数据集</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-01-22 22:28:01 / 修改时间：22:29:02" itemprop="dateCreated datePublished" datetime="2026-01-22T22:28:01+08:00">2026-01-22</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java-Security/" itemprop="url" rel="index"><span itemprop="name">Java Security</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在软件安全研究和漏洞挖掘（Vulnerability Mining）领域，构建高质量的数据集是第一步，也是最耗时的一步。我们需要从成千上万个开源项目（如 Apache Spark, Spring Framework）中，精准还原出几年前某个特定版本的“案发现场”。</p>
-<p>最近在复现 IRIS 项目时，学习到了很实用的数据集构建方法，所以记录一下。</p>
-<p>项目中的数据集构建脚本 <code>fetch_one.py</code> ，采用了 <strong>“浅克隆 + 精准抓取”</strong> 的 Git 组合拳。这套方案避免了下载冗余的历史记录，将构建速度提升了数倍，博客记录一下学习这套 Git 命令背后的逻辑。</p>
-<h2 id="面临的挑战：时间与空间的博弈"><a href="#面临的挑战：时间与空间的博弈" class="headerlink" title="面临的挑战：时间与空间的博弈"></a>面临的挑战：时间与空间的博弈</h2><p>通常，想要获取某个历史版本的代码，最直接的做法是：<br><code>git clone &lt;repo_url&gt;</code> 然后 <code>git checkout &lt;old_commit&gt;</code>。</p>
-<p>但在大规模数据挖掘场景下，这种做法有两个致命弱点：</p>
-<ol>
-<li><strong>体积巨大</strong>：像 Linux 内核或 Chromium 这样的大型项目，<code>.git</code> 目录动辄几个 GB。如果我们要分析 1000 个项目，硬盘瞬间爆炸。</li>
-<li><strong>网络浪费</strong>：我们可能只需要 5 年前某次提交的那几十个文件，却下载了项目成立 10 年来的每一次变更记录。</li>
-</ol>
-<p>为了解决这个问题，项目在 <code>fetch_project</code> 函数中设计了一套“外科手术式”的精准 fetch 操作流程。</p>
-<h2 id="核心流程拆解"><a href="#核心流程拆解" class="headerlink" title="核心流程拆解"></a>核心流程拆解</h2><p>Python 脚本并没有一次性拉取所有数据，而是分四步走：<strong>快速搭架子 -&gt; 精准捞数据 -&gt; 时光倒流 -&gt; 环境修复</strong>。</p>
-<h3 id="第一步：极速克隆-Clone-Latest"><a href="#第一步：极速克隆-Clone-Latest" class="headerlink" title="第一步：极速克隆 (Clone Latest)"></a>第一步：极速克隆 (Clone Latest)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subprocess.run([<span class="string">&quot;git&quot;</span>, <span class="string">&quot;clone&quot;</span>, <span class="string">&quot;--depth&quot;</span>, <span class="string">&quot;1&quot;</span>, repo_url, <span class="built_in">str</span>(target_dir)], check=<span class="literal">True</span>, ...)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>命令</strong>：<code>git clone --depth 1 &lt;repo_url&gt; &lt;target_dir&gt;</code></li>
-<li><strong>解读</strong>：<br>这是整个流程的基石。参数 <code>--depth 1</code> 告诉 Git：<strong>“我只要最新的这一层代码，以前的历史我都不关心。”</strong></li>
-<li><strong>作用</strong>：<br>这被称为 <strong>浅克隆 (Shallow Clone)</strong>。它能以最小的代价（通常只有几十 MB）快速把仓库的“架子”搭好，确立远程连接，生成 <code>.git</code> 目录，而无需下载漫长的历史提交记录。</li>
-</ul>
-<h3 id="第二步：精准补货-Fetch-Old-Commit"><a href="#第二步：精准补货-Fetch-Old-Commit" class="headerlink" title="第二步：精准补货 (Fetch Old Commit)"></a>第二步：精准补货 (Fetch Old Commit)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subprocess.run([<span class="string">&quot;git&quot;</span>, <span class="string">&quot;fetch&quot;</span>, <span class="string">&quot;--depth&quot;</span>, <span class="string">&quot;1&quot;</span>, <span class="string">&quot;origin&quot;</span>, commit_id], cwd=target_dir, ...)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>命令</strong>：<code>git fetch --depth 1 origin &lt;commit_id&gt;</code></li>
-<li><strong>解读</strong>：<br>这是高阶的一步。我们已经有了仓库架子，但那个包含漏洞的 <code>commit_id</code> 可能深埋在 5 年前的历史中，本地并没有。<br>这条命令利用了现代 Git 服务器（如 GitHub）支持的特性，直接向服务器请求：<strong>“我只想要这个特定的 Commit Hash，把它以及它的文件快照给我，其他的父节点历史我依然不要。”</strong></li>
-<li><strong>作用</strong>：<br>这相当于“按需补货”。Git 会将这个古老的版本作为一个“孤岛”下载到本地的 <code>.git</code> 数据库中。既拿到了我们急需的数据，又保持了本地仓库的轻量化。</li>
-</ul>
-<h3 id="第三步：时光倒流-Checkout"><a href="#第三步：时光倒流-Checkout" class="headerlink" title="第三步：时光倒流 (Checkout)"></a>第三步：时光倒流 (Checkout)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subprocess.run([<span class="string">&quot;git&quot;</span>, <span class="string">&quot;checkout&quot;</span>, commit_id], cwd=target_dir, ...)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>命令</strong>：<code>git checkout &lt;commit_id&gt;</code></li>
-<li><strong>解读</strong>：<br>数据下载到了 <code>.git</code> 目录（通常存在 <code>FETCH_HEAD</code> 中），但工作区的文件还是最新的。这一步是将工作区的文件“刷新”成漏洞版本的状态。</li>
-<li><strong>作用</strong>：<br>执行后，工作区正式回到“案发时间”。此时虽然处于 <code>Detached HEAD</code>（头指针分离）状态，但这对于代码分析和编译来说完全足够。</li>
-</ul>
-<h3 id="第四步：修复环境-Apply-Patch"><a href="#第四步：修复环境-Apply-Patch" class="headerlink" title="第四步：修复环境 (Apply Patch)"></a>第四步：修复环境 (Apply Patch)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subprocess.run([<span class="string">&quot;git&quot;</span>, <span class="string">&quot;apply&quot;</span>, <span class="built_in">str</span>(patch_path)], cwd=target_dir, ...)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>命令</strong>：<code>git apply &lt;patch_path&gt;</code></li>
-<li><strong>解读</strong>：<br>如果我们提前准备了补丁文件（位于 <code>data/patches/</code>），则应用它。</li>
-<li><strong>为什么要这步？</strong>：<br>这是漏洞复现中最痛的一点——<strong>“代码虽然回去了，环境却变了”</strong>。<br>老旧的代码往往引用了已经关闭的 Maven 仓库，使用了不再兼容的 Gradle 插件，或者依赖了特定版本的编译器。我们不修改业务逻辑，只通过 Patch 修改构建脚本（如 <code>pom.xml</code>），确保这些“老古董”代码能在现代的机器上成功编译跑起来。</li>
-</ul>
-<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h2><p>通过这套流程，IRIS 成功构建了一个高效的数据集构建 pipeline：</p>
-<ol>
-<li><strong>Clone Latest</strong>: 只拿最新版，<strong>快</strong>。</li>
-<li><strong>Fetch Specific</strong>: 只抓特定点，<strong>准</strong>。</li>
-<li><strong>Checkout</strong>: 切换工作区，<strong>稳</strong>。</li>
-<li><strong>Patch</strong>: 修正构建项，<strong>活</strong>。</li>
-</ol>
-<p>这套 Git 组合拳极其精妙，它将原本可能需要数小时的下载任务缩短到了几秒钟，同时极大地节省了磁盘空间。对于从事软件仓库挖掘（Mining Software Repositories, MSR）的研究者来说，这绝对是必备的最佳实践。</p>
-<p>PS：注意需要收集到精确的 commit_id 也就是存在漏洞的 SHA-1 哈希值作为版本号。</p>
 
       
     </div>
