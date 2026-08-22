@@ -27,17 +27,17 @@
 <meta property="og:site_name" content="Aono Note">
 <meta property="og:description" content="Java漏洞靶场搭建学习在学习 Java Web 安全的过程中，目前状态是只能理解相关的漏洞原理，根据 PoC 做题或者复现漏洞，但是这些对于 代码审计、漏洞挖掘、SDL 等都没有实质性帮助，想要在学习或工作过程中提升相关能力，计划实现以下目标：  理解漏洞产生的真实上下文； 搭建一个可控、可扩展的实验环境； 训练从代码层面定位与修复问题的能力；  这篇博客记录了学习搭建 Java 漏洞靶场的过程">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://zyufoye.github.io/2025/12/09/uploads/java_range1.png">
-<meta property="og:image" content="https://zyufoye.github.io/2025/12/09/uploads/java_range2.png">
-<meta property="og:image" content="https://zyufoye.github.io/2025/12/09/uploads/java_range3.png">
-<meta property="og:image" content="https://zyufoye.github.io/2025/12/09/uploads/java_range4.png">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/java_range1.png">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/java_range2.png">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/java_range3.png">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/java_range4.png">
 <meta property="article:published_time" content="2025-12-09T09:53:16.000Z">
-<meta property="article:modified_time" content="2025-12-09T11:07:04.810Z">
+<meta property="article:modified_time" content="2026-08-22T00:59:16.591Z">
 <meta property="article:author" content="Aono">
 <meta property="article:tag" content="Java Security">
 <meta property="article:tag" content="Springboot">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://zyufoye.github.io/2025/12/09/uploads/java_range1.png">
+<meta name="twitter:image" content="https://zyufoye.github.io/uploads/java_range1.png">
 
 
 <link rel="canonical" href="https://zyufoye.github.io/2025/12/09/Java%E6%BC%8F%E6%B4%9E%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA%E5%AD%A6%E4%B9%A0-%E4%B8%80-%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8ESpringboot%E6%9E%B6%E6%9E%84/">
@@ -255,9 +255,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-12-09 17:53:16 / 修改时间：19:07:04" itemprop="dateCreated datePublished" datetime="2025-12-09T17:53:16+08:00">2025-12-09</time>
+      <time title="创建时间：2025-12-09 17:53:16" itemprop="dateCreated datePublished" datetime="2025-12-09T17:53:16+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-08-22 08:59:16" itemprop="dateModified" datetime="2026-08-22T08:59:16+08:00">2026-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -321,13 +327,13 @@
 <li><code>data</code>：数据模型 实体层 对应数据库表或接口数据结构；</li>
 </ul>
 <h3 id="部署搭建记录"><a href="#部署搭建记录" class="headerlink" title="部署搭建记录"></a>部署搭建记录</h3><p>首先选择新建项目：</p>
-<p><img src="../uploads/java_range1.png" alt=""></p>
+<p><img src="/uploads/java_range1.png" alt=""></p>
 <p>通过Springboot Initializr初始化项目:</p>
-<p><img src="../uploads/java_range2.png" alt=""></p>
+<p><img src="/uploads/java_range2.png" alt=""></p>
 <p>选择相关依赖：</p>
-<p><img src="../uploads/java_range3.png" alt=""></p>
+<p><img src="/uploads/java_range3.png" alt=""></p>
 <p>初始化项目结构如下：</p>
-<p><img src="../uploads/java_range4.png" alt=""></p>
+<p><img src="/uploads/java_range4.png" alt=""></p>
 <p>依赖还是存在一些问题，因为靶场对应的是Java1.8版本，但是IDEA创建project时只有17、21和25可选项（这个应该有办法解决，后续再搞），不过目前已经清楚了Springboot的架构是什么样子。</p>
 <h2 id="代码审计"><a href="#代码审计" class="headerlink" title="代码审计"></a>代码审计</h2><h3 id="db-IndexDb-java"><a href="#db-IndexDb-java" class="headerlink" title="db/IndexDb.java"></a>db/IndexDb.java</h3><p><code>IndexDb.java</code> 是一个基于 <code>JdbcTemplate</code> 的数据库访问类，负责从 students 和 teachers 表中查询数据，同时为了漏洞靶场演示，刻意使用字符串拼接 SQL，存在明显的 SQL 注入风险。</p>
 <p>详细解读：</p>

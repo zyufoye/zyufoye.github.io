@@ -27,14 +27,14 @@
 <meta property="og:site_name" content="Aono Note">
 <meta property="og:description" content="基础理论：Diffie-Hellman (DH) 密钥交换协议在介绍SSH之前，首先了解DH协议，因为它是SSH能够安全协商密钥的基石。  核心难题：如何在不安全的网络上，让两个人协商出一个只有他们知道的“密码”（会话密钥），而不用担心被旁人窃听？ 数学原理：基于离散对数问题的困难性。 公式： 正向计算容易：已知 ，算出  很快。 反向计算极难：已知 ，想要算出指数 （私钥），在  足够大时，计算">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://zyufoye.github.io/2026/01/18/uploads/ssh_2.png">
+<meta property="og:image" content="https://zyufoye.github.io/uploads/ssh_2.png">
 <meta property="article:published_time" content="2026-01-18T08:07:34.000Z">
-<meta property="article:modified_time" content="2026-01-18T08:20:56.543Z">
+<meta property="article:modified_time" content="2026-08-22T00:59:16.622Z">
 <meta property="article:author" content="Aono">
 <meta property="article:tag" content="Config">
 <meta property="article:tag" content="密码学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://zyufoye.github.io/2026/01/18/uploads/ssh_2.png">
+<meta name="twitter:image" content="https://zyufoye.github.io/uploads/ssh_2.png">
 
 
 <link rel="canonical" href="https://zyufoye.github.io/2026/01/18/SSH%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE/">
@@ -364,9 +364,15 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2026-01-18 16:07:34 / 修改时间：16:20:56" itemprop="dateCreated datePublished" datetime="2026-01-18T16:07:34+08:00">2026-01-18</time>
+      <time title="创建时间：2026-01-18 16:07:34" itemprop="dateCreated datePublished" datetime="2026-01-18T16:07:34+08:00">2026-01-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-08-22 08:59:16" itemprop="dateModified" datetime="2026-08-22T08:59:16+08:00">2026-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -428,7 +434,7 @@ mjx-container[display="true"] + br {
 </ul>
 </li>
 </ol>
-<h4 id="3-SSH的工作流程（7个步骤）"><a href="#3-SSH的工作流程（7个步骤）" class="headerlink" title="3. SSH的工作流程（7个步骤）"></a>3. SSH的工作流程（7个步骤）</h4><p><img src="../uploads/ssh_2.png" alt=""></p>
+<h4 id="3-SSH的工作流程（7个步骤）"><a href="#3-SSH的工作流程（7个步骤）" class="headerlink" title="3. SSH的工作流程（7个步骤）"></a>3. SSH的工作流程（7个步骤）</h4><p><img src="/uploads/ssh_2.png" alt=""></p>
 <ol>
 <li><strong>获取证书</strong>：客户端获取服务器的公钥证书（或已经存有服务器公钥）。</li>
 <li><strong>连接请求</strong>：客户端发起TCP连接（握手）。</li>

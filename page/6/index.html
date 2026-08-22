@@ -929,7 +929,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-01-28 22:14:55" itemprop="dateModified" datetime="2026-01-28T22:14:55+08:00">2026-01-28</time>
+      <time title="修改时间：2026-08-22 08:59:16" itemprop="dateModified" datetime="2026-08-22T08:59:16+08:00">2026-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -952,9 +952,9 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>CVE-2016-9177 是 Spark (Java Web Framework) 中一个允许攻击者读取服务器任意文件的严重漏洞。官方补丁如下：</p>
-<p><img src="../uploads/Spark20161.png" alt=""></p>
+<p><img src="/uploads/Spark20161.png" alt=""></p>
 <p>添加了校验逻辑：</p>
-<p><img src="../uploads/Spark20162.png" alt=""></p>
+<p><img src="/uploads/Spark20162.png" alt=""></p>
 <h3 id="1-漏洞核心原理：盲目的-“Exists”-检查"><a href="#1-漏洞核心原理：盲目的-“Exists”-检查" class="headerlink" title="1. 漏洞核心原理：盲目的 “Exists” 检查"></a>1. 漏洞核心原理：盲目的 “Exists” 检查</h3><p>在修复之前，<code>ClassPathResourceHandler.java</code> 和 <code>ExternalResourceHandler.java</code> 的逻辑非常简单，甚至可以说过于单纯。</p>
 <p><strong>漏洞代码逻辑（Before）：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 伪代码逻辑</span></span><br><span class="line"><span class="keyword">public</span> Resource <span class="title function_">getResource</span><span class="params">(String path)</span> &#123;</span><br><span class="line">    <span class="comment">// Spark 根据 URL 拼接出文件路径，并创建一个 Resource 对象</span></span><br><span class="line">    <span class="type">Resource</span> <span class="variable">resource</span> <span class="operator">=</span> ...; </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 漏洞点：只检查了文件是否存在</span></span><br><span class="line">    <span class="keyword">return</span> (resource != <span class="literal">null</span> &amp;&amp; resource.exists()) ? resource : <span class="literal">null</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><strong>攻击场景：</strong><br>假设开发者配置了静态文件目录为 <code>/var/www/public</code></p>
@@ -1208,7 +1208,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-01-28 22:14:43" itemprop="dateModified" datetime="2026-01-28T22:14:43+08:00">2026-01-28</time>
+      <time title="修改时间：2026-08-22 08:59:16" itemprop="dateModified" datetime="2026-08-22T08:59:16+08:00">2026-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">

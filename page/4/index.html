@@ -357,9 +357,15 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2026-03-02 21:21:33 / 修改时间：21:25:08" itemprop="dateCreated datePublished" datetime="2026-03-02T21:21:33+08:00">2026-03-02</time>
+      <time title="创建时间：2026-03-02 21:21:33" itemprop="dateCreated datePublished" datetime="2026-03-02T21:21:33+08:00">2026-03-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-08-22 08:59:16" itemprop="dateModified" datetime="2026-08-22T08:59:16+08:00">2026-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -388,7 +394,7 @@ mjx-container[display="true"] + br {
 <li><strong>角色定位</strong>：如果说防火墙是“门卫”，那么 IDS 就是网络中的<strong>预警机</strong>或<strong>巡逻员</strong>。它的直接目的<strong>不是阻断</strong>（那是IPS或防火墙干的事），而是<strong>发现、记录和报警</strong>，为应急响应和取证提供依据。</li>
 </ul>
 <p>传统的入侵检测模型：</p>
-<p><img src="../uploads/IDS1.png" alt=""></p>
+<p><img src="/uploads/IDS1.png" alt=""></p>
 <p><strong>2. CIDF 通用模型（四大组件）</strong><br>现代 IDS 都遵循 CIDF 框架，包含四个部分：</p>
 <ul>
 <li><strong>事件产生器</strong>：负责到处收集数据（抓包、拿日志）。</li>
@@ -396,7 +402,7 @@ mjx-container[display="true"] + br {
 <li><strong>响应单元</strong>：依据分析结果做出反应（如发警报）。</li>
 <li><strong>事件数据库</strong>：存储数据和结果。</li>
 </ul>
-<p><img src="../uploads/IDS2.png" alt=""></p>
+<p><img src="/uploads/IDS2.png" alt=""></p>
 <h3 id="模块二：两大核心检测技术流派（重点）"><a href="#模块二：两大核心检测技术流派（重点）" class="headerlink" title="模块二：两大核心检测技术流派（重点）"></a>模块二：两大核心检测技术流派（重点）</h3><p>这是 IDS 最核心的理论，分为“误用检测”和“异常检测”两大流派，外加一些新型辅助技术。</p>
 <p><strong>1. 基于误用的检测（又称：基于特征的检测）</strong></p>
 <ul>
@@ -417,7 +423,7 @@ mjx-container[display="true"] + br {
 <li><strong>攻击诱骗</strong>：故意弄个假系统（蜜罐）吸引黑客攻击，从而反向追踪黑客。</li>
 </ul>
 <h3 id="模块三：IDS-的三大分类及优缺点对比（考点）"><a href="#模块三：IDS-的三大分类及优缺点对比（考点）" class="headerlink" title="模块三：IDS 的三大分类及优缺点对比（考点）"></a>模块三：IDS 的三大分类及优缺点对比（考点）</h3><p>IDS 系统组成：数据采集模块、入侵分析引擎模块、应急处理模块、管理配置模块和其他辅助模块，架构图如下：</p>
-<p><img src="../uploads/IDS3.png" alt=""></p>
+<p><img src="/uploads/IDS3.png" alt=""></p>
 <p>根据<strong>数据来源</strong>和<strong>部署位置</strong>，IDS 分为三大类：</p>
 <p><strong>1. 基于主机的 IDS（HIDS）</strong></p>
 <ul>
@@ -1078,7 +1084,7 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-03-08 22:58:40" itemprop="dateModified" datetime="2026-03-08T22:58:40+08:00">2026-03-08</time>
+      <time title="修改时间：2026-08-22 08:59:16" itemprop="dateModified" datetime="2026-08-22T08:59:16+08:00">2026-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1227,7 +1233,7 @@ mjx-container[display="true"] + br {
 <li><strong>优点：</strong> 减少了用户密钥密文的暴露次数；实现了<strong>单点登录 (SSO)</strong>，只要用户拿到了TGT并且该TGT没有过期，用户就可以使用TGT通过TGS完成到任一服务器的认证而不必重新输入密码。</li>
 <li><strong>致命缺点：</strong> 极度依赖<strong>时间同步</strong>（防重放）；存在单点故障风险，抗<strong>拒绝服务(DoS)攻击</strong>能力弱。</li>
 </ul>
-<p><img src="../uploads/Kerberos.png" alt=""></p>
+<p><img src="/uploads/Kerberos.png" alt=""></p>
 <p><strong>票据（Ticket）</strong> 主要包含以下 6 项核心内容：</p>
 <ol>
 <li><strong>客户方 Principal</strong>（客户端的身份标识）</li>
@@ -1402,7 +1408,7 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-02-25 20:01:51" itemprop="dateModified" datetime="2026-02-25T20:01:51+08:00">2026-02-25</time>
+      <time title="修改时间：2026-08-22 08:59:16" itemprop="dateModified" datetime="2026-08-22T08:59:16+08:00">2026-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1454,7 +1460,7 @@ mjx-container[display="true"] + br {
 <li><strong>访问控制数据库</strong>：策略库，记录权限信息，作为判断依据。</li>
 <li><strong>审计库</strong>：记录操作日志（成功或失败）。</li>
 </ul>
-<p><img src="../uploads/accesscontrol.png" alt=""></p>
+<p><img src="/uploads/accesscontrol.png" alt=""></p>
 <p><strong>2. 模型的发展与应用场景</strong></p>
 <ul>
 <li><strong>基础类</strong>：DAC、MAC、RBAC（常用于操作系统、数据库）。</li>
@@ -1860,9 +1866,15 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2026-02-04 20:31:35 / 修改时间：20:35:12" itemprop="dateCreated datePublished" datetime="2026-02-04T20:31:35+08:00">2026-02-04</time>
+      <time title="创建时间：2026-02-04 20:31:35" itemprop="dateCreated datePublished" datetime="2026-02-04T20:31:35+08:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-08-22 08:59:16" itemprop="dateModified" datetime="2026-08-22T08:59:16+08:00">2026-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1968,7 +1980,7 @@ mjx-container[display="true"] + br {
 </ul>
 </li>
 </ul>
-<p><img src="../uploads/IDC逻辑架构.png" alt=""></p>
+<p><img src="/uploads/IDC逻辑架构.png" alt=""></p>
 <h3 id="五、-CA机房（认证中心）物理安全控制"><a href="#五、-CA机房（认证中心）物理安全控制" class="headerlink" title="五、 CA机房（认证中心）物理安全控制"></a>五、 CA机房（认证中心）物理安全控制</h3><p>CA机房作为核心信任源，有更严格的合规要求（遵循GM/T 0034）：</p>
 <ol>
 <li><strong>屏蔽与检测</strong>：实施屏蔽措施，<strong>每五年</strong>至少进行一次屏蔽室检测。</li>
@@ -2035,9 +2047,15 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2026-02-04 20:27:32 / 修改时间：20:30:18" itemprop="dateCreated datePublished" datetime="2026-02-04T20:27:32+08:00">2026-02-04</time>
+      <time title="创建时间：2026-02-04 20:27:32" itemprop="dateCreated datePublished" datetime="2026-02-04T20:27:32+08:00">2026-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-08-22 08:59:16" itemprop="dateModified" datetime="2026-08-22T08:59:16+08:00">2026-08-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -2096,7 +2114,7 @@ mjx-container[display="true"] + br {
 </li>
 <li><strong>基于环境攻击</strong>：利用电磁波、温度、湿度等外部环境缺陷破坏系统运行。</li>
 </ul>
-<p><img src="../uploads/IC木马植入.png" alt=""></p>
+<p><img src="/uploads/IC木马植入.png" alt=""></p>
 <h3 id="三、-物理安全保护体系"><a href="#三、-物理安全保护体系" class="headerlink" title="三、 物理安全保护体系"></a>三、 物理安全保护体系</h3><h4 id="1-保护维度"><a href="#1-保护维度" class="headerlink" title="1. 保护维度"></a>1. 保护维度</h4><ul>
 <li><strong>设备物理安全</strong>：标志标记、防电磁泄露/干扰、电源保护、抗震动、供应链安全（防木马）。</li>
 <li><strong>环境物理安全</strong>：机房选址、屏蔽、防火/水/雷/鼠/盗、供电及空调系统。</li>
